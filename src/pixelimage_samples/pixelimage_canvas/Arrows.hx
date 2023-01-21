@@ -34,6 +34,8 @@ class Arrows {
         drawGrid();
         // see xml definitions below
         XMLshape.withString( pixelImage, arrowShapeTest );
+        XMLshape.withString( pixelImage, arrowShapeReverseFlareTest );
+        XMLshape.withString( pixelImage, arrowShapeFlareTest );
         XMLshape.withString( pixelImage, arrowThickGradientTest ); 
         end();
     }
@@ -51,24 +53,42 @@ class Arrows {
     function drawGrid(){
         pixelImage.lineGrid( 100, 100, 1024*3, 768*3, 100, 2.5, 0xfF003300 );
     }
-
     var arrowShapeTest: String = 
                     '<ArrowShape
+                        both="false"
+                        x1="500" y1="400" 
+                        x2="890" y2="230" 
+                        arrowWidth="70"
+                        strokeWidth="30" strokeColor="0xff0000FF">
+                    </ArrowShape>';
+    var arrowShapeReverseFlareTest: String = 
+                    '<ArrowShape
                         flare="true"
-                        both="true"
+                        both="false"
+                        reverseFlare="true"
                         x1="100" y1="300" 
                         x2="360" y2="120" 
                         arrowWidth="60"
                         arrowHeight="50"
                         strokeWidth="5" strokeColor="0xffFF0000">
                     </ArrowShape>';
+    var arrowShapeFlareTest: String = 
+                    '<ArrowShape
+                        flare="true"
+                        both="false"
+                        x1="400" y1="400" 
+                        x2="560" y2="720" 
+                        arrowWidth="60"
+                        arrowHeight="50"
+                        strokeWidth="5" strokeColor="0xff00FF00">
+                    </ArrowShape>';
     var arrowThickGradientTest: String = 
                     '<ArrowThickGradient
                         flare="true"
                         reverseFlare="true"
                         both="true"
-                        x1="100" y1="300" 
-                        x2="360" y2="120" 
+                        x1="300" y1="300" 
+                        x2="560" y2="120" 
                         arrowWidth="60"
                         arrowHeight="50"
                         strokeWidth="5" strokeTopColor="0xFF9000FF" strokeBottomColor="0xffffa200">

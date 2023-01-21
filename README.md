@@ -28,6 +28,7 @@ git clone https://github.com/nanjizal/pixelimage-samples.git
 
 ## pixelimage-canvas
   - Arrows [code](/src/pixelimage_samples/pixelimage_canvas/Arrows.hx) [html](https://nanjizal.github.io/pixelimage-samples/bin/canvas_arrows.html)
+  - Curves [code](/src/pixelimage_samples/pixelimage_canvas/Curves.hx) [html](https://nanjizal.github.io/pixelimage-samples/bin/canvas_curves.html) BROKEN
   
   
   

@@ -17169,6 +17169,7 @@ pixelimage_triGML_contour_CubicCurveShape.prototype = $extend(pixelimage_triGML_
 		var drawing = new pixelimage_triGML_coreShape_DrawShapeHelper(pixelImage,this.strokeWidth,this.strokeColor);
 		drawing.moveTo(this.x1,this.y1);
 		drawing.curveTo(this.x2,this.y2,this.x3,this.y3,this.x4,this.y4);
+		haxe_Log.trace("render CubicCurveShape",{ fileName : "pixelimage/triGML/contour/CubicCurveShape.hx", lineNumber : 69, className : "pixelimage.triGML.contour.CubicCurveShape", methodName : "render"});
 		return pixelimage_triGML_coreShape_FillShape.prototype.render.call(this,pixelImage);
 	}
 	,__class__: pixelimage_triGML_contour_CubicCurveShape
@@ -18878,17 +18879,21 @@ pixelimage_triGML_coreShape_DrawShapeHelper.prototype = {
 				var dx = oldInfo.cx * this.scaleX + this.translateX;
 				var dy = oldInfo.cy * this.scaleY + this.translateY;
 				var color = this.strokeColor;
-				var hasHit = false;
+				var hasHit = true;
 				if(hasHit == null) {
 					hasHit = false;
+				}
+				var hasHit1 = hasHit;
+				if(hasHit1 == null) {
+					hasHit1 = false;
 				}
 				var bx1 = bx;
 				var by1 = by;
 				var cx1 = dx;
 				var cy1 = dy;
-				var hasHit1 = hasHit;
-				if(hasHit1 == null) {
-					hasHit1 = false;
+				var hasHit = hasHit1;
+				if(hasHit == null) {
+					hasHit = false;
 				}
 				var adjustWinding = ax * by1 - bx1 * ay + (bx1 * cy1 - cx1 * by1) + (cx1 * ay - ax * cy1) > 0;
 				if(!adjustWinding) {
@@ -18899,7 +18904,7 @@ pixelimage_triGML_coreShape_DrawShapeHelper.prototype = {
 					cx1 = bx_;
 					cy1 = by_;
 				}
-				var hasHit2 = hasHit1;
+				var hasHit2 = hasHit;
 				if(hasHit2 == null) {
 					hasHit2 = false;
 				}
@@ -19027,9 +19032,9 @@ pixelimage_triGML_coreShape_DrawShapeHelper.prototype = {
 				var by1 = cy;
 				var cx1 = dx;
 				var cy1 = dy;
-				var hasHit1 = hasHit;
-				if(hasHit1 == null) {
-					hasHit1 = false;
+				var hasHit = hasHit1;
+				if(hasHit == null) {
+					hasHit = false;
 				}
 				var adjustWinding = bx * by1 - bx1 * by + (bx1 * cy1 - cx1 * by1) + (cx1 * by - bx * cy1) > 0;
 				if(!adjustWinding) {
@@ -19040,7 +19045,7 @@ pixelimage_triGML_coreShape_DrawShapeHelper.prototype = {
 					cx1 = bx_;
 					cy1 = by_;
 				}
-				var hasHit2 = hasHit1;
+				var hasHit2 = hasHit;
 				if(hasHit2 == null) {
 					hasHit2 = false;
 				}
@@ -19164,7 +19169,7 @@ pixelimage_triGML_coreShape_DrawShapeHelper.prototype = {
 				if(hasHit2 == true) {
 					var v = new pixelimage_algo_HitTri(bx,by,bx1,by1,cx1,cy1);
 				}
-				if(hasHit == true) {
+				if(hasHit1 == true) {
 					var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy);
 				}
 			}
@@ -60780,42 +60785,21 @@ pixelimage_triGML_shape_VePathElementShape.prototype = $extend(pixelimage_triGML
 	}
 	,__class__: pixelimage_triGML_shape_VePathElementShape
 });
-var pixelimage_$samples_pixelimage_$canvas_Arrows = function() {
-	this.arrowThickGradientTest = "<ArrowThickGradient\n                        flare=\"true\"\n                        reverseFlare=\"true\"\n                        both=\"true\"\n                        x1=\"300\" y1=\"300\" \n                        x2=\"560\" y2=\"120\" \n                        arrowWidth=\"60\"\n                        arrowHeight=\"50\"\n                        strokeWidth=\"5\" strokeTopColor=\"0xFF9000FF\" strokeBottomColor=\"0xffffa200\">\n                    </ArrowThickGradient>";
-	this.arrowShapeFlareTest = "<ArrowShape\n                        flare=\"true\"\n                        both=\"false\"\n                        x1=\"400\" y1=\"400\" \n                        x2=\"560\" y2=\"720\" \n                        arrowWidth=\"60\"\n                        arrowHeight=\"50\"\n                        strokeWidth=\"5\" strokeColor=\"0xff00FF00\">\n                    </ArrowShape>";
-	this.arrowShapeReverseFlareTest = "<ArrowShape\n                        flare=\"true\"\n                        both=\"false\"\n                        reverseFlare=\"true\"\n                        x1=\"100\" y1=\"300\" \n                        x2=\"360\" y2=\"120\" \n                        arrowWidth=\"60\"\n                        arrowHeight=\"50\"\n                        strokeWidth=\"5\" strokeColor=\"0xffFF0000\">\n                    </ArrowShape>";
-	this.arrowShapeTest = "<ArrowShape\n                        both=\"false\"\n                        x1=\"500\" y1=\"400\" \n                        x2=\"890\" y2=\"230\" \n                        arrowWidth=\"70\"\n                        strokeWidth=\"30\" strokeColor=\"0xff0000FF\">\n                    </ArrowShape>";
+var pixelimage_$samples_pixelimage_$canvas_Curves = function() {
+	this.cubicCurveTest = "<CubicCurveShape \n                        x1=\"100\" y1=\"200\" \n                        x2=\"100\" y2=\"100\" \n                        x3=\"250\" y3=\"100\" \n                        x4=\"250\" y4=\"200\"\n                        strokeColor=\"0xFFFF0000\" strokeWidth=\"10\" \n                        fill=\"0xFF00FF00\">\n                    </CubicCurveShape>";
 	this.canvasSetup = new htmlHelper_canvas_CanvasSetup();
 	this.begin();
 	this.drawGrid();
 	var pixelImage = this.pixelImage;
-	var str = this.arrowShapeTest;
-	haxe_Log.trace(str,{ fileName : "pixelimage/triGML/coreShape/XMLshape.hx", lineNumber : 17, className : "pixelimage.triGML.coreShape.XMLshape", methodName : "withString"});
-	var xml = Xml.parse("<node>" + str + "</node>").firstElement();
-	haxe_Log.trace(xml,{ fileName : "pixelimage/triGML/coreShape/XMLshape.hx", lineNumber : 19, className : "pixelimage.triGML.coreShape.XMLshape", methodName : "withString"});
-	new pixelimage_triGML_coreShape_XMLshape(pixelImage,xml);
-	var pixelImage = this.pixelImage;
-	var str = this.arrowShapeReverseFlareTest;
-	haxe_Log.trace(str,{ fileName : "pixelimage/triGML/coreShape/XMLshape.hx", lineNumber : 17, className : "pixelimage.triGML.coreShape.XMLshape", methodName : "withString"});
-	var xml = Xml.parse("<node>" + str + "</node>").firstElement();
-	haxe_Log.trace(xml,{ fileName : "pixelimage/triGML/coreShape/XMLshape.hx", lineNumber : 19, className : "pixelimage.triGML.coreShape.XMLshape", methodName : "withString"});
-	new pixelimage_triGML_coreShape_XMLshape(pixelImage,xml);
-	var pixelImage = this.pixelImage;
-	var str = this.arrowShapeFlareTest;
-	haxe_Log.trace(str,{ fileName : "pixelimage/triGML/coreShape/XMLshape.hx", lineNumber : 17, className : "pixelimage.triGML.coreShape.XMLshape", methodName : "withString"});
-	var xml = Xml.parse("<node>" + str + "</node>").firstElement();
-	haxe_Log.trace(xml,{ fileName : "pixelimage/triGML/coreShape/XMLshape.hx", lineNumber : 19, className : "pixelimage.triGML.coreShape.XMLshape", methodName : "withString"});
-	new pixelimage_triGML_coreShape_XMLshape(pixelImage,xml);
-	var pixelImage = this.pixelImage;
-	var str = this.arrowThickGradientTest;
+	var str = this.cubicCurveTest;
 	haxe_Log.trace(str,{ fileName : "pixelimage/triGML/coreShape/XMLshape.hx", lineNumber : 17, className : "pixelimage.triGML.coreShape.XMLshape", methodName : "withString"});
 	var xml = Xml.parse("<node>" + str + "</node>").firstElement();
 	haxe_Log.trace(xml,{ fileName : "pixelimage/triGML/coreShape/XMLshape.hx", lineNumber : 19, className : "pixelimage.triGML.coreShape.XMLshape", methodName : "withString"});
 	new pixelimage_triGML_coreShape_XMLshape(pixelImage,xml);
 	this.end();
 };
-pixelimage_$samples_pixelimage_$canvas_Arrows.__name__ = "pixelimage_samples.pixelimage_canvas.Arrows";
-pixelimage_$samples_pixelimage_$canvas_Arrows.prototype = {
+pixelimage_$samples_pixelimage_$canvas_Curves.__name__ = "pixelimage_samples.pixelimage_canvas.Curves";
+pixelimage_$samples_pixelimage_$canvas_Curves.prototype = {
 	begin: function() {
 		this.surface = this.canvasSetup.surface;
 		var this1 = new Uint32Array(12582912);
@@ -60994,10 +60978,10 @@ pixelimage_$samples_pixelimage_$canvas_Arrows.prototype = {
 			}
 		}
 	}
-	,__class__: pixelimage_$samples_pixelimage_$canvas_Arrows
+	,__class__: pixelimage_$samples_pixelimage_$canvas_Curves
 };
-function pixelimage_$samples_pixelimage_$canvas_Arrows_main() {
-	new pixelimage_$samples_pixelimage_$canvas_Arrows();
+function pixelimage_$samples_pixelimage_$canvas_Curves_main() {
+	new pixelimage_$samples_pixelimage_$canvas_Curves();
 }
 var vision_ds_Line2D = function(start,end) {
 	this.end = new vision_ds_Point2D(0,0);
@@ -61079,5 +61063,5 @@ var pixelimage_Endian_isLittleEndian = (function($this) {
 	$r = a8[0] != 255;
 	return $r;
 }(this));
-pixelimage_$samples_pixelimage_$canvas_Arrows_main();
+pixelimage_$samples_pixelimage_$canvas_Curves_main();
 })(typeof window != "undefined" ? window : typeof global != "undefined" ? global : typeof self != "undefined" ? self : this);
