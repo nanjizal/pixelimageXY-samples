@@ -24,7 +24,7 @@ git clone https://github.com/nanjizal/pixelimage-samples.git
 ```
 
 ## pixelimage-canvas
-  - [Arrows](/src/pixelimage_samples/pixelimage_canvas/Arrows.hx) 
+  - [Arrows](/src/pixelimage_samples/pixelimage_canvas/Arrows.hx) [canvas_arrows.html](https://nanjizal.github.io/pixelimage-samples/bin/canvas_arrows.html)
   
   
   
