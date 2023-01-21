@@ -20,17 +20,17 @@ lix install --global github:nanjizal/pixelimage
   
   
 ## 
-## pixelimage-flixel
+#### pixelimage-flixel
 not yet integrated
 
-## pixelimage-openfl
+#### pixelimage-openfl
 not yet integrated
 
-# pixelimage-ceramic
+#### pixelimage-ceramic
 not yet integrated
 
-# pixelimage-peote-view
+#### pixelimage-peote-view
 not yet integrated
 
-# pixelimage-heaps
+#### pixelimage-heaps
 not yet integrated
