@@ -35,6 +35,12 @@ not yet integrated
 #### pixelimage-openfl
 not yet integrated
 
+### pixelimage-lime
+not yet integrated
+
+### pixelimage-nme
+not yet integrated
+
 #### pixelimage-ceramic
 not yet integrated
 
@@ -43,3 +49,9 @@ not yet integrated
 
 #### pixelimage-heaps
 not yet integrated
+
+#### pixelimage-kha
+not yet integrated
+
+#### pixelimage-Vision
+no samples added yet
