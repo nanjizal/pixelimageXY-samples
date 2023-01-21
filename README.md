@@ -6,7 +6,8 @@ pixelimage dependancies
 - [htmlHelper](https://github.com/nanjizal/htmlHelper/) for Html canvas tests.
 - [justPath](https://github.com/nanjizal/justPath/) for svg path data drawing.
 - [pixelimage](https://github.com/nanjizal/pixelimage/) the library.
-### These can be installed via lix.
+  
+### These can be installed via lix. For simplicity you can do this globally.
 ```
 lix install --global github:nanjizal/htmlHelper
 lix install --global github:nanjizal/justPath
