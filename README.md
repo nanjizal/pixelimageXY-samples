@@ -8,7 +8,7 @@ pixelimage dependancies
 - [pixelimage](https://github.com/nanjizal/pixelimage/) the library.
   
 these not really needed but include for occasional/future use.
-- [format](https://github.com/haxeFoundation/format/) for image conversion
+- [format](https://github.com/HaxeFoundation/format/) for image conversion
 - [Vision](https://github.com/ShaharMS/Vision) for filters
   
 ### These can be installed via lix. For simplicity you can do this globally.
@@ -17,7 +17,10 @@ lix install --global github:nanjizal/htmlHelper
 lix install --global github:nanjizal/justPath
 lix install --global github:nanjizal/pixelimage
 ```
-
+```
+lix install --global github:HaxeFoundation/format
+lix install --global github:ShaharMS/Vision
+```
 ### Clone this repository to test the pixelimage-samples
 ```
 git clone https://github.com/nanjizal/pixelimage-samples.git
