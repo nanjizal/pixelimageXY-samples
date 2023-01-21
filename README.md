@@ -13,6 +13,12 @@ lix install --global github:nanjizal/htmlHelper
 lix install --global github:nanjizal/justPath
 lix install --global github:nanjizal/pixelimage
 ```
+
+### Clone this repository to test the pixelimage-samples
+```
+git clone https://github.com/nanjizal/pixelimage-samples.git
+```
+
 ## pixelimage-canvas
   
   
