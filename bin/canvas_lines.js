@@ -31773,6 +31773,9 @@ pixelimage_triGML_gradientContour_LineGradient.prototype = $extend(pixelimage_tr
 			this.cornerColors[0] = Std.parseInt(value);
 			this.cornerColors[2] = Std.parseInt(value);
 			break;
+		case "strokeWidth":
+			this.strokeWidth = parseFloat(value);
+			break;
 		case "x1":
 			this.x1 = parseFloat(value);
 			break;
@@ -60785,42 +60788,28 @@ pixelimage_triGML_shape_VePathElementShape.prototype = $extend(pixelimage_triGML
 	}
 	,__class__: pixelimage_triGML_shape_VePathElementShape
 });
-var pixelimage_$samples_pixelimage_$canvas_Arrows = function() {
-	this.arrowThickGradientTest = "<ArrowThickGradient\n                        flare=\"true\"\n                        reverseFlare=\"true\"\n                        both=\"true\"\n                        x1=\"300\" y1=\"300\" \n                        x2=\"560\" y2=\"120\" \n                        arrowWidth=\"60\"\n                        arrowHeight=\"50\"\n                        strokeWidth=\"5\" strokeTopColor=\"0xFF9000FF\" strokeBottomColor=\"0xffffa200\">\n                    </ArrowThickGradient>";
-	this.arrowShapeFlareTest = "<ArrowShape\n                        flare=\"true\"\n                        both=\"false\"\n                        x1=\"400\" y1=\"400\" \n                        x2=\"560\" y2=\"720\" \n                        arrowWidth=\"60\"\n                        arrowHeight=\"50\"\n                        strokeWidth=\"5\" strokeColor=\"0xff00FF00\">\n                    </ArrowShape>";
-	this.arrowShapeReverseFlareTest = "<ArrowShape\n                        flare=\"true\"\n                        both=\"false\"\n                        reverseFlare=\"true\"\n                        x1=\"100\" y1=\"300\" \n                        x2=\"360\" y2=\"120\" \n                        arrowWidth=\"60\"\n                        arrowHeight=\"50\"\n                        strokeWidth=\"5\" strokeColor=\"0xffFF0000\">\n                    </ArrowShape>";
-	this.arrowShapeTest = "<ArrowShape\n                        both=\"false\"\n                        x1=\"500\" y1=\"400\" \n                        x2=\"890\" y2=\"230\" \n                        arrowWidth=\"70\"\n                        strokeWidth=\"30\" strokeColor=\"0xff0000FF\">\n                    </ArrowShape>";
+var pixelimage_$samples_pixelimage_$canvas_Lines = function() {
+	this.lineShapeTest = "<LineShape \n                        x2=\"400\" y2=\"400\" \n                        x1=\"420\" y1=\"460\" \n                        strokeWidth=\"30\" strokeColor=\"0xffFF0000\">\n                    </LineShape>";
+	this.lineGradientTest = "<LineGradient \n                        x1=\"100\" y1=\"300\" \n                        x2=\"300\" y2=\"120\" \n                        strokeWidth=\"10\" \n                        colorA=\"0xFF0000\" colorB=\"0xa00cc0\" colorC=\"0x0fa00f\" colorD=\"0x000fff\">\n                    </LineGradient>";
 	this.canvasSetup = new htmlHelper_canvas_CanvasSetup();
 	this.begin();
 	this.drawGrid();
 	var pixelImage = this.pixelImage;
-	var str = this.arrowShapeTest;
+	var str = this.lineGradientTest;
 	haxe_Log.trace(str,{ fileName : "pixelimage/triGML/coreShape/XMLshape.hx", lineNumber : 17, className : "pixelimage.triGML.coreShape.XMLshape", methodName : "withString"});
 	var xml = Xml.parse("<node>" + str + "</node>").firstElement();
 	haxe_Log.trace(xml,{ fileName : "pixelimage/triGML/coreShape/XMLshape.hx", lineNumber : 19, className : "pixelimage.triGML.coreShape.XMLshape", methodName : "withString"});
 	new pixelimage_triGML_coreShape_XMLshape(pixelImage,xml);
 	var pixelImage = this.pixelImage;
-	var str = this.arrowShapeReverseFlareTest;
-	haxe_Log.trace(str,{ fileName : "pixelimage/triGML/coreShape/XMLshape.hx", lineNumber : 17, className : "pixelimage.triGML.coreShape.XMLshape", methodName : "withString"});
-	var xml = Xml.parse("<node>" + str + "</node>").firstElement();
-	haxe_Log.trace(xml,{ fileName : "pixelimage/triGML/coreShape/XMLshape.hx", lineNumber : 19, className : "pixelimage.triGML.coreShape.XMLshape", methodName : "withString"});
-	new pixelimage_triGML_coreShape_XMLshape(pixelImage,xml);
-	var pixelImage = this.pixelImage;
-	var str = this.arrowShapeFlareTest;
-	haxe_Log.trace(str,{ fileName : "pixelimage/triGML/coreShape/XMLshape.hx", lineNumber : 17, className : "pixelimage.triGML.coreShape.XMLshape", methodName : "withString"});
-	var xml = Xml.parse("<node>" + str + "</node>").firstElement();
-	haxe_Log.trace(xml,{ fileName : "pixelimage/triGML/coreShape/XMLshape.hx", lineNumber : 19, className : "pixelimage.triGML.coreShape.XMLshape", methodName : "withString"});
-	new pixelimage_triGML_coreShape_XMLshape(pixelImage,xml);
-	var pixelImage = this.pixelImage;
-	var str = this.arrowThickGradientTest;
+	var str = this.lineShapeTest;
 	haxe_Log.trace(str,{ fileName : "pixelimage/triGML/coreShape/XMLshape.hx", lineNumber : 17, className : "pixelimage.triGML.coreShape.XMLshape", methodName : "withString"});
 	var xml = Xml.parse("<node>" + str + "</node>").firstElement();
 	haxe_Log.trace(xml,{ fileName : "pixelimage/triGML/coreShape/XMLshape.hx", lineNumber : 19, className : "pixelimage.triGML.coreShape.XMLshape", methodName : "withString"});
 	new pixelimage_triGML_coreShape_XMLshape(pixelImage,xml);
 	this.end();
 };
-pixelimage_$samples_pixelimage_$canvas_Arrows.__name__ = "pixelimage_samples.pixelimage_canvas.Arrows";
-pixelimage_$samples_pixelimage_$canvas_Arrows.prototype = {
+pixelimage_$samples_pixelimage_$canvas_Lines.__name__ = "pixelimage_samples.pixelimage_canvas.Lines";
+pixelimage_$samples_pixelimage_$canvas_Lines.prototype = {
 	begin: function() {
 		this.surface = this.canvasSetup.surface;
 		var this1 = new Uint32Array(12582912);
@@ -60999,10 +60988,10 @@ pixelimage_$samples_pixelimage_$canvas_Arrows.prototype = {
 			}
 		}
 	}
-	,__class__: pixelimage_$samples_pixelimage_$canvas_Arrows
+	,__class__: pixelimage_$samples_pixelimage_$canvas_Lines
 };
-function pixelimage_$samples_pixelimage_$canvas_Arrows_main() {
-	new pixelimage_$samples_pixelimage_$canvas_Arrows();
+function pixelimage_$samples_pixelimage_$canvas_Lines_main() {
+	new pixelimage_$samples_pixelimage_$canvas_Lines();
 }
 var vision_ds_Line2D = function(start,end) {
 	this.end = new vision_ds_Point2D(0,0);
@@ -61084,5 +61073,5 @@ var pixelimage_Endian_isLittleEndian = (function($this) {
 	$r = a8[0] != 255;
 	return $r;
 }(this));
-pixelimage_$samples_pixelimage_$canvas_Arrows_main();
+pixelimage_$samples_pixelimage_$canvas_Lines_main();
 })(typeof window != "undefined" ? window : typeof global != "undefined" ? global : typeof self != "undefined" ? self : this);
