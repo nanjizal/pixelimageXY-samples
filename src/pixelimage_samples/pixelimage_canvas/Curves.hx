@@ -9,9 +9,9 @@ import vision.Vision;
 import vision.ds.Kernal2D;
 import pixelimage.formats.VisionImage;
 import pixelimage.triGML.*;
-import pixelimage.triGML.pattern.*;
-import pixelimage.triGML.coreShape.XMLshape;
-import pixelimage.triGML.coreShape.XMLshapeSamples;
+import pixelimage.triangleGML.*;
+import pixelimage.triangleGML.pattern.*;
+import pixelimage.triangleGML.coreShape.TriangleGML;
 import htmlHelper.tools.ImageLoader;
 import pixelimage.fontImage.TestLem;
 import pixelimage.fontImage.OneDfont;
@@ -32,7 +32,7 @@ class Curves {
     public function new(){
         begin();
         drawGrid();
-        XMLshape.withString( pixelImage, cubicCurveTest );
+        TriangleGML.withString( pixelImage, cubicCurveTest );
         // see xml definitions below
         end();
     }

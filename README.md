@@ -27,9 +27,14 @@ git clone https://github.com/nanjizal/pixelimage-samples.git
 ```
 
 ## pixelimage-canvas
+  - Arcs: [code](/src/pixelimage_samples/pixelimage_canvas/Arcs.hx), [html](https://nanjizal.github.io/pixelimage-samples/bin/canvas_arcs.html).
   - Arrows: [code](/src/pixelimage_samples/pixelimage_canvas/Arrows.hx), [html](https://nanjizal.github.io/pixelimage-samples/bin/canvas_arrows.html).
   - Curves: [code](/src/pixelimage_samples/pixelimage_canvas/Curves.hx), [html](https://nanjizal.github.io/pixelimage-samples/bin/canvas_curves.html).  !BROKEN!
-  - Lines: [code](/src/pixelimage_samples/pixelimage_lines/Lines.hx), [html](https://nanjizal.github.io/pixelimage-samples/bin/canvas_lines.html).
+  - Ellipes: [code]/src/pixelimage_samples/pixelimage_canvas/Ellipses.hx), [html](https://nanjizal.github.io/pixelimage-samples/bin/canvas_ellipses.html).
+  - Lines: [code](/src/pixelimage_samples/pixelimage_canvas/Lines.hx), [html](https://nanjizal.github.io/pixelimage-samples/bin/canvas_lines.html).
+  - Quads: [code](/src/pixelimage_samples/pixelimage_canvas/Quads.hx), [html](https://nanjizal.github.io/pixelimage-samples/bin/canvas_quads.html).
+  - Rectangles: [code](/src/pixelimage_samples/pixelimage_canvas/Rectangles.hx), [html](https://nanjizal.github.io/pixelimage-samples/bin/canvas_rectangles.html).
+  - Triangles: [code](/src/pixelimage_samples/pixelimage_canvas/Triangles.hx), [html](https://nanjizal.github.io/pixelimage-samples/bin/canvas_triangles.html).
   
   
   

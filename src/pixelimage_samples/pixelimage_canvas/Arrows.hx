@@ -8,10 +8,9 @@ import js.html.ImageElement;
 import vision.Vision;
 import vision.ds.Kernal2D;
 import pixelimage.formats.VisionImage;
-import pixelimage.triGML.*;
-import pixelimage.triGML.pattern.*;
-import pixelimage.triGML.coreShape.XMLshape;
-import pixelimage.triGML.coreShape.XMLshapeSamples;
+import pixelimage.triangleGML.*;
+import pixelimage.triangleGML.pattern.*;
+import pixelimage.triangleGML.coreShape.TriangleGML;
 import htmlHelper.tools.ImageLoader;
 import pixelimage.fontImage.TestLem;
 import pixelimage.fontImage.OneDfont;
@@ -31,12 +30,14 @@ class Arrows {
 
     public function new(){
         begin();
-        drawGrid();
         // see xml definitions below
-        XMLshape.withString( pixelImage, arrowShapeTest );
-        XMLshape.withString( pixelImage, arrowShapeReverseFlareTest );
-        XMLshape.withString( pixelImage, arrowShapeFlareTest );
-        XMLshape.withString( pixelImage, arrowThickGradientTest ); 
+        draw([
+              lineGridShape
+            , arrowShapeTest
+            , arrowShapeReverseFlareTest
+            , arrowShapeFlareTest
+            , arrowThickGradientTest
+        ]);
         end();
     }
 
@@ -45,7 +46,9 @@ class Arrows {
         pixelImage = new Pixelshape( 1024*4, 768*4 );
         pixelImage.transparent = true;
     }
-
+    function draw( triangleGMLs: Array<String> ){
+        for( shapeString in triangleGMLs ) TriangleGML.withString( pixelImage, shapeString );
+    }
     function end(){
         pixelImage.drawToContext( surface.me, 0, 0 );
     }
@@ -93,5 +96,11 @@ class Arrows {
                         arrowHeight="50"
                         strokeWidth="5" strokeTopColor="0xFF9000FF" strokeBottomColor="0xffffa200">
                     </ArrowThickGradient>';
-
+    var lineGridShape = 
+                    '<LineGridShape
+                        left = "100"  top = "100"
+                        width = "2048" height = "1536"
+                        delta = "100" deltaH = "100"
+                        strokeColor="0xfF003300" strokeWidth="2.5">
+                    </LineGridShape>';
 }

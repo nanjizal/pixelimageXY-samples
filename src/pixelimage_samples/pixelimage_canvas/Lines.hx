@@ -8,10 +8,9 @@ import js.html.ImageElement;
 import vision.Vision;
 import vision.ds.Kernal2D;
 import pixelimage.formats.VisionImage;
-import pixelimage.triGML.*;
-import pixelimage.triGML.pattern.*;
-import pixelimage.triGML.coreShape.XMLshape;
-import pixelimage.triGML.coreShape.XMLshapeSamples;
+import pixelimage.triangleGML.*;
+import pixelimage.triangleGML.pattern.*;
+import pixelimage.triangleGML.coreShape.TriangleGML;
 import htmlHelper.tools.ImageLoader;
 import pixelimage.fontImage.TestLem;
 import pixelimage.fontImage.OneDfont;
@@ -33,8 +32,8 @@ class Lines {
         begin();
         drawGrid();
         // see xml definitions below
-        XMLshape.withString( pixelImage, lineGradientTest );
-        XMLshape.withString( pixelImage, lineShapeTest );
+        TriangleGML.withString( pixelImage, lineGradientTest );
+        TriangleGML.withString( pixelImage, lineShapeTest );
         end();
     }
 

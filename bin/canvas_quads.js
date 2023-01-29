@@ -16581,13 +16581,13 @@ pixelimage_pixel__$TwoGrad_TwoGrad_$.__name__ = "pixelimage.pixel._TwoGrad.TwoGr
 pixelimage_pixel__$TwoGrad_TwoGrad_$.prototype = {
 	__class__: pixelimage_pixel__$TwoGrad_TwoGrad_$
 };
-var pixelimage_triangleGML_coreShape_ShapeInterface = function() { };
-pixelimage_triangleGML_coreShape_ShapeInterface.__name__ = "pixelimage.triangleGML.coreShape.ShapeInterface";
-pixelimage_triangleGML_coreShape_ShapeInterface.__isInterface__ = true;
-pixelimage_triangleGML_coreShape_ShapeInterface.prototype = {
-	__class__: pixelimage_triangleGML_coreShape_ShapeInterface
+var pixelimage_triGML_coreShape_ShapeInterface = function() { };
+pixelimage_triGML_coreShape_ShapeInterface.__name__ = "pixelimage.triGML.coreShape.ShapeInterface";
+pixelimage_triGML_coreShape_ShapeInterface.__isInterface__ = true;
+pixelimage_triGML_coreShape_ShapeInterface.prototype = {
+	__class__: pixelimage_triGML_coreShape_ShapeInterface
 };
-var pixelimage_triangleGML_coreShape_GroupShape = function(opacity,visibility) {
+var pixelimage_triGML_coreShape_GroupShape = function(opacity,visibility) {
 	if(visibility == null) {
 		visibility = true;
 	}
@@ -16597,9 +16597,9 @@ var pixelimage_triangleGML_coreShape_GroupShape = function(opacity,visibility) {
 	this.visibility = visibility;
 	this.opacity = opacity;
 };
-pixelimage_triangleGML_coreShape_GroupShape.__name__ = "pixelimage.triangleGML.coreShape.GroupShape";
-pixelimage_triangleGML_coreShape_GroupShape.__interfaces__ = [pixelimage_triangleGML_coreShape_ShapeInterface];
-pixelimage_triangleGML_coreShape_GroupShape.prototype = {
+pixelimage_triGML_coreShape_GroupShape.__name__ = "pixelimage.triGML.coreShape.GroupShape";
+pixelimage_triGML_coreShape_GroupShape.__interfaces__ = [pixelimage_triGML_coreShape_ShapeInterface];
+pixelimage_triGML_coreShape_GroupShape.prototype = {
 	setParameter: function(name,value) {
 		switch(name) {
 		case "opacity":
@@ -16609,15 +16609,15 @@ pixelimage_triangleGML_coreShape_GroupShape.prototype = {
 			this.visibility = value.toLowerCase() == "true";
 			break;
 		default:
-			haxe_Log.trace("property not found " + name,{ fileName : "pixelimage/triangleGML/coreShape/GroupShape.hx", lineNumber : 20, className : "pixelimage.triangleGML.coreShape.GroupShape", methodName : "setParameter"});
+			haxe_Log.trace("property not found " + name,{ fileName : "pixelimage/triGML/coreShape/GroupShape.hx", lineNumber : 20, className : "pixelimage.triGML.coreShape.GroupShape", methodName : "setParameter"});
 		}
 	}
 	,render: function(pixelShape) {
 		return pixelShape;
 	}
-	,__class__: pixelimage_triangleGML_coreShape_GroupShape
+	,__class__: pixelimage_triGML_coreShape_GroupShape
 };
-var pixelimage_triangleGML_coreShape_BasicShape = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray) {
+var pixelimage_triGML_coreShape_BasicShape = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray) {
 	if(strokeWidth == null) {
 		strokeWidth = 1.;
 	}
@@ -16630,14 +16630,14 @@ var pixelimage_triangleGML_coreShape_BasicShape = function(opacity,visibility,st
 	if(opacity == null) {
 		opacity = 1.;
 	}
-	pixelimage_triangleGML_coreShape_GroupShape.call(this,opacity,visibility);
+	pixelimage_triGML_coreShape_GroupShape.call(this,opacity,visibility);
 	this.strokeColor = strokeColor;
 	this.strokeWidth = strokeWidth;
 	this.strokeDashGapArray = strokeDashGapArray;
 };
-pixelimage_triangleGML_coreShape_BasicShape.__name__ = "pixelimage.triangleGML.coreShape.BasicShape";
-pixelimage_triangleGML_coreShape_BasicShape.__super__ = pixelimage_triangleGML_coreShape_GroupShape;
-pixelimage_triangleGML_coreShape_BasicShape.prototype = $extend(pixelimage_triangleGML_coreShape_GroupShape.prototype,{
+pixelimage_triGML_coreShape_BasicShape.__name__ = "pixelimage.triGML.coreShape.BasicShape";
+pixelimage_triGML_coreShape_BasicShape.__super__ = pixelimage_triGML_coreShape_GroupShape;
+pixelimage_triGML_coreShape_BasicShape.prototype = $extend(pixelimage_triGML_coreShape_GroupShape.prototype,{
 	setParameter: function(name,value) {
 		switch(name) {
 		case "strokeColor":
@@ -16650,12 +16650,12 @@ pixelimage_triangleGML_coreShape_BasicShape.prototype = $extend(pixelimage_trian
 			this.strokeWidth = parseFloat(value);
 			break;
 		default:
-			pixelimage_triangleGML_coreShape_GroupShape.prototype.setParameter.call(this,name,value);
+			pixelimage_triGML_coreShape_GroupShape.prototype.setParameter.call(this,name,value);
 		}
 	}
-	,__class__: pixelimage_triangleGML_coreShape_BasicShape
+	,__class__: pixelimage_triGML_coreShape_BasicShape
 });
-var pixelimage_triangleGML_contour_ArrowShape = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,both,flare,reverseFlare,x1,y1,x2,y2,arrowWidth,arrowHeight) {
+var pixelimage_triGML_contour_ArrowShape = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,both,flare,reverseFlare,x1,y1,x2,y2,arrowWidth,arrowHeight) {
 	if(arrowHeight == null) {
 		arrowHeight = 0.;
 	}
@@ -16695,7 +16695,7 @@ var pixelimage_triangleGML_contour_ArrowShape = function(opacity,visibility,stro
 	if(opacity == null) {
 		opacity = 1.;
 	}
-	pixelimage_triangleGML_coreShape_BasicShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray);
+	pixelimage_triGML_coreShape_BasicShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray);
 	this.both = both;
 	this.flare = flare;
 	this.reverseFlare = reverseFlare;
@@ -16704,9 +16704,9 @@ var pixelimage_triangleGML_contour_ArrowShape = function(opacity,visibility,stro
 	this.x2 = x2;
 	this.y2 = y2;
 };
-pixelimage_triangleGML_contour_ArrowShape.__name__ = "pixelimage.triangleGML.contour.ArrowShape";
-pixelimage_triangleGML_contour_ArrowShape.__super__ = pixelimage_triangleGML_coreShape_BasicShape;
-pixelimage_triangleGML_contour_ArrowShape.prototype = $extend(pixelimage_triangleGML_coreShape_BasicShape.prototype,{
+pixelimage_triGML_contour_ArrowShape.__name__ = "pixelimage.triGML.contour.ArrowShape";
+pixelimage_triGML_contour_ArrowShape.__super__ = pixelimage_triGML_coreShape_BasicShape;
+pixelimage_triGML_contour_ArrowShape.prototype = $extend(pixelimage_triGML_coreShape_BasicShape.prototype,{
 	setParameter: function(name,value) {
 		switch(name) {
 		case "arrowHeight":
@@ -16737,7 +16737,7 @@ pixelimage_triangleGML_contour_ArrowShape.prototype = $extend(pixelimage_triangl
 			this.y2 = parseFloat(value);
 			break;
 		default:
-			pixelimage_triangleGML_coreShape_BasicShape.prototype.setParameter.call(this,name,value);
+			pixelimage_triGML_coreShape_BasicShape.prototype.setParameter.call(this,name,value);
 		}
 	}
 	,render: function(pixelImage) {
@@ -20427,11 +20427,11 @@ pixelimage_triangleGML_contour_ArrowShape.prototype = $extend(pixelimage_triangl
 				hitArr.triArr.push(hitQuad.triBCD);
 			}
 		}
-		return pixelimage_triangleGML_coreShape_BasicShape.prototype.render.call(this,pixelImage);
+		return pixelimage_triGML_coreShape_BasicShape.prototype.render.call(this,pixelImage);
 	}
-	,__class__: pixelimage_triangleGML_contour_ArrowShape
+	,__class__: pixelimage_triGML_contour_ArrowShape
 });
-var pixelimage_triangleGML_coreShape_FillShape = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill) {
+var pixelimage_triGML_coreShape_FillShape = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill) {
 	if(fill == null) {
 		fill = 0;
 	}
@@ -20447,22 +20447,22 @@ var pixelimage_triangleGML_coreShape_FillShape = function(opacity,visibility,str
 	if(opacity == null) {
 		opacity = 1.;
 	}
-	pixelimage_triangleGML_coreShape_BasicShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray);
+	pixelimage_triGML_coreShape_BasicShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray);
 	this.fill = fill;
 };
-pixelimage_triangleGML_coreShape_FillShape.__name__ = "pixelimage.triangleGML.coreShape.FillShape";
-pixelimage_triangleGML_coreShape_FillShape.__super__ = pixelimage_triangleGML_coreShape_BasicShape;
-pixelimage_triangleGML_coreShape_FillShape.prototype = $extend(pixelimage_triangleGML_coreShape_BasicShape.prototype,{
+pixelimage_triGML_coreShape_FillShape.__name__ = "pixelimage.triGML.coreShape.FillShape";
+pixelimage_triGML_coreShape_FillShape.__super__ = pixelimage_triGML_coreShape_BasicShape;
+pixelimage_triGML_coreShape_FillShape.prototype = $extend(pixelimage_triGML_coreShape_BasicShape.prototype,{
 	setParameter: function(name,value) {
 		if(name == "fill") {
 			this.fill = Std.parseInt(value);
 		} else {
-			pixelimage_triangleGML_coreShape_BasicShape.prototype.setParameter.call(this,name,value);
+			pixelimage_triGML_coreShape_BasicShape.prototype.setParameter.call(this,name,value);
 		}
 	}
-	,__class__: pixelimage_triangleGML_coreShape_FillShape
+	,__class__: pixelimage_triGML_coreShape_FillShape
 });
-var pixelimage_triangleGML_contour_CubicCurveShape = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill,x1,y1,x2,y2,x3,y3,x4,y4) {
+var pixelimage_triGML_contour_CubicCurveShape = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill,x1,y1,x2,y2,x3,y3,x4,y4) {
 	if(y4 == null) {
 		y4 = 0.;
 	}
@@ -20502,7 +20502,7 @@ var pixelimage_triangleGML_contour_CubicCurveShape = function(opacity,visibility
 	if(opacity == null) {
 		opacity = 1.;
 	}
-	pixelimage_triangleGML_coreShape_FillShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill);
+	pixelimage_triGML_coreShape_FillShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill);
 	this.x1 = x1;
 	this.y1 = y1;
 	this.x2 = x2;
@@ -20512,9 +20512,9 @@ var pixelimage_triangleGML_contour_CubicCurveShape = function(opacity,visibility
 	this.x4 = x4;
 	this.y4 = y4;
 };
-pixelimage_triangleGML_contour_CubicCurveShape.__name__ = "pixelimage.triangleGML.contour.CubicCurveShape";
-pixelimage_triangleGML_contour_CubicCurveShape.__super__ = pixelimage_triangleGML_coreShape_FillShape;
-pixelimage_triangleGML_contour_CubicCurveShape.prototype = $extend(pixelimage_triangleGML_coreShape_FillShape.prototype,{
+pixelimage_triGML_contour_CubicCurveShape.__name__ = "pixelimage.triGML.contour.CubicCurveShape";
+pixelimage_triGML_contour_CubicCurveShape.__super__ = pixelimage_triGML_coreShape_FillShape;
+pixelimage_triGML_contour_CubicCurveShape.prototype = $extend(pixelimage_triGML_coreShape_FillShape.prototype,{
 	setParameter: function(name,value) {
 		switch(name) {
 		case "x1":
@@ -20542,19 +20542,19 @@ pixelimage_triangleGML_contour_CubicCurveShape.prototype = $extend(pixelimage_tr
 			this.y4 = parseFloat(value);
 			break;
 		default:
-			pixelimage_triangleGML_coreShape_FillShape.prototype.setParameter.call(this,name,value);
+			pixelimage_triGML_coreShape_FillShape.prototype.setParameter.call(this,name,value);
 		}
 	}
 	,render: function(pixelShape) {
 		var drawing = new pixelimage_draw_DrawShapeHelper(pixelShape,this.strokeWidth,this.strokeColor);
 		drawing.moveTo(this.x1,this.y1);
 		drawing.curveTo(this.x2,this.y2,this.x3,this.y3,this.x4,this.y4);
-		haxe_Log.trace("render CubicCurveShape",{ fileName : "pixelimage/triangleGML/contour/CubicCurveShape.hx", lineNumber : 69, className : "pixelimage.triangleGML.contour.CubicCurveShape", methodName : "render"});
-		return pixelimage_triangleGML_coreShape_FillShape.prototype.render.call(this,pixelShape);
+		haxe_Log.trace("render CubicCurveShape",{ fileName : "pixelimage/triGML/contour/CubicCurveShape.hx", lineNumber : 69, className : "pixelimage.triGML.contour.CubicCurveShape", methodName : "render"});
+		return pixelimage_triGML_coreShape_FillShape.prototype.render.call(this,pixelShape);
 	}
-	,__class__: pixelimage_triangleGML_contour_CubicCurveShape
+	,__class__: pixelimage_triGML_contour_CubicCurveShape
 });
-var pixelimage_triangleGML_contour_LineGridShape = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,left,top,width,height,delta,deltaH) {
+var pixelimage_triGML_contour_LineGridShape = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,left,top,width,height,delta,deltaH) {
 	if(deltaH == null) {
 		deltaH = 0.;
 	}
@@ -20585,7 +20585,7 @@ var pixelimage_triangleGML_contour_LineGridShape = function(opacity,visibility,s
 	if(opacity == null) {
 		opacity = 1.;
 	}
-	pixelimage_triangleGML_coreShape_BasicShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray);
+	pixelimage_triGML_coreShape_BasicShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray);
 	this.left = left;
 	this.top = top;
 	this.width = width;
@@ -20593,9 +20593,9 @@ var pixelimage_triangleGML_contour_LineGridShape = function(opacity,visibility,s
 	this.delta = delta;
 	this.deltaH = deltaH;
 };
-pixelimage_triangleGML_contour_LineGridShape.__name__ = "pixelimage.triangleGML.contour.LineGridShape";
-pixelimage_triangleGML_contour_LineGridShape.__super__ = pixelimage_triangleGML_coreShape_BasicShape;
-pixelimage_triangleGML_contour_LineGridShape.prototype = $extend(pixelimage_triangleGML_coreShape_BasicShape.prototype,{
+pixelimage_triGML_contour_LineGridShape.__name__ = "pixelimage.triGML.contour.LineGridShape";
+pixelimage_triGML_contour_LineGridShape.__super__ = pixelimage_triGML_coreShape_BasicShape;
+pixelimage_triGML_contour_LineGridShape.prototype = $extend(pixelimage_triGML_coreShape_BasicShape.prototype,{
 	setParameter: function(name,value) {
 		switch(name) {
 		case "delta":
@@ -20617,7 +20617,7 @@ pixelimage_triangleGML_contour_LineGridShape.prototype = $extend(pixelimage_tria
 			this.width = parseFloat(value);
 			break;
 		default:
-			pixelimage_triangleGML_coreShape_BasicShape.prototype.setParameter.call(this,name,value);
+			pixelimage_triGML_coreShape_BasicShape.prototype.setParameter.call(this,name,value);
 		}
 	}
 	,render: function(pixelShape) {
@@ -20859,11 +20859,11 @@ pixelimage_triangleGML_contour_LineGridShape.prototype = $extend(pixelimage_tria
 				}
 			}
 		}
-		return pixelimage_triangleGML_coreShape_BasicShape.prototype.render.call(this,pixelShape);
+		return pixelimage_triGML_coreShape_BasicShape.prototype.render.call(this,pixelShape);
 	}
-	,__class__: pixelimage_triangleGML_contour_LineGridShape
+	,__class__: pixelimage_triGML_contour_LineGridShape
 });
-var pixelimage_triangleGML_contour_LineShape = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,x1,y1,x2,y2) {
+var pixelimage_triGML_contour_LineShape = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,x1,y1,x2,y2) {
 	if(y2 == null) {
 		y2 = 0.;
 	}
@@ -20888,15 +20888,15 @@ var pixelimage_triangleGML_contour_LineShape = function(opacity,visibility,strok
 	if(opacity == null) {
 		opacity = 1.;
 	}
-	pixelimage_triangleGML_coreShape_BasicShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray);
+	pixelimage_triGML_coreShape_BasicShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray);
 	this.x1 = x1;
 	this.y1 = y1;
 	this.x2 = x2;
 	this.y2 = y2;
 };
-pixelimage_triangleGML_contour_LineShape.__name__ = "pixelimage.triangleGML.contour.LineShape";
-pixelimage_triangleGML_contour_LineShape.__super__ = pixelimage_triangleGML_coreShape_BasicShape;
-pixelimage_triangleGML_contour_LineShape.prototype = $extend(pixelimage_triangleGML_coreShape_BasicShape.prototype,{
+pixelimage_triGML_contour_LineShape.__name__ = "pixelimage.triGML.contour.LineShape";
+pixelimage_triGML_contour_LineShape.__super__ = pixelimage_triGML_coreShape_BasicShape;
+pixelimage_triGML_contour_LineShape.prototype = $extend(pixelimage_triGML_coreShape_BasicShape.prototype,{
 	setParameter: function(name,value) {
 		switch(name) {
 		case "x1":
@@ -20912,7 +20912,7 @@ pixelimage_triangleGML_contour_LineShape.prototype = $extend(pixelimage_triangle
 			this.y2 = parseFloat(value);
 			break;
 		default:
-			pixelimage_triangleGML_coreShape_BasicShape.prototype.setParameter.call(this,name,value);
+			pixelimage_triGML_coreShape_BasicShape.prototype.setParameter.call(this,name,value);
 		}
 	}
 	,render: function(pixelShape) {
@@ -21240,11 +21240,11 @@ pixelimage_triangleGML_contour_LineShape.prototype = $extend(pixelimage_triangle
 		if(hasHit1 == true) {
 			var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy,true);
 		}
-		return pixelimage_triangleGML_coreShape_BasicShape.prototype.render.call(this,pixelShape);
+		return pixelimage_triGML_coreShape_BasicShape.prototype.render.call(this,pixelShape);
 	}
-	,__class__: pixelimage_triangleGML_contour_LineShape
+	,__class__: pixelimage_triGML_contour_LineShape
 });
-var pixelimage_triangleGML_contour_PolyLineShape = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill,points) {
+var pixelimage_triGML_contour_PolyLineShape = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill,points) {
 	if(fill == null) {
 		fill = 0;
 	}
@@ -21260,12 +21260,12 @@ var pixelimage_triangleGML_contour_PolyLineShape = function(opacity,visibility,s
 	if(opacity == null) {
 		opacity = 1.;
 	}
-	pixelimage_triangleGML_coreShape_FillShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill);
+	pixelimage_triGML_coreShape_FillShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill);
 	this.points = points;
 };
-pixelimage_triangleGML_contour_PolyLineShape.__name__ = "pixelimage.triangleGML.contour.PolyLineShape";
-pixelimage_triangleGML_contour_PolyLineShape.__super__ = pixelimage_triangleGML_coreShape_FillShape;
-pixelimage_triangleGML_contour_PolyLineShape.prototype = $extend(pixelimage_triangleGML_coreShape_FillShape.prototype,{
+pixelimage_triGML_contour_PolyLineShape.__name__ = "pixelimage.triGML.contour.PolyLineShape";
+pixelimage_triGML_contour_PolyLineShape.__super__ = pixelimage_triGML_coreShape_FillShape;
+pixelimage_triGML_contour_PolyLineShape.prototype = $extend(pixelimage_triGML_coreShape_FillShape.prototype,{
 	setParameter: function(name,value) {
 		if(name == "points") {
 			value = value.split("[")[1].split("]")[0];
@@ -21279,7 +21279,7 @@ pixelimage_triangleGML_contour_PolyLineShape.prototype = $extend(pixelimage_tria
 			}
 			this.points = _g;
 		} else {
-			pixelimage_triangleGML_coreShape_FillShape.prototype.setParameter.call(this,name,value);
+			pixelimage_triGML_coreShape_FillShape.prototype.setParameter.call(this,name,value);
 		}
 	}
 	,render: function(pixelShape) {
@@ -21306,11 +21306,11 @@ pixelimage_triangleGML_contour_PolyLineShape.prototype = $extend(pixelimage_tria
 			++i;
 			drawing.lineTo(x,y);
 		}
-		return pixelimage_triangleGML_coreShape_FillShape.prototype.render.call(this,pixelShape);
+		return pixelimage_triGML_coreShape_FillShape.prototype.render.call(this,pixelShape);
 	}
-	,__class__: pixelimage_triangleGML_contour_PolyLineShape
+	,__class__: pixelimage_triGML_contour_PolyLineShape
 });
-var pixelimage_triangleGML_contour_QuadCurveShape = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill,thru,x1,y1,x2,y2,x3,y3) {
+var pixelimage_triGML_contour_QuadCurveShape = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill,thru,x1,y1,x2,y2,x3,y3) {
 	if(y3 == null) {
 		y3 = 0.;
 	}
@@ -21347,7 +21347,7 @@ var pixelimage_triangleGML_contour_QuadCurveShape = function(opacity,visibility,
 	if(opacity == null) {
 		opacity = 1.;
 	}
-	pixelimage_triangleGML_coreShape_FillShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill);
+	pixelimage_triGML_coreShape_FillShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill);
 	this.thru = thru;
 	this.x1 = x1;
 	this.y1 = y1;
@@ -21356,9 +21356,9 @@ var pixelimage_triangleGML_contour_QuadCurveShape = function(opacity,visibility,
 	this.x3 = x3;
 	this.y3 = y3;
 };
-pixelimage_triangleGML_contour_QuadCurveShape.__name__ = "pixelimage.triangleGML.contour.QuadCurveShape";
-pixelimage_triangleGML_contour_QuadCurveShape.__super__ = pixelimage_triangleGML_coreShape_FillShape;
-pixelimage_triangleGML_contour_QuadCurveShape.prototype = $extend(pixelimage_triangleGML_coreShape_FillShape.prototype,{
+pixelimage_triGML_contour_QuadCurveShape.__name__ = "pixelimage.triGML.contour.QuadCurveShape";
+pixelimage_triGML_contour_QuadCurveShape.__super__ = pixelimage_triGML_coreShape_FillShape;
+pixelimage_triGML_contour_QuadCurveShape.prototype = $extend(pixelimage_triGML_coreShape_FillShape.prototype,{
 	setParameter: function(name,value) {
 		switch(name) {
 		case "thru":
@@ -21383,18 +21383,18 @@ pixelimage_triangleGML_contour_QuadCurveShape.prototype = $extend(pixelimage_tri
 			this.y3 = parseFloat(value);
 			break;
 		default:
-			pixelimage_triangleGML_coreShape_FillShape.prototype.setParameter.call(this,name,value);
+			pixelimage_triGML_coreShape_FillShape.prototype.setParameter.call(this,name,value);
 		}
 	}
 	,render: function(pixelShape) {
 		var drawing = new pixelimage_draw_DrawShapeHelper(pixelShape,this.strokeWidth,this.strokeColor);
 		drawing.moveTo(this.x1,this.y1);
 		drawing.quadTo(this.x2,this.y2,this.x3,this.y3);
-		return pixelimage_triangleGML_coreShape_FillShape.prototype.render.call(this,pixelShape);
+		return pixelimage_triGML_coreShape_FillShape.prototype.render.call(this,pixelShape);
 	}
-	,__class__: pixelimage_triangleGML_contour_QuadCurveShape
+	,__class__: pixelimage_triGML_contour_QuadCurveShape
 });
-var pixelimage_triangleGML_contour_QuadShape = function(opacity,visibility,strokeColor,aX,aY,bX,bY,cX,cY,dX,dY) {
+var pixelimage_triGML_contour_QuadShape = function(opacity,visibility,strokeColor,aX,aY,bX,bY,cX,cY,dX,dY) {
 	if(dY == null) {
 		dY = 1.;
 	}
@@ -21428,7 +21428,7 @@ var pixelimage_triangleGML_contour_QuadShape = function(opacity,visibility,strok
 	if(opacity == null) {
 		opacity = 1.;
 	}
-	pixelimage_triangleGML_coreShape_BasicShape.call(this,opacity,visibility,strokeColor,0.,null);
+	pixelimage_triGML_coreShape_BasicShape.call(this,opacity,visibility,strokeColor,0.,null);
 	this.aX = aX;
 	this.aY = aY;
 	this.bX = bX;
@@ -21438,9 +21438,9 @@ var pixelimage_triangleGML_contour_QuadShape = function(opacity,visibility,strok
 	this.dX = dX;
 	this.dY = dY;
 };
-pixelimage_triangleGML_contour_QuadShape.__name__ = "pixelimage.triangleGML.contour.QuadShape";
-pixelimage_triangleGML_contour_QuadShape.__super__ = pixelimage_triangleGML_coreShape_BasicShape;
-pixelimage_triangleGML_contour_QuadShape.prototype = $extend(pixelimage_triangleGML_coreShape_BasicShape.prototype,{
+pixelimage_triGML_contour_QuadShape.__name__ = "pixelimage.triGML.contour.QuadShape";
+pixelimage_triGML_contour_QuadShape.__super__ = pixelimage_triGML_coreShape_BasicShape;
+pixelimage_triGML_contour_QuadShape.prototype = $extend(pixelimage_triGML_coreShape_BasicShape.prototype,{
 	setParameter: function(name,value) {
 		switch(name) {
 		case "aX":
@@ -21468,7 +21468,7 @@ pixelimage_triangleGML_contour_QuadShape.prototype = $extend(pixelimage_triangle
 			this.dY = parseFloat(value);
 			break;
 		default:
-			pixelimage_triangleGML_coreShape_BasicShape.prototype.setParameter.call(this,name,value);
+			pixelimage_triGML_coreShape_BasicShape.prototype.setParameter.call(this,name,value);
 		}
 	}
 	,render: function(pixelShape) {
@@ -21770,11 +21770,11 @@ pixelimage_triangleGML_contour_QuadShape.prototype = $extend(pixelimage_triangle
 		if(hasHit == true) {
 			var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy,true);
 		}
-		return pixelimage_triangleGML_coreShape_BasicShape.prototype.render.call(this,pixelShape);
+		return pixelimage_triGML_coreShape_BasicShape.prototype.render.call(this,pixelShape);
 	}
-	,__class__: pixelimage_triangleGML_contour_QuadShape
+	,__class__: pixelimage_triGML_contour_QuadShape
 });
-var pixelimage_triangleGML_contour_ThruCurveShape = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill,x1,y1,x2,y2,x3,y3) {
+var pixelimage_triGML_contour_ThruCurveShape = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill,x1,y1,x2,y2,x3,y3) {
 	if(y3 == null) {
 		y3 = 0.;
 	}
@@ -21808,7 +21808,7 @@ var pixelimage_triangleGML_contour_ThruCurveShape = function(opacity,visibility,
 	if(opacity == null) {
 		opacity = 1.;
 	}
-	pixelimage_triangleGML_coreShape_FillShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill);
+	pixelimage_triGML_coreShape_FillShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill);
 	this.x1 = x1;
 	this.y1 = y1;
 	this.x2 = x2;
@@ -21816,9 +21816,9 @@ var pixelimage_triangleGML_contour_ThruCurveShape = function(opacity,visibility,
 	this.x3 = x3;
 	this.y3 = y3;
 };
-pixelimage_triangleGML_contour_ThruCurveShape.__name__ = "pixelimage.triangleGML.contour.ThruCurveShape";
-pixelimage_triangleGML_contour_ThruCurveShape.__super__ = pixelimage_triangleGML_coreShape_FillShape;
-pixelimage_triangleGML_contour_ThruCurveShape.prototype = $extend(pixelimage_triangleGML_coreShape_FillShape.prototype,{
+pixelimage_triGML_contour_ThruCurveShape.__name__ = "pixelimage.triGML.contour.ThruCurveShape";
+pixelimage_triGML_contour_ThruCurveShape.__super__ = pixelimage_triGML_coreShape_FillShape;
+pixelimage_triGML_contour_ThruCurveShape.prototype = $extend(pixelimage_triGML_coreShape_FillShape.prototype,{
 	setParameter: function(name,value) {
 		switch(name) {
 		case "x1":
@@ -21840,7 +21840,7 @@ pixelimage_triangleGML_contour_ThruCurveShape.prototype = $extend(pixelimage_tri
 			this.y3 = parseFloat(value);
 			break;
 		default:
-			pixelimage_triangleGML_coreShape_FillShape.prototype.setParameter.call(this,name,value);
+			pixelimage_triGML_coreShape_FillShape.prototype.setParameter.call(this,name,value);
 		}
 	}
 	,render: function(pixelShape) {
@@ -21848,11 +21848,11 @@ pixelimage_triangleGML_contour_ThruCurveShape.prototype = $extend(pixelimage_tri
 		drawing.moveTo(this.x1,this.y1);
 		drawing.quadThru(this.x2,this.y2,this.x3,this.y3);
 		drawing = null;
-		return pixelimage_triangleGML_coreShape_FillShape.prototype.render.call(this,pixelShape);
+		return pixelimage_triGML_coreShape_FillShape.prototype.render.call(this,pixelShape);
 	}
-	,__class__: pixelimage_triangleGML_contour_ThruCurveShape
+	,__class__: pixelimage_triGML_contour_ThruCurveShape
 });
-var pixelimage_triangleGML_coreShape_BasicGradient = function(opacity,visibility,cornerColors) {
+var pixelimage_triGML_coreShape_BasicGradient = function(opacity,visibility,cornerColors) {
 	if(visibility == null) {
 		visibility = true;
 	}
@@ -21860,14 +21860,14 @@ var pixelimage_triangleGML_coreShape_BasicGradient = function(opacity,visibility
 		opacity = 1.;
 	}
 	this.cornerColors = [];
-	pixelimage_triangleGML_coreShape_GroupShape.call(this,opacity,visibility);
+	pixelimage_triGML_coreShape_GroupShape.call(this,opacity,visibility);
 	if(cornerColors != null) {
 		this.cornerColors = cornerColors;
 	}
 };
-pixelimage_triangleGML_coreShape_BasicGradient.__name__ = "pixelimage.triangleGML.coreShape.BasicGradient";
-pixelimage_triangleGML_coreShape_BasicGradient.__super__ = pixelimage_triangleGML_coreShape_GroupShape;
-pixelimage_triangleGML_coreShape_BasicGradient.prototype = $extend(pixelimage_triangleGML_coreShape_GroupShape.prototype,{
+pixelimage_triGML_coreShape_BasicGradient.__name__ = "pixelimage.triGML.coreShape.BasicGradient";
+pixelimage_triGML_coreShape_BasicGradient.__super__ = pixelimage_triGML_coreShape_GroupShape;
+pixelimage_triGML_coreShape_BasicGradient.prototype = $extend(pixelimage_triGML_coreShape_GroupShape.prototype,{
 	setParameter: function(name,value) {
 		if(name == "cornerColors") {
 			value = value.split("[")[1].split("]")[0];
@@ -21881,12 +21881,12 @@ pixelimage_triangleGML_coreShape_BasicGradient.prototype = $extend(pixelimage_tr
 			}
 			this.cornerColors = _g;
 		} else {
-			pixelimage_triangleGML_coreShape_GroupShape.prototype.setParameter.call(this,name,value);
+			pixelimage_triGML_coreShape_GroupShape.prototype.setParameter.call(this,name,value);
 		}
 	}
-	,__class__: pixelimage_triangleGML_coreShape_BasicGradient
+	,__class__: pixelimage_triGML_coreShape_BasicGradient
 });
-var pixelimage_triangleGML_coreShape_PatternShape = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,strokeColor0,strokeColor1,fillColor0,fillColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale,fillPatternFill,fillPatternWidth,fillPatternHeight,fillPatternAcross,fillPatternScale) {
+var pixelimage_triGML_coreShape_PatternShape = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,strokeColor0,strokeColor1,fillColor0,fillColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale,fillPatternFill,fillPatternWidth,fillPatternHeight,fillPatternAcross,fillPatternScale) {
 	if(fillPatternScale == null) {
 		fillPatternScale = 1;
 	}
@@ -21929,7 +21929,7 @@ var pixelimage_triangleGML_coreShape_PatternShape = function(opacity,visibility,
 	if(opacity == null) {
 		opacity = 1.;
 	}
-	pixelimage_triangleGML_coreShape_BasicShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray);
+	pixelimage_triGML_coreShape_BasicShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray);
 	this.strokeColor0 = strokeColor0;
 	this.strokeColor1 = strokeColor1;
 	this.fillColor0 = fillColor0;
@@ -21949,9 +21949,9 @@ var pixelimage_triangleGML_coreShape_PatternShape = function(opacity,visibility,
 	this.fillPatternAcross = fillPatternAcross;
 	this.fillPatternScale = fillPatternScale;
 };
-pixelimage_triangleGML_coreShape_PatternShape.__name__ = "pixelimage.triangleGML.coreShape.PatternShape";
-pixelimage_triangleGML_coreShape_PatternShape.__super__ = pixelimage_triangleGML_coreShape_BasicShape;
-pixelimage_triangleGML_coreShape_PatternShape.prototype = $extend(pixelimage_triangleGML_coreShape_BasicShape.prototype,{
+pixelimage_triGML_coreShape_PatternShape.__name__ = "pixelimage.triGML.coreShape.PatternShape";
+pixelimage_triGML_coreShape_PatternShape.__super__ = pixelimage_triGML_coreShape_BasicShape;
+pixelimage_triGML_coreShape_PatternShape.prototype = $extend(pixelimage_triGML_coreShape_BasicShape.prototype,{
 	setParameter: function(name,value) {
 		switch(name) {
 		case "fillColor0":
@@ -22019,13 +22019,13 @@ pixelimage_triangleGML_coreShape_PatternShape.prototype = $extend(pixelimage_tri
 			this.strokePatternWidth = Std.parseInt(value);
 			break;
 		default:
-			pixelimage_triangleGML_coreShape_BasicShape.prototype.setParameter.call(this,name,value);
+			pixelimage_triGML_coreShape_BasicShape.prototype.setParameter.call(this,name,value);
 		}
 	}
 	,render: function(pixelShape) {
 		this.tileImageStroke = null;
 		this.tileImageFill = null;
-		return pixelimage_triangleGML_coreShape_BasicShape.prototype.render.call(this,pixelShape);
+		return pixelimage_triGML_coreShape_BasicShape.prototype.render.call(this,pixelShape);
 	}
 	,buildPatternTemplates: function() {
 		this.tileImageStroke = null;
@@ -22605,9 +22605,9 @@ pixelimage_triangleGML_coreShape_PatternShape.prototype = $extend(pixelimage_tri
 			this.tileImageFill = pixelImage;
 		}
 	}
-	,__class__: pixelimage_triangleGML_coreShape_PatternShape
+	,__class__: pixelimage_triGML_coreShape_PatternShape
 });
-var pixelimage_triangleGML_coreShape_PatternStroke = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,strokeColor0,strokeColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale) {
+var pixelimage_triGML_coreShape_PatternStroke = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,strokeColor0,strokeColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale) {
 	if(strokePatternScale == null) {
 		strokePatternScale = 1;
 	}
@@ -22632,7 +22632,7 @@ var pixelimage_triangleGML_coreShape_PatternStroke = function(opacity,visibility
 	if(opacity == null) {
 		opacity = 1.;
 	}
-	pixelimage_triangleGML_coreShape_BasicShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray);
+	pixelimage_triGML_coreShape_BasicShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray);
 	this.strokeColor0 = strokeColor0;
 	this.strokeColor1 = strokeColor1;
 	this.strokePatternFill = strokePatternFill;
@@ -22641,9 +22641,9 @@ var pixelimage_triangleGML_coreShape_PatternStroke = function(opacity,visibility
 	this.strokePatternAcross = strokePatternAcross;
 	this.strokePatternScale = strokePatternScale;
 };
-pixelimage_triangleGML_coreShape_PatternStroke.__name__ = "pixelimage.triangleGML.coreShape.PatternStroke";
-pixelimage_triangleGML_coreShape_PatternStroke.__super__ = pixelimage_triangleGML_coreShape_BasicShape;
-pixelimage_triangleGML_coreShape_PatternStroke.prototype = $extend(pixelimage_triangleGML_coreShape_BasicShape.prototype,{
+pixelimage_triGML_coreShape_PatternStroke.__name__ = "pixelimage.triGML.coreShape.PatternStroke";
+pixelimage_triGML_coreShape_PatternStroke.__super__ = pixelimage_triGML_coreShape_BasicShape;
+pixelimage_triGML_coreShape_PatternStroke.prototype = $extend(pixelimage_triGML_coreShape_BasicShape.prototype,{
 	setParameter: function(name,value) {
 		switch(name) {
 		case "strokeColor0":
@@ -22679,12 +22679,12 @@ pixelimage_triangleGML_coreShape_PatternStroke.prototype = $extend(pixelimage_tr
 			this.strokePatternWidth = Std.parseInt(value);
 			break;
 		default:
-			pixelimage_triangleGML_coreShape_BasicShape.prototype.setParameter.call(this,name,value);
+			pixelimage_triGML_coreShape_BasicShape.prototype.setParameter.call(this,name,value);
 		}
 	}
 	,render: function(pixelShape) {
 		this.tileImageStroke = null;
-		return pixelimage_triangleGML_coreShape_BasicShape.prototype.render.call(this,pixelShape);
+		return pixelimage_triGML_coreShape_BasicShape.prototype.render.call(this,pixelShape);
 	}
 	,buildPatternTemplates: function() {
 		var w = this.strokePatternWidth;
@@ -22974,15 +22974,132 @@ pixelimage_triangleGML_coreShape_PatternStroke.prototype = $extend(pixelimage_tr
 			this.tileImageStroke = pixelImage;
 		}
 	}
-	,__class__: pixelimage_triangleGML_coreShape_PatternStroke
+	,__class__: pixelimage_triGML_coreShape_PatternStroke
 });
-var pixelimage_triangleGML_coreShape_TriangleGML = function(pixelShape,xml) {
+function pixelimage_triGML_coreShape_TriGML_getTriGML(nodeName) {
+	var triGMLname = nodeName;
+	var s;
+	switch(triGMLname) {
+	case "ArcPattern":
+		s = new pixelimage_triGML_patternShape_ArcPattern();
+		break;
+	case "ArcShape":
+		s = new pixelimage_triGML_shape_ArcShape();
+		break;
+	case "ArrowShape":
+		s = new pixelimage_triGML_contour_ArrowShape();
+		break;
+	case "ArrowThickGradient":
+		s = new pixelimage_triGML_gradient_ArrowThickGradient();
+		break;
+	case "CirclePattern":
+		s = new pixelimage_triGML_patternShape_CirclePattern();
+		break;
+	case "CircleShape":
+		s = new pixelimage_triGML_shape_CircleShape();
+		break;
+	case "CubicCurvePattern":
+		s = new pixelimage_triGML_patternContour_CubicCurvePattern();
+		break;
+	case "CubicCurveShape":
+		s = new pixelimage_triGML_contour_CubicCurveShape();
+		break;
+	case "EllipsePattern":
+		s = new pixelimage_triGML_patternShape_EllipsePattern();
+		break;
+	case "EllipseRadialGradient":
+		s = new pixelimage_triGML_gradient_EllipseRadialGradient();
+		break;
+	case "EllipseShape":
+		s = new pixelimage_triGML_shape_EllipseShape();
+		break;
+	case "LineGradient":
+		s = new pixelimage_triGML_gradientContour_LineGradient();
+		break;
+	case "LineGridShape":
+		s = new pixelimage_triGML_contour_LineGridShape();
+		break;
+	case "LinePattern":
+		s = new pixelimage_triGML_patternContour_LinePattern();
+		break;
+	case "LineShape":
+		s = new pixelimage_triGML_contour_LineShape();
+		break;
+	case "PathElementPattern":
+		s = new pixelimage_triGML_patternShape_PathElementPattern();
+		break;
+	case "PathElementShape":
+		s = new pixelimage_triGML_shape_PathElementShape();
+		break;
+	case "PathElementThickGradient":
+		s = new pixelimage_triGML_gradient_PathElementThickGradient();
+		break;
+	case "PolyLineGradient":
+		s = new pixelimage_triGML_gradientContour_PolyLineGradient();
+		break;
+	case "PolyLineShape":
+		s = new pixelimage_triGML_contour_PolyLineShape();
+		break;
+	case "QuadCurveShape":
+		s = new pixelimage_triGML_contour_QuadCurveShape();
+		break;
+	case "QuadGradient":
+		s = new pixelimage_triGML_gradient_QuadGradient();
+		break;
+	case "QuadPattern":
+		s = new pixelimage_triGML_patternContour_QuadPattern();
+		break;
+	case "QuadShape":
+		s = new pixelimage_triGML_contour_QuadShape();
+		break;
+	case "QuadrilateralPattern":
+		s = new pixelimage_triGML_patternShape_QuadrilateralPattern();
+		break;
+	case "QuadrilateralShape":
+		s = new pixelimage_triGML_shape_QuadrilateralShape();
+		break;
+	case "RectanglePattern":
+		s = new pixelimage_triGML_patternShape_RectanglePattern();
+		break;
+	case "RectangleShape":
+		s = new pixelimage_triGML_shape_RectangleShape();
+		break;
+	case "SquarePattern":
+		s = new pixelimage_triGML_patternShape_SquarePattern();
+		break;
+	case "SquareShape":
+		s = new pixelimage_triGML_shape_SquareShape();
+		break;
+	case "Star6Shape":
+		s = new pixelimage_triGML_shape_Star6Shape();
+		break;
+	case "ThruCurveShape":
+		s = new pixelimage_triGML_contour_ThruCurveShape();
+		break;
+	case "TriangleGradient":
+		s = new pixelimage_triGML_gradient_TriangleGradient();
+		break;
+	case "TrianglePattern":
+		s = new pixelimage_triGML_patternContour_TrianglePattern();
+		break;
+	case "TriangleShape":
+		s = new pixelimage_triGML_shape_TriangleShape();
+		break;
+	case "VePathElementShape":
+		s = new pixelimage_triGML_shape_VePathElementShape();
+		break;
+	default:
+		throw haxe_Exception.thrown("shape unfound");
+	}
+	return s;
+}
+var pixelimage_triGML_coreShape_XMLshape = function(pixelShape,xml) {
 	this.pixelShape = pixelShape;
 	this.xml = xml;
 	this.process();
 };
-pixelimage_triangleGML_coreShape_TriangleGML.__name__ = "pixelimage.triangleGML.coreShape.TriangleGML";
-pixelimage_triangleGML_coreShape_TriangleGML.prototype = {
+pixelimage_triGML_coreShape_XMLshape.__name__ = "pixelimage.triGML.coreShape.XMLshape";
+pixelimage_triGML_coreShape_XMLshape.prototype = {
 	process: function() {
 		var e = this.xml.elements();
 		while(e.hasNext()) {
@@ -22995,135 +23112,18 @@ pixelimage_triangleGML_coreShape_TriangleGML.prototype = {
 			throw haxe_Exception.thrown("Bad node type, expected Element but found " + (x.nodeType == null ? "null" : XmlType.toString(x.nodeType)));
 		}
 		var name = x.nodeName;
-		var s = pixelimage_triangleGML_coreShape_TriangleGML_getTriangleGML(name);
+		var s = pixelimage_triGML_coreShape_TriGML_getTriGML(name);
 		var att = x.attributes();
 		while(att.hasNext()) {
 			var att1 = att.next();
-			haxe_Log.trace(att1 + " " + x.get(att1),{ fileName : "pixelimage/triangleGML/coreShape/TriangleGML.hx", lineNumber : 39, className : "pixelimage.triangleGML.coreShape.TriangleGML", methodName : "processShape"});
+			haxe_Log.trace(att1 + " " + x.get(att1),{ fileName : "pixelimage/triGML/coreShape/XMLshape.hx", lineNumber : 32, className : "pixelimage.triGML.coreShape.XMLshape", methodName : "processShape"});
 			s.setParameter(att1,x.get(att1));
 		}
 		s.render(this.pixelShape);
 	}
-	,__class__: pixelimage_triangleGML_coreShape_TriangleGML
+	,__class__: pixelimage_triGML_coreShape_XMLshape
 };
-function pixelimage_triangleGML_coreShape_TriangleGML_getTriangleGML(nodeName) {
-	var triangleGMLname = nodeName;
-	var s;
-	switch(triangleGMLname) {
-	case "ArcPattern":
-		s = new pixelimage_triangleGML_patternShape_ArcPattern();
-		break;
-	case "ArcShape":
-		s = new pixelimage_triangleGML_shape_ArcShape();
-		break;
-	case "ArrowShape":
-		s = new pixelimage_triangleGML_contour_ArrowShape();
-		break;
-	case "ArrowThickGradient":
-		s = new pixelimage_triangleGML_gradient_ArrowThickGradient();
-		break;
-	case "CirclePattern":
-		s = new pixelimage_triangleGML_patternShape_CirclePattern();
-		break;
-	case "CircleShape":
-		s = new pixelimage_triangleGML_shape_CircleShape();
-		break;
-	case "CubicCurvePattern":
-		s = new pixelimage_triangleGML_patternContour_CubicCurvePattern();
-		break;
-	case "CubicCurveShape":
-		s = new pixelimage_triangleGML_contour_CubicCurveShape();
-		break;
-	case "EllipsePattern":
-		s = new pixelimage_triangleGML_patternShape_EllipsePattern();
-		break;
-	case "EllipseRadialGradient":
-		s = new pixelimage_triangleGML_gradient_EllipseRadialGradient();
-		break;
-	case "EllipseShape":
-		s = new pixelimage_triangleGML_shape_EllipseShape();
-		break;
-	case "LineGradient":
-		s = new pixelimage_triangleGML_gradientContour_LineGradient();
-		break;
-	case "LineGridShape":
-		s = new pixelimage_triangleGML_contour_LineGridShape();
-		break;
-	case "LinePattern":
-		s = new pixelimage_triangleGML_patternContour_LinePattern();
-		break;
-	case "LineShape":
-		s = new pixelimage_triangleGML_contour_LineShape();
-		break;
-	case "PathElementPattern":
-		s = new pixelimage_triangleGML_patternShape_PathElementPattern();
-		break;
-	case "PathElementShape":
-		s = new pixelimage_triangleGML_shape_PathElementShape();
-		break;
-	case "PathElementThickGradient":
-		s = new pixelimage_triangleGML_gradient_PathElementThickGradient();
-		break;
-	case "PolyLineGradient":
-		s = new pixelimage_triangleGML_gradientContour_PolyLineGradient();
-		break;
-	case "PolyLineShape":
-		s = new pixelimage_triangleGML_contour_PolyLineShape();
-		break;
-	case "QuadCurveShape":
-		s = new pixelimage_triangleGML_contour_QuadCurveShape();
-		break;
-	case "QuadGradient":
-		s = new pixelimage_triangleGML_gradient_QuadGradient();
-		break;
-	case "QuadPattern":
-		s = new pixelimage_triangleGML_patternContour_QuadPattern();
-		break;
-	case "QuadShape":
-		s = new pixelimage_triangleGML_contour_QuadShape();
-		break;
-	case "QuadrilateralPattern":
-		s = new pixelimage_triangleGML_patternShape_QuadrilateralPattern();
-		break;
-	case "QuadrilateralShape":
-		s = new pixelimage_triangleGML_shape_QuadrilateralShape();
-		break;
-	case "RectanglePattern":
-		s = new pixelimage_triangleGML_patternShape_RectanglePattern();
-		break;
-	case "RectangleShape":
-		s = new pixelimage_triangleGML_shape_RectangleShape();
-		break;
-	case "SquarePattern":
-		s = new pixelimage_triangleGML_patternShape_SquarePattern();
-		break;
-	case "SquareShape":
-		s = new pixelimage_triangleGML_shape_SquareShape();
-		break;
-	case "Star6Shape":
-		s = new pixelimage_triangleGML_shape_Star6Shape();
-		break;
-	case "ThruCurveShape":
-		s = new pixelimage_triangleGML_contour_ThruCurveShape();
-		break;
-	case "TriangleGradient":
-		s = new pixelimage_triangleGML_gradient_TriangleGradient();
-		break;
-	case "TrianglePattern":
-		s = new pixelimage_triangleGML_patternContour_TrianglePattern();
-		break;
-	case "TriangleShape":
-		s = new pixelimage_triangleGML_shape_TriangleShape();
-		break;
-	case "VePathElementShape":
-		s = new pixelimage_triangleGML_shape_VePathElementShape();
-		break;
-	default:
-		throw haxe_Exception.thrown("shape unfound");
-	}
-	return s;
-}
-var pixelimage_triangleGML_gradient_ArrowThickGradient = function(opacity,visibility,strokeTopColor,strokeBottomColor,strokeWidth,strokeDashGapArray,both,flare,reverseFlare,x1,y1,x2,y2,arrowWidth,arrowHeight) {
+var pixelimage_triGML_gradient_ArrowThickGradient = function(opacity,visibility,strokeTopColor,strokeBottomColor,strokeWidth,strokeDashGapArray,both,flare,reverseFlare,x1,y1,x2,y2,arrowWidth,arrowHeight) {
 	if(arrowHeight == null) {
 		arrowHeight = 0.;
 	}
@@ -23166,7 +23166,7 @@ var pixelimage_triangleGML_gradient_ArrowThickGradient = function(opacity,visibi
 	if(opacity == null) {
 		opacity = 1.;
 	}
-	pixelimage_triangleGML_coreShape_FillShape.call(this,opacity,visibility,-16777216,1.,strokeDashGapArray,this.fill);
+	pixelimage_triGML_coreShape_FillShape.call(this,opacity,visibility,-16777216,1.,strokeDashGapArray,this.fill);
 	this.both = both;
 	this.flare = flare;
 	this.x1 = x1;
@@ -23176,9 +23176,9 @@ var pixelimage_triangleGML_gradient_ArrowThickGradient = function(opacity,visibi
 	this.strokeTopColor = strokeTopColor;
 	this.strokeBottomColor = strokeBottomColor;
 };
-pixelimage_triangleGML_gradient_ArrowThickGradient.__name__ = "pixelimage.triangleGML.gradient.ArrowThickGradient";
-pixelimage_triangleGML_gradient_ArrowThickGradient.__super__ = pixelimage_triangleGML_coreShape_FillShape;
-pixelimage_triangleGML_gradient_ArrowThickGradient.prototype = $extend(pixelimage_triangleGML_coreShape_FillShape.prototype,{
+pixelimage_triGML_gradient_ArrowThickGradient.__name__ = "pixelimage.triGML.gradient.ArrowThickGradient";
+pixelimage_triGML_gradient_ArrowThickGradient.__super__ = pixelimage_triGML_coreShape_FillShape;
+pixelimage_triGML_gradient_ArrowThickGradient.prototype = $extend(pixelimage_triGML_coreShape_FillShape.prototype,{
 	setParameter: function(name,value) {
 		switch(name) {
 		case "arrowHeight":
@@ -23215,7 +23215,7 @@ pixelimage_triangleGML_gradient_ArrowThickGradient.prototype = $extend(pixelimag
 			this.y2 = parseFloat(value);
 			break;
 		default:
-			pixelimage_triangleGML_coreShape_FillShape.prototype.setParameter.call(this,name,value);
+			pixelimage_triGML_coreShape_FillShape.prototype.setParameter.call(this,name,value);
 		}
 	}
 	,render: function(pixelShape) {
@@ -28096,11 +28096,11 @@ pixelimage_triangleGML_gradient_ArrowThickGradient.prototype = $extend(pixelimag
 				hitArr.triArr.push(hitQuad.triBCD);
 			}
 		}
-		return pixelimage_triangleGML_coreShape_FillShape.prototype.render.call(this,pixelShape);
+		return pixelimage_triGML_coreShape_FillShape.prototype.render.call(this,pixelShape);
 	}
-	,__class__: pixelimage_triangleGML_gradient_ArrowThickGradient
+	,__class__: pixelimage_triGML_gradient_ArrowThickGradient
 });
-var pixelimage_triangleGML_gradient_EllipseRadialGradient = function(opacity,visibility,centreX,centreY,radiusX,radiusY,colorIn,colorOut,gradientCentreX,gradientCentreY,rotation) {
+var pixelimage_triGML_gradient_EllipseRadialGradient = function(opacity,visibility,centreX,centreY,radiusX,radiusY,colorIn,colorOut,gradientCentreX,gradientCentreY,rotation) {
 	if(rotation == null) {
 		rotation = 0.;
 	}
@@ -28134,7 +28134,7 @@ var pixelimage_triangleGML_gradient_EllipseRadialGradient = function(opacity,vis
 	if(opacity == null) {
 		opacity = 1.;
 	}
-	pixelimage_triangleGML_coreShape_BasicGradient.call(this,opacity,visibility,[colorIn,colorOut]);
+	pixelimage_triGML_coreShape_BasicGradient.call(this,opacity,visibility,[colorIn,colorOut]);
 	this.centreX = centreX;
 	this.centreY = centreY;
 	this.radiusX = radiusX;
@@ -28143,9 +28143,9 @@ var pixelimage_triangleGML_gradient_EllipseRadialGradient = function(opacity,vis
 	this.gradientCentreY = gradientCentreY;
 	this.rotation = rotation;
 };
-pixelimage_triangleGML_gradient_EllipseRadialGradient.__name__ = "pixelimage.triangleGML.gradient.EllipseRadialGradient";
-pixelimage_triangleGML_gradient_EllipseRadialGradient.__super__ = pixelimage_triangleGML_coreShape_BasicGradient;
-pixelimage_triangleGML_gradient_EllipseRadialGradient.prototype = $extend(pixelimage_triangleGML_coreShape_BasicGradient.prototype,{
+pixelimage_triGML_gradient_EllipseRadialGradient.__name__ = "pixelimage.triGML.gradient.EllipseRadialGradient";
+pixelimage_triGML_gradient_EllipseRadialGradient.__super__ = pixelimage_triGML_coreShape_BasicGradient;
+pixelimage_triGML_gradient_EllipseRadialGradient.prototype = $extend(pixelimage_triGML_coreShape_BasicGradient.prototype,{
 	setParameter: function(name,value) {
 		switch(name) {
 		case "centreX":
@@ -28176,7 +28176,7 @@ pixelimage_triangleGML_gradient_EllipseRadialGradient.prototype = $extend(pixeli
 			this.rotation = parseFloat(value);
 			break;
 		default:
-			pixelimage_triangleGML_coreShape_BasicGradient.prototype.setParameter.call(this,name,value);
+			pixelimage_triGML_coreShape_BasicGradient.prototype.setParameter.call(this,name,value);
 		}
 	}
 	,render: function(pixelShape) {
@@ -28934,11 +28934,11 @@ pixelimage_triangleGML_gradient_EllipseRadialGradient.prototype = $extend(pixeli
 			}
 		}
 		temp = null;
-		return pixelimage_triangleGML_coreShape_BasicGradient.prototype.render.call(this,pixelShape);
+		return pixelimage_triGML_coreShape_BasicGradient.prototype.render.call(this,pixelShape);
 	}
-	,__class__: pixelimage_triangleGML_gradient_EllipseRadialGradient
+	,__class__: pixelimage_triGML_gradient_EllipseRadialGradient
 });
-var pixelimage_triangleGML_gradient_PathElementThickGradient = function(opacity,visibility,strokeTopColor,strokeBottomColor,strokeWidth,strokeDashGapArray,fill,pathData,translateX,translateY,scaleX,scaleY) {
+var pixelimage_triGML_gradient_PathElementThickGradient = function(opacity,visibility,strokeTopColor,strokeBottomColor,strokeWidth,strokeDashGapArray,fill,pathData,translateX,translateY,scaleX,scaleY) {
 	if(scaleY == null) {
 		scaleY = 1.;
 	}
@@ -28975,7 +28975,7 @@ var pixelimage_triangleGML_gradient_PathElementThickGradient = function(opacity,
 	this.toggleDraw = true;
 	this.y0 = 0.;
 	this.x0 = 0.;
-	pixelimage_triangleGML_coreShape_FillShape.call(this,opacity,visibility,-16777216,1.,strokeDashGapArray,fill);
+	pixelimage_triGML_coreShape_FillShape.call(this,opacity,visibility,-16777216,1.,strokeDashGapArray,fill);
 	this.pathData = pathData;
 	this.strokeTopColor = strokeTopColor;
 	this.strokeBottomColor = strokeBottomColor;
@@ -28985,10 +28985,10 @@ var pixelimage_triangleGML_gradient_PathElementThickGradient = function(opacity,
 	this.scaleX = scaleX;
 	this.scaleY = scaleY;
 };
-pixelimage_triangleGML_gradient_PathElementThickGradient.__name__ = "pixelimage.triangleGML.gradient.PathElementThickGradient";
-pixelimage_triangleGML_gradient_PathElementThickGradient.__interfaces__ = [justPath_ILinePathContext];
-pixelimage_triangleGML_gradient_PathElementThickGradient.__super__ = pixelimage_triangleGML_coreShape_FillShape;
-pixelimage_triangleGML_gradient_PathElementThickGradient.prototype = $extend(pixelimage_triangleGML_coreShape_FillShape.prototype,{
+pixelimage_triGML_gradient_PathElementThickGradient.__name__ = "pixelimage.triGML.gradient.PathElementThickGradient";
+pixelimage_triGML_gradient_PathElementThickGradient.__interfaces__ = [justPath_ILinePathContext];
+pixelimage_triGML_gradient_PathElementThickGradient.__super__ = pixelimage_triGML_coreShape_FillShape;
+pixelimage_triGML_gradient_PathElementThickGradient.prototype = $extend(pixelimage_triGML_coreShape_FillShape.prototype,{
 	setParameter: function(name,value) {
 		switch(name) {
 		case "pathData":
@@ -29016,11 +29016,11 @@ pixelimage_triangleGML_gradient_PathElementThickGradient.prototype = $extend(pix
 			this.translateY = parseFloat(value);
 			break;
 		default:
-			pixelimage_triangleGML_coreShape_FillShape.prototype.setParameter.call(this,name,value);
+			pixelimage_triGML_coreShape_FillShape.prototype.setParameter.call(this,name,value);
 		}
 	}
 	,render: function(pixelShape) {
-		haxe_Log.trace("render pathData " + this.pathData,{ fileName : "pixelimage/triangleGML/gradient/PathElementThickGradient.hx", lineNumber : 69, className : "pixelimage.triangleGML.gradient.PathElementThickGradient", methodName : "render"});
+		haxe_Log.trace("render pathData " + this.pathData,{ fileName : "pixelimage/triGML/gradient/PathElementThickGradient.hx", lineNumber : 69, className : "pixelimage.triGML.gradient.PathElementThickGradient", methodName : "render"});
 		var w = Math.ceil(pixelShape.width);
 		var h = Math.ceil(pixelShape.height);
 		var this1 = new Uint32Array(w * h | 0);
@@ -29107,7 +29107,7 @@ pixelimage_triangleGML_gradient_PathElementThickGradient.prototype = $extend(pix
 			}
 		}
 		this.temp = null;
-		return pixelimage_triangleGML_coreShape_FillShape.prototype.render.call(this,pixelShape);
+		return pixelimage_triGML_coreShape_FillShape.prototype.render.call(this,pixelShape);
 	}
 	,lineSegmentTo: function(x2,y2) {
 		if(this.toggleDraw) {
@@ -31355,9 +31355,9 @@ pixelimage_triangleGML_gradient_PathElementThickGradient.prototype = $extend(pix
 		this.info = null;
 		this.toggleDraw = true;
 	}
-	,__class__: pixelimage_triangleGML_gradient_PathElementThickGradient
+	,__class__: pixelimage_triGML_gradient_PathElementThickGradient
 });
-var pixelimage_triangleGML_gradient_QuadGradient = function(opacity,visibility,x1,y1,color1,x2,y2,color2,x3,y3,color3,x4,y4,color4) {
+var pixelimage_triGML_gradient_QuadGradient = function(opacity,visibility,x1,y1,color1,x2,y2,color2,x3,y3,color3,x4,y4,color4) {
 	if(color4 == null) {
 		color4 = -27392;
 	}
@@ -31400,7 +31400,7 @@ var pixelimage_triangleGML_gradient_QuadGradient = function(opacity,visibility,x
 	if(opacity == null) {
 		opacity = 1.;
 	}
-	pixelimage_triangleGML_coreShape_BasicGradient.call(this,opacity,visibility,[color1,color2,color3,color4]);
+	pixelimage_triGML_coreShape_BasicGradient.call(this,opacity,visibility,[color1,color2,color3,color4]);
 	this.x1 = x1;
 	this.y1 = y1;
 	this.x2 = x2;
@@ -31410,9 +31410,9 @@ var pixelimage_triangleGML_gradient_QuadGradient = function(opacity,visibility,x
 	this.x4 = x4;
 	this.y4 = y4;
 };
-pixelimage_triangleGML_gradient_QuadGradient.__name__ = "pixelimage.triangleGML.gradient.QuadGradient";
-pixelimage_triangleGML_gradient_QuadGradient.__super__ = pixelimage_triangleGML_coreShape_BasicGradient;
-pixelimage_triangleGML_gradient_QuadGradient.prototype = $extend(pixelimage_triangleGML_coreShape_BasicGradient.prototype,{
+pixelimage_triGML_gradient_QuadGradient.__name__ = "pixelimage.triGML.gradient.QuadGradient";
+pixelimage_triGML_gradient_QuadGradient.__super__ = pixelimage_triGML_coreShape_BasicGradient;
+pixelimage_triGML_gradient_QuadGradient.prototype = $extend(pixelimage_triGML_coreShape_BasicGradient.prototype,{
 	setParameter: function(name,value) {
 		switch(name) {
 		case "color1":
@@ -31452,7 +31452,7 @@ pixelimage_triangleGML_gradient_QuadGradient.prototype = $extend(pixelimage_tria
 			this.y4 = parseFloat(value);
 			break;
 		default:
-			pixelimage_triangleGML_coreShape_BasicGradient.prototype.setParameter.call(this,name,value);
+			pixelimage_triGML_coreShape_BasicGradient.prototype.setParameter.call(this,name,value);
 		}
 	}
 	,render: function(pixelShape) {
@@ -32025,11 +32025,11 @@ pixelimage_triangleGML_gradient_QuadGradient.prototype = $extend(pixelimage_tria
 			}
 		}
 		temp = null;
-		return pixelimage_triangleGML_coreShape_BasicGradient.prototype.render.call(this,pixelShape);
+		return pixelimage_triGML_coreShape_BasicGradient.prototype.render.call(this,pixelShape);
 	}
-	,__class__: pixelimage_triangleGML_gradient_QuadGradient
+	,__class__: pixelimage_triGML_gradient_QuadGradient
 });
-var pixelimage_triangleGML_gradient_TriangleGradient = function(opacity,visibility,aX,aY,bX,bY,cX,cY,colorA,colorB,colorC) {
+var pixelimage_triGML_gradient_TriangleGradient = function(opacity,visibility,aX,aY,bX,bY,cX,cY,colorA,colorB,colorC) {
 	if(colorC == null) {
 		colorC = -16776961;
 	}
@@ -32063,7 +32063,7 @@ var pixelimage_triangleGML_gradient_TriangleGradient = function(opacity,visibili
 	if(opacity == null) {
 		opacity = 1.;
 	}
-	pixelimage_triangleGML_coreShape_BasicGradient.call(this,opacity,visibility,[colorA,colorB,colorC]);
+	pixelimage_triGML_coreShape_BasicGradient.call(this,opacity,visibility,[colorA,colorB,colorC]);
 	this.aX = aX;
 	this.aY = aY;
 	this.bX = bX;
@@ -32071,9 +32071,9 @@ var pixelimage_triangleGML_gradient_TriangleGradient = function(opacity,visibili
 	this.cX = cX;
 	this.cY = cY;
 };
-pixelimage_triangleGML_gradient_TriangleGradient.__name__ = "pixelimage.triangleGML.gradient.TriangleGradient";
-pixelimage_triangleGML_gradient_TriangleGradient.__super__ = pixelimage_triangleGML_coreShape_BasicGradient;
-pixelimage_triangleGML_gradient_TriangleGradient.prototype = $extend(pixelimage_triangleGML_coreShape_BasicGradient.prototype,{
+pixelimage_triGML_gradient_TriangleGradient.__name__ = "pixelimage.triGML.gradient.TriangleGradient";
+pixelimage_triGML_gradient_TriangleGradient.__super__ = pixelimage_triGML_coreShape_BasicGradient;
+pixelimage_triGML_gradient_TriangleGradient.prototype = $extend(pixelimage_triGML_coreShape_BasicGradient.prototype,{
 	setParameter: function(name,value) {
 		switch(name) {
 		case "aX":
@@ -32104,7 +32104,7 @@ pixelimage_triangleGML_gradient_TriangleGradient.prototype = $extend(pixelimage_
 			this.cornerColors[2] = Std.parseInt(value);
 			break;
 		default:
-			pixelimage_triangleGML_coreShape_BasicGradient.prototype.setParameter.call(this,name,value);
+			pixelimage_triGML_coreShape_BasicGradient.prototype.setParameter.call(this,name,value);
 		}
 	}
 	,render: function(pixelShape) {
@@ -32368,11 +32368,11 @@ pixelimage_triangleGML_gradient_TriangleGradient.prototype = $extend(pixelimage_
 				v_yIter3 = this1;
 			}
 		}
-		return pixelimage_triangleGML_coreShape_BasicGradient.prototype.render.call(this,pixelShape);
+		return pixelimage_triGML_coreShape_BasicGradient.prototype.render.call(this,pixelShape);
 	}
-	,__class__: pixelimage_triangleGML_gradient_TriangleGradient
+	,__class__: pixelimage_triGML_gradient_TriangleGradient
 });
-var pixelimage_triangleGML_gradientContour_LineGradient = function(opacity,visibility,x1,y1,x2,y2,colorA,colorB,colorC,colorD,strokeWidth) {
+var pixelimage_triGML_gradientContour_LineGradient = function(opacity,visibility,x1,y1,x2,y2,colorA,colorB,colorC,colorD,strokeWidth) {
 	if(strokeWidth == null) {
 		strokeWidth = 1.;
 	}
@@ -32406,16 +32406,16 @@ var pixelimage_triangleGML_gradientContour_LineGradient = function(opacity,visib
 	if(opacity == null) {
 		opacity = 1.;
 	}
-	pixelimage_triangleGML_coreShape_BasicGradient.call(this,opacity,visibility,[colorA,colorB,colorC,colorD]);
+	pixelimage_triGML_coreShape_BasicGradient.call(this,opacity,visibility,[colorA,colorB,colorC,colorD]);
 	this.x1 = x1;
 	this.y1 = y1;
 	this.x2 = x2;
 	this.y2 = y2;
 	this.strokeWidth = strokeWidth;
 };
-pixelimage_triangleGML_gradientContour_LineGradient.__name__ = "pixelimage.triangleGML.gradientContour.LineGradient";
-pixelimage_triangleGML_gradientContour_LineGradient.__super__ = pixelimage_triangleGML_coreShape_BasicGradient;
-pixelimage_triangleGML_gradientContour_LineGradient.prototype = $extend(pixelimage_triangleGML_coreShape_BasicGradient.prototype,{
+pixelimage_triGML_gradientContour_LineGradient.__name__ = "pixelimage.triGML.gradientContour.LineGradient";
+pixelimage_triGML_gradientContour_LineGradient.__super__ = pixelimage_triGML_coreShape_BasicGradient;
+pixelimage_triGML_gradientContour_LineGradient.prototype = $extend(pixelimage_triGML_coreShape_BasicGradient.prototype,{
 	setParameter: function(name,value) {
 		switch(name) {
 		case "colorA":
@@ -32462,7 +32462,7 @@ pixelimage_triangleGML_gradientContour_LineGradient.prototype = $extend(pixelima
 			this.y2 = parseFloat(value);
 			break;
 		default:
-			pixelimage_triangleGML_coreShape_BasicGradient.prototype.setParameter.call(this,name,value);
+			pixelimage_triGML_coreShape_BasicGradient.prototype.setParameter.call(this,name,value);
 		}
 	}
 	,render: function(pixelShape) {
@@ -33130,11 +33130,11 @@ pixelimage_triangleGML_gradientContour_LineGradient.prototype = $extend(pixelima
 		if(hasHit1 == true) {
 			var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy,true);
 		}
-		return pixelimage_triangleGML_coreShape_BasicGradient.prototype.render.call(this,pixelShape);
+		return pixelimage_triGML_coreShape_BasicGradient.prototype.render.call(this,pixelShape);
 	}
-	,__class__: pixelimage_triangleGML_gradientContour_LineGradient
+	,__class__: pixelimage_triGML_gradientContour_LineGradient
 });
-var pixelimage_triangleGML_gradientContour_PolyLineGradient = function(opacity,visibility,strokeWidth,points,colorDirection,colors) {
+var pixelimage_triGML_gradientContour_PolyLineGradient = function(opacity,visibility,strokeWidth,points,colorDirection,colors) {
 	if(colorDirection == null) {
 		colorDirection = "longways";
 	}
@@ -33147,14 +33147,14 @@ var pixelimage_triangleGML_gradientContour_PolyLineGradient = function(opacity,v
 	if(opacity == null) {
 		opacity = 1.;
 	}
-	pixelimage_triangleGML_coreShape_BasicGradient.call(this,opacity,visibility,colors);
+	pixelimage_triGML_coreShape_BasicGradient.call(this,opacity,visibility,colors);
 	this.strokeWidth = strokeWidth;
 	this.colorDirection = colorDirection;
 	this.points = points;
 };
-pixelimage_triangleGML_gradientContour_PolyLineGradient.__name__ = "pixelimage.triangleGML.gradientContour.PolyLineGradient";
-pixelimage_triangleGML_gradientContour_PolyLineGradient.__super__ = pixelimage_triangleGML_coreShape_BasicGradient;
-pixelimage_triangleGML_gradientContour_PolyLineGradient.prototype = $extend(pixelimage_triangleGML_coreShape_BasicGradient.prototype,{
+pixelimage_triGML_gradientContour_PolyLineGradient.__name__ = "pixelimage.triGML.gradientContour.PolyLineGradient";
+pixelimage_triGML_gradientContour_PolyLineGradient.__super__ = pixelimage_triGML_coreShape_BasicGradient;
+pixelimage_triGML_gradientContour_PolyLineGradient.prototype = $extend(pixelimage_triGML_coreShape_BasicGradient.prototype,{
 	setParameter: function(name,value) {
 		switch(name) {
 		case "colorDirection":
@@ -33188,7 +33188,7 @@ pixelimage_triangleGML_gradientContour_PolyLineGradient.prototype = $extend(pixe
 			this.strokeWidth = parseFloat(value);
 			break;
 		default:
-			pixelimage_triangleGML_coreShape_BasicGradient.prototype.setParameter.call(this,name,value);
+			pixelimage_triGML_coreShape_BasicGradient.prototype.setParameter.call(this,name,value);
 		}
 	}
 	,render: function(pixelShape) {
@@ -33909,11 +33909,11 @@ pixelimage_triangleGML_gradientContour_PolyLineGradient.prototype = $extend(pixe
 				var v1 = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy,true);
 			}
 		}
-		return pixelimage_triangleGML_coreShape_BasicGradient.prototype.render.call(this,pixelShape);
+		return pixelimage_triGML_coreShape_BasicGradient.prototype.render.call(this,pixelShape);
 	}
-	,__class__: pixelimage_triangleGML_gradientContour_PolyLineGradient
+	,__class__: pixelimage_triGML_gradientContour_PolyLineGradient
 });
-var pixelimage_triangleGML_patternContour_CubicCurvePattern = function(opacity,visibility,strokeWidth,strokeDashGapArray,strokeColor0,strokeColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale,fill,thru,x1,y1,x2,y2,x3,y3,x4,y4,translateX,translateY,scaleX,scaleY) {
+var pixelimage_triGML_patternContour_CubicCurvePattern = function(opacity,visibility,strokeWidth,strokeDashGapArray,strokeColor0,strokeColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale,fill,thru,x1,y1,x2,y2,x3,y3,x4,y4,translateX,translateY,scaleX,scaleY) {
 	if(scaleY == null) {
 		scaleY = 1.;
 	}
@@ -33977,7 +33977,7 @@ var pixelimage_triangleGML_patternContour_CubicCurvePattern = function(opacity,v
 	if(opacity == null) {
 		opacity = 1.;
 	}
-	pixelimage_triangleGML_coreShape_PatternStroke.call(this,opacity,visibility,-65536,strokeWidth,strokeDashGapArray,strokeColor0,strokeColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale);
+	pixelimage_triGML_coreShape_PatternStroke.call(this,opacity,visibility,-65536,strokeWidth,strokeDashGapArray,strokeColor0,strokeColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale);
 	this.x1 = x1;
 	this.y1 = y1;
 	this.x2 = x2;
@@ -33991,9 +33991,9 @@ var pixelimage_triangleGML_patternContour_CubicCurvePattern = function(opacity,v
 	this.scaleX = scaleX;
 	this.scaleY = scaleY;
 };
-pixelimage_triangleGML_patternContour_CubicCurvePattern.__name__ = "pixelimage.triangleGML.patternContour.CubicCurvePattern";
-pixelimage_triangleGML_patternContour_CubicCurvePattern.__super__ = pixelimage_triangleGML_coreShape_PatternStroke;
-pixelimage_triangleGML_patternContour_CubicCurvePattern.prototype = $extend(pixelimage_triangleGML_coreShape_PatternStroke.prototype,{
+pixelimage_triGML_patternContour_CubicCurvePattern.__name__ = "pixelimage.triGML.patternContour.CubicCurvePattern";
+pixelimage_triGML_patternContour_CubicCurvePattern.__super__ = pixelimage_triGML_coreShape_PatternStroke;
+pixelimage_triGML_patternContour_CubicCurvePattern.prototype = $extend(pixelimage_triGML_coreShape_PatternStroke.prototype,{
 	setParameter: function(name,value) {
 		switch(name) {
 		case "x1":
@@ -34021,7 +34021,7 @@ pixelimage_triangleGML_patternContour_CubicCurvePattern.prototype = $extend(pixe
 			this.y4 = parseFloat(value);
 			break;
 		default:
-			pixelimage_triangleGML_coreShape_PatternStroke.prototype.setParameter.call(this,name,value);
+			pixelimage_triGML_coreShape_PatternStroke.prototype.setParameter.call(this,name,value);
 		}
 	}
 	,render: function(pixelShape) {
@@ -34029,11 +34029,11 @@ pixelimage_triangleGML_patternContour_CubicCurvePattern.prototype = $extend(pixe
 		var drawing = new pixelimage_draw_DrawTileHelper(pixelShape,this.strokeWidth,this.tileImageStroke,this.translateX,this.translateY,this.scaleX,this.scaleY);
 		drawing.moveTo(this.x1,this.y1);
 		drawing.curveTo(this.x2,this.y2,this.x3,this.y3,this.x4,this.y4);
-		return pixelimage_triangleGML_coreShape_PatternStroke.prototype.render.call(this,pixelShape);
+		return pixelimage_triGML_coreShape_PatternStroke.prototype.render.call(this,pixelShape);
 	}
-	,__class__: pixelimage_triangleGML_patternContour_CubicCurvePattern
+	,__class__: pixelimage_triGML_patternContour_CubicCurvePattern
 });
-var pixelimage_triangleGML_patternContour_LinePattern = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,strokeColor0,strokeColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale,x1,y1,x2,y2) {
+var pixelimage_triGML_patternContour_LinePattern = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,strokeColor0,strokeColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale,x1,y1,x2,y2) {
 	if(y2 == null) {
 		y2 = 0.;
 	}
@@ -34070,15 +34070,15 @@ var pixelimage_triangleGML_patternContour_LinePattern = function(opacity,visibil
 	if(opacity == null) {
 		opacity = 1.;
 	}
-	pixelimage_triangleGML_coreShape_PatternStroke.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,strokeColor0,strokeColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale);
+	pixelimage_triGML_coreShape_PatternStroke.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,strokeColor0,strokeColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale);
 	this.x1 = x1;
 	this.y1 = y1;
 	this.x2 = x2;
 	this.y2 = y2;
 };
-pixelimage_triangleGML_patternContour_LinePattern.__name__ = "pixelimage.triangleGML.patternContour.LinePattern";
-pixelimage_triangleGML_patternContour_LinePattern.__super__ = pixelimage_triangleGML_coreShape_PatternStroke;
-pixelimage_triangleGML_patternContour_LinePattern.prototype = $extend(pixelimage_triangleGML_coreShape_PatternStroke.prototype,{
+pixelimage_triGML_patternContour_LinePattern.__name__ = "pixelimage.triGML.patternContour.LinePattern";
+pixelimage_triGML_patternContour_LinePattern.__super__ = pixelimage_triGML_coreShape_PatternStroke;
+pixelimage_triGML_patternContour_LinePattern.prototype = $extend(pixelimage_triGML_coreShape_PatternStroke.prototype,{
 	setParameter: function(name,value) {
 		switch(name) {
 		case "x1":
@@ -34094,7 +34094,7 @@ pixelimage_triangleGML_patternContour_LinePattern.prototype = $extend(pixelimage
 			this.y2 = parseFloat(value);
 			break;
 		default:
-			pixelimage_triangleGML_coreShape_PatternStroke.prototype.setParameter.call(this,name,value);
+			pixelimage_triGML_coreShape_PatternStroke.prototype.setParameter.call(this,name,value);
 		}
 	}
 	,render: function(pixelShape) {
@@ -34637,11 +34637,11 @@ pixelimage_triangleGML_patternContour_LinePattern.prototype = $extend(pixelimage
 		if(hasHit1 == true) {
 			var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy,true);
 		}
-		return pixelimage_triangleGML_coreShape_PatternStroke.prototype.render.call(this,pixelShape);
+		return pixelimage_triGML_coreShape_PatternStroke.prototype.render.call(this,pixelShape);
 	}
-	,__class__: pixelimage_triangleGML_patternContour_LinePattern
+	,__class__: pixelimage_triGML_patternContour_LinePattern
 });
-var pixelimage_triangleGML_patternContour_QuadPattern = function(opacity,visibility,strokeColor0,strokeColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale,aX,aY,bX,bY,cX,cY,dX,dY) {
+var pixelimage_triGML_patternContour_QuadPattern = function(opacity,visibility,strokeColor0,strokeColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale,aX,aY,bX,bY,cX,cY,dX,dY) {
 	if(dY == null) {
 		dY = 1.;
 	}
@@ -34684,7 +34684,7 @@ var pixelimage_triangleGML_patternContour_QuadPattern = function(opacity,visibil
 	if(opacity == null) {
 		opacity = 1.;
 	}
-	pixelimage_triangleGML_coreShape_PatternStroke.call(this,opacity,visibility,0,0,null,strokeColor0,strokeColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale);
+	pixelimage_triGML_coreShape_PatternStroke.call(this,opacity,visibility,0,0,null,strokeColor0,strokeColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale);
 	this.aX = aX;
 	this.aY = aY;
 	this.bX = bX;
@@ -34694,9 +34694,9 @@ var pixelimage_triangleGML_patternContour_QuadPattern = function(opacity,visibil
 	this.dX = dX;
 	this.dY = dY;
 };
-pixelimage_triangleGML_patternContour_QuadPattern.__name__ = "pixelimage.triangleGML.patternContour.QuadPattern";
-pixelimage_triangleGML_patternContour_QuadPattern.__super__ = pixelimage_triangleGML_coreShape_PatternStroke;
-pixelimage_triangleGML_patternContour_QuadPattern.prototype = $extend(pixelimage_triangleGML_coreShape_PatternStroke.prototype,{
+pixelimage_triGML_patternContour_QuadPattern.__name__ = "pixelimage.triGML.patternContour.QuadPattern";
+pixelimage_triGML_patternContour_QuadPattern.__super__ = pixelimage_triGML_coreShape_PatternStroke;
+pixelimage_triGML_patternContour_QuadPattern.prototype = $extend(pixelimage_triGML_coreShape_PatternStroke.prototype,{
 	setParameter: function(name,value) {
 		switch(name) {
 		case "aX":
@@ -34724,7 +34724,7 @@ pixelimage_triangleGML_patternContour_QuadPattern.prototype = $extend(pixelimage
 			this.dY = parseFloat(value);
 			break;
 		default:
-			pixelimage_triangleGML_coreShape_PatternStroke.prototype.setParameter.call(this,name,value);
+			pixelimage_triGML_coreShape_PatternStroke.prototype.setParameter.call(this,name,value);
 		}
 	}
 	,render: function(pixelShape) {
@@ -35035,11 +35035,11 @@ pixelimage_triangleGML_patternContour_QuadPattern.prototype = $extend(pixelimage
 		if(hasHit == true) {
 			var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy,true);
 		}
-		return pixelimage_triangleGML_coreShape_PatternStroke.prototype.render.call(this,pixelShape);
+		return pixelimage_triGML_coreShape_PatternStroke.prototype.render.call(this,pixelShape);
 	}
-	,__class__: pixelimage_triangleGML_patternContour_QuadPattern
+	,__class__: pixelimage_triGML_patternContour_QuadPattern
 });
-var pixelimage_triangleGML_patternContour_TrianglePattern = function(opacity,visibility,strokeColor0,strokeColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale,aX,aY,bX,bY,cX,cY) {
+var pixelimage_triGML_patternContour_TrianglePattern = function(opacity,visibility,strokeColor0,strokeColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale,aX,aY,bX,bY,cX,cY) {
 	if(cY == null) {
 		cY = 1.;
 	}
@@ -35076,7 +35076,7 @@ var pixelimage_triangleGML_patternContour_TrianglePattern = function(opacity,vis
 	if(opacity == null) {
 		opacity = 1.;
 	}
-	pixelimage_triangleGML_coreShape_PatternStroke.call(this,opacity,visibility,0,0,null,strokeColor0,strokeColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale);
+	pixelimage_triGML_coreShape_PatternStroke.call(this,opacity,visibility,0,0,null,strokeColor0,strokeColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale);
 	this.aX = aX;
 	this.aY = aY;
 	this.bX = bX;
@@ -35084,9 +35084,9 @@ var pixelimage_triangleGML_patternContour_TrianglePattern = function(opacity,vis
 	this.cX = cX;
 	this.cY = cY;
 };
-pixelimage_triangleGML_patternContour_TrianglePattern.__name__ = "pixelimage.triangleGML.patternContour.TrianglePattern";
-pixelimage_triangleGML_patternContour_TrianglePattern.__super__ = pixelimage_triangleGML_coreShape_PatternStroke;
-pixelimage_triangleGML_patternContour_TrianglePattern.prototype = $extend(pixelimage_triangleGML_coreShape_PatternStroke.prototype,{
+pixelimage_triGML_patternContour_TrianglePattern.__name__ = "pixelimage.triGML.patternContour.TrianglePattern";
+pixelimage_triGML_patternContour_TrianglePattern.__super__ = pixelimage_triGML_coreShape_PatternStroke;
+pixelimage_triGML_patternContour_TrianglePattern.prototype = $extend(pixelimage_triGML_coreShape_PatternStroke.prototype,{
 	setParameter: function(name,value) {
 		switch(name) {
 		case "aX":
@@ -35108,7 +35108,7 @@ pixelimage_triangleGML_patternContour_TrianglePattern.prototype = $extend(pixeli
 			this.cY = parseFloat(value);
 			break;
 		default:
-			pixelimage_triangleGML_coreShape_PatternStroke.prototype.setParameter.call(this,name,value);
+			pixelimage_triGML_coreShape_PatternStroke.prototype.setParameter.call(this,name,value);
 		}
 	}
 	,render: function(pixelShape) {
@@ -35261,11 +35261,11 @@ pixelimage_triangleGML_patternContour_TrianglePattern.prototype = $extend(pixeli
 		if(hasHit1 == false) {
 			var v = new pixelimage_algo_HitTri(ax,ay,bx,by,cx,cy,true);
 		}
-		return pixelimage_triangleGML_coreShape_PatternStroke.prototype.render.call(this,pixelShape);
+		return pixelimage_triGML_coreShape_PatternStroke.prototype.render.call(this,pixelShape);
 	}
-	,__class__: pixelimage_triangleGML_patternContour_TrianglePattern
+	,__class__: pixelimage_triGML_patternContour_TrianglePattern
 });
-var pixelimage_triangleGML_patternShape_ArcPattern = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,strokeColor0,strokeColor1,fillColor0,fillColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale,fillPatternFill,fillPatternWidth,fillPatternHeight,fillPatternAcross,fillPatternScale,left,top,width,height,startAngle,sweepAngle,arcType) {
+var pixelimage_triGML_patternShape_ArcPattern = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,strokeColor0,strokeColor1,fillColor0,fillColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale,fillPatternFill,fillPatternWidth,fillPatternHeight,fillPatternAcross,fillPatternScale,left,top,width,height,startAngle,sweepAngle,arcType) {
 	if(arcType == null) {
 		arcType = "pie";
 	}
@@ -35329,7 +35329,7 @@ var pixelimage_triangleGML_patternShape_ArcPattern = function(opacity,visibility
 	if(opacity == null) {
 		opacity = 1.;
 	}
-	pixelimage_triangleGML_coreShape_PatternShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,strokeColor0,strokeColor1,fillColor0,fillColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale,fillPatternFill,fillPatternWidth,fillPatternHeight,fillPatternAcross,fillPatternScale);
+	pixelimage_triGML_coreShape_PatternShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,strokeColor0,strokeColor1,fillColor0,fillColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale,fillPatternFill,fillPatternWidth,fillPatternHeight,fillPatternAcross,fillPatternScale);
 	this.left = left;
 	this.top = top;
 	this.width = width;
@@ -35340,9 +35340,9 @@ var pixelimage_triangleGML_patternShape_ArcPattern = function(opacity,visibility
 	this.rx = width / 2;
 	this.ry = height / 2;
 };
-pixelimage_triangleGML_patternShape_ArcPattern.__name__ = "pixelimage.triangleGML.patternShape.ArcPattern";
-pixelimage_triangleGML_patternShape_ArcPattern.__super__ = pixelimage_triangleGML_coreShape_PatternShape;
-pixelimage_triangleGML_patternShape_ArcPattern.prototype = $extend(pixelimage_triangleGML_coreShape_PatternShape.prototype,{
+pixelimage_triGML_patternShape_ArcPattern.__name__ = "pixelimage.triGML.patternShape.ArcPattern";
+pixelimage_triGML_patternShape_ArcPattern.__super__ = pixelimage_triGML_coreShape_PatternShape;
+pixelimage_triGML_patternShape_ArcPattern.prototype = $extend(pixelimage_triGML_coreShape_PatternShape.prototype,{
 	setParameter: function(name,value) {
 		switch(name) {
 		case "arcType":
@@ -35369,7 +35369,7 @@ pixelimage_triangleGML_patternShape_ArcPattern.prototype = $extend(pixelimage_tr
 			this.width = parseFloat(value);
 			break;
 		default:
-			pixelimage_triangleGML_coreShape_PatternShape.prototype.setParameter.call(this,name,value);
+			pixelimage_triGML_coreShape_PatternShape.prototype.setParameter.call(this,name,value);
 		}
 		this.rx = this.width / 2;
 		this.ry = this.height / 2;
@@ -35472,7 +35472,7 @@ pixelimage_triangleGML_patternShape_ArcPattern.prototype = $extend(pixelimage_tr
 			}
 		}
 		temp = null;
-		return pixelimage_triangleGML_coreShape_PatternShape.prototype.render.call(this,pixelShape);
+		return pixelimage_triGML_coreShape_PatternShape.prototype.render.call(this,pixelShape);
 	}
 	,chord: function(temp) {
 		this.ellipse(temp);
@@ -38464,9 +38464,9 @@ pixelimage_triangleGML_patternShape_ArcPattern.prototype = $extend(pixelimage_tr
 			var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy,true);
 		}
 	}
-	,__class__: pixelimage_triangleGML_patternShape_ArcPattern
+	,__class__: pixelimage_triGML_patternShape_ArcPattern
 });
-var pixelimage_triangleGML_patternShape_CirclePattern = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,strokeColor0,strokeColor1,fillColor0,fillColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale,fillPatternFill,fillPatternWidth,fillPatternHeight,fillPatternAcross,fillPatternScale,left,top,diameter) {
+var pixelimage_triGML_patternShape_CirclePattern = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,strokeColor0,strokeColor1,fillColor0,fillColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale,fillPatternFill,fillPatternWidth,fillPatternHeight,fillPatternAcross,fillPatternScale,left,top,diameter) {
 	if(diameter == null) {
 		diameter = 1.;
 	}
@@ -38518,14 +38518,14 @@ var pixelimage_triangleGML_patternShape_CirclePattern = function(opacity,visibil
 	if(opacity == null) {
 		opacity = 1.;
 	}
-	pixelimage_triangleGML_coreShape_PatternShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,strokeColor0,strokeColor1,fillColor0,fillColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale,fillPatternFill,fillPatternWidth,fillPatternHeight,fillPatternAcross,fillPatternScale);
+	pixelimage_triGML_coreShape_PatternShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,strokeColor0,strokeColor1,fillColor0,fillColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale,fillPatternFill,fillPatternWidth,fillPatternHeight,fillPatternAcross,fillPatternScale);
 	this.left = left;
 	this.top = top;
 	this.diameter = diameter;
 };
-pixelimage_triangleGML_patternShape_CirclePattern.__name__ = "pixelimage.triangleGML.patternShape.CirclePattern";
-pixelimage_triangleGML_patternShape_CirclePattern.__super__ = pixelimage_triangleGML_coreShape_PatternShape;
-pixelimage_triangleGML_patternShape_CirclePattern.prototype = $extend(pixelimage_triangleGML_coreShape_PatternShape.prototype,{
+pixelimage_triGML_patternShape_CirclePattern.__name__ = "pixelimage.triGML.patternShape.CirclePattern";
+pixelimage_triGML_patternShape_CirclePattern.__super__ = pixelimage_triGML_coreShape_PatternShape;
+pixelimage_triGML_patternShape_CirclePattern.prototype = $extend(pixelimage_triGML_coreShape_PatternShape.prototype,{
 	setParameter: function(name,value) {
 		switch(name) {
 		case "diameter":
@@ -38538,7 +38538,7 @@ pixelimage_triangleGML_patternShape_CirclePattern.prototype = $extend(pixelimage
 			this.top = parseFloat(value);
 			break;
 		default:
-			pixelimage_triangleGML_coreShape_PatternShape.prototype.setParameter.call(this,name,value);
+			pixelimage_triGML_coreShape_PatternShape.prototype.setParameter.call(this,name,value);
 		}
 	}
 	,render: function(pixelShape) {
@@ -38629,7 +38629,7 @@ pixelimage_triangleGML_patternShape_CirclePattern.prototype = $extend(pixelimage
 			}
 		}
 		temp = null;
-		return pixelimage_triangleGML_coreShape_PatternShape.prototype.render.call(this,pixelShape);
+		return pixelimage_triGML_coreShape_PatternShape.prototype.render.call(this,pixelShape);
 	}
 	,buildCircle: function(temp) {
 		var w = Math.round(this.strokeWidth / 2);
@@ -39734,9 +39734,9 @@ pixelimage_triangleGML_patternShape_CirclePattern.prototype = $extend(pixelimage
 			}
 		}
 	}
-	,__class__: pixelimage_triangleGML_patternShape_CirclePattern
+	,__class__: pixelimage_triGML_patternShape_CirclePattern
 });
-var pixelimage_triangleGML_patternShape_EllipsePattern = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,strokeColor0,strokeColor1,fillColor0,fillColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale,fillPatternFill,fillPatternWidth,fillPatternHeight,fillPatternAcross,fillPatternScale,left,top,width,height) {
+var pixelimage_triGML_patternShape_EllipsePattern = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,strokeColor0,strokeColor1,fillColor0,fillColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale,fillPatternFill,fillPatternWidth,fillPatternHeight,fillPatternAcross,fillPatternScale,left,top,width,height) {
 	if(height == null) {
 		height = 1.;
 	}
@@ -39791,15 +39791,15 @@ var pixelimage_triangleGML_patternShape_EllipsePattern = function(opacity,visibi
 	if(opacity == null) {
 		opacity = 1.;
 	}
-	pixelimage_triangleGML_coreShape_PatternShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,strokeColor0,strokeColor1,fillColor0,fillColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale,fillPatternFill,fillPatternWidth,fillPatternHeight,fillPatternAcross,fillPatternScale);
+	pixelimage_triGML_coreShape_PatternShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,strokeColor0,strokeColor1,fillColor0,fillColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale,fillPatternFill,fillPatternWidth,fillPatternHeight,fillPatternAcross,fillPatternScale);
 	this.left = left;
 	this.top = top;
 	this.width = width;
 	this.height = height;
 };
-pixelimage_triangleGML_patternShape_EllipsePattern.__name__ = "pixelimage.triangleGML.patternShape.EllipsePattern";
-pixelimage_triangleGML_patternShape_EllipsePattern.__super__ = pixelimage_triangleGML_coreShape_PatternShape;
-pixelimage_triangleGML_patternShape_EllipsePattern.prototype = $extend(pixelimage_triangleGML_coreShape_PatternShape.prototype,{
+pixelimage_triGML_patternShape_EllipsePattern.__name__ = "pixelimage.triGML.patternShape.EllipsePattern";
+pixelimage_triGML_patternShape_EllipsePattern.__super__ = pixelimage_triGML_coreShape_PatternShape;
+pixelimage_triGML_patternShape_EllipsePattern.prototype = $extend(pixelimage_triGML_coreShape_PatternShape.prototype,{
 	setParameter: function(name,value) {
 		switch(name) {
 		case "height":
@@ -39815,7 +39815,7 @@ pixelimage_triangleGML_patternShape_EllipsePattern.prototype = $extend(pixelimag
 			this.width = parseFloat(value);
 			break;
 		default:
-			pixelimage_triangleGML_coreShape_PatternShape.prototype.setParameter.call(this,name,value);
+			pixelimage_triGML_coreShape_PatternShape.prototype.setParameter.call(this,name,value);
 		}
 	}
 	,render: function(pixelShape) {
@@ -40646,11 +40646,11 @@ pixelimage_triangleGML_patternShape_EllipsePattern.prototype = $extend(pixelimag
 			}
 		}
 		temp = null;
-		return pixelimage_triangleGML_coreShape_PatternShape.prototype.render.call(this,pixelShape);
+		return pixelimage_triGML_coreShape_PatternShape.prototype.render.call(this,pixelShape);
 	}
-	,__class__: pixelimage_triangleGML_patternShape_EllipsePattern
+	,__class__: pixelimage_triGML_patternShape_EllipsePattern
 });
-var pixelimage_triangleGML_patternShape_PathElementPattern = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,strokeColor0,strokeColor1,fillColor0,fillColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale,fillPatternFill,fillPatternWidth,fillPatternHeight,fillPatternAcross,fillPatternScale,pathData,translateX,translateY,scaleX,scaleY) {
+var pixelimage_triGML_patternShape_PathElementPattern = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,strokeColor0,strokeColor1,fillColor0,fillColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale,fillPatternFill,fillPatternWidth,fillPatternHeight,fillPatternAcross,fillPatternScale,pathData,translateX,translateY,scaleX,scaleY) {
 	if(scaleY == null) {
 		scaleY = 1.;
 	}
@@ -40711,17 +40711,17 @@ var pixelimage_triangleGML_patternShape_PathElementPattern = function(opacity,vi
 	this.toggleDraw = true;
 	this.y0 = 0.;
 	this.x0 = 0.;
-	pixelimage_triangleGML_coreShape_PatternShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,strokeColor0,strokeColor1,fillColor0,fillColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale,fillPatternFill,fillPatternWidth,fillPatternHeight,fillPatternAcross,fillPatternScale);
+	pixelimage_triGML_coreShape_PatternShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,strokeColor0,strokeColor1,fillColor0,fillColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale,fillPatternFill,fillPatternWidth,fillPatternHeight,fillPatternAcross,fillPatternScale);
 	this.pathData = pathData;
 	this.translateX = translateX;
 	this.translateY = translateY;
 	this.scaleX = scaleX;
 	this.scaleY = scaleY;
 };
-pixelimage_triangleGML_patternShape_PathElementPattern.__name__ = "pixelimage.triangleGML.patternShape.PathElementPattern";
-pixelimage_triangleGML_patternShape_PathElementPattern.__interfaces__ = [justPath_ILinePathContext];
-pixelimage_triangleGML_patternShape_PathElementPattern.__super__ = pixelimage_triangleGML_coreShape_PatternShape;
-pixelimage_triangleGML_patternShape_PathElementPattern.prototype = $extend(pixelimage_triangleGML_coreShape_PatternShape.prototype,{
+pixelimage_triGML_patternShape_PathElementPattern.__name__ = "pixelimage.triGML.patternShape.PathElementPattern";
+pixelimage_triGML_patternShape_PathElementPattern.__interfaces__ = [justPath_ILinePathContext];
+pixelimage_triGML_patternShape_PathElementPattern.__super__ = pixelimage_triGML_coreShape_PatternShape;
+pixelimage_triGML_patternShape_PathElementPattern.prototype = $extend(pixelimage_triGML_coreShape_PatternShape.prototype,{
 	setParameter: function(name,value) {
 		switch(name) {
 		case "pathData":
@@ -40740,7 +40740,7 @@ pixelimage_triangleGML_patternShape_PathElementPattern.prototype = $extend(pixel
 			this.translateY = parseFloat(value);
 			break;
 		default:
-			pixelimage_triangleGML_coreShape_PatternShape.prototype.setParameter.call(this,name,value);
+			pixelimage_triGML_coreShape_PatternShape.prototype.setParameter.call(this,name,value);
 		}
 	}
 	,render: function(pixelShape) {
@@ -40831,7 +40831,7 @@ pixelimage_triangleGML_patternShape_PathElementPattern.prototype = $extend(pixel
 			}
 		}
 		this.temp = null;
-		return pixelimage_triangleGML_coreShape_PatternShape.prototype.render.call(this,pixelShape);
+		return pixelimage_triGML_coreShape_PatternShape.prototype.render.call(this,pixelShape);
 	}
 	,lineSegmentTo: function(x2,y2) {
 		if(this.toggleDraw) {
@@ -42575,9 +42575,9 @@ pixelimage_triangleGML_patternShape_PathElementPattern.prototype = $extend(pixel
 		this.info = null;
 		this.toggleDraw = true;
 	}
-	,__class__: pixelimage_triangleGML_patternShape_PathElementPattern
+	,__class__: pixelimage_triGML_patternShape_PathElementPattern
 });
-var pixelimage_triangleGML_patternShape_QuadrilateralPattern = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,strokeColor0,strokeColor1,fillColor0,fillColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale,fillPatternFill,fillPatternWidth,fillPatternHeight,fillPatternAcross,fillPatternScale,x1,y1,x2,y2,x3,y3,x4,y4) {
+var pixelimage_triGML_patternShape_QuadrilateralPattern = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,strokeColor0,strokeColor1,fillColor0,fillColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale,fillPatternFill,fillPatternWidth,fillPatternHeight,fillPatternAcross,fillPatternScale,x1,y1,x2,y2,x3,y3,x4,y4) {
 	if(y4 == null) {
 		y4 = 0.;
 	}
@@ -42644,7 +42644,7 @@ var pixelimage_triangleGML_patternShape_QuadrilateralPattern = function(opacity,
 	if(opacity == null) {
 		opacity = 1.;
 	}
-	pixelimage_triangleGML_coreShape_PatternShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,strokeColor0,strokeColor1,fillColor0,fillColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale,fillPatternFill,fillPatternWidth,fillPatternHeight,fillPatternAcross,fillPatternScale);
+	pixelimage_triGML_coreShape_PatternShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,strokeColor0,strokeColor1,fillColor0,fillColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale,fillPatternFill,fillPatternWidth,fillPatternHeight,fillPatternAcross,fillPatternScale);
 	this.x1 = x1;
 	this.y1 = y1;
 	this.x2 = x2;
@@ -42654,9 +42654,9 @@ var pixelimage_triangleGML_patternShape_QuadrilateralPattern = function(opacity,
 	this.x4 = x4;
 	this.y4 = y4;
 };
-pixelimage_triangleGML_patternShape_QuadrilateralPattern.__name__ = "pixelimage.triangleGML.patternShape.QuadrilateralPattern";
-pixelimage_triangleGML_patternShape_QuadrilateralPattern.__super__ = pixelimage_triangleGML_coreShape_PatternShape;
-pixelimage_triangleGML_patternShape_QuadrilateralPattern.prototype = $extend(pixelimage_triangleGML_coreShape_PatternShape.prototype,{
+pixelimage_triGML_patternShape_QuadrilateralPattern.__name__ = "pixelimage.triGML.patternShape.QuadrilateralPattern";
+pixelimage_triGML_patternShape_QuadrilateralPattern.__super__ = pixelimage_triGML_coreShape_PatternShape;
+pixelimage_triGML_patternShape_QuadrilateralPattern.prototype = $extend(pixelimage_triGML_coreShape_PatternShape.prototype,{
 	setParameter: function(name,value) {
 		switch(name) {
 		case "x1":
@@ -42684,7 +42684,7 @@ pixelimage_triangleGML_patternShape_QuadrilateralPattern.prototype = $extend(pix
 			this.y4 = parseFloat(value);
 			break;
 		default:
-			pixelimage_triangleGML_coreShape_PatternShape.prototype.setParameter.call(this,name,value);
+			pixelimage_triGML_coreShape_PatternShape.prototype.setParameter.call(this,name,value);
 		}
 	}
 	,render: function(pixelShape) {
@@ -43440,11 +43440,11 @@ pixelimage_triangleGML_patternShape_QuadrilateralPattern.prototype = $extend(pix
 			}
 		}
 		temp = null;
-		return pixelimage_triangleGML_coreShape_PatternShape.prototype.render.call(this,pixelShape);
+		return pixelimage_triGML_coreShape_PatternShape.prototype.render.call(this,pixelShape);
 	}
-	,__class__: pixelimage_triangleGML_patternShape_QuadrilateralPattern
+	,__class__: pixelimage_triGML_patternShape_QuadrilateralPattern
 });
-var pixelimage_triangleGML_patternShape_RectanglePattern = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,strokeColor0,strokeColor1,fillColor0,fillColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale,fillPatternFill,fillPatternWidth,fillPatternHeight,fillPatternAcross,fillPatternScale,left,top,width,height,rounded) {
+var pixelimage_triGML_patternShape_RectanglePattern = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,strokeColor0,strokeColor1,fillColor0,fillColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale,fillPatternFill,fillPatternWidth,fillPatternHeight,fillPatternAcross,fillPatternScale,left,top,width,height,rounded) {
 	if(rounded == null) {
 		rounded = false;
 	}
@@ -43502,16 +43502,16 @@ var pixelimage_triangleGML_patternShape_RectanglePattern = function(opacity,visi
 	if(opacity == null) {
 		opacity = 1.;
 	}
-	pixelimage_triangleGML_coreShape_PatternShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,strokeColor0,strokeColor1,fillColor0,fillColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale,fillPatternFill,fillPatternWidth,fillPatternHeight,fillPatternAcross,fillPatternScale);
+	pixelimage_triGML_coreShape_PatternShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,strokeColor0,strokeColor1,fillColor0,fillColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale,fillPatternFill,fillPatternWidth,fillPatternHeight,fillPatternAcross,fillPatternScale);
 	this.left = left;
 	this.top = top;
 	this.width = width;
 	this.height = height;
 	this.rounded = rounded;
 };
-pixelimage_triangleGML_patternShape_RectanglePattern.__name__ = "pixelimage.triangleGML.patternShape.RectanglePattern";
-pixelimage_triangleGML_patternShape_RectanglePattern.__super__ = pixelimage_triangleGML_coreShape_PatternShape;
-pixelimage_triangleGML_patternShape_RectanglePattern.prototype = $extend(pixelimage_triangleGML_coreShape_PatternShape.prototype,{
+pixelimage_triGML_patternShape_RectanglePattern.__name__ = "pixelimage.triGML.patternShape.RectanglePattern";
+pixelimage_triGML_patternShape_RectanglePattern.__super__ = pixelimage_triGML_coreShape_PatternShape;
+pixelimage_triGML_patternShape_RectanglePattern.prototype = $extend(pixelimage_triGML_coreShape_PatternShape.prototype,{
 	setParameter: function(name,value) {
 		switch(name) {
 		case "height":
@@ -43530,7 +43530,7 @@ pixelimage_triangleGML_patternShape_RectanglePattern.prototype = $extend(pixelim
 			this.width = parseFloat(value);
 			break;
 		default:
-			pixelimage_triangleGML_coreShape_PatternShape.prototype.setParameter.call(this,name,value);
+			pixelimage_triGML_coreShape_PatternShape.prototype.setParameter.call(this,name,value);
 		}
 	}
 	,render: function(pixelShape) {
@@ -43621,7 +43621,7 @@ pixelimage_triangleGML_patternShape_RectanglePattern.prototype = $extend(pixelim
 			}
 		}
 		temp = null;
-		return pixelimage_triangleGML_coreShape_PatternShape.prototype.render.call(this,pixelShape);
+		return pixelimage_triGML_coreShape_PatternShape.prototype.render.call(this,pixelShape);
 	}
 	,buildRectangles: function(temp) {
 		if(this.rounded == false) {
@@ -48461,9 +48461,9 @@ pixelimage_triangleGML_patternShape_RectanglePattern.prototype = $extend(pixelim
 			}
 		}
 	}
-	,__class__: pixelimage_triangleGML_patternShape_RectanglePattern
+	,__class__: pixelimage_triGML_patternShape_RectanglePattern
 });
-var pixelimage_triangleGML_patternShape_SquarePattern = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,strokeColor0,strokeColor1,fillColor0,fillColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale,fillPatternFill,fillPatternWidth,fillPatternHeight,fillPatternAcross,fillPatternScale,left,top,diameter) {
+var pixelimage_triGML_patternShape_SquarePattern = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,strokeColor0,strokeColor1,fillColor0,fillColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale,fillPatternFill,fillPatternWidth,fillPatternHeight,fillPatternAcross,fillPatternScale,left,top,diameter) {
 	if(diameter == null) {
 		diameter = 1.;
 	}
@@ -48515,14 +48515,14 @@ var pixelimage_triangleGML_patternShape_SquarePattern = function(opacity,visibil
 	if(opacity == null) {
 		opacity = 1.;
 	}
-	pixelimage_triangleGML_coreShape_PatternShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,strokeColor0,strokeColor1,fillColor0,fillColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale,fillPatternFill,fillPatternWidth,fillPatternHeight,fillPatternAcross,fillPatternScale);
+	pixelimage_triGML_coreShape_PatternShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,strokeColor0,strokeColor1,fillColor0,fillColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale,fillPatternFill,fillPatternWidth,fillPatternHeight,fillPatternAcross,fillPatternScale);
 	this.left = left;
 	this.top = top;
 	this.diameter = diameter;
 };
-pixelimage_triangleGML_patternShape_SquarePattern.__name__ = "pixelimage.triangleGML.patternShape.SquarePattern";
-pixelimage_triangleGML_patternShape_SquarePattern.__super__ = pixelimage_triangleGML_coreShape_PatternShape;
-pixelimage_triangleGML_patternShape_SquarePattern.prototype = $extend(pixelimage_triangleGML_coreShape_PatternShape.prototype,{
+pixelimage_triGML_patternShape_SquarePattern.__name__ = "pixelimage.triGML.patternShape.SquarePattern";
+pixelimage_triGML_patternShape_SquarePattern.__super__ = pixelimage_triGML_coreShape_PatternShape;
+pixelimage_triGML_patternShape_SquarePattern.prototype = $extend(pixelimage_triGML_coreShape_PatternShape.prototype,{
 	setParameter: function(name,value) {
 		switch(name) {
 		case "diameter":
@@ -48535,7 +48535,7 @@ pixelimage_triangleGML_patternShape_SquarePattern.prototype = $extend(pixelimage
 			this.top = parseFloat(value);
 			break;
 		default:
-			pixelimage_triangleGML_coreShape_PatternShape.prototype.setParameter.call(this,name,value);
+			pixelimage_triGML_coreShape_PatternShape.prototype.setParameter.call(this,name,value);
 		}
 	}
 	,render: function(pixelShape) {
@@ -48626,7 +48626,7 @@ pixelimage_triangleGML_patternShape_SquarePattern.prototype = $extend(pixelimage
 			}
 		}
 		temp = null;
-		return pixelimage_triangleGML_coreShape_PatternShape.prototype.render.call(this,pixelShape);
+		return pixelimage_triGML_coreShape_PatternShape.prototype.render.call(this,pixelShape);
 	}
 	,buildSquare: function(temp) {
 		var tileImage = this.tileImageStroke;
@@ -49240,9 +49240,9 @@ pixelimage_triangleGML_patternShape_SquarePattern.prototype = $extend(pixelimage
 			var v = new pixelimage_algo_HitQuad(x,y,bx,y,bx,cy,x,cy,true);
 		}
 	}
-	,__class__: pixelimage_triangleGML_patternShape_SquarePattern
+	,__class__: pixelimage_triGML_patternShape_SquarePattern
 });
-var pixelimage_triangleGML_shape_ArcShape = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill,left,top,width,height,startAngle,sweepAngle,arcType) {
+var pixelimage_triGML_shape_ArcShape = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill,left,top,width,height,startAngle,sweepAngle,arcType) {
 	if(arcType == null) {
 		arcType = "pie";
 	}
@@ -49279,7 +49279,7 @@ var pixelimage_triangleGML_shape_ArcShape = function(opacity,visibility,strokeCo
 	if(opacity == null) {
 		opacity = 1.;
 	}
-	pixelimage_triangleGML_coreShape_FillShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill);
+	pixelimage_triGML_coreShape_FillShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill);
 	this.left = left;
 	this.top = top;
 	this.width = width;
@@ -49290,9 +49290,9 @@ var pixelimage_triangleGML_shape_ArcShape = function(opacity,visibility,strokeCo
 	this.rx = width / 2;
 	this.ry = height / 2;
 };
-pixelimage_triangleGML_shape_ArcShape.__name__ = "pixelimage.triangleGML.shape.ArcShape";
-pixelimage_triangleGML_shape_ArcShape.__super__ = pixelimage_triangleGML_coreShape_FillShape;
-pixelimage_triangleGML_shape_ArcShape.prototype = $extend(pixelimage_triangleGML_coreShape_FillShape.prototype,{
+pixelimage_triGML_shape_ArcShape.__name__ = "pixelimage.triGML.shape.ArcShape";
+pixelimage_triGML_shape_ArcShape.__super__ = pixelimage_triGML_coreShape_FillShape;
+pixelimage_triGML_shape_ArcShape.prototype = $extend(pixelimage_triGML_coreShape_FillShape.prototype,{
 	setParameter: function(name,value) {
 		switch(name) {
 		case "arcType":
@@ -49319,7 +49319,7 @@ pixelimage_triangleGML_shape_ArcShape.prototype = $extend(pixelimage_triangleGML
 			this.width = parseFloat(value);
 			break;
 		default:
-			pixelimage_triangleGML_coreShape_FillShape.prototype.setParameter.call(this,name,value);
+			pixelimage_triGML_coreShape_FillShape.prototype.setParameter.call(this,name,value);
 		}
 		this.rx = this.width / 2;
 		this.ry = this.height / 2;
@@ -49421,7 +49421,7 @@ pixelimage_triangleGML_shape_ArcShape.prototype = $extend(pixelimage_triangleGML
 			}
 		}
 		temp = null;
-		return pixelimage_triangleGML_coreShape_FillShape.prototype.render.call(this,pixelShape);
+		return pixelimage_triGML_coreShape_FillShape.prototype.render.call(this,pixelShape);
 	}
 	,chord: function(temp) {
 		this.ellipse(temp);
@@ -51743,9 +51743,9 @@ pixelimage_triangleGML_shape_ArcShape.prototype = $extend(pixelimage_triangleGML
 			var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy,true);
 		}
 	}
-	,__class__: pixelimage_triangleGML_shape_ArcShape
+	,__class__: pixelimage_triGML_shape_ArcShape
 });
-var pixelimage_triangleGML_shape_CircleShape = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill,left,top,diameter) {
+var pixelimage_triGML_shape_CircleShape = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill,left,top,diameter) {
 	if(diameter == null) {
 		diameter = 1.;
 	}
@@ -51770,14 +51770,14 @@ var pixelimage_triangleGML_shape_CircleShape = function(opacity,visibility,strok
 	if(opacity == null) {
 		opacity = 1.;
 	}
-	pixelimage_triangleGML_coreShape_FillShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill);
+	pixelimage_triGML_coreShape_FillShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill);
 	this.left = left;
 	this.top = top;
 	this.diameter = diameter;
 };
-pixelimage_triangleGML_shape_CircleShape.__name__ = "pixelimage.triangleGML.shape.CircleShape";
-pixelimage_triangleGML_shape_CircleShape.__super__ = pixelimage_triangleGML_coreShape_FillShape;
-pixelimage_triangleGML_shape_CircleShape.prototype = $extend(pixelimage_triangleGML_coreShape_FillShape.prototype,{
+pixelimage_triGML_shape_CircleShape.__name__ = "pixelimage.triGML.shape.CircleShape";
+pixelimage_triGML_shape_CircleShape.__super__ = pixelimage_triGML_coreShape_FillShape;
+pixelimage_triGML_shape_CircleShape.prototype = $extend(pixelimage_triGML_coreShape_FillShape.prototype,{
 	setParameter: function(name,value) {
 		switch(name) {
 		case "diameter":
@@ -51790,7 +51790,7 @@ pixelimage_triangleGML_shape_CircleShape.prototype = $extend(pixelimage_triangle
 			this.top = parseFloat(value);
 			break;
 		default:
-			pixelimage_triangleGML_coreShape_FillShape.prototype.setParameter.call(this,name,value);
+			pixelimage_triGML_coreShape_FillShape.prototype.setParameter.call(this,name,value);
 		}
 	}
 	,render: function(pixelShape) {
@@ -51880,7 +51880,7 @@ pixelimage_triangleGML_shape_CircleShape.prototype = $extend(pixelimage_triangle
 			}
 		}
 		temp = null;
-		return pixelimage_triangleGML_coreShape_FillShape.prototype.render.call(this,pixelShape);
+		return pixelimage_triGML_coreShape_FillShape.prototype.render.call(this,pixelShape);
 	}
 	,buildCircle: function(temp) {
 		var w = Math.round(this.strokeWidth / 2);
@@ -52608,9 +52608,9 @@ pixelimage_triangleGML_shape_CircleShape.prototype = $extend(pixelimage_triangle
 			}
 		}
 	}
-	,__class__: pixelimage_triangleGML_shape_CircleShape
+	,__class__: pixelimage_triGML_shape_CircleShape
 });
-var pixelimage_triangleGML_shape_EllipseShape = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill,left,top,width,height) {
+var pixelimage_triGML_shape_EllipseShape = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill,left,top,width,height) {
 	if(height == null) {
 		height = 1.;
 	}
@@ -52638,15 +52638,15 @@ var pixelimage_triangleGML_shape_EllipseShape = function(opacity,visibility,stro
 	if(opacity == null) {
 		opacity = 1.;
 	}
-	pixelimage_triangleGML_coreShape_FillShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill);
+	pixelimage_triGML_coreShape_FillShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill);
 	this.left = left;
 	this.top = top;
 	this.width = width;
 	this.height = height;
 };
-pixelimage_triangleGML_shape_EllipseShape.__name__ = "pixelimage.triangleGML.shape.EllipseShape";
-pixelimage_triangleGML_shape_EllipseShape.__super__ = pixelimage_triangleGML_coreShape_FillShape;
-pixelimage_triangleGML_shape_EllipseShape.prototype = $extend(pixelimage_triangleGML_coreShape_FillShape.prototype,{
+pixelimage_triGML_shape_EllipseShape.__name__ = "pixelimage.triGML.shape.EllipseShape";
+pixelimage_triGML_shape_EllipseShape.__super__ = pixelimage_triGML_coreShape_FillShape;
+pixelimage_triGML_shape_EllipseShape.prototype = $extend(pixelimage_triGML_coreShape_FillShape.prototype,{
 	setParameter: function(name,value) {
 		switch(name) {
 		case "height":
@@ -52662,7 +52662,7 @@ pixelimage_triangleGML_shape_EllipseShape.prototype = $extend(pixelimage_triangl
 			this.width = parseFloat(value);
 			break;
 		default:
-			pixelimage_triangleGML_coreShape_FillShape.prototype.setParameter.call(this,name,value);
+			pixelimage_triGML_coreShape_FillShape.prototype.setParameter.call(this,name,value);
 		}
 	}
 	,render: function(pixelShape) {
@@ -53476,11 +53476,11 @@ pixelimage_triangleGML_shape_EllipseShape.prototype = $extend(pixelimage_triangl
 			}
 		}
 		temp = null;
-		return pixelimage_triangleGML_coreShape_FillShape.prototype.render.call(this,pixelShape);
+		return pixelimage_triGML_coreShape_FillShape.prototype.render.call(this,pixelShape);
 	}
-	,__class__: pixelimage_triangleGML_shape_EllipseShape
+	,__class__: pixelimage_triGML_shape_EllipseShape
 });
-var pixelimage_triangleGML_shape_PathElementShape = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill,pathData,translateX,translateY,scaleX,scaleY) {
+var pixelimage_triGML_shape_PathElementShape = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill,pathData,translateX,translateY,scaleX,scaleY) {
 	if(scaleY == null) {
 		scaleY = 1.;
 	}
@@ -53515,17 +53515,17 @@ var pixelimage_triangleGML_shape_PathElementShape = function(opacity,visibility,
 	this.y0 = 0.;
 	this.x0 = 0.;
 	this.pathData = "";
-	pixelimage_triangleGML_coreShape_FillShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill);
+	pixelimage_triGML_coreShape_FillShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill);
 	this.pathData = pathData;
 	this.translateX = translateX;
 	this.translateY = translateY;
 	this.scaleX = scaleX;
 	this.scaleY = scaleY;
 };
-pixelimage_triangleGML_shape_PathElementShape.__name__ = "pixelimage.triangleGML.shape.PathElementShape";
-pixelimage_triangleGML_shape_PathElementShape.__interfaces__ = [justPath_ILinePathContext];
-pixelimage_triangleGML_shape_PathElementShape.__super__ = pixelimage_triangleGML_coreShape_FillShape;
-pixelimage_triangleGML_shape_PathElementShape.prototype = $extend(pixelimage_triangleGML_coreShape_FillShape.prototype,{
+pixelimage_triGML_shape_PathElementShape.__name__ = "pixelimage.triGML.shape.PathElementShape";
+pixelimage_triGML_shape_PathElementShape.__interfaces__ = [justPath_ILinePathContext];
+pixelimage_triGML_shape_PathElementShape.__super__ = pixelimage_triGML_coreShape_FillShape;
+pixelimage_triGML_shape_PathElementShape.prototype = $extend(pixelimage_triGML_coreShape_FillShape.prototype,{
 	setParameter: function(name,value) {
 		switch(name) {
 		case "pathData":
@@ -53544,7 +53544,7 @@ pixelimage_triangleGML_shape_PathElementShape.prototype = $extend(pixelimage_tri
 			this.translateY = parseFloat(value);
 			break;
 		default:
-			pixelimage_triangleGML_coreShape_FillShape.prototype.setParameter.call(this,name,value);
+			pixelimage_triGML_coreShape_FillShape.prototype.setParameter.call(this,name,value);
 		}
 	}
 	,render: function(pixelShape) {
@@ -53633,7 +53633,7 @@ pixelimage_triangleGML_shape_PathElementShape.prototype = $extend(pixelimage_tri
 			}
 		}
 		this.temp = null;
-		return pixelimage_triangleGML_coreShape_FillShape.prototype.render.call(this,pixelShape);
+		return pixelimage_triGML_coreShape_FillShape.prototype.render.call(this,pixelShape);
 	}
 	,drawing: function() {
 		var sp = new justPath_SvgLinePath(this);
@@ -54931,9 +54931,9 @@ pixelimage_triangleGML_shape_PathElementShape.prototype = $extend(pixelimage_tri
 		this.info = null;
 		this.toggleDraw = true;
 	}
-	,__class__: pixelimage_triangleGML_shape_PathElementShape
+	,__class__: pixelimage_triGML_shape_PathElementShape
 });
-var pixelimage_triangleGML_shape_QuadrilateralShape = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill,x1,y1,x2,y2,x3,y3,x4,y4) {
+var pixelimage_triGML_shape_QuadrilateralShape = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill,x1,y1,x2,y2,x3,y3,x4,y4) {
 	if(y4 == null) {
 		y4 = 0.;
 	}
@@ -54973,7 +54973,7 @@ var pixelimage_triangleGML_shape_QuadrilateralShape = function(opacity,visibilit
 	if(opacity == null) {
 		opacity = 1.;
 	}
-	pixelimage_triangleGML_coreShape_FillShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill);
+	pixelimage_triGML_coreShape_FillShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill);
 	this.x1 = x1;
 	this.y1 = y1;
 	this.x2 = x2;
@@ -54983,9 +54983,9 @@ var pixelimage_triangleGML_shape_QuadrilateralShape = function(opacity,visibilit
 	this.x4 = x4;
 	this.y4 = y4;
 };
-pixelimage_triangleGML_shape_QuadrilateralShape.__name__ = "pixelimage.triangleGML.shape.QuadrilateralShape";
-pixelimage_triangleGML_shape_QuadrilateralShape.__super__ = pixelimage_triangleGML_coreShape_FillShape;
-pixelimage_triangleGML_shape_QuadrilateralShape.prototype = $extend(pixelimage_triangleGML_coreShape_FillShape.prototype,{
+pixelimage_triGML_shape_QuadrilateralShape.__name__ = "pixelimage.triGML.shape.QuadrilateralShape";
+pixelimage_triGML_shape_QuadrilateralShape.__super__ = pixelimage_triGML_coreShape_FillShape;
+pixelimage_triGML_shape_QuadrilateralShape.prototype = $extend(pixelimage_triGML_coreShape_FillShape.prototype,{
 	setParameter: function(name,value) {
 		switch(name) {
 		case "x1":
@@ -55013,7 +55013,7 @@ pixelimage_triangleGML_shape_QuadrilateralShape.prototype = $extend(pixelimage_t
 			this.y4 = parseFloat(value);
 			break;
 		default:
-			pixelimage_triangleGML_coreShape_FillShape.prototype.setParameter.call(this,name,value);
+			pixelimage_triGML_coreShape_FillShape.prototype.setParameter.call(this,name,value);
 		}
 	}
 	,render: function(pixelShape) {
@@ -55752,11 +55752,11 @@ pixelimage_triangleGML_shape_QuadrilateralShape.prototype = $extend(pixelimage_t
 			}
 		}
 		temp = null;
-		return pixelimage_triangleGML_coreShape_FillShape.prototype.render.call(this,pixelShape);
+		return pixelimage_triGML_coreShape_FillShape.prototype.render.call(this,pixelShape);
 	}
-	,__class__: pixelimage_triangleGML_shape_QuadrilateralShape
+	,__class__: pixelimage_triGML_shape_QuadrilateralShape
 });
-var pixelimage_triangleGML_shape_RectangleShape = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill,left,top,width,height,rounded) {
+var pixelimage_triGML_shape_RectangleShape = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill,left,top,width,height,rounded) {
 	if(rounded == null) {
 		rounded = false;
 	}
@@ -55787,16 +55787,16 @@ var pixelimage_triangleGML_shape_RectangleShape = function(opacity,visibility,st
 	if(opacity == null) {
 		opacity = 1.;
 	}
-	pixelimage_triangleGML_coreShape_FillShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill);
+	pixelimage_triGML_coreShape_FillShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill);
 	this.left = left;
 	this.top = top;
 	this.width = width;
 	this.height = height;
 	this.rounded = rounded;
 };
-pixelimage_triangleGML_shape_RectangleShape.__name__ = "pixelimage.triangleGML.shape.RectangleShape";
-pixelimage_triangleGML_shape_RectangleShape.__super__ = pixelimage_triangleGML_coreShape_FillShape;
-pixelimage_triangleGML_shape_RectangleShape.prototype = $extend(pixelimage_triangleGML_coreShape_FillShape.prototype,{
+pixelimage_triGML_shape_RectangleShape.__name__ = "pixelimage.triGML.shape.RectangleShape";
+pixelimage_triGML_shape_RectangleShape.__super__ = pixelimage_triGML_coreShape_FillShape;
+pixelimage_triGML_shape_RectangleShape.prototype = $extend(pixelimage_triGML_coreShape_FillShape.prototype,{
 	setParameter: function(name,value) {
 		switch(name) {
 		case "height":
@@ -55815,7 +55815,7 @@ pixelimage_triangleGML_shape_RectangleShape.prototype = $extend(pixelimage_trian
 			this.width = parseFloat(value);
 			break;
 		default:
-			pixelimage_triangleGML_coreShape_FillShape.prototype.setParameter.call(this,name,value);
+			pixelimage_triGML_coreShape_FillShape.prototype.setParameter.call(this,name,value);
 		}
 	}
 	,render: function(pixelShape) {
@@ -57830,11 +57830,11 @@ pixelimage_triangleGML_shape_RectangleShape.prototype = $extend(pixelimage_trian
 			}
 			temp = null;
 		}
-		return pixelimage_triangleGML_coreShape_FillShape.prototype.render.call(this,pixelShape);
+		return pixelimage_triGML_coreShape_FillShape.prototype.render.call(this,pixelShape);
 	}
-	,__class__: pixelimage_triangleGML_shape_RectangleShape
+	,__class__: pixelimage_triGML_shape_RectangleShape
 });
-var pixelimage_triangleGML_shape_SquareShape = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill,left,top,diameter) {
+var pixelimage_triGML_shape_SquareShape = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill,left,top,diameter) {
 	if(diameter == null) {
 		diameter = 1.;
 	}
@@ -57859,14 +57859,14 @@ var pixelimage_triangleGML_shape_SquareShape = function(opacity,visibility,strok
 	if(opacity == null) {
 		opacity = 1.;
 	}
-	pixelimage_triangleGML_coreShape_FillShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill);
+	pixelimage_triGML_coreShape_FillShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill);
 	this.left = left;
 	this.top = top;
 	this.diameter = diameter;
 };
-pixelimage_triangleGML_shape_SquareShape.__name__ = "pixelimage.triangleGML.shape.SquareShape";
-pixelimage_triangleGML_shape_SquareShape.__super__ = pixelimage_triangleGML_coreShape_FillShape;
-pixelimage_triangleGML_shape_SquareShape.prototype = $extend(pixelimage_triangleGML_coreShape_FillShape.prototype,{
+pixelimage_triGML_shape_SquareShape.__name__ = "pixelimage.triGML.shape.SquareShape";
+pixelimage_triGML_shape_SquareShape.__super__ = pixelimage_triGML_coreShape_FillShape;
+pixelimage_triGML_shape_SquareShape.prototype = $extend(pixelimage_triGML_coreShape_FillShape.prototype,{
 	setParameter: function(name,value) {
 		switch(name) {
 		case "diameter":
@@ -57879,7 +57879,7 @@ pixelimage_triangleGML_shape_SquareShape.prototype = $extend(pixelimage_triangle
 			this.top = parseFloat(value);
 			break;
 		default:
-			pixelimage_triangleGML_coreShape_FillShape.prototype.setParameter.call(this,name,value);
+			pixelimage_triGML_coreShape_FillShape.prototype.setParameter.call(this,name,value);
 		}
 	}
 	,render: function(pixelShape) {
@@ -57969,7 +57969,7 @@ pixelimage_triangleGML_shape_SquareShape.prototype = $extend(pixelimage_triangle
 			}
 		}
 		temp = null;
-		return pixelimage_triangleGML_coreShape_FillShape.prototype.render.call(this,pixelShape);
+		return pixelimage_triGML_coreShape_FillShape.prototype.render.call(this,pixelShape);
 	}
 	,buildSquare: function(temp) {
 		var color = this.strokeColor;
@@ -58073,9 +58073,9 @@ pixelimage_triangleGML_shape_SquareShape.prototype = $extend(pixelimage_triangle
 			}
 		}
 	}
-	,__class__: pixelimage_triangleGML_shape_SquareShape
+	,__class__: pixelimage_triGML_shape_SquareShape
 });
-var pixelimage_triangleGML_shape_Star6Shape = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill,left,top,diameter,rotation) {
+var pixelimage_triGML_shape_Star6Shape = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill,left,top,diameter,rotation) {
 	if(rotation == null) {
 		rotation = 0.;
 	}
@@ -58103,15 +58103,15 @@ var pixelimage_triangleGML_shape_Star6Shape = function(opacity,visibility,stroke
 	if(opacity == null) {
 		opacity = 1.;
 	}
-	pixelimage_triangleGML_coreShape_FillShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill);
+	pixelimage_triGML_coreShape_FillShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill);
 	this.left = left;
 	this.top = top;
 	this.diameter = diameter;
 	this.rotation = rotation;
 };
-pixelimage_triangleGML_shape_Star6Shape.__name__ = "pixelimage.triangleGML.shape.Star6Shape";
-pixelimage_triangleGML_shape_Star6Shape.__super__ = pixelimage_triangleGML_coreShape_FillShape;
-pixelimage_triangleGML_shape_Star6Shape.prototype = $extend(pixelimage_triangleGML_coreShape_FillShape.prototype,{
+pixelimage_triGML_shape_Star6Shape.__name__ = "pixelimage.triGML.shape.Star6Shape";
+pixelimage_triGML_shape_Star6Shape.__super__ = pixelimage_triGML_coreShape_FillShape;
+pixelimage_triGML_shape_Star6Shape.prototype = $extend(pixelimage_triGML_coreShape_FillShape.prototype,{
 	setParameter: function(name,value) {
 		switch(name) {
 		case "diameter":
@@ -58128,7 +58128,7 @@ pixelimage_triangleGML_shape_Star6Shape.prototype = $extend(pixelimage_triangleG
 			this.top = parseFloat(value);
 			break;
 		default:
-			pixelimage_triangleGML_coreShape_FillShape.prototype.setParameter.call(this,name,value);
+			pixelimage_triGML_coreShape_FillShape.prototype.setParameter.call(this,name,value);
 		}
 	}
 	,render: function(pixelShape) {
@@ -58832,11 +58832,11 @@ pixelimage_triangleGML_shape_Star6Shape.prototype = $extend(pixelimage_triangleG
 			}
 		}
 		temp = null;
-		return pixelimage_triangleGML_coreShape_FillShape.prototype.render.call(this,pixelShape);
+		return pixelimage_triGML_coreShape_FillShape.prototype.render.call(this,pixelShape);
 	}
-	,__class__: pixelimage_triangleGML_shape_Star6Shape
+	,__class__: pixelimage_triGML_shape_Star6Shape
 });
-var pixelimage_triangleGML_shape_TriangleShape = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill,x1,y1,x2,y2,x3,y3) {
+var pixelimage_triGML_shape_TriangleShape = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill,x1,y1,x2,y2,x3,y3) {
 	if(y3 == null) {
 		y3 = 0.;
 	}
@@ -58870,7 +58870,7 @@ var pixelimage_triangleGML_shape_TriangleShape = function(opacity,visibility,str
 	if(opacity == null) {
 		opacity = 1.;
 	}
-	pixelimage_triangleGML_coreShape_FillShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill);
+	pixelimage_triGML_coreShape_FillShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill);
 	this.x1 = x1;
 	this.y1 = y1;
 	this.x2 = x2;
@@ -58878,9 +58878,9 @@ var pixelimage_triangleGML_shape_TriangleShape = function(opacity,visibility,str
 	this.x3 = x3;
 	this.y3 = y3;
 };
-pixelimage_triangleGML_shape_TriangleShape.__name__ = "pixelimage.triangleGML.shape.TriangleShape";
-pixelimage_triangleGML_shape_TriangleShape.__super__ = pixelimage_triangleGML_coreShape_FillShape;
-pixelimage_triangleGML_shape_TriangleShape.prototype = $extend(pixelimage_triangleGML_coreShape_FillShape.prototype,{
+pixelimage_triGML_shape_TriangleShape.__name__ = "pixelimage.triGML.shape.TriangleShape";
+pixelimage_triGML_shape_TriangleShape.__super__ = pixelimage_triGML_coreShape_FillShape;
+pixelimage_triGML_shape_TriangleShape.prototype = $extend(pixelimage_triGML_coreShape_FillShape.prototype,{
 	setParameter: function(name,value) {
 		switch(name) {
 		case "x1":
@@ -58902,7 +58902,7 @@ pixelimage_triangleGML_shape_TriangleShape.prototype = $extend(pixelimage_triang
 			this.y3 = parseFloat(value);
 			break;
 		default:
-			pixelimage_triangleGML_coreShape_FillShape.prototype.setParameter.call(this,name,value);
+			pixelimage_triGML_coreShape_FillShape.prototype.setParameter.call(this,name,value);
 		}
 	}
 	,render: function(pixelShape) {
@@ -60022,11 +60022,11 @@ pixelimage_triangleGML_shape_TriangleShape.prototype = $extend(pixelimage_triang
 		if(hasHit1 == true) {
 			var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy,true);
 		}
-		return pixelimage_triangleGML_coreShape_FillShape.prototype.render.call(this,pixelShape);
+		return pixelimage_triGML_coreShape_FillShape.prototype.render.call(this,pixelShape);
 	}
-	,__class__: pixelimage_triangleGML_shape_TriangleShape
+	,__class__: pixelimage_triGML_shape_TriangleShape
 });
-var pixelimage_triangleGML_shape_VePathElementShape = function(opacity,visibility,strokeColors,strokeWidths,strokeDashGapArray,fill,pathData,translateX,translateY,scaleX,scaleY) {
+var pixelimage_triGML_shape_VePathElementShape = function(opacity,visibility,strokeColors,strokeWidths,strokeDashGapArray,fill,pathData,translateX,translateY,scaleX,scaleY) {
 	if(scaleY == null) {
 		scaleY = 1.;
 	}
@@ -60055,7 +60055,7 @@ var pixelimage_triangleGML_shape_VePathElementShape = function(opacity,visibilit
 	this.y0 = 0.;
 	this.x0 = 0.;
 	this.pathData = "";
-	pixelimage_triangleGML_coreShape_FillShape.call(this,opacity,visibility,0,1,strokeDashGapArray,fill);
+	pixelimage_triGML_coreShape_FillShape.call(this,opacity,visibility,0,1,strokeDashGapArray,fill);
 	this.strokeColors = strokeColors;
 	this.strokeWidths = strokeWidths;
 	this.pathData = pathData;
@@ -60064,10 +60064,10 @@ var pixelimage_triangleGML_shape_VePathElementShape = function(opacity,visibilit
 	this.scaleX = scaleX;
 	this.scaleY = scaleY;
 };
-pixelimage_triangleGML_shape_VePathElementShape.__name__ = "pixelimage.triangleGML.shape.VePathElementShape";
-pixelimage_triangleGML_shape_VePathElementShape.__interfaces__ = [justPath_ILinePathContext];
-pixelimage_triangleGML_shape_VePathElementShape.__super__ = pixelimage_triangleGML_coreShape_FillShape;
-pixelimage_triangleGML_shape_VePathElementShape.prototype = $extend(pixelimage_triangleGML_coreShape_FillShape.prototype,{
+pixelimage_triGML_shape_VePathElementShape.__name__ = "pixelimage.triGML.shape.VePathElementShape";
+pixelimage_triGML_shape_VePathElementShape.__interfaces__ = [justPath_ILinePathContext];
+pixelimage_triGML_shape_VePathElementShape.__super__ = pixelimage_triGML_coreShape_FillShape;
+pixelimage_triGML_shape_VePathElementShape.prototype = $extend(pixelimage_triGML_coreShape_FillShape.prototype,{
 	setParameter: function(name,value) {
 		switch(name) {
 		case "pathData":
@@ -60110,7 +60110,7 @@ pixelimage_triangleGML_shape_VePathElementShape.prototype = $extend(pixelimage_t
 			this.translateY = parseFloat(value);
 			break;
 		default:
-			pixelimage_triangleGML_coreShape_FillShape.prototype.setParameter.call(this,name,value);
+			pixelimage_triGML_coreShape_FillShape.prototype.setParameter.call(this,name,value);
 		}
 	}
 	,render: function(pixelShape) {
@@ -60211,7 +60211,7 @@ pixelimage_triangleGML_shape_VePathElementShape.prototype = $extend(pixelimage_t
 			}
 		}
 		this.temp = null;
-		return pixelimage_triangleGML_coreShape_FillShape.prototype.render.call(this,pixelShape);
+		return pixelimage_triGML_coreShape_FillShape.prototype.render.call(this,pixelShape);
 	}
 	,drawing: function() {
 		if(this.sp == null) {
@@ -61511,21 +61511,23 @@ pixelimage_triangleGML_shape_VePathElementShape.prototype = $extend(pixelimage_t
 		this.info = null;
 		this.toggleDraw = true;
 	}
-	,__class__: pixelimage_triangleGML_shape_VePathElementShape
+	,__class__: pixelimage_triGML_shape_VePathElementShape
 });
-var pixelimage_$samples_pixelimage_$canvas_Arrows = function() {
-	this.lineGridShape = "<LineGridShape\n                        left = \"100\"  top = \"100\"\n                        width = \"2048\" height = \"1536\"\n                        delta = \"100\" deltaH = \"100\"\n                        strokeColor=\"0xfF003300\" strokeWidth=\"2.5\">\n                    </LineGridShape>";
-	this.arrowThickGradientTest = "<ArrowThickGradient\n                        flare=\"true\"\n                        reverseFlare=\"true\"\n                        both=\"true\"\n                        x1=\"300\" y1=\"300\" \n                        x2=\"560\" y2=\"120\" \n                        arrowWidth=\"60\"\n                        arrowHeight=\"50\"\n                        strokeWidth=\"5\" strokeTopColor=\"0xFF9000FF\" strokeBottomColor=\"0xffffa200\">\n                    </ArrowThickGradient>";
-	this.arrowShapeFlareTest = "<ArrowShape\n                        flare=\"true\"\n                        both=\"false\"\n                        x1=\"400\" y1=\"400\" \n                        x2=\"560\" y2=\"720\" \n                        arrowWidth=\"60\"\n                        arrowHeight=\"50\"\n                        strokeWidth=\"5\" strokeColor=\"0xff00FF00\">\n                    </ArrowShape>";
-	this.arrowShapeReverseFlareTest = "<ArrowShape\n                        flare=\"true\"\n                        both=\"false\"\n                        reverseFlare=\"true\"\n                        x1=\"100\" y1=\"300\" \n                        x2=\"360\" y2=\"120\" \n                        arrowWidth=\"60\"\n                        arrowHeight=\"50\"\n                        strokeWidth=\"5\" strokeColor=\"0xffFF0000\">\n                    </ArrowShape>";
-	this.arrowShapeTest = "<ArrowShape\n                        both=\"false\"\n                        x1=\"500\" y1=\"400\" \n                        x2=\"890\" y2=\"230\" \n                        arrowWidth=\"70\"\n                        strokeWidth=\"30\" strokeColor=\"0xff0000FF\">\n                    </ArrowShape>";
+var pixelimage_$samples_pixelimage_$canvas_Quads = function() {
+	this.quadShape = "<QuadShape \n        x1=\"100\" y1=\"300\" \n        x2=\"300\" y2=\"120\" \n        x3=\"130\" y3=\"220\" \n        x4=\"500\" y4=\"500\" \n        strokeColor=\"0xFFFF0000\" strokeWidth=\"1\" \n        fill=\"0xFF00FF00\">\n    </QuadShape>";
 	this.canvasSetup = new htmlHelper_canvas_CanvasSetup();
 	this.begin();
-	this.draw([this.lineGridShape,this.arrowShapeTest,this.arrowShapeReverseFlareTest,this.arrowShapeFlareTest,this.arrowThickGradientTest]);
+	this.drawGrid();
+	var pixelShape = this.pixelImage;
+	var str = this.quadShape;
+	haxe_Log.trace(str,{ fileName : "pixelimage/triGML/coreShape/XMLshape.hx", lineNumber : 18, className : "pixelimage.triGML.coreShape.XMLshape", methodName : "withString"});
+	var xml = Xml.parse("<node>" + str + "</node>").firstElement();
+	haxe_Log.trace(xml,{ fileName : "pixelimage/triGML/coreShape/XMLshape.hx", lineNumber : 20, className : "pixelimage.triGML.coreShape.XMLshape", methodName : "withString"});
+	new pixelimage_triGML_coreShape_XMLshape(pixelShape,xml);
 	this.end();
 };
-pixelimage_$samples_pixelimage_$canvas_Arrows.__name__ = "pixelimage_samples.pixelimage_canvas.Arrows";
-pixelimage_$samples_pixelimage_$canvas_Arrows.prototype = {
+pixelimage_$samples_pixelimage_$canvas_Quads.__name__ = "pixelimage_samples.pixelimage_canvas.Quads";
+pixelimage_$samples_pixelimage_$canvas_Quads.prototype = {
 	begin: function() {
 		this.surface = this.canvasSetup.surface;
 		var this1 = new Uint32Array(12582912);
@@ -61533,18 +61535,6 @@ pixelimage_$samples_pixelimage_$canvas_Arrows.prototype = {
 		var this1 = this2;
 		this.pixelImage = this1;
 		this.pixelImage.transparent = true;
-	}
-	,draw: function(triangleGMLs) {
-		var _g = 0;
-		while(_g < triangleGMLs.length) {
-			var shapeString = triangleGMLs[_g];
-			++_g;
-			var pixelShape = this.pixelImage;
-			haxe_Log.trace(shapeString,{ fileName : "pixelimage/triangleGML/coreShape/TriangleGML.hx", lineNumber : 25, className : "pixelimage.triangleGML.coreShape.TriangleGML", methodName : "withString"});
-			var xml = Xml.parse("<node>" + shapeString + "</node>").firstElement();
-			haxe_Log.trace(xml,{ fileName : "pixelimage/triangleGML/coreShape/TriangleGML.hx", lineNumber : 27, className : "pixelimage.triangleGML.coreShape.TriangleGML", methodName : "withString"});
-			new pixelimage_triangleGML_coreShape_TriangleGML(pixelShape,xml);
-		}
 	}
 	,end: function() {
 		var this1 = this.pixelImage;
@@ -61603,10 +61593,123 @@ pixelimage_$samples_pixelimage_$canvas_Arrows.prototype = {
 			}
 		}
 	}
-	,__class__: pixelimage_$samples_pixelimage_$canvas_Arrows
+	,drawGrid: function() {
+		var this1 = this.pixelImage;
+		var h_ = 2300;
+		var w_ = 3000;
+		var _g = 0;
+		var _g1 = 31;
+		while(_g < _g1) {
+			var i = _g++;
+			var x = 100 + i * 100 - 1.25;
+			var p = x | 0;
+			var xx = p;
+			var q = 100;
+			var maxX = x + 2.5 | 0;
+			var maxY = 100 + h_ | 0;
+			while(true) {
+				var x1 = p++;
+				var this2 = -16764160;
+				var c = this2;
+				if((c >> 24 & 255) < 254 && this1.transparent) {
+					var location = this1.useVirtualPos ? (q - this1.virtualY) * this1.width + x1 - this1.virtualX | 0 : q * this1.width + x1 | 0;
+					var this3 = this1.image[location];
+					var this4 = this3;
+					var this5 = pixelimage_Endian_isLittleEndian ? (this4 >> 24 & 255) << 24 | (this4 & 255) << 16 | (this4 >> 8 & 255) << 8 | this4 >> 16 & 255 : this4;
+					var this6 = this5 >> 24 & 255;
+					var a1 = this6 == 0 ? 0. : this6 / 255;
+					var this7 = this5 >> 16 & 255;
+					var r1 = this7 == 0 ? 0. : this7 / 255;
+					var this8 = this5 >> 8 & 255;
+					var g1 = this8 == 0 ? 0. : this8 / 255;
+					var this9 = this5 & 255;
+					var b1 = this9 == 0 ? 0. : this9 / 255;
+					var this10 = 255;
+					var a2 = this10 == 0 ? 0. : this10 / 255;
+					var this11 = 0;
+					var r2 = this11 == 0 ? 0. : this11 / 255;
+					var this12 = 51;
+					var g2 = this12 == 0 ? 0. : this12 / 255;
+					var this13 = 0;
+					var b2 = this13 == 0 ? 0. : this13 / 255;
+					var a3 = a1 * (1 - a2);
+					var r = 255 * (r1 * a3 + r2 * a2) | 0;
+					var g = 255 * (g1 * a3 + g2 * a2) | 0;
+					var b = 255 * (b1 * a3 + b2 * a2) | 0;
+					var a = 255 * (a3 + a2) | 0;
+					var blended = a << 24 | r << 16 | g << 8 | b;
+					this1.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+				} else {
+					this1.image[this1.useVirtualPos ? (q - this1.virtualY) * this1.width + x1 - this1.virtualX | 0 : q * this1.width + x1 | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
+				}
+				if(p > maxX) {
+					p = xx;
+					++q;
+				}
+				if(q > maxY) {
+					break;
+				}
+			}
+		}
+		var _g = 0;
+		var _g1 = 24;
+		while(_g < _g1) {
+			var i = _g++;
+			var y = 100 + i * 100 - 1.25;
+			var p = 100;
+			var xx = p;
+			var q = y | 0;
+			var maxX = 100 + w_ | 0;
+			var maxY = y + 2.5 | 0;
+			while(true) {
+				var x = p++;
+				var this2 = -16764160;
+				var c = this2;
+				if((c >> 24 & 255) < 254 && this1.transparent) {
+					var location = this1.useVirtualPos ? (q - this1.virtualY) * this1.width + x - this1.virtualX | 0 : q * this1.width + x | 0;
+					var this3 = this1.image[location];
+					var this4 = this3;
+					var this5 = pixelimage_Endian_isLittleEndian ? (this4 >> 24 & 255) << 24 | (this4 & 255) << 16 | (this4 >> 8 & 255) << 8 | this4 >> 16 & 255 : this4;
+					var this6 = this5 >> 24 & 255;
+					var a1 = this6 == 0 ? 0. : this6 / 255;
+					var this7 = this5 >> 16 & 255;
+					var r1 = this7 == 0 ? 0. : this7 / 255;
+					var this8 = this5 >> 8 & 255;
+					var g1 = this8 == 0 ? 0. : this8 / 255;
+					var this9 = this5 & 255;
+					var b1 = this9 == 0 ? 0. : this9 / 255;
+					var this10 = 255;
+					var a2 = this10 == 0 ? 0. : this10 / 255;
+					var this11 = 0;
+					var r2 = this11 == 0 ? 0. : this11 / 255;
+					var this12 = 51;
+					var g2 = this12 == 0 ? 0. : this12 / 255;
+					var this13 = 0;
+					var b2 = this13 == 0 ? 0. : this13 / 255;
+					var a3 = a1 * (1 - a2);
+					var r = 255 * (r1 * a3 + r2 * a2) | 0;
+					var g = 255 * (g1 * a3 + g2 * a2) | 0;
+					var b = 255 * (b1 * a3 + b2 * a2) | 0;
+					var a = 255 * (a3 + a2) | 0;
+					var blended = a << 24 | r << 16 | g << 8 | b;
+					this1.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+				} else {
+					this1.image[this1.useVirtualPos ? (q - this1.virtualY) * this1.width + x - this1.virtualX | 0 : q * this1.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
+				}
+				if(p > maxX) {
+					p = xx;
+					++q;
+				}
+				if(q > maxY) {
+					break;
+				}
+			}
+		}
+	}
+	,__class__: pixelimage_$samples_pixelimage_$canvas_Quads
 };
-function pixelimage_$samples_pixelimage_$canvas_Arrows_main() {
-	new pixelimage_$samples_pixelimage_$canvas_Arrows();
+function pixelimage_$samples_pixelimage_$canvas_Quads_main() {
+	new pixelimage_$samples_pixelimage_$canvas_Quads();
 }
 var vision_ds_Line2D = function(start,end) {
 	this.end = new vision_ds_Point2D(0,0);
@@ -61688,5 +61791,5 @@ var pixelimage_Endian_isLittleEndian = (function($this) {
 	$r = a8[0] != 255;
 	return $r;
 }(this));
-pixelimage_$samples_pixelimage_$canvas_Arrows_main();
+pixelimage_$samples_pixelimage_$canvas_Quads_main();
 })(typeof window != "undefined" ? window : typeof global != "undefined" ? global : typeof self != "undefined" ? self : this);

@@ -13036,91 +13036,10 @@ pixelimage_ImageStruct.__name__ = "pixelimage.ImageStruct";
 pixelimage_ImageStruct.prototype = {
 	__class__: pixelimage_ImageStruct
 };
-var pixelimage_Pixelimage = {};
-pixelimage_Pixelimage.scaleUpInt = function(this1,scaleW,scaleH,transparent,includeMask) {
-	if(includeMask == null) {
-		includeMask = false;
-	}
-	if(transparent == null) {
-		transparent = false;
-	}
-	if(scaleH == null) {
-		scaleH = 2;
-	}
-	if(scaleW == null) {
-		scaleW = 2;
-	}
-	var p = 0;
-	var xx = p;
-	var q = 0;
-	var wNew = this1.width * scaleW | 0;
-	var hNew = this1.height * scaleH | 0;
-	var this2 = new Uint32Array(wNew * hNew | 0);
-	var this3 = new pixelimage_ImageStruct(wNew,hNew,this2);
-	var pixelImage = this3;
-	var maxX = wNew;
-	var maxY = hNew;
-	while(true) {
-		var x = p / scaleW | 0;
-		var y = q / scaleH | 0;
-		var c = this1.image[this1.useVirtualPos ? (y - this1.virtualY) * this1.width + x - this1.virtualX | 0 : y * this1.width + x | 0];
-		var color = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
-		var x1 = p++;
-		var this2 = color;
-		var c1 = this2;
-		if((c1 >> 24 & 255) < 254 && pixelImage.transparent) {
-			var location = pixelImage.useVirtualPos ? (q - pixelImage.virtualY) * pixelImage.width + x1 - pixelImage.virtualX | 0 : q * pixelImage.width + x1 | 0;
-			var this3 = pixelImage.image[location];
-			var this4 = this3;
-			var this5 = pixelimage_Endian_isLittleEndian ? (this4 >> 24 & 255) << 24 | (this4 & 255) << 16 | (this4 >> 8 & 255) << 8 | this4 >> 16 & 255 : this4;
-			var this6 = this5 >> 24 & 255;
-			var a1 = this6 == 0 ? 0. : this6 / 255;
-			var this7 = this5 >> 16 & 255;
-			var r1 = this7 == 0 ? 0. : this7 / 255;
-			var this8 = this5 >> 8 & 255;
-			var g1 = this8 == 0 ? 0. : this8 / 255;
-			var this9 = this5 & 255;
-			var b1 = this9 == 0 ? 0. : this9 / 255;
-			var this10 = color >> 24 & 255;
-			var a2 = this10 == 0 ? 0. : this10 / 255;
-			var this11 = color >> 16 & 255;
-			var r2 = this11 == 0 ? 0. : this11 / 255;
-			var this12 = color >> 8 & 255;
-			var g2 = this12 == 0 ? 0. : this12 / 255;
-			var this13 = color & 255;
-			var b2 = this13 == 0 ? 0. : this13 / 255;
-			var a3 = a1 * (1 - a2);
-			var r = 255 * (r1 * a3 + r2 * a2) | 0;
-			var g = 255 * (g1 * a3 + g2 * a2) | 0;
-			var b = 255 * (b1 * a3 + b2 * a2) | 0;
-			var a = 255 * (a3 + a2) | 0;
-			var blended = a << 24 | r << 16 | g << 8 | b;
-			pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
-		} else {
-			pixelImage.image[pixelImage.useVirtualPos ? (q - pixelImage.virtualY) * pixelImage.width + x1 - pixelImage.virtualX | 0 : q * pixelImage.width + x1 | 0] = pixelimage_Endian_isLittleEndian ? (c1 >> 24 & 255) << 24 | (c1 & 255) << 16 | (c1 >> 8 & 255) << 8 | c1 >> 16 & 255 : c1;
-		}
-		if(p > maxX) {
-			p = xx;
-			++q;
-		}
-		if(q > maxY) {
-			break;
-		}
-	}
-	if(this1.mask != null && includeMask) {
-		var v = pixelimage_Pixelimage.scaleUpInt(this1.mask,scaleW,scaleH,this1.mask.transparent,includeMask);
-		pixelImage.useMask = true;
-		pixelImage.mask = v;
-	}
-	return pixelImage;
-};
 var pixelimage_algo_IhitObj = function() { };
 pixelimage_algo_IhitObj.__name__ = "pixelimage.algo.IhitObj";
 pixelimage_algo_IhitObj.__isInterface__ = true;
-var pixelimage_algo_HitQuad = function(ax,ay,bx,by,cx,cy,dx,dy,preCalculated) {
-	if(preCalculated == null) {
-		preCalculated = true;
-	}
+var pixelimage_algo_HitQuad = function(ax,ay,bx,by,cx,cy,dx,dy) {
 	this.ax = ax;
 	this.ay = ay;
 	this.bx = bx;
@@ -13129,70 +13048,57 @@ var pixelimage_algo_HitQuad = function(ax,ay,bx,by,cx,cy,dx,dy,preCalculated) {
 	this.cy = cy;
 	this.dx = dx;
 	this.dy = dy;
-	if(preCalculated) {
-		this.triABD = new pixelimage_algo_HitTri(this.ax,this.ay,this.bx,this.by,this.dx,this.dy,true);
-		this.triBCD = new pixelimage_algo_HitTri(this.bx,this.by,this.cx,this.cy,this.dx,this.dy,true);
-		var a = this.ax;
-		var b = this.bx;
-		var c = this.cx;
-		var d = this.dx;
-		var min = Math.floor(a);
-		var max = Math.ceil(a);
-		if(b < min) {
-			min = Math.floor(b);
-		} else if(b > max) {
-			max = Math.ceil(b);
-		}
-		if(c < min) {
-			min = Math.floor(c);
-		} else if(c > max) {
-			max = Math.ceil(c);
-		}
-		if(d < min) {
-			min = Math.floor(d);
-		} else if(d > max) {
-			max = Math.ceil(d);
-		}
-		var ii_min = min;
-		var ii_max = max;
-		var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-		this.xIter4 = this1;
-		var a = this.ay;
-		var b = this.by;
-		var c = this.cy;
-		var d = this.dy;
-		var min = Math.floor(a);
-		var max = Math.ceil(a);
-		if(b < min) {
-			min = Math.floor(b);
-		} else if(b > max) {
-			max = Math.ceil(b);
-		}
-		if(c < min) {
-			min = Math.floor(c);
-		} else if(c > max) {
-			max = Math.ceil(c);
-		}
-		if(d < min) {
-			min = Math.floor(d);
-		} else if(d > max) {
-			max = Math.ceil(d);
-		}
-		var ii_min = min;
-		var ii_max = max;
-		var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-		this.yIter4 = this1;
+	this.triABD = new pixelimage_algo_HitTri(ax,ay,bx,by,dx,dy);
+	this.triBCD = new pixelimage_algo_HitTri(bx,by,cx,cy,dx,dy);
+	var min = Math.floor(ax);
+	var max = Math.ceil(ax);
+	if(bx < min) {
+		min = Math.floor(bx);
+	} else if(bx > max) {
+		max = Math.ceil(bx);
 	}
+	if(cx < min) {
+		min = Math.floor(cx);
+	} else if(cx > max) {
+		max = Math.ceil(cx);
+	}
+	if(dx < min) {
+		min = Math.floor(dx);
+	} else if(dx > max) {
+		max = Math.ceil(dx);
+	}
+	var ii_min = min;
+	var ii_max = max;
+	var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+	this.xIter4 = this1;
+	var min = Math.floor(ay);
+	var max = Math.ceil(ay);
+	if(by < min) {
+		min = Math.floor(by);
+	} else if(by > max) {
+		max = Math.ceil(by);
+	}
+	if(cy < min) {
+		min = Math.floor(cy);
+	} else if(cy > max) {
+		max = Math.ceil(cy);
+	}
+	if(dy < min) {
+		min = Math.floor(dy);
+	} else if(dy > max) {
+		max = Math.ceil(dy);
+	}
+	var ii_min = min;
+	var ii_max = max;
+	var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+	this.yIter4 = this1;
 };
 pixelimage_algo_HitQuad.__name__ = "pixelimage.algo.HitQuad";
 pixelimage_algo_HitQuad.__interfaces__ = [pixelimage_algo_IhitObj];
 pixelimage_algo_HitQuad.prototype = {
 	__class__: pixelimage_algo_HitQuad
 };
-var pixelimage_algo_HitTri = function(ax,ay,bx,by,cx,cy,preCalculated) {
-	if(preCalculated == null) {
-		preCalculated = true;
-	}
+var pixelimage_algo_HitTri = function(ax,ay,bx,by,cx,cy) {
 	var adjustWinding = ax * by - bx * ay + (bx * cy - cx * by) + (cx * ay - ax * cy) > 0;
 	if(!adjustWinding) {
 		var bx_ = bx;
@@ -13208,72 +13114,63 @@ var pixelimage_algo_HitTri = function(ax,ay,bx,by,cx,cy,preCalculated) {
 	this.by = by;
 	this.cx = cx;
 	this.cy = cy;
-	this.preCalculated = preCalculated;
-	if(preCalculated) {
-		this.s0 = this.ay * this.cx - this.ax * this.cy;
-		this.sx = this.cy - this.ay;
-		this.sy = this.ax - this.cx;
-		this.t0 = this.ax * this.by - this.ay * this.bx;
-		this.tx = this.ay - this.by;
-		this.ty = this.bx - this.ax;
-		this.A = -this.by * this.cx + this.ay * (-this.bx + this.cx) + this.ax * (this.by - this.cy) + this.bx * this.cy;
-		var a = this.ax;
-		var b = this.bx;
-		var c = this.cx;
-		var tmp;
-		if(a > b) {
-			if(a > c) {
-				var ii_min = b > c ? Math.floor(c) : Math.floor(b);
-				var ii_max = Math.ceil(a);
-				var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-				tmp = this1;
-			} else {
-				var ii_min = Math.floor(b);
-				var ii_max = Math.ceil(c);
-				var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-				tmp = this1;
-			}
-		} else if(b > c) {
-			var ii_min = a > c ? Math.floor(c) : Math.ceil(a);
-			var ii_max = Math.ceil(b);
+	this.s0 = ay * cx - ax * cy;
+	this.sx = cy - ay;
+	this.sy = ax - cx;
+	this.t0 = ax * by - ay * bx;
+	this.tx = ay - by;
+	this.ty = bx - ax;
+	this.A = -by * cx + ay * (-bx + cx) + ax * (by - cy) + bx * cy;
+	var tmp;
+	if(ax > bx) {
+		if(ax > cx) {
+			var ii_min = bx > cx ? Math.floor(cx) : Math.floor(bx);
+			var ii_max = Math.ceil(ax);
 			var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
 			tmp = this1;
 		} else {
-			var ii_min = Math.floor(a);
-			var ii_max = Math.ceil(c);
+			var ii_min = Math.floor(bx);
+			var ii_max = Math.ceil(cx);
 			var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
 			tmp = this1;
 		}
-		this.xIter3 = tmp;
-		var a = this.ay;
-		var b = this.by;
-		var c = this.cy;
-		var tmp;
-		if(a > b) {
-			if(a > c) {
-				var ii_min = b > c ? Math.floor(c) : Math.floor(b);
-				var ii_max = Math.ceil(a);
-				var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-				tmp = this1;
-			} else {
-				var ii_min = Math.floor(b);
-				var ii_max = Math.ceil(c);
-				var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-				tmp = this1;
-			}
-		} else if(b > c) {
-			var ii_min = a > c ? Math.floor(c) : Math.ceil(a);
-			var ii_max = Math.ceil(b);
-			var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-			tmp = this1;
-		} else {
-			var ii_min = Math.floor(a);
-			var ii_max = Math.ceil(c);
-			var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-			tmp = this1;
-		}
-		this.yIter3 = tmp;
+	} else if(bx > cx) {
+		var ii_min = ax > cx ? Math.floor(cx) : Math.ceil(ax);
+		var ii_max = Math.ceil(bx);
+		var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+		tmp = this1;
+	} else {
+		var ii_min = Math.floor(ax);
+		var ii_max = Math.ceil(cx);
+		var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+		tmp = this1;
 	}
+	this.xIter3 = tmp;
+	var tmp;
+	if(ay > by) {
+		if(ay > cy) {
+			var ii_min = by > cy ? Math.floor(cy) : Math.floor(by);
+			var ii_max = Math.ceil(ay);
+			var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+			tmp = this1;
+		} else {
+			var ii_min = Math.floor(by);
+			var ii_max = Math.ceil(cy);
+			var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+			tmp = this1;
+		}
+	} else if(by > cy) {
+		var ii_min = ay > cy ? Math.floor(cy) : Math.ceil(ay);
+		var ii_max = Math.ceil(by);
+		var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+		tmp = this1;
+	} else {
+		var ii_min = Math.floor(ay);
+		var ii_max = Math.ceil(cy);
+		var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+		tmp = this1;
+	}
+	this.yIter3 = tmp;
 };
 pixelimage_algo_HitTri.__name__ = "pixelimage.algo.HitTri";
 pixelimage_algo_HitTri.__interfaces__ = [pixelimage_algo_IhitObj];
@@ -13288,7 +13185,5329 @@ pixelimage_algo_HitTriArray.__interfaces__ = [pixelimage_algo_IhitObj];
 pixelimage_algo_HitTriArray.prototype = {
 	__class__: pixelimage_algo_HitTriArray
 };
-var pixelimage_draw_DrawShapeHelper = function(pixelImage,strokeWidth,strokeColor,translateX,translateY,scaleX,scaleY) {
+var pixelimage_iter_IntIterStart = function(min_,max_) {
+	this.start = min_;
+	this.max = max_;
+};
+pixelimage_iter_IntIterStart.__name__ = "pixelimage.iter.IntIterStart";
+pixelimage_iter_IntIterStart.prototype = {
+	__class__: pixelimage_iter_IntIterStart
+};
+var pixelimage_pixel__$TwoGrad_TwoGrad_$ = function(colorClock,colorAnti) {
+	this.colorClock = colorClock;
+	this.colorAnti = colorAnti;
+};
+pixelimage_pixel__$TwoGrad_TwoGrad_$.__name__ = "pixelimage.pixel._TwoGrad.TwoGrad_";
+pixelimage_pixel__$TwoGrad_TwoGrad_$.prototype = {
+	__class__: pixelimage_pixel__$TwoGrad_TwoGrad_$
+};
+var pixelimage_triGML_coreShape_ShapeInterface = function() { };
+pixelimage_triGML_coreShape_ShapeInterface.__name__ = "pixelimage.triGML.coreShape.ShapeInterface";
+pixelimage_triGML_coreShape_ShapeInterface.__isInterface__ = true;
+pixelimage_triGML_coreShape_ShapeInterface.prototype = {
+	__class__: pixelimage_triGML_coreShape_ShapeInterface
+};
+var pixelimage_triGML_coreShape_GroupShape = function(opacity,visibility) {
+	if(visibility == null) {
+		visibility = true;
+	}
+	if(opacity == null) {
+		opacity = 1.;
+	}
+	this.visibility = visibility;
+	this.opacity = opacity;
+};
+pixelimage_triGML_coreShape_GroupShape.__name__ = "pixelimage.triGML.coreShape.GroupShape";
+pixelimage_triGML_coreShape_GroupShape.__interfaces__ = [pixelimage_triGML_coreShape_ShapeInterface];
+pixelimage_triGML_coreShape_GroupShape.prototype = {
+	setParameter: function(name,value) {
+		switch(name) {
+		case "opacity":
+			this.opacity = parseFloat(value);
+			break;
+		case "visibility":
+			this.visibility = value.toLowerCase() == "true";
+			break;
+		default:
+			haxe_Log.trace("property not found " + name,{ fileName : "pixelimage/triGML/coreShape/GroupShape.hx", lineNumber : 20, className : "pixelimage.triGML.coreShape.GroupShape", methodName : "setParameter"});
+		}
+	}
+	,render: function(pixelImage) {
+		return pixelImage;
+	}
+	,__class__: pixelimage_triGML_coreShape_GroupShape
+};
+var pixelimage_triGML_coreShape_BasicShape = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray) {
+	if(strokeWidth == null) {
+		strokeWidth = 1.;
+	}
+	if(strokeColor == null) {
+		strokeColor = 0;
+	}
+	if(visibility == null) {
+		visibility = true;
+	}
+	if(opacity == null) {
+		opacity = 1.;
+	}
+	pixelimage_triGML_coreShape_GroupShape.call(this,opacity,visibility);
+	this.strokeColor = strokeColor;
+	this.strokeWidth = strokeWidth;
+	this.strokeDashGapArray = strokeDashGapArray;
+};
+pixelimage_triGML_coreShape_BasicShape.__name__ = "pixelimage.triGML.coreShape.BasicShape";
+pixelimage_triGML_coreShape_BasicShape.__super__ = pixelimage_triGML_coreShape_GroupShape;
+pixelimage_triGML_coreShape_BasicShape.prototype = $extend(pixelimage_triGML_coreShape_GroupShape.prototype,{
+	setParameter: function(name,value) {
+		switch(name) {
+		case "strokeColor":
+			this.strokeColor = Std.parseInt(value);
+			break;
+		case "strokeDashGapArray":
+			this.strokeDashGapArray = null;
+			break;
+		case "strokeWidth":
+			this.strokeWidth = parseFloat(value);
+			break;
+		default:
+			pixelimage_triGML_coreShape_GroupShape.prototype.setParameter.call(this,name,value);
+		}
+	}
+	,__class__: pixelimage_triGML_coreShape_BasicShape
+});
+var pixelimage_triGML_contour_ArrowShape = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,both,flare,reverseFlare,x1,y1,x2,y2,arrowWidth,arrowHeight) {
+	if(arrowHeight == null) {
+		arrowHeight = 0.;
+	}
+	if(arrowWidth == null) {
+		arrowWidth = 0.;
+	}
+	if(y2 == null) {
+		y2 = 0.;
+	}
+	if(x2 == null) {
+		x2 = 0.;
+	}
+	if(y1 == null) {
+		y1 = 0.;
+	}
+	if(x1 == null) {
+		x1 = 0.;
+	}
+	if(reverseFlare == null) {
+		reverseFlare = false;
+	}
+	if(flare == null) {
+		flare = false;
+	}
+	if(both == null) {
+		both = false;
+	}
+	if(strokeWidth == null) {
+		strokeWidth = 1.;
+	}
+	if(strokeColor == null) {
+		strokeColor = -1048576;
+	}
+	if(visibility == null) {
+		visibility = true;
+	}
+	if(opacity == null) {
+		opacity = 1.;
+	}
+	pixelimage_triGML_coreShape_BasicShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray);
+	this.both = both;
+	this.flare = flare;
+	this.reverseFlare = reverseFlare;
+	this.x1 = x1;
+	this.y1 = y1;
+	this.x2 = x2;
+	this.y2 = y2;
+};
+pixelimage_triGML_contour_ArrowShape.__name__ = "pixelimage.triGML.contour.ArrowShape";
+pixelimage_triGML_contour_ArrowShape.__super__ = pixelimage_triGML_coreShape_BasicShape;
+pixelimage_triGML_contour_ArrowShape.prototype = $extend(pixelimage_triGML_coreShape_BasicShape.prototype,{
+	setParameter: function(name,value) {
+		switch(name) {
+		case "arrowHeight":
+			this.arrowHeight = parseFloat(value);
+			break;
+		case "arrowWidth":
+			this.arrowWidth = parseFloat(value);
+			break;
+		case "both":
+			this.both = StringTools.trim(value).toLowerCase() == "true";
+			break;
+		case "flare":
+			this.flare = StringTools.trim(value).toLowerCase() == "true";
+			break;
+		case "reverseFlare":
+			this.reverseFlare = StringTools.trim(value).toLowerCase() == "true";
+			break;
+		case "x1":
+			this.x1 = parseFloat(value);
+			break;
+		case "x2":
+			this.x2 = parseFloat(value);
+			break;
+		case "y1":
+			this.y1 = parseFloat(value);
+			break;
+		case "y2":
+			this.y2 = parseFloat(value);
+			break;
+		default:
+			pixelimage_triGML_coreShape_BasicShape.prototype.setParameter.call(this,name,value);
+		}
+	}
+	,render: function(pixelImage) {
+		if(this.both == false) {
+			if(this.arrowHeight > 0. || this.arrowWidth > 0.) {
+				var px = this.x1;
+				var py = this.y1;
+				var qx = this.x2;
+				var qy = this.y2;
+				var arrowWidth = this.arrowWidth;
+				var arrowHeight = this.arrowHeight;
+				var thick = this.strokeWidth;
+				var color = this.strokeColor;
+				var flare = this.flare;
+				var reverseFlare = this.reverseFlare;
+				if(reverseFlare == null) {
+					reverseFlare = false;
+				}
+				if(flare == null) {
+					flare = false;
+				}
+				haxe_Log.trace("pixelimage.fillArrow",{ fileName : "pixelimage/Pixelimage.hx", lineNumber : 792, className : "pixelimage._Pixelimage.Pixelimage_Impl_", methodName : "fillFixArrow"});
+				var flare1 = flare;
+				var reverseFlare1 = reverseFlare;
+				var hasHit = true;
+				if(hasHit == null) {
+					hasHit = false;
+				}
+				if(reverseFlare1 == null) {
+					reverseFlare1 = false;
+				}
+				if(flare1 == null) {
+					flare1 = false;
+				}
+				var goldenRatio = 1.61803398875;
+				haxe_Log.trace("fillLineFixedArrow",{ fileName : "pixelimage/algo/ArrowPixel.hx", lineNumber : 249, className : "pixelimage.algo._ArrowPixel.ArrowPixel_Fields_", methodName : "fillLineFixedArrow"});
+				var o = qy - py;
+				var a = qx - px;
+				var h = Math.pow(o * o + a * a,0.5);
+				var theta = Math.atan2(o,a);
+				var thicker = arrowWidth > thick * 1.1 ? arrowWidth : 2 * thick * goldenRatio;
+				var sin = Math.sin(theta);
+				var cos = Math.cos(theta);
+				var radius = thick / 2;
+				var radius2 = thicker / 2;
+				var h2 = arrowHeight < h * 1.1 ? h - arrowHeight : h / goldenRatio;
+				var hitQuad;
+				if(flare1) {
+					if(reverseFlare1) {
+						var hasHit1 = true;
+						if(hasHit1 == null) {
+							hasHit1 = false;
+						}
+						var sin1 = Math.sin(theta);
+						var cos1 = Math.cos(theta);
+						var radius1 = thick / 2;
+						var radius21 = (thicker - (thicker - thick) / goldenRatio) / 2;
+						var dx = 0.1;
+						var dy = radius1;
+						var cx = h2;
+						var cy = radius21;
+						var bx = h2;
+						var by = -radius21;
+						var ax = 0.1;
+						var ay = -radius1;
+						var temp = 0.;
+						temp = px + (ax * cos1 - ay * sin1);
+						ay = py + (ay * cos1 + ax * sin1);
+						ax = temp;
+						temp = px + (bx * cos1 - by * sin1);
+						by = py + (by * cos1 + bx * sin1);
+						bx = temp;
+						temp = px + (cx * cos1 - cy * sin1);
+						cy = py + (cy * cos1 + cx * sin1);
+						cx = temp;
+						temp = px + (dx * cos1 - dy * sin1);
+						dy = py + (dy * cos1 + dx * sin1);
+						dx = temp;
+						var hasHit2 = hasHit1;
+						if(hasHit2 == null) {
+							hasHit2 = false;
+						}
+						var bx1 = bx;
+						var by1 = by;
+						var cx1 = dx;
+						var cy1 = dy;
+						var hasHit1 = hasHit2;
+						if(hasHit1 == null) {
+							hasHit1 = false;
+						}
+						var adjustWinding = ax * by1 - bx1 * ay + (bx1 * cy1 - cx1 * by1) + (cx1 * ay - ax * cy1) > 0;
+						if(!adjustWinding) {
+							var bx_ = bx1;
+							var by_ = by1;
+							bx1 = cx1;
+							by1 = cy1;
+							cx1 = bx_;
+							cy1 = by_;
+						}
+						var hasHit3 = hasHit1;
+						if(hasHit3 == null) {
+							hasHit3 = false;
+						}
+						var s0 = ay * cx1 - ax * cy1;
+						var sx = cy1 - ay;
+						var sy = ax - cx1;
+						var t0 = ax * by1 - ay * bx1;
+						var tx = ay - by1;
+						var ty = bx1 - ax;
+						var A = -by1 * cx1 + ay * (-bx1 + cx1) + ax * (by1 - cy1) + bx1 * cy1;
+						var yIter3;
+						if(ay > by1) {
+							if(ay > cy1) {
+								var ii_min = by1 > cy1 ? Math.floor(cy1) : Math.floor(by1);
+								var ii_max = Math.ceil(ay);
+								var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+								yIter3 = this1;
+							} else {
+								var ii_min = Math.floor(by1);
+								var ii_max = Math.ceil(cy1);
+								var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+								yIter3 = this1;
+							}
+						} else if(by1 > cy1) {
+							var ii_min = ay > cy1 ? Math.floor(cy1) : Math.ceil(ay);
+							var ii_max = Math.ceil(by1);
+							var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+							yIter3 = this1;
+						} else {
+							var ii_min = Math.floor(ay);
+							var ii_max = Math.ceil(cy1);
+							var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+							yIter3 = this1;
+						}
+						var foundY = false;
+						var s = 0.;
+						var t = 0.;
+						var sxx = 0.;
+						var txx = 0.;
+						var this1;
+						if(ax > bx1) {
+							if(ax > cx1) {
+								var ii_min = bx1 > cx1 ? Math.floor(cx1) : Math.floor(bx1);
+								var ii_max = Math.ceil(ax);
+								var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+								this1 = this2;
+							} else {
+								var ii_min = Math.floor(bx1);
+								var ii_max = Math.ceil(cx1);
+								var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+								this1 = this2;
+							}
+						} else if(bx1 > cx1) {
+							var ii_min = ax > cx1 ? Math.floor(cx1) : Math.ceil(ax);
+							var ii_max = Math.ceil(bx1);
+							var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+							this1 = this2;
+						} else {
+							var ii_min = Math.floor(ax);
+							var ii_max = Math.ceil(cx1);
+							var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+							this1 = this2;
+						}
+						var _g_min = this1.start;
+						var _g_max = this1.max;
+						while(_g_min < _g_max) {
+							var x = _g_min++;
+							sxx = sx * x;
+							txx = tx * x;
+							foundY = false;
+							var _g_min1 = yIter3.start;
+							var _g_max1 = yIter3.max;
+							while(_g_min1 < _g_max1) {
+								var y = _g_min1++;
+								s = s0 + sxx + sy * y;
+								t = t0 + txx + ty * y;
+								if(s <= 0 || t <= 0) {
+									if(foundY) {
+										break;
+									}
+								} else if(s + t < A) {
+									var this1 = color;
+									var c = this1;
+									if((c >> 24 & 255) < 254 && pixelImage.transparent) {
+										var location = pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0;
+										var this2 = pixelImage.image[location];
+										var this3 = this2;
+										var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
+										var this5 = this4 >> 24 & 255;
+										var a1 = this5 == 0 ? 0. : this5 / 255;
+										var this6 = this4 >> 16 & 255;
+										var r1 = this6 == 0 ? 0. : this6 / 255;
+										var this7 = this4 >> 8 & 255;
+										var g1 = this7 == 0 ? 0. : this7 / 255;
+										var this8 = this4 & 255;
+										var b1 = this8 == 0 ? 0. : this8 / 255;
+										var this9 = color >> 24 & 255;
+										var a2 = this9 == 0 ? 0. : this9 / 255;
+										var this10 = color >> 16 & 255;
+										var r2 = this10 == 0 ? 0. : this10 / 255;
+										var this11 = color >> 8 & 255;
+										var g2 = this11 == 0 ? 0. : this11 / 255;
+										var this12 = color & 255;
+										var b2 = this12 == 0 ? 0. : this12 / 255;
+										var a3 = a1 * (1 - a2);
+										var r = 255 * (r1 * a3 + r2 * a2) | 0;
+										var g = 255 * (g1 * a3 + g2 * a2) | 0;
+										var b = 255 * (b1 * a3 + b2 * a2) | 0;
+										var a = 255 * (a3 + a2) | 0;
+										var blended = a << 24 | r << 16 | g << 8 | b;
+										pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+									} else {
+										pixelImage.image[pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
+									}
+									foundY = true;
+								} else if(foundY) {
+									break;
+								}
+							}
+						}
+						if(hasHit3 == true) {
+							var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1);
+						}
+						var bx1 = cx;
+						var by1 = cy;
+						var cx1 = dx;
+						var cy1 = dy;
+						var hasHit1 = hasHit2;
+						if(hasHit1 == null) {
+							hasHit1 = false;
+						}
+						var adjustWinding = bx * by1 - bx1 * by + (bx1 * cy1 - cx1 * by1) + (cx1 * by - bx * cy1) > 0;
+						if(!adjustWinding) {
+							var bx_ = bx1;
+							var by_ = by1;
+							bx1 = cx1;
+							by1 = cy1;
+							cx1 = bx_;
+							cy1 = by_;
+						}
+						var hasHit3 = hasHit1;
+						if(hasHit3 == null) {
+							hasHit3 = false;
+						}
+						var s0 = by * cx1 - bx * cy1;
+						var sx = cy1 - by;
+						var sy = bx - cx1;
+						var t0 = bx * by1 - by * bx1;
+						var tx = by - by1;
+						var ty = bx1 - bx;
+						var A = -by1 * cx1 + by * (-bx1 + cx1) + bx * (by1 - cy1) + bx1 * cy1;
+						var yIter3;
+						if(by > by1) {
+							if(by > cy1) {
+								var ii_min = by1 > cy1 ? Math.floor(cy1) : Math.floor(by1);
+								var ii_max = Math.ceil(by);
+								var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+								yIter3 = this1;
+							} else {
+								var ii_min = Math.floor(by1);
+								var ii_max = Math.ceil(cy1);
+								var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+								yIter3 = this1;
+							}
+						} else if(by1 > cy1) {
+							var ii_min = by > cy1 ? Math.floor(cy1) : Math.ceil(by);
+							var ii_max = Math.ceil(by1);
+							var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+							yIter3 = this1;
+						} else {
+							var ii_min = Math.floor(by);
+							var ii_max = Math.ceil(cy1);
+							var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+							yIter3 = this1;
+						}
+						var foundY = false;
+						var s = 0.;
+						var t = 0.;
+						var sxx = 0.;
+						var txx = 0.;
+						var this1;
+						if(bx > bx1) {
+							if(bx > cx1) {
+								var ii_min = bx1 > cx1 ? Math.floor(cx1) : Math.floor(bx1);
+								var ii_max = Math.ceil(bx);
+								var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+								this1 = this2;
+							} else {
+								var ii_min = Math.floor(bx1);
+								var ii_max = Math.ceil(cx1);
+								var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+								this1 = this2;
+							}
+						} else if(bx1 > cx1) {
+							var ii_min = bx > cx1 ? Math.floor(cx1) : Math.ceil(bx);
+							var ii_max = Math.ceil(bx1);
+							var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+							this1 = this2;
+						} else {
+							var ii_min = Math.floor(bx);
+							var ii_max = Math.ceil(cx1);
+							var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+							this1 = this2;
+						}
+						var _g_min = this1.start;
+						var _g_max = this1.max;
+						while(_g_min < _g_max) {
+							var x = _g_min++;
+							sxx = sx * x;
+							txx = tx * x;
+							foundY = false;
+							var _g_min1 = yIter3.start;
+							var _g_max1 = yIter3.max;
+							while(_g_min1 < _g_max1) {
+								var y = _g_min1++;
+								s = s0 + sxx + sy * y;
+								t = t0 + txx + ty * y;
+								if(s <= 0 || t <= 0) {
+									if(foundY) {
+										break;
+									}
+								} else if(s + t < A) {
+									var this1 = color;
+									var c = this1;
+									if((c >> 24 & 255) < 254 && pixelImage.transparent) {
+										var location = pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0;
+										var this2 = pixelImage.image[location];
+										var this3 = this2;
+										var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
+										var this5 = this4 >> 24 & 255;
+										var a1 = this5 == 0 ? 0. : this5 / 255;
+										var this6 = this4 >> 16 & 255;
+										var r1 = this6 == 0 ? 0. : this6 / 255;
+										var this7 = this4 >> 8 & 255;
+										var g1 = this7 == 0 ? 0. : this7 / 255;
+										var this8 = this4 & 255;
+										var b1 = this8 == 0 ? 0. : this8 / 255;
+										var this9 = color >> 24 & 255;
+										var a2 = this9 == 0 ? 0. : this9 / 255;
+										var this10 = color >> 16 & 255;
+										var r2 = this10 == 0 ? 0. : this10 / 255;
+										var this11 = color >> 8 & 255;
+										var g2 = this11 == 0 ? 0. : this11 / 255;
+										var this12 = color & 255;
+										var b2 = this12 == 0 ? 0. : this12 / 255;
+										var a3 = a1 * (1 - a2);
+										var r = 255 * (r1 * a3 + r2 * a2) | 0;
+										var g = 255 * (g1 * a3 + g2 * a2) | 0;
+										var b = 255 * (b1 * a3 + b2 * a2) | 0;
+										var a = 255 * (a3 + a2) | 0;
+										var blended = a << 24 | r << 16 | g << 8 | b;
+										pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+									} else {
+										pixelImage.image[pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
+									}
+									foundY = true;
+								} else if(foundY) {
+									break;
+								}
+							}
+						}
+						if(hasHit3 == true) {
+							var v = new pixelimage_algo_HitTri(bx,by,bx1,by1,cx1,cy1);
+						}
+						if(hasHit2 == true) {
+							var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy);
+							hitQuad = v;
+						} else {
+							hitQuad = null;
+						}
+					} else {
+						var hasHit1 = true;
+						if(hasHit1 == null) {
+							hasHit1 = false;
+						}
+						var sin1 = Math.sin(theta);
+						var cos1 = Math.cos(theta);
+						var radius1 = (thicker - (thicker - thick) / goldenRatio) / 2;
+						var radius21 = thick / 2;
+						var dx = 0.1;
+						var dy = radius1;
+						var cx = h2;
+						var cy = radius21;
+						var bx = h2;
+						var by = -radius21;
+						var ax = 0.1;
+						var ay = -radius1;
+						var temp = 0.;
+						temp = px + (ax * cos1 - ay * sin1);
+						ay = py + (ay * cos1 + ax * sin1);
+						ax = temp;
+						temp = px + (bx * cos1 - by * sin1);
+						by = py + (by * cos1 + bx * sin1);
+						bx = temp;
+						temp = px + (cx * cos1 - cy * sin1);
+						cy = py + (cy * cos1 + cx * sin1);
+						cx = temp;
+						temp = px + (dx * cos1 - dy * sin1);
+						dy = py + (dy * cos1 + dx * sin1);
+						dx = temp;
+						var hasHit2 = hasHit1;
+						if(hasHit2 == null) {
+							hasHit2 = false;
+						}
+						var bx1 = bx;
+						var by1 = by;
+						var cx1 = dx;
+						var cy1 = dy;
+						var hasHit1 = hasHit2;
+						if(hasHit1 == null) {
+							hasHit1 = false;
+						}
+						var adjustWinding = ax * by1 - bx1 * ay + (bx1 * cy1 - cx1 * by1) + (cx1 * ay - ax * cy1) > 0;
+						if(!adjustWinding) {
+							var bx_ = bx1;
+							var by_ = by1;
+							bx1 = cx1;
+							by1 = cy1;
+							cx1 = bx_;
+							cy1 = by_;
+						}
+						var hasHit3 = hasHit1;
+						if(hasHit3 == null) {
+							hasHit3 = false;
+						}
+						var s0 = ay * cx1 - ax * cy1;
+						var sx = cy1 - ay;
+						var sy = ax - cx1;
+						var t0 = ax * by1 - ay * bx1;
+						var tx = ay - by1;
+						var ty = bx1 - ax;
+						var A = -by1 * cx1 + ay * (-bx1 + cx1) + ax * (by1 - cy1) + bx1 * cy1;
+						var yIter3;
+						if(ay > by1) {
+							if(ay > cy1) {
+								var ii_min = by1 > cy1 ? Math.floor(cy1) : Math.floor(by1);
+								var ii_max = Math.ceil(ay);
+								var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+								yIter3 = this1;
+							} else {
+								var ii_min = Math.floor(by1);
+								var ii_max = Math.ceil(cy1);
+								var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+								yIter3 = this1;
+							}
+						} else if(by1 > cy1) {
+							var ii_min = ay > cy1 ? Math.floor(cy1) : Math.ceil(ay);
+							var ii_max = Math.ceil(by1);
+							var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+							yIter3 = this1;
+						} else {
+							var ii_min = Math.floor(ay);
+							var ii_max = Math.ceil(cy1);
+							var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+							yIter3 = this1;
+						}
+						var foundY = false;
+						var s = 0.;
+						var t = 0.;
+						var sxx = 0.;
+						var txx = 0.;
+						var this1;
+						if(ax > bx1) {
+							if(ax > cx1) {
+								var ii_min = bx1 > cx1 ? Math.floor(cx1) : Math.floor(bx1);
+								var ii_max = Math.ceil(ax);
+								var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+								this1 = this2;
+							} else {
+								var ii_min = Math.floor(bx1);
+								var ii_max = Math.ceil(cx1);
+								var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+								this1 = this2;
+							}
+						} else if(bx1 > cx1) {
+							var ii_min = ax > cx1 ? Math.floor(cx1) : Math.ceil(ax);
+							var ii_max = Math.ceil(bx1);
+							var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+							this1 = this2;
+						} else {
+							var ii_min = Math.floor(ax);
+							var ii_max = Math.ceil(cx1);
+							var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+							this1 = this2;
+						}
+						var _g_min = this1.start;
+						var _g_max = this1.max;
+						while(_g_min < _g_max) {
+							var x = _g_min++;
+							sxx = sx * x;
+							txx = tx * x;
+							foundY = false;
+							var _g_min1 = yIter3.start;
+							var _g_max1 = yIter3.max;
+							while(_g_min1 < _g_max1) {
+								var y = _g_min1++;
+								s = s0 + sxx + sy * y;
+								t = t0 + txx + ty * y;
+								if(s <= 0 || t <= 0) {
+									if(foundY) {
+										break;
+									}
+								} else if(s + t < A) {
+									var this1 = color;
+									var c = this1;
+									if((c >> 24 & 255) < 254 && pixelImage.transparent) {
+										var location = pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0;
+										var this2 = pixelImage.image[location];
+										var this3 = this2;
+										var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
+										var this5 = this4 >> 24 & 255;
+										var a1 = this5 == 0 ? 0. : this5 / 255;
+										var this6 = this4 >> 16 & 255;
+										var r1 = this6 == 0 ? 0. : this6 / 255;
+										var this7 = this4 >> 8 & 255;
+										var g1 = this7 == 0 ? 0. : this7 / 255;
+										var this8 = this4 & 255;
+										var b1 = this8 == 0 ? 0. : this8 / 255;
+										var this9 = color >> 24 & 255;
+										var a2 = this9 == 0 ? 0. : this9 / 255;
+										var this10 = color >> 16 & 255;
+										var r2 = this10 == 0 ? 0. : this10 / 255;
+										var this11 = color >> 8 & 255;
+										var g2 = this11 == 0 ? 0. : this11 / 255;
+										var this12 = color & 255;
+										var b2 = this12 == 0 ? 0. : this12 / 255;
+										var a3 = a1 * (1 - a2);
+										var r = 255 * (r1 * a3 + r2 * a2) | 0;
+										var g = 255 * (g1 * a3 + g2 * a2) | 0;
+										var b = 255 * (b1 * a3 + b2 * a2) | 0;
+										var a = 255 * (a3 + a2) | 0;
+										var blended = a << 24 | r << 16 | g << 8 | b;
+										pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+									} else {
+										pixelImage.image[pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
+									}
+									foundY = true;
+								} else if(foundY) {
+									break;
+								}
+							}
+						}
+						if(hasHit3 == true) {
+							var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1);
+						}
+						var bx1 = cx;
+						var by1 = cy;
+						var cx1 = dx;
+						var cy1 = dy;
+						var hasHit1 = hasHit2;
+						if(hasHit1 == null) {
+							hasHit1 = false;
+						}
+						var adjustWinding = bx * by1 - bx1 * by + (bx1 * cy1 - cx1 * by1) + (cx1 * by - bx * cy1) > 0;
+						if(!adjustWinding) {
+							var bx_ = bx1;
+							var by_ = by1;
+							bx1 = cx1;
+							by1 = cy1;
+							cx1 = bx_;
+							cy1 = by_;
+						}
+						var hasHit3 = hasHit1;
+						if(hasHit3 == null) {
+							hasHit3 = false;
+						}
+						var s0 = by * cx1 - bx * cy1;
+						var sx = cy1 - by;
+						var sy = bx - cx1;
+						var t0 = bx * by1 - by * bx1;
+						var tx = by - by1;
+						var ty = bx1 - bx;
+						var A = -by1 * cx1 + by * (-bx1 + cx1) + bx * (by1 - cy1) + bx1 * cy1;
+						var yIter3;
+						if(by > by1) {
+							if(by > cy1) {
+								var ii_min = by1 > cy1 ? Math.floor(cy1) : Math.floor(by1);
+								var ii_max = Math.ceil(by);
+								var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+								yIter3 = this1;
+							} else {
+								var ii_min = Math.floor(by1);
+								var ii_max = Math.ceil(cy1);
+								var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+								yIter3 = this1;
+							}
+						} else if(by1 > cy1) {
+							var ii_min = by > cy1 ? Math.floor(cy1) : Math.ceil(by);
+							var ii_max = Math.ceil(by1);
+							var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+							yIter3 = this1;
+						} else {
+							var ii_min = Math.floor(by);
+							var ii_max = Math.ceil(cy1);
+							var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+							yIter3 = this1;
+						}
+						var foundY = false;
+						var s = 0.;
+						var t = 0.;
+						var sxx = 0.;
+						var txx = 0.;
+						var this1;
+						if(bx > bx1) {
+							if(bx > cx1) {
+								var ii_min = bx1 > cx1 ? Math.floor(cx1) : Math.floor(bx1);
+								var ii_max = Math.ceil(bx);
+								var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+								this1 = this2;
+							} else {
+								var ii_min = Math.floor(bx1);
+								var ii_max = Math.ceil(cx1);
+								var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+								this1 = this2;
+							}
+						} else if(bx1 > cx1) {
+							var ii_min = bx > cx1 ? Math.floor(cx1) : Math.ceil(bx);
+							var ii_max = Math.ceil(bx1);
+							var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+							this1 = this2;
+						} else {
+							var ii_min = Math.floor(bx);
+							var ii_max = Math.ceil(cx1);
+							var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+							this1 = this2;
+						}
+						var _g_min = this1.start;
+						var _g_max = this1.max;
+						while(_g_min < _g_max) {
+							var x = _g_min++;
+							sxx = sx * x;
+							txx = tx * x;
+							foundY = false;
+							var _g_min1 = yIter3.start;
+							var _g_max1 = yIter3.max;
+							while(_g_min1 < _g_max1) {
+								var y = _g_min1++;
+								s = s0 + sxx + sy * y;
+								t = t0 + txx + ty * y;
+								if(s <= 0 || t <= 0) {
+									if(foundY) {
+										break;
+									}
+								} else if(s + t < A) {
+									var this1 = color;
+									var c = this1;
+									if((c >> 24 & 255) < 254 && pixelImage.transparent) {
+										var location = pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0;
+										var this2 = pixelImage.image[location];
+										var this3 = this2;
+										var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
+										var this5 = this4 >> 24 & 255;
+										var a1 = this5 == 0 ? 0. : this5 / 255;
+										var this6 = this4 >> 16 & 255;
+										var r1 = this6 == 0 ? 0. : this6 / 255;
+										var this7 = this4 >> 8 & 255;
+										var g1 = this7 == 0 ? 0. : this7 / 255;
+										var this8 = this4 & 255;
+										var b1 = this8 == 0 ? 0. : this8 / 255;
+										var this9 = color >> 24 & 255;
+										var a2 = this9 == 0 ? 0. : this9 / 255;
+										var this10 = color >> 16 & 255;
+										var r2 = this10 == 0 ? 0. : this10 / 255;
+										var this11 = color >> 8 & 255;
+										var g2 = this11 == 0 ? 0. : this11 / 255;
+										var this12 = color & 255;
+										var b2 = this12 == 0 ? 0. : this12 / 255;
+										var a3 = a1 * (1 - a2);
+										var r = 255 * (r1 * a3 + r2 * a2) | 0;
+										var g = 255 * (g1 * a3 + g2 * a2) | 0;
+										var b = 255 * (b1 * a3 + b2 * a2) | 0;
+										var a = 255 * (a3 + a2) | 0;
+										var blended = a << 24 | r << 16 | g << 8 | b;
+										pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+									} else {
+										pixelImage.image[pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
+									}
+									foundY = true;
+								} else if(foundY) {
+									break;
+								}
+							}
+						}
+						if(hasHit3 == true) {
+							var v = new pixelimage_algo_HitTri(bx,by,bx1,by1,cx1,cy1);
+						}
+						if(hasHit2 == true) {
+							var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy);
+							hitQuad = v;
+						} else {
+							hitQuad = null;
+						}
+					}
+				} else {
+					var hasHit1 = true;
+					if(hasHit1 == null) {
+						hasHit1 = false;
+					}
+					var sin1 = Math.sin(theta);
+					var cos1 = Math.cos(theta);
+					var radius = thick / 2;
+					var dx = 0.1;
+					var dy = radius;
+					var cx = h2;
+					var cy = radius;
+					var bx = h2;
+					var by = -radius;
+					var ax = 0.1;
+					var ay = -radius;
+					var temp = 0.;
+					temp = px + (ax * cos1 - ay * sin1);
+					ay = py + (ay * cos1 + ax * sin1);
+					ax = temp;
+					temp = px + (bx * cos1 - by * sin1);
+					by = py + (by * cos1 + bx * sin1);
+					bx = temp;
+					temp = px + (cx * cos1 - cy * sin1);
+					cy = py + (cy * cos1 + cx * sin1);
+					cx = temp;
+					temp = px + (dx * cos1 - dy * sin1);
+					dy = py + (dy * cos1 + dx * sin1);
+					dx = temp;
+					var hasHit2 = hasHit1;
+					if(hasHit2 == null) {
+						hasHit2 = false;
+					}
+					var bx1 = bx;
+					var by1 = by;
+					var cx1 = dx;
+					var cy1 = dy;
+					var hasHit1 = hasHit2;
+					if(hasHit1 == null) {
+						hasHit1 = false;
+					}
+					var adjustWinding = ax * by1 - bx1 * ay + (bx1 * cy1 - cx1 * by1) + (cx1 * ay - ax * cy1) > 0;
+					if(!adjustWinding) {
+						var bx_ = bx1;
+						var by_ = by1;
+						bx1 = cx1;
+						by1 = cy1;
+						cx1 = bx_;
+						cy1 = by_;
+					}
+					var hasHit3 = hasHit1;
+					if(hasHit3 == null) {
+						hasHit3 = false;
+					}
+					var s0 = ay * cx1 - ax * cy1;
+					var sx = cy1 - ay;
+					var sy = ax - cx1;
+					var t0 = ax * by1 - ay * bx1;
+					var tx = ay - by1;
+					var ty = bx1 - ax;
+					var A = -by1 * cx1 + ay * (-bx1 + cx1) + ax * (by1 - cy1) + bx1 * cy1;
+					var yIter3;
+					if(ay > by1) {
+						if(ay > cy1) {
+							var ii_min = by1 > cy1 ? Math.floor(cy1) : Math.floor(by1);
+							var ii_max = Math.ceil(ay);
+							var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+							yIter3 = this1;
+						} else {
+							var ii_min = Math.floor(by1);
+							var ii_max = Math.ceil(cy1);
+							var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+							yIter3 = this1;
+						}
+					} else if(by1 > cy1) {
+						var ii_min = ay > cy1 ? Math.floor(cy1) : Math.ceil(ay);
+						var ii_max = Math.ceil(by1);
+						var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+						yIter3 = this1;
+					} else {
+						var ii_min = Math.floor(ay);
+						var ii_max = Math.ceil(cy1);
+						var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+						yIter3 = this1;
+					}
+					var foundY = false;
+					var s = 0.;
+					var t = 0.;
+					var sxx = 0.;
+					var txx = 0.;
+					var this1;
+					if(ax > bx1) {
+						if(ax > cx1) {
+							var ii_min = bx1 > cx1 ? Math.floor(cx1) : Math.floor(bx1);
+							var ii_max = Math.ceil(ax);
+							var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+							this1 = this2;
+						} else {
+							var ii_min = Math.floor(bx1);
+							var ii_max = Math.ceil(cx1);
+							var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+							this1 = this2;
+						}
+					} else if(bx1 > cx1) {
+						var ii_min = ax > cx1 ? Math.floor(cx1) : Math.ceil(ax);
+						var ii_max = Math.ceil(bx1);
+						var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+						this1 = this2;
+					} else {
+						var ii_min = Math.floor(ax);
+						var ii_max = Math.ceil(cx1);
+						var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+						this1 = this2;
+					}
+					var _g_min = this1.start;
+					var _g_max = this1.max;
+					while(_g_min < _g_max) {
+						var x = _g_min++;
+						sxx = sx * x;
+						txx = tx * x;
+						foundY = false;
+						var _g_min1 = yIter3.start;
+						var _g_max1 = yIter3.max;
+						while(_g_min1 < _g_max1) {
+							var y = _g_min1++;
+							s = s0 + sxx + sy * y;
+							t = t0 + txx + ty * y;
+							if(s <= 0 || t <= 0) {
+								if(foundY) {
+									break;
+								}
+							} else if(s + t < A) {
+								var this1 = color;
+								var c = this1;
+								if((c >> 24 & 255) < 254 && pixelImage.transparent) {
+									var location = pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0;
+									var this2 = pixelImage.image[location];
+									var this3 = this2;
+									var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
+									var this5 = this4 >> 24 & 255;
+									var a1 = this5 == 0 ? 0. : this5 / 255;
+									var this6 = this4 >> 16 & 255;
+									var r1 = this6 == 0 ? 0. : this6 / 255;
+									var this7 = this4 >> 8 & 255;
+									var g1 = this7 == 0 ? 0. : this7 / 255;
+									var this8 = this4 & 255;
+									var b1 = this8 == 0 ? 0. : this8 / 255;
+									var this9 = color >> 24 & 255;
+									var a2 = this9 == 0 ? 0. : this9 / 255;
+									var this10 = color >> 16 & 255;
+									var r2 = this10 == 0 ? 0. : this10 / 255;
+									var this11 = color >> 8 & 255;
+									var g2 = this11 == 0 ? 0. : this11 / 255;
+									var this12 = color & 255;
+									var b2 = this12 == 0 ? 0. : this12 / 255;
+									var a3 = a1 * (1 - a2);
+									var r = 255 * (r1 * a3 + r2 * a2) | 0;
+									var g = 255 * (g1 * a3 + g2 * a2) | 0;
+									var b = 255 * (b1 * a3 + b2 * a2) | 0;
+									var a = 255 * (a3 + a2) | 0;
+									var blended = a << 24 | r << 16 | g << 8 | b;
+									pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+								} else {
+									pixelImage.image[pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
+								}
+								foundY = true;
+							} else if(foundY) {
+								break;
+							}
+						}
+					}
+					if(hasHit3 == true) {
+						var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1);
+					}
+					var bx1 = cx;
+					var by1 = cy;
+					var cx1 = dx;
+					var cy1 = dy;
+					var hasHit1 = hasHit2;
+					if(hasHit1 == null) {
+						hasHit1 = false;
+					}
+					var adjustWinding = bx * by1 - bx1 * by + (bx1 * cy1 - cx1 * by1) + (cx1 * by - bx * cy1) > 0;
+					if(!adjustWinding) {
+						var bx_ = bx1;
+						var by_ = by1;
+						bx1 = cx1;
+						by1 = cy1;
+						cx1 = bx_;
+						cy1 = by_;
+					}
+					var hasHit3 = hasHit1;
+					if(hasHit3 == null) {
+						hasHit3 = false;
+					}
+					var s0 = by * cx1 - bx * cy1;
+					var sx = cy1 - by;
+					var sy = bx - cx1;
+					var t0 = bx * by1 - by * bx1;
+					var tx = by - by1;
+					var ty = bx1 - bx;
+					var A = -by1 * cx1 + by * (-bx1 + cx1) + bx * (by1 - cy1) + bx1 * cy1;
+					var yIter3;
+					if(by > by1) {
+						if(by > cy1) {
+							var ii_min = by1 > cy1 ? Math.floor(cy1) : Math.floor(by1);
+							var ii_max = Math.ceil(by);
+							var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+							yIter3 = this1;
+						} else {
+							var ii_min = Math.floor(by1);
+							var ii_max = Math.ceil(cy1);
+							var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+							yIter3 = this1;
+						}
+					} else if(by1 > cy1) {
+						var ii_min = by > cy1 ? Math.floor(cy1) : Math.ceil(by);
+						var ii_max = Math.ceil(by1);
+						var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+						yIter3 = this1;
+					} else {
+						var ii_min = Math.floor(by);
+						var ii_max = Math.ceil(cy1);
+						var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+						yIter3 = this1;
+					}
+					var foundY = false;
+					var s = 0.;
+					var t = 0.;
+					var sxx = 0.;
+					var txx = 0.;
+					var this1;
+					if(bx > bx1) {
+						if(bx > cx1) {
+							var ii_min = bx1 > cx1 ? Math.floor(cx1) : Math.floor(bx1);
+							var ii_max = Math.ceil(bx);
+							var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+							this1 = this2;
+						} else {
+							var ii_min = Math.floor(bx1);
+							var ii_max = Math.ceil(cx1);
+							var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+							this1 = this2;
+						}
+					} else if(bx1 > cx1) {
+						var ii_min = bx > cx1 ? Math.floor(cx1) : Math.ceil(bx);
+						var ii_max = Math.ceil(bx1);
+						var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+						this1 = this2;
+					} else {
+						var ii_min = Math.floor(bx);
+						var ii_max = Math.ceil(cx1);
+						var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+						this1 = this2;
+					}
+					var _g_min = this1.start;
+					var _g_max = this1.max;
+					while(_g_min < _g_max) {
+						var x = _g_min++;
+						sxx = sx * x;
+						txx = tx * x;
+						foundY = false;
+						var _g_min1 = yIter3.start;
+						var _g_max1 = yIter3.max;
+						while(_g_min1 < _g_max1) {
+							var y = _g_min1++;
+							s = s0 + sxx + sy * y;
+							t = t0 + txx + ty * y;
+							if(s <= 0 || t <= 0) {
+								if(foundY) {
+									break;
+								}
+							} else if(s + t < A) {
+								var this1 = color;
+								var c = this1;
+								if((c >> 24 & 255) < 254 && pixelImage.transparent) {
+									var location = pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0;
+									var this2 = pixelImage.image[location];
+									var this3 = this2;
+									var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
+									var this5 = this4 >> 24 & 255;
+									var a1 = this5 == 0 ? 0. : this5 / 255;
+									var this6 = this4 >> 16 & 255;
+									var r1 = this6 == 0 ? 0. : this6 / 255;
+									var this7 = this4 >> 8 & 255;
+									var g1 = this7 == 0 ? 0. : this7 / 255;
+									var this8 = this4 & 255;
+									var b1 = this8 == 0 ? 0. : this8 / 255;
+									var this9 = color >> 24 & 255;
+									var a2 = this9 == 0 ? 0. : this9 / 255;
+									var this10 = color >> 16 & 255;
+									var r2 = this10 == 0 ? 0. : this10 / 255;
+									var this11 = color >> 8 & 255;
+									var g2 = this11 == 0 ? 0. : this11 / 255;
+									var this12 = color & 255;
+									var b2 = this12 == 0 ? 0. : this12 / 255;
+									var a3 = a1 * (1 - a2);
+									var r = 255 * (r1 * a3 + r2 * a2) | 0;
+									var g = 255 * (g1 * a3 + g2 * a2) | 0;
+									var b = 255 * (b1 * a3 + b2 * a2) | 0;
+									var a = 255 * (a3 + a2) | 0;
+									var blended = a << 24 | r << 16 | g << 8 | b;
+									pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+								} else {
+									pixelImage.image[pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
+								}
+								foundY = true;
+							} else if(foundY) {
+								break;
+							}
+						}
+					}
+					if(hasHit3 == true) {
+						var v = new pixelimage_algo_HitTri(bx,by,bx1,by1,cx1,cy1);
+					}
+					if(hasHit2 == true) {
+						var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy);
+						hitQuad = v;
+					} else {
+						hitQuad = null;
+					}
+				}
+				var cx = h2;
+				var cy = radius2;
+				var bx = h2;
+				var by = -radius2;
+				var temp = 0.;
+				temp = px + (bx * cos - by * sin);
+				by = py + (by * cos + bx * sin);
+				bx = temp;
+				temp = px + (cx * cos - cy * sin);
+				cy = py + (cy * cos + cx * sin);
+				cx = temp;
+				var bx1 = bx;
+				var by1 = by;
+				var cx1 = cx;
+				var cy1 = cy;
+				var hasHit1 = hasHit;
+				if(hasHit1 == null) {
+					hasHit1 = false;
+				}
+				var adjustWinding = qx * by1 - bx1 * qy + (bx1 * cy1 - cx1 * by1) + (cx1 * qy - qx * cy1) > 0;
+				if(!adjustWinding) {
+					var bx_ = bx1;
+					var by_ = by1;
+					bx1 = cx1;
+					by1 = cy1;
+					cx1 = bx_;
+					cy1 = by_;
+				}
+				var hasHit2 = hasHit1;
+				if(hasHit2 == null) {
+					hasHit2 = false;
+				}
+				var s0 = qy * cx1 - qx * cy1;
+				var sx = cy1 - qy;
+				var sy = qx - cx1;
+				var t0 = qx * by1 - qy * bx1;
+				var tx = qy - by1;
+				var ty = bx1 - qx;
+				var A = -by1 * cx1 + qy * (-bx1 + cx1) + qx * (by1 - cy1) + bx1 * cy1;
+				var yIter3;
+				if(qy > by1) {
+					if(qy > cy1) {
+						var ii_min = by1 > cy1 ? Math.floor(cy1) : Math.floor(by1);
+						var ii_max = Math.ceil(qy);
+						var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+						yIter3 = this1;
+					} else {
+						var ii_min = Math.floor(by1);
+						var ii_max = Math.ceil(cy1);
+						var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+						yIter3 = this1;
+					}
+				} else if(by1 > cy1) {
+					var ii_min = qy > cy1 ? Math.floor(cy1) : Math.ceil(qy);
+					var ii_max = Math.ceil(by1);
+					var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+					yIter3 = this1;
+				} else {
+					var ii_min = Math.floor(qy);
+					var ii_max = Math.ceil(cy1);
+					var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+					yIter3 = this1;
+				}
+				var foundY = false;
+				var s = 0.;
+				var t = 0.;
+				var sxx = 0.;
+				var txx = 0.;
+				var this1;
+				if(qx > bx1) {
+					if(qx > cx1) {
+						var ii_min = bx1 > cx1 ? Math.floor(cx1) : Math.floor(bx1);
+						var ii_max = Math.ceil(qx);
+						var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+						this1 = this2;
+					} else {
+						var ii_min = Math.floor(bx1);
+						var ii_max = Math.ceil(cx1);
+						var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+						this1 = this2;
+					}
+				} else if(bx1 > cx1) {
+					var ii_min = qx > cx1 ? Math.floor(cx1) : Math.ceil(qx);
+					var ii_max = Math.ceil(bx1);
+					var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+					this1 = this2;
+				} else {
+					var ii_min = Math.floor(qx);
+					var ii_max = Math.ceil(cx1);
+					var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+					this1 = this2;
+				}
+				var _g_min = this1.start;
+				var _g_max = this1.max;
+				while(_g_min < _g_max) {
+					var x = _g_min++;
+					sxx = sx * x;
+					txx = tx * x;
+					foundY = false;
+					var _g_min1 = yIter3.start;
+					var _g_max1 = yIter3.max;
+					while(_g_min1 < _g_max1) {
+						var y = _g_min1++;
+						s = s0 + sxx + sy * y;
+						t = t0 + txx + ty * y;
+						if(s <= 0 || t <= 0) {
+							if(foundY) {
+								break;
+							}
+						} else if(s + t < A) {
+							var this1 = color;
+							var c = this1;
+							if((c >> 24 & 255) < 254 && pixelImage.transparent) {
+								var location = pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0;
+								var this2 = pixelImage.image[location];
+								var this3 = this2;
+								var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
+								var this5 = this4 >> 24 & 255;
+								var a1 = this5 == 0 ? 0. : this5 / 255;
+								var this6 = this4 >> 16 & 255;
+								var r1 = this6 == 0 ? 0. : this6 / 255;
+								var this7 = this4 >> 8 & 255;
+								var g1 = this7 == 0 ? 0. : this7 / 255;
+								var this8 = this4 & 255;
+								var b1 = this8 == 0 ? 0. : this8 / 255;
+								var this9 = color >> 24 & 255;
+								var a2 = this9 == 0 ? 0. : this9 / 255;
+								var this10 = color >> 16 & 255;
+								var r2 = this10 == 0 ? 0. : this10 / 255;
+								var this11 = color >> 8 & 255;
+								var g2 = this11 == 0 ? 0. : this11 / 255;
+								var this12 = color & 255;
+								var b2 = this12 == 0 ? 0. : this12 / 255;
+								var a3 = a1 * (1 - a2);
+								var r = 255 * (r1 * a3 + r2 * a2) | 0;
+								var g = 255 * (g1 * a3 + g2 * a2) | 0;
+								var b = 255 * (b1 * a3 + b2 * a2) | 0;
+								var a = 255 * (a3 + a2) | 0;
+								var blended = a << 24 | r << 16 | g << 8 | b;
+								pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+							} else {
+								pixelImage.image[pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
+							}
+							foundY = true;
+						} else if(foundY) {
+							break;
+						}
+					}
+				}
+				var hitTri;
+				if(hasHit2 == true) {
+					var v = new pixelimage_algo_HitTri(qx,qy,bx1,by1,cx1,cy1);
+					hitTri = v;
+				} else {
+					hitTri = null;
+				}
+				if(hasHit) {
+					var hitArr = new pixelimage_algo_HitTriArray([hitTri]);
+					if(hitQuad != null) {
+						hitArr.triArr.push(hitQuad.triABD);
+					}
+					hitArr.triArr.push(hitQuad.triBCD);
+				}
+			} else {
+				var px = this.x1;
+				var py = this.y1;
+				var qx = this.x2;
+				var qy = this.y2;
+				var thick = this.strokeWidth;
+				var color = this.strokeColor;
+				var flare = this.flare;
+				var reverseFlare = this.reverseFlare;
+				if(reverseFlare == null) {
+					reverseFlare = false;
+				}
+				if(flare == null) {
+					flare = false;
+				}
+				haxe_Log.trace("pixelimage.fillArrow",{ fileName : "pixelimage/Pixelimage.hx", lineNumber : 781, className : "pixelimage._Pixelimage.Pixelimage_Impl_", methodName : "fillArrow"});
+				var flare1 = flare;
+				var reverseFlare1 = reverseFlare;
+				var hasHit = true;
+				if(hasHit == null) {
+					hasHit = false;
+				}
+				if(reverseFlare1 == null) {
+					reverseFlare1 = false;
+				}
+				if(flare1 == null) {
+					flare1 = false;
+				}
+				var goldenRatio = 1.61803398875;
+				var o = qy - py;
+				var a = qx - px;
+				var h = Math.pow(o * o + a * a,0.5);
+				var theta = Math.atan2(o,a);
+				var thicker = 2 * thick * goldenRatio;
+				var sin = Math.sin(theta);
+				var cos = Math.cos(theta);
+				var radius = thick / 2;
+				var radius2 = thicker / 2;
+				var h2 = h / goldenRatio;
+				var hitQuad;
+				if(flare1) {
+					if(reverseFlare1) {
+						var hasHit1 = true;
+						if(hasHit1 == null) {
+							hasHit1 = false;
+						}
+						var sin1 = Math.sin(theta);
+						var cos1 = Math.cos(theta);
+						var radius1 = thick / 2;
+						var radius21 = (thicker - (thicker - thick) / goldenRatio) / 2;
+						var dx = 0.1;
+						var dy = radius1;
+						var cx = h2;
+						var cy = radius21;
+						var bx = h2;
+						var by = -radius21;
+						var ax = 0.1;
+						var ay = -radius1;
+						var temp = 0.;
+						temp = px + (ax * cos1 - ay * sin1);
+						ay = py + (ay * cos1 + ax * sin1);
+						ax = temp;
+						temp = px + (bx * cos1 - by * sin1);
+						by = py + (by * cos1 + bx * sin1);
+						bx = temp;
+						temp = px + (cx * cos1 - cy * sin1);
+						cy = py + (cy * cos1 + cx * sin1);
+						cx = temp;
+						temp = px + (dx * cos1 - dy * sin1);
+						dy = py + (dy * cos1 + dx * sin1);
+						dx = temp;
+						var hasHit2 = hasHit1;
+						if(hasHit2 == null) {
+							hasHit2 = false;
+						}
+						var bx1 = bx;
+						var by1 = by;
+						var cx1 = dx;
+						var cy1 = dy;
+						var hasHit1 = hasHit2;
+						if(hasHit1 == null) {
+							hasHit1 = false;
+						}
+						var adjustWinding = ax * by1 - bx1 * ay + (bx1 * cy1 - cx1 * by1) + (cx1 * ay - ax * cy1) > 0;
+						if(!adjustWinding) {
+							var bx_ = bx1;
+							var by_ = by1;
+							bx1 = cx1;
+							by1 = cy1;
+							cx1 = bx_;
+							cy1 = by_;
+						}
+						var hasHit3 = hasHit1;
+						if(hasHit3 == null) {
+							hasHit3 = false;
+						}
+						var s0 = ay * cx1 - ax * cy1;
+						var sx = cy1 - ay;
+						var sy = ax - cx1;
+						var t0 = ax * by1 - ay * bx1;
+						var tx = ay - by1;
+						var ty = bx1 - ax;
+						var A = -by1 * cx1 + ay * (-bx1 + cx1) + ax * (by1 - cy1) + bx1 * cy1;
+						var yIter3;
+						if(ay > by1) {
+							if(ay > cy1) {
+								var ii_min = by1 > cy1 ? Math.floor(cy1) : Math.floor(by1);
+								var ii_max = Math.ceil(ay);
+								var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+								yIter3 = this1;
+							} else {
+								var ii_min = Math.floor(by1);
+								var ii_max = Math.ceil(cy1);
+								var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+								yIter3 = this1;
+							}
+						} else if(by1 > cy1) {
+							var ii_min = ay > cy1 ? Math.floor(cy1) : Math.ceil(ay);
+							var ii_max = Math.ceil(by1);
+							var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+							yIter3 = this1;
+						} else {
+							var ii_min = Math.floor(ay);
+							var ii_max = Math.ceil(cy1);
+							var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+							yIter3 = this1;
+						}
+						var foundY = false;
+						var s = 0.;
+						var t = 0.;
+						var sxx = 0.;
+						var txx = 0.;
+						var this1;
+						if(ax > bx1) {
+							if(ax > cx1) {
+								var ii_min = bx1 > cx1 ? Math.floor(cx1) : Math.floor(bx1);
+								var ii_max = Math.ceil(ax);
+								var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+								this1 = this2;
+							} else {
+								var ii_min = Math.floor(bx1);
+								var ii_max = Math.ceil(cx1);
+								var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+								this1 = this2;
+							}
+						} else if(bx1 > cx1) {
+							var ii_min = ax > cx1 ? Math.floor(cx1) : Math.ceil(ax);
+							var ii_max = Math.ceil(bx1);
+							var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+							this1 = this2;
+						} else {
+							var ii_min = Math.floor(ax);
+							var ii_max = Math.ceil(cx1);
+							var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+							this1 = this2;
+						}
+						var _g_min = this1.start;
+						var _g_max = this1.max;
+						while(_g_min < _g_max) {
+							var x = _g_min++;
+							sxx = sx * x;
+							txx = tx * x;
+							foundY = false;
+							var _g_min1 = yIter3.start;
+							var _g_max1 = yIter3.max;
+							while(_g_min1 < _g_max1) {
+								var y = _g_min1++;
+								s = s0 + sxx + sy * y;
+								t = t0 + txx + ty * y;
+								if(s <= 0 || t <= 0) {
+									if(foundY) {
+										break;
+									}
+								} else if(s + t < A) {
+									var this1 = color;
+									var c = this1;
+									if((c >> 24 & 255) < 254 && pixelImage.transparent) {
+										var location = pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0;
+										var this2 = pixelImage.image[location];
+										var this3 = this2;
+										var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
+										var this5 = this4 >> 24 & 255;
+										var a1 = this5 == 0 ? 0. : this5 / 255;
+										var this6 = this4 >> 16 & 255;
+										var r1 = this6 == 0 ? 0. : this6 / 255;
+										var this7 = this4 >> 8 & 255;
+										var g1 = this7 == 0 ? 0. : this7 / 255;
+										var this8 = this4 & 255;
+										var b1 = this8 == 0 ? 0. : this8 / 255;
+										var this9 = color >> 24 & 255;
+										var a2 = this9 == 0 ? 0. : this9 / 255;
+										var this10 = color >> 16 & 255;
+										var r2 = this10 == 0 ? 0. : this10 / 255;
+										var this11 = color >> 8 & 255;
+										var g2 = this11 == 0 ? 0. : this11 / 255;
+										var this12 = color & 255;
+										var b2 = this12 == 0 ? 0. : this12 / 255;
+										var a3 = a1 * (1 - a2);
+										var r = 255 * (r1 * a3 + r2 * a2) | 0;
+										var g = 255 * (g1 * a3 + g2 * a2) | 0;
+										var b = 255 * (b1 * a3 + b2 * a2) | 0;
+										var a = 255 * (a3 + a2) | 0;
+										var blended = a << 24 | r << 16 | g << 8 | b;
+										pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+									} else {
+										pixelImage.image[pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
+									}
+									foundY = true;
+								} else if(foundY) {
+									break;
+								}
+							}
+						}
+						if(hasHit3 == true) {
+							var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1);
+						}
+						var bx1 = cx;
+						var by1 = cy;
+						var cx1 = dx;
+						var cy1 = dy;
+						var hasHit1 = hasHit2;
+						if(hasHit1 == null) {
+							hasHit1 = false;
+						}
+						var adjustWinding = bx * by1 - bx1 * by + (bx1 * cy1 - cx1 * by1) + (cx1 * by - bx * cy1) > 0;
+						if(!adjustWinding) {
+							var bx_ = bx1;
+							var by_ = by1;
+							bx1 = cx1;
+							by1 = cy1;
+							cx1 = bx_;
+							cy1 = by_;
+						}
+						var hasHit3 = hasHit1;
+						if(hasHit3 == null) {
+							hasHit3 = false;
+						}
+						var s0 = by * cx1 - bx * cy1;
+						var sx = cy1 - by;
+						var sy = bx - cx1;
+						var t0 = bx * by1 - by * bx1;
+						var tx = by - by1;
+						var ty = bx1 - bx;
+						var A = -by1 * cx1 + by * (-bx1 + cx1) + bx * (by1 - cy1) + bx1 * cy1;
+						var yIter3;
+						if(by > by1) {
+							if(by > cy1) {
+								var ii_min = by1 > cy1 ? Math.floor(cy1) : Math.floor(by1);
+								var ii_max = Math.ceil(by);
+								var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+								yIter3 = this1;
+							} else {
+								var ii_min = Math.floor(by1);
+								var ii_max = Math.ceil(cy1);
+								var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+								yIter3 = this1;
+							}
+						} else if(by1 > cy1) {
+							var ii_min = by > cy1 ? Math.floor(cy1) : Math.ceil(by);
+							var ii_max = Math.ceil(by1);
+							var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+							yIter3 = this1;
+						} else {
+							var ii_min = Math.floor(by);
+							var ii_max = Math.ceil(cy1);
+							var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+							yIter3 = this1;
+						}
+						var foundY = false;
+						var s = 0.;
+						var t = 0.;
+						var sxx = 0.;
+						var txx = 0.;
+						var this1;
+						if(bx > bx1) {
+							if(bx > cx1) {
+								var ii_min = bx1 > cx1 ? Math.floor(cx1) : Math.floor(bx1);
+								var ii_max = Math.ceil(bx);
+								var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+								this1 = this2;
+							} else {
+								var ii_min = Math.floor(bx1);
+								var ii_max = Math.ceil(cx1);
+								var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+								this1 = this2;
+							}
+						} else if(bx1 > cx1) {
+							var ii_min = bx > cx1 ? Math.floor(cx1) : Math.ceil(bx);
+							var ii_max = Math.ceil(bx1);
+							var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+							this1 = this2;
+						} else {
+							var ii_min = Math.floor(bx);
+							var ii_max = Math.ceil(cx1);
+							var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+							this1 = this2;
+						}
+						var _g_min = this1.start;
+						var _g_max = this1.max;
+						while(_g_min < _g_max) {
+							var x = _g_min++;
+							sxx = sx * x;
+							txx = tx * x;
+							foundY = false;
+							var _g_min1 = yIter3.start;
+							var _g_max1 = yIter3.max;
+							while(_g_min1 < _g_max1) {
+								var y = _g_min1++;
+								s = s0 + sxx + sy * y;
+								t = t0 + txx + ty * y;
+								if(s <= 0 || t <= 0) {
+									if(foundY) {
+										break;
+									}
+								} else if(s + t < A) {
+									var this1 = color;
+									var c = this1;
+									if((c >> 24 & 255) < 254 && pixelImage.transparent) {
+										var location = pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0;
+										var this2 = pixelImage.image[location];
+										var this3 = this2;
+										var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
+										var this5 = this4 >> 24 & 255;
+										var a1 = this5 == 0 ? 0. : this5 / 255;
+										var this6 = this4 >> 16 & 255;
+										var r1 = this6 == 0 ? 0. : this6 / 255;
+										var this7 = this4 >> 8 & 255;
+										var g1 = this7 == 0 ? 0. : this7 / 255;
+										var this8 = this4 & 255;
+										var b1 = this8 == 0 ? 0. : this8 / 255;
+										var this9 = color >> 24 & 255;
+										var a2 = this9 == 0 ? 0. : this9 / 255;
+										var this10 = color >> 16 & 255;
+										var r2 = this10 == 0 ? 0. : this10 / 255;
+										var this11 = color >> 8 & 255;
+										var g2 = this11 == 0 ? 0. : this11 / 255;
+										var this12 = color & 255;
+										var b2 = this12 == 0 ? 0. : this12 / 255;
+										var a3 = a1 * (1 - a2);
+										var r = 255 * (r1 * a3 + r2 * a2) | 0;
+										var g = 255 * (g1 * a3 + g2 * a2) | 0;
+										var b = 255 * (b1 * a3 + b2 * a2) | 0;
+										var a = 255 * (a3 + a2) | 0;
+										var blended = a << 24 | r << 16 | g << 8 | b;
+										pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+									} else {
+										pixelImage.image[pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
+									}
+									foundY = true;
+								} else if(foundY) {
+									break;
+								}
+							}
+						}
+						if(hasHit3 == true) {
+							var v = new pixelimage_algo_HitTri(bx,by,bx1,by1,cx1,cy1);
+						}
+						if(hasHit2 == true) {
+							var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy);
+							hitQuad = v;
+						} else {
+							hitQuad = null;
+						}
+					} else {
+						var hasHit1 = true;
+						if(hasHit1 == null) {
+							hasHit1 = false;
+						}
+						var sin1 = Math.sin(theta);
+						var cos1 = Math.cos(theta);
+						var radius1 = (thicker - (thicker - thick) / goldenRatio) / 2;
+						var radius21 = thick / 2;
+						var dx = 0.1;
+						var dy = radius1;
+						var cx = h2;
+						var cy = radius21;
+						var bx = h2;
+						var by = -radius21;
+						var ax = 0.1;
+						var ay = -radius1;
+						var temp = 0.;
+						temp = px + (ax * cos1 - ay * sin1);
+						ay = py + (ay * cos1 + ax * sin1);
+						ax = temp;
+						temp = px + (bx * cos1 - by * sin1);
+						by = py + (by * cos1 + bx * sin1);
+						bx = temp;
+						temp = px + (cx * cos1 - cy * sin1);
+						cy = py + (cy * cos1 + cx * sin1);
+						cx = temp;
+						temp = px + (dx * cos1 - dy * sin1);
+						dy = py + (dy * cos1 + dx * sin1);
+						dx = temp;
+						var hasHit2 = hasHit1;
+						if(hasHit2 == null) {
+							hasHit2 = false;
+						}
+						var bx1 = bx;
+						var by1 = by;
+						var cx1 = dx;
+						var cy1 = dy;
+						var hasHit1 = hasHit2;
+						if(hasHit1 == null) {
+							hasHit1 = false;
+						}
+						var adjustWinding = ax * by1 - bx1 * ay + (bx1 * cy1 - cx1 * by1) + (cx1 * ay - ax * cy1) > 0;
+						if(!adjustWinding) {
+							var bx_ = bx1;
+							var by_ = by1;
+							bx1 = cx1;
+							by1 = cy1;
+							cx1 = bx_;
+							cy1 = by_;
+						}
+						var hasHit3 = hasHit1;
+						if(hasHit3 == null) {
+							hasHit3 = false;
+						}
+						var s0 = ay * cx1 - ax * cy1;
+						var sx = cy1 - ay;
+						var sy = ax - cx1;
+						var t0 = ax * by1 - ay * bx1;
+						var tx = ay - by1;
+						var ty = bx1 - ax;
+						var A = -by1 * cx1 + ay * (-bx1 + cx1) + ax * (by1 - cy1) + bx1 * cy1;
+						var yIter3;
+						if(ay > by1) {
+							if(ay > cy1) {
+								var ii_min = by1 > cy1 ? Math.floor(cy1) : Math.floor(by1);
+								var ii_max = Math.ceil(ay);
+								var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+								yIter3 = this1;
+							} else {
+								var ii_min = Math.floor(by1);
+								var ii_max = Math.ceil(cy1);
+								var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+								yIter3 = this1;
+							}
+						} else if(by1 > cy1) {
+							var ii_min = ay > cy1 ? Math.floor(cy1) : Math.ceil(ay);
+							var ii_max = Math.ceil(by1);
+							var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+							yIter3 = this1;
+						} else {
+							var ii_min = Math.floor(ay);
+							var ii_max = Math.ceil(cy1);
+							var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+							yIter3 = this1;
+						}
+						var foundY = false;
+						var s = 0.;
+						var t = 0.;
+						var sxx = 0.;
+						var txx = 0.;
+						var this1;
+						if(ax > bx1) {
+							if(ax > cx1) {
+								var ii_min = bx1 > cx1 ? Math.floor(cx1) : Math.floor(bx1);
+								var ii_max = Math.ceil(ax);
+								var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+								this1 = this2;
+							} else {
+								var ii_min = Math.floor(bx1);
+								var ii_max = Math.ceil(cx1);
+								var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+								this1 = this2;
+							}
+						} else if(bx1 > cx1) {
+							var ii_min = ax > cx1 ? Math.floor(cx1) : Math.ceil(ax);
+							var ii_max = Math.ceil(bx1);
+							var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+							this1 = this2;
+						} else {
+							var ii_min = Math.floor(ax);
+							var ii_max = Math.ceil(cx1);
+							var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+							this1 = this2;
+						}
+						var _g_min = this1.start;
+						var _g_max = this1.max;
+						while(_g_min < _g_max) {
+							var x = _g_min++;
+							sxx = sx * x;
+							txx = tx * x;
+							foundY = false;
+							var _g_min1 = yIter3.start;
+							var _g_max1 = yIter3.max;
+							while(_g_min1 < _g_max1) {
+								var y = _g_min1++;
+								s = s0 + sxx + sy * y;
+								t = t0 + txx + ty * y;
+								if(s <= 0 || t <= 0) {
+									if(foundY) {
+										break;
+									}
+								} else if(s + t < A) {
+									var this1 = color;
+									var c = this1;
+									if((c >> 24 & 255) < 254 && pixelImage.transparent) {
+										var location = pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0;
+										var this2 = pixelImage.image[location];
+										var this3 = this2;
+										var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
+										var this5 = this4 >> 24 & 255;
+										var a1 = this5 == 0 ? 0. : this5 / 255;
+										var this6 = this4 >> 16 & 255;
+										var r1 = this6 == 0 ? 0. : this6 / 255;
+										var this7 = this4 >> 8 & 255;
+										var g1 = this7 == 0 ? 0. : this7 / 255;
+										var this8 = this4 & 255;
+										var b1 = this8 == 0 ? 0. : this8 / 255;
+										var this9 = color >> 24 & 255;
+										var a2 = this9 == 0 ? 0. : this9 / 255;
+										var this10 = color >> 16 & 255;
+										var r2 = this10 == 0 ? 0. : this10 / 255;
+										var this11 = color >> 8 & 255;
+										var g2 = this11 == 0 ? 0. : this11 / 255;
+										var this12 = color & 255;
+										var b2 = this12 == 0 ? 0. : this12 / 255;
+										var a3 = a1 * (1 - a2);
+										var r = 255 * (r1 * a3 + r2 * a2) | 0;
+										var g = 255 * (g1 * a3 + g2 * a2) | 0;
+										var b = 255 * (b1 * a3 + b2 * a2) | 0;
+										var a = 255 * (a3 + a2) | 0;
+										var blended = a << 24 | r << 16 | g << 8 | b;
+										pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+									} else {
+										pixelImage.image[pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
+									}
+									foundY = true;
+								} else if(foundY) {
+									break;
+								}
+							}
+						}
+						if(hasHit3 == true) {
+							var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1);
+						}
+						var bx1 = cx;
+						var by1 = cy;
+						var cx1 = dx;
+						var cy1 = dy;
+						var hasHit1 = hasHit2;
+						if(hasHit1 == null) {
+							hasHit1 = false;
+						}
+						var adjustWinding = bx * by1 - bx1 * by + (bx1 * cy1 - cx1 * by1) + (cx1 * by - bx * cy1) > 0;
+						if(!adjustWinding) {
+							var bx_ = bx1;
+							var by_ = by1;
+							bx1 = cx1;
+							by1 = cy1;
+							cx1 = bx_;
+							cy1 = by_;
+						}
+						var hasHit3 = hasHit1;
+						if(hasHit3 == null) {
+							hasHit3 = false;
+						}
+						var s0 = by * cx1 - bx * cy1;
+						var sx = cy1 - by;
+						var sy = bx - cx1;
+						var t0 = bx * by1 - by * bx1;
+						var tx = by - by1;
+						var ty = bx1 - bx;
+						var A = -by1 * cx1 + by * (-bx1 + cx1) + bx * (by1 - cy1) + bx1 * cy1;
+						var yIter3;
+						if(by > by1) {
+							if(by > cy1) {
+								var ii_min = by1 > cy1 ? Math.floor(cy1) : Math.floor(by1);
+								var ii_max = Math.ceil(by);
+								var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+								yIter3 = this1;
+							} else {
+								var ii_min = Math.floor(by1);
+								var ii_max = Math.ceil(cy1);
+								var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+								yIter3 = this1;
+							}
+						} else if(by1 > cy1) {
+							var ii_min = by > cy1 ? Math.floor(cy1) : Math.ceil(by);
+							var ii_max = Math.ceil(by1);
+							var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+							yIter3 = this1;
+						} else {
+							var ii_min = Math.floor(by);
+							var ii_max = Math.ceil(cy1);
+							var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+							yIter3 = this1;
+						}
+						var foundY = false;
+						var s = 0.;
+						var t = 0.;
+						var sxx = 0.;
+						var txx = 0.;
+						var this1;
+						if(bx > bx1) {
+							if(bx > cx1) {
+								var ii_min = bx1 > cx1 ? Math.floor(cx1) : Math.floor(bx1);
+								var ii_max = Math.ceil(bx);
+								var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+								this1 = this2;
+							} else {
+								var ii_min = Math.floor(bx1);
+								var ii_max = Math.ceil(cx1);
+								var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+								this1 = this2;
+							}
+						} else if(bx1 > cx1) {
+							var ii_min = bx > cx1 ? Math.floor(cx1) : Math.ceil(bx);
+							var ii_max = Math.ceil(bx1);
+							var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+							this1 = this2;
+						} else {
+							var ii_min = Math.floor(bx);
+							var ii_max = Math.ceil(cx1);
+							var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+							this1 = this2;
+						}
+						var _g_min = this1.start;
+						var _g_max = this1.max;
+						while(_g_min < _g_max) {
+							var x = _g_min++;
+							sxx = sx * x;
+							txx = tx * x;
+							foundY = false;
+							var _g_min1 = yIter3.start;
+							var _g_max1 = yIter3.max;
+							while(_g_min1 < _g_max1) {
+								var y = _g_min1++;
+								s = s0 + sxx + sy * y;
+								t = t0 + txx + ty * y;
+								if(s <= 0 || t <= 0) {
+									if(foundY) {
+										break;
+									}
+								} else if(s + t < A) {
+									var this1 = color;
+									var c = this1;
+									if((c >> 24 & 255) < 254 && pixelImage.transparent) {
+										var location = pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0;
+										var this2 = pixelImage.image[location];
+										var this3 = this2;
+										var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
+										var this5 = this4 >> 24 & 255;
+										var a1 = this5 == 0 ? 0. : this5 / 255;
+										var this6 = this4 >> 16 & 255;
+										var r1 = this6 == 0 ? 0. : this6 / 255;
+										var this7 = this4 >> 8 & 255;
+										var g1 = this7 == 0 ? 0. : this7 / 255;
+										var this8 = this4 & 255;
+										var b1 = this8 == 0 ? 0. : this8 / 255;
+										var this9 = color >> 24 & 255;
+										var a2 = this9 == 0 ? 0. : this9 / 255;
+										var this10 = color >> 16 & 255;
+										var r2 = this10 == 0 ? 0. : this10 / 255;
+										var this11 = color >> 8 & 255;
+										var g2 = this11 == 0 ? 0. : this11 / 255;
+										var this12 = color & 255;
+										var b2 = this12 == 0 ? 0. : this12 / 255;
+										var a3 = a1 * (1 - a2);
+										var r = 255 * (r1 * a3 + r2 * a2) | 0;
+										var g = 255 * (g1 * a3 + g2 * a2) | 0;
+										var b = 255 * (b1 * a3 + b2 * a2) | 0;
+										var a = 255 * (a3 + a2) | 0;
+										var blended = a << 24 | r << 16 | g << 8 | b;
+										pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+									} else {
+										pixelImage.image[pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
+									}
+									foundY = true;
+								} else if(foundY) {
+									break;
+								}
+							}
+						}
+						if(hasHit3 == true) {
+							var v = new pixelimage_algo_HitTri(bx,by,bx1,by1,cx1,cy1);
+						}
+						if(hasHit2 == true) {
+							var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy);
+							hitQuad = v;
+						} else {
+							hitQuad = null;
+						}
+					}
+				} else {
+					var hasHit1 = true;
+					if(hasHit1 == null) {
+						hasHit1 = false;
+					}
+					var sin1 = Math.sin(theta);
+					var cos1 = Math.cos(theta);
+					var radius = thick / 2;
+					var dx = 0.1;
+					var dy = radius;
+					var cx = h2;
+					var cy = radius;
+					var bx = h2;
+					var by = -radius;
+					var ax = 0.1;
+					var ay = -radius;
+					var temp = 0.;
+					temp = px + (ax * cos1 - ay * sin1);
+					ay = py + (ay * cos1 + ax * sin1);
+					ax = temp;
+					temp = px + (bx * cos1 - by * sin1);
+					by = py + (by * cos1 + bx * sin1);
+					bx = temp;
+					temp = px + (cx * cos1 - cy * sin1);
+					cy = py + (cy * cos1 + cx * sin1);
+					cx = temp;
+					temp = px + (dx * cos1 - dy * sin1);
+					dy = py + (dy * cos1 + dx * sin1);
+					dx = temp;
+					var hasHit2 = hasHit1;
+					if(hasHit2 == null) {
+						hasHit2 = false;
+					}
+					var bx1 = bx;
+					var by1 = by;
+					var cx1 = dx;
+					var cy1 = dy;
+					var hasHit1 = hasHit2;
+					if(hasHit1 == null) {
+						hasHit1 = false;
+					}
+					var adjustWinding = ax * by1 - bx1 * ay + (bx1 * cy1 - cx1 * by1) + (cx1 * ay - ax * cy1) > 0;
+					if(!adjustWinding) {
+						var bx_ = bx1;
+						var by_ = by1;
+						bx1 = cx1;
+						by1 = cy1;
+						cx1 = bx_;
+						cy1 = by_;
+					}
+					var hasHit3 = hasHit1;
+					if(hasHit3 == null) {
+						hasHit3 = false;
+					}
+					var s0 = ay * cx1 - ax * cy1;
+					var sx = cy1 - ay;
+					var sy = ax - cx1;
+					var t0 = ax * by1 - ay * bx1;
+					var tx = ay - by1;
+					var ty = bx1 - ax;
+					var A = -by1 * cx1 + ay * (-bx1 + cx1) + ax * (by1 - cy1) + bx1 * cy1;
+					var yIter3;
+					if(ay > by1) {
+						if(ay > cy1) {
+							var ii_min = by1 > cy1 ? Math.floor(cy1) : Math.floor(by1);
+							var ii_max = Math.ceil(ay);
+							var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+							yIter3 = this1;
+						} else {
+							var ii_min = Math.floor(by1);
+							var ii_max = Math.ceil(cy1);
+							var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+							yIter3 = this1;
+						}
+					} else if(by1 > cy1) {
+						var ii_min = ay > cy1 ? Math.floor(cy1) : Math.ceil(ay);
+						var ii_max = Math.ceil(by1);
+						var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+						yIter3 = this1;
+					} else {
+						var ii_min = Math.floor(ay);
+						var ii_max = Math.ceil(cy1);
+						var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+						yIter3 = this1;
+					}
+					var foundY = false;
+					var s = 0.;
+					var t = 0.;
+					var sxx = 0.;
+					var txx = 0.;
+					var this1;
+					if(ax > bx1) {
+						if(ax > cx1) {
+							var ii_min = bx1 > cx1 ? Math.floor(cx1) : Math.floor(bx1);
+							var ii_max = Math.ceil(ax);
+							var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+							this1 = this2;
+						} else {
+							var ii_min = Math.floor(bx1);
+							var ii_max = Math.ceil(cx1);
+							var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+							this1 = this2;
+						}
+					} else if(bx1 > cx1) {
+						var ii_min = ax > cx1 ? Math.floor(cx1) : Math.ceil(ax);
+						var ii_max = Math.ceil(bx1);
+						var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+						this1 = this2;
+					} else {
+						var ii_min = Math.floor(ax);
+						var ii_max = Math.ceil(cx1);
+						var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+						this1 = this2;
+					}
+					var _g_min = this1.start;
+					var _g_max = this1.max;
+					while(_g_min < _g_max) {
+						var x = _g_min++;
+						sxx = sx * x;
+						txx = tx * x;
+						foundY = false;
+						var _g_min1 = yIter3.start;
+						var _g_max1 = yIter3.max;
+						while(_g_min1 < _g_max1) {
+							var y = _g_min1++;
+							s = s0 + sxx + sy * y;
+							t = t0 + txx + ty * y;
+							if(s <= 0 || t <= 0) {
+								if(foundY) {
+									break;
+								}
+							} else if(s + t < A) {
+								var this1 = color;
+								var c = this1;
+								if((c >> 24 & 255) < 254 && pixelImage.transparent) {
+									var location = pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0;
+									var this2 = pixelImage.image[location];
+									var this3 = this2;
+									var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
+									var this5 = this4 >> 24 & 255;
+									var a1 = this5 == 0 ? 0. : this5 / 255;
+									var this6 = this4 >> 16 & 255;
+									var r1 = this6 == 0 ? 0. : this6 / 255;
+									var this7 = this4 >> 8 & 255;
+									var g1 = this7 == 0 ? 0. : this7 / 255;
+									var this8 = this4 & 255;
+									var b1 = this8 == 0 ? 0. : this8 / 255;
+									var this9 = color >> 24 & 255;
+									var a2 = this9 == 0 ? 0. : this9 / 255;
+									var this10 = color >> 16 & 255;
+									var r2 = this10 == 0 ? 0. : this10 / 255;
+									var this11 = color >> 8 & 255;
+									var g2 = this11 == 0 ? 0. : this11 / 255;
+									var this12 = color & 255;
+									var b2 = this12 == 0 ? 0. : this12 / 255;
+									var a3 = a1 * (1 - a2);
+									var r = 255 * (r1 * a3 + r2 * a2) | 0;
+									var g = 255 * (g1 * a3 + g2 * a2) | 0;
+									var b = 255 * (b1 * a3 + b2 * a2) | 0;
+									var a = 255 * (a3 + a2) | 0;
+									var blended = a << 24 | r << 16 | g << 8 | b;
+									pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+								} else {
+									pixelImage.image[pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
+								}
+								foundY = true;
+							} else if(foundY) {
+								break;
+							}
+						}
+					}
+					if(hasHit3 == true) {
+						var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1);
+					}
+					var bx1 = cx;
+					var by1 = cy;
+					var cx1 = dx;
+					var cy1 = dy;
+					var hasHit1 = hasHit2;
+					if(hasHit1 == null) {
+						hasHit1 = false;
+					}
+					var adjustWinding = bx * by1 - bx1 * by + (bx1 * cy1 - cx1 * by1) + (cx1 * by - bx * cy1) > 0;
+					if(!adjustWinding) {
+						var bx_ = bx1;
+						var by_ = by1;
+						bx1 = cx1;
+						by1 = cy1;
+						cx1 = bx_;
+						cy1 = by_;
+					}
+					var hasHit3 = hasHit1;
+					if(hasHit3 == null) {
+						hasHit3 = false;
+					}
+					var s0 = by * cx1 - bx * cy1;
+					var sx = cy1 - by;
+					var sy = bx - cx1;
+					var t0 = bx * by1 - by * bx1;
+					var tx = by - by1;
+					var ty = bx1 - bx;
+					var A = -by1 * cx1 + by * (-bx1 + cx1) + bx * (by1 - cy1) + bx1 * cy1;
+					var yIter3;
+					if(by > by1) {
+						if(by > cy1) {
+							var ii_min = by1 > cy1 ? Math.floor(cy1) : Math.floor(by1);
+							var ii_max = Math.ceil(by);
+							var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+							yIter3 = this1;
+						} else {
+							var ii_min = Math.floor(by1);
+							var ii_max = Math.ceil(cy1);
+							var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+							yIter3 = this1;
+						}
+					} else if(by1 > cy1) {
+						var ii_min = by > cy1 ? Math.floor(cy1) : Math.ceil(by);
+						var ii_max = Math.ceil(by1);
+						var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+						yIter3 = this1;
+					} else {
+						var ii_min = Math.floor(by);
+						var ii_max = Math.ceil(cy1);
+						var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+						yIter3 = this1;
+					}
+					var foundY = false;
+					var s = 0.;
+					var t = 0.;
+					var sxx = 0.;
+					var txx = 0.;
+					var this1;
+					if(bx > bx1) {
+						if(bx > cx1) {
+							var ii_min = bx1 > cx1 ? Math.floor(cx1) : Math.floor(bx1);
+							var ii_max = Math.ceil(bx);
+							var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+							this1 = this2;
+						} else {
+							var ii_min = Math.floor(bx1);
+							var ii_max = Math.ceil(cx1);
+							var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+							this1 = this2;
+						}
+					} else if(bx1 > cx1) {
+						var ii_min = bx > cx1 ? Math.floor(cx1) : Math.ceil(bx);
+						var ii_max = Math.ceil(bx1);
+						var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+						this1 = this2;
+					} else {
+						var ii_min = Math.floor(bx);
+						var ii_max = Math.ceil(cx1);
+						var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+						this1 = this2;
+					}
+					var _g_min = this1.start;
+					var _g_max = this1.max;
+					while(_g_min < _g_max) {
+						var x = _g_min++;
+						sxx = sx * x;
+						txx = tx * x;
+						foundY = false;
+						var _g_min1 = yIter3.start;
+						var _g_max1 = yIter3.max;
+						while(_g_min1 < _g_max1) {
+							var y = _g_min1++;
+							s = s0 + sxx + sy * y;
+							t = t0 + txx + ty * y;
+							if(s <= 0 || t <= 0) {
+								if(foundY) {
+									break;
+								}
+							} else if(s + t < A) {
+								var this1 = color;
+								var c = this1;
+								if((c >> 24 & 255) < 254 && pixelImage.transparent) {
+									var location = pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0;
+									var this2 = pixelImage.image[location];
+									var this3 = this2;
+									var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
+									var this5 = this4 >> 24 & 255;
+									var a1 = this5 == 0 ? 0. : this5 / 255;
+									var this6 = this4 >> 16 & 255;
+									var r1 = this6 == 0 ? 0. : this6 / 255;
+									var this7 = this4 >> 8 & 255;
+									var g1 = this7 == 0 ? 0. : this7 / 255;
+									var this8 = this4 & 255;
+									var b1 = this8 == 0 ? 0. : this8 / 255;
+									var this9 = color >> 24 & 255;
+									var a2 = this9 == 0 ? 0. : this9 / 255;
+									var this10 = color >> 16 & 255;
+									var r2 = this10 == 0 ? 0. : this10 / 255;
+									var this11 = color >> 8 & 255;
+									var g2 = this11 == 0 ? 0. : this11 / 255;
+									var this12 = color & 255;
+									var b2 = this12 == 0 ? 0. : this12 / 255;
+									var a3 = a1 * (1 - a2);
+									var r = 255 * (r1 * a3 + r2 * a2) | 0;
+									var g = 255 * (g1 * a3 + g2 * a2) | 0;
+									var b = 255 * (b1 * a3 + b2 * a2) | 0;
+									var a = 255 * (a3 + a2) | 0;
+									var blended = a << 24 | r << 16 | g << 8 | b;
+									pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+								} else {
+									pixelImage.image[pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
+								}
+								foundY = true;
+							} else if(foundY) {
+								break;
+							}
+						}
+					}
+					if(hasHit3 == true) {
+						var v = new pixelimage_algo_HitTri(bx,by,bx1,by1,cx1,cy1);
+					}
+					if(hasHit2 == true) {
+						var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy);
+						hitQuad = v;
+					} else {
+						hitQuad = null;
+					}
+				}
+				var cx = h2;
+				var cy = radius2;
+				var bx = h2;
+				var by = -radius2;
+				var temp = 0.;
+				temp = px + (bx * cos - by * sin);
+				by = py + (by * cos + bx * sin);
+				bx = temp;
+				temp = px + (cx * cos - cy * sin);
+				cy = py + (cy * cos + cx * sin);
+				cx = temp;
+				var bx1 = bx;
+				var by1 = by;
+				var cx1 = cx;
+				var cy1 = cy;
+				var hasHit1 = hasHit;
+				if(hasHit1 == null) {
+					hasHit1 = false;
+				}
+				var adjustWinding = qx * by1 - bx1 * qy + (bx1 * cy1 - cx1 * by1) + (cx1 * qy - qx * cy1) > 0;
+				if(!adjustWinding) {
+					var bx_ = bx1;
+					var by_ = by1;
+					bx1 = cx1;
+					by1 = cy1;
+					cx1 = bx_;
+					cy1 = by_;
+				}
+				var hasHit2 = hasHit1;
+				if(hasHit2 == null) {
+					hasHit2 = false;
+				}
+				var s0 = qy * cx1 - qx * cy1;
+				var sx = cy1 - qy;
+				var sy = qx - cx1;
+				var t0 = qx * by1 - qy * bx1;
+				var tx = qy - by1;
+				var ty = bx1 - qx;
+				var A = -by1 * cx1 + qy * (-bx1 + cx1) + qx * (by1 - cy1) + bx1 * cy1;
+				var yIter3;
+				if(qy > by1) {
+					if(qy > cy1) {
+						var ii_min = by1 > cy1 ? Math.floor(cy1) : Math.floor(by1);
+						var ii_max = Math.ceil(qy);
+						var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+						yIter3 = this1;
+					} else {
+						var ii_min = Math.floor(by1);
+						var ii_max = Math.ceil(cy1);
+						var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+						yIter3 = this1;
+					}
+				} else if(by1 > cy1) {
+					var ii_min = qy > cy1 ? Math.floor(cy1) : Math.ceil(qy);
+					var ii_max = Math.ceil(by1);
+					var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+					yIter3 = this1;
+				} else {
+					var ii_min = Math.floor(qy);
+					var ii_max = Math.ceil(cy1);
+					var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+					yIter3 = this1;
+				}
+				var foundY = false;
+				var s = 0.;
+				var t = 0.;
+				var sxx = 0.;
+				var txx = 0.;
+				var this1;
+				if(qx > bx1) {
+					if(qx > cx1) {
+						var ii_min = bx1 > cx1 ? Math.floor(cx1) : Math.floor(bx1);
+						var ii_max = Math.ceil(qx);
+						var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+						this1 = this2;
+					} else {
+						var ii_min = Math.floor(bx1);
+						var ii_max = Math.ceil(cx1);
+						var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+						this1 = this2;
+					}
+				} else if(bx1 > cx1) {
+					var ii_min = qx > cx1 ? Math.floor(cx1) : Math.ceil(qx);
+					var ii_max = Math.ceil(bx1);
+					var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+					this1 = this2;
+				} else {
+					var ii_min = Math.floor(qx);
+					var ii_max = Math.ceil(cx1);
+					var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+					this1 = this2;
+				}
+				var _g_min = this1.start;
+				var _g_max = this1.max;
+				while(_g_min < _g_max) {
+					var x = _g_min++;
+					sxx = sx * x;
+					txx = tx * x;
+					foundY = false;
+					var _g_min1 = yIter3.start;
+					var _g_max1 = yIter3.max;
+					while(_g_min1 < _g_max1) {
+						var y = _g_min1++;
+						s = s0 + sxx + sy * y;
+						t = t0 + txx + ty * y;
+						if(s <= 0 || t <= 0) {
+							if(foundY) {
+								break;
+							}
+						} else if(s + t < A) {
+							var this1 = color;
+							var c = this1;
+							if((c >> 24 & 255) < 254 && pixelImage.transparent) {
+								var location = pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0;
+								var this2 = pixelImage.image[location];
+								var this3 = this2;
+								var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
+								var this5 = this4 >> 24 & 255;
+								var a1 = this5 == 0 ? 0. : this5 / 255;
+								var this6 = this4 >> 16 & 255;
+								var r1 = this6 == 0 ? 0. : this6 / 255;
+								var this7 = this4 >> 8 & 255;
+								var g1 = this7 == 0 ? 0. : this7 / 255;
+								var this8 = this4 & 255;
+								var b1 = this8 == 0 ? 0. : this8 / 255;
+								var this9 = color >> 24 & 255;
+								var a2 = this9 == 0 ? 0. : this9 / 255;
+								var this10 = color >> 16 & 255;
+								var r2 = this10 == 0 ? 0. : this10 / 255;
+								var this11 = color >> 8 & 255;
+								var g2 = this11 == 0 ? 0. : this11 / 255;
+								var this12 = color & 255;
+								var b2 = this12 == 0 ? 0. : this12 / 255;
+								var a3 = a1 * (1 - a2);
+								var r = 255 * (r1 * a3 + r2 * a2) | 0;
+								var g = 255 * (g1 * a3 + g2 * a2) | 0;
+								var b = 255 * (b1 * a3 + b2 * a2) | 0;
+								var a = 255 * (a3 + a2) | 0;
+								var blended = a << 24 | r << 16 | g << 8 | b;
+								pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+							} else {
+								pixelImage.image[pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
+							}
+							foundY = true;
+						} else if(foundY) {
+							break;
+						}
+					}
+				}
+				var hitTri;
+				if(hasHit2 == true) {
+					var v = new pixelimage_algo_HitTri(qx,qy,bx1,by1,cx1,cy1);
+					hitTri = v;
+				} else {
+					hitTri = null;
+				}
+				if(hasHit) {
+					var hitArr = new pixelimage_algo_HitTriArray([hitTri]);
+					if(hitQuad != null) {
+						hitArr.triArr.push(hitQuad.triABD);
+					}
+					hitArr.triArr.push(hitQuad.triBCD);
+				}
+			}
+		} else if(this.arrowHeight > 0. || this.arrowWidth > 0.) {
+			var px = this.x1;
+			var py = this.y1;
+			var qx = this.x2;
+			var qy = this.y2;
+			var arrowWidth = this.arrowWidth;
+			var arrowHeight = this.arrowHeight;
+			var thick = this.strokeWidth;
+			var color = this.strokeColor;
+			var hasHit = true;
+			if(hasHit == null) {
+				hasHit = false;
+			}
+			var goldenRatio = 1.61803398875;
+			var o = qy - py;
+			var a = qx - px;
+			var h = Math.pow(o * o + a * a,0.5);
+			var theta = Math.atan2(o,a);
+			var thicker = arrowWidth > thick * 1.1 ? arrowWidth : 2 * thick * goldenRatio;
+			var sin = Math.sin(theta);
+			var cos = Math.cos(theta);
+			var radius = thick / 2;
+			var radius2 = thicker / 2;
+			var h2 = arrowHeight < h * 1.1 ? h - arrowHeight : h / goldenRatio;
+			var hSmall = h - h2;
+			var px_ = hSmall;
+			var py_ = 0.;
+			var temp = 0.;
+			temp = px + (px_ * cos - py_ * sin);
+			py_ = py + (py_ * cos + px_ * sin);
+			px_ = temp;
+			var h = h2 - hSmall;
+			var hasHit1 = true;
+			if(hasHit1 == null) {
+				hasHit1 = false;
+			}
+			var sin1 = Math.sin(theta);
+			var cos1 = Math.cos(theta);
+			var radius = thick / 2;
+			var dx = 0.1;
+			var dy = radius;
+			var cx = h;
+			var cy = radius;
+			var bx = h;
+			var by = -radius;
+			var ax = 0.1;
+			var ay = -radius;
+			var temp1 = 0.;
+			temp1 = px_ + (ax * cos1 - ay * sin1);
+			ay = py_ + (ay * cos1 + ax * sin1);
+			ax = temp1;
+			temp1 = px_ + (bx * cos1 - by * sin1);
+			by = py_ + (by * cos1 + bx * sin1);
+			bx = temp1;
+			temp1 = px_ + (cx * cos1 - cy * sin1);
+			cy = py_ + (cy * cos1 + cx * sin1);
+			cx = temp1;
+			temp1 = px_ + (dx * cos1 - dy * sin1);
+			dy = py_ + (dy * cos1 + dx * sin1);
+			dx = temp1;
+			var hasHit2 = hasHit1;
+			if(hasHit2 == null) {
+				hasHit2 = false;
+			}
+			var bx1 = bx;
+			var by1 = by;
+			var cx1 = dx;
+			var cy1 = dy;
+			var hasHit1 = hasHit2;
+			if(hasHit1 == null) {
+				hasHit1 = false;
+			}
+			var adjustWinding = ax * by1 - bx1 * ay + (bx1 * cy1 - cx1 * by1) + (cx1 * ay - ax * cy1) > 0;
+			if(!adjustWinding) {
+				var bx_ = bx1;
+				var by_ = by1;
+				bx1 = cx1;
+				by1 = cy1;
+				cx1 = bx_;
+				cy1 = by_;
+			}
+			var hasHit3 = hasHit1;
+			if(hasHit3 == null) {
+				hasHit3 = false;
+			}
+			var s0 = ay * cx1 - ax * cy1;
+			var sx = cy1 - ay;
+			var sy = ax - cx1;
+			var t0 = ax * by1 - ay * bx1;
+			var tx = ay - by1;
+			var ty = bx1 - ax;
+			var A = -by1 * cx1 + ay * (-bx1 + cx1) + ax * (by1 - cy1) + bx1 * cy1;
+			var yIter3;
+			if(ay > by1) {
+				if(ay > cy1) {
+					var ii_min = by1 > cy1 ? Math.floor(cy1) : Math.floor(by1);
+					var ii_max = Math.ceil(ay);
+					var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+					yIter3 = this1;
+				} else {
+					var ii_min = Math.floor(by1);
+					var ii_max = Math.ceil(cy1);
+					var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+					yIter3 = this1;
+				}
+			} else if(by1 > cy1) {
+				var ii_min = ay > cy1 ? Math.floor(cy1) : Math.ceil(ay);
+				var ii_max = Math.ceil(by1);
+				var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+				yIter3 = this1;
+			} else {
+				var ii_min = Math.floor(ay);
+				var ii_max = Math.ceil(cy1);
+				var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+				yIter3 = this1;
+			}
+			var foundY = false;
+			var s = 0.;
+			var t = 0.;
+			var sxx = 0.;
+			var txx = 0.;
+			var this1;
+			if(ax > bx1) {
+				if(ax > cx1) {
+					var ii_min = bx1 > cx1 ? Math.floor(cx1) : Math.floor(bx1);
+					var ii_max = Math.ceil(ax);
+					var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+					this1 = this2;
+				} else {
+					var ii_min = Math.floor(bx1);
+					var ii_max = Math.ceil(cx1);
+					var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+					this1 = this2;
+				}
+			} else if(bx1 > cx1) {
+				var ii_min = ax > cx1 ? Math.floor(cx1) : Math.ceil(ax);
+				var ii_max = Math.ceil(bx1);
+				var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+				this1 = this2;
+			} else {
+				var ii_min = Math.floor(ax);
+				var ii_max = Math.ceil(cx1);
+				var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+				this1 = this2;
+			}
+			var _g_min = this1.start;
+			var _g_max = this1.max;
+			while(_g_min < _g_max) {
+				var x = _g_min++;
+				sxx = sx * x;
+				txx = tx * x;
+				foundY = false;
+				var _g_min1 = yIter3.start;
+				var _g_max1 = yIter3.max;
+				while(_g_min1 < _g_max1) {
+					var y = _g_min1++;
+					s = s0 + sxx + sy * y;
+					t = t0 + txx + ty * y;
+					if(s <= 0 || t <= 0) {
+						if(foundY) {
+							break;
+						}
+					} else if(s + t < A) {
+						var this1 = color;
+						var c = this1;
+						if((c >> 24 & 255) < 254 && pixelImage.transparent) {
+							var location = pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0;
+							var this2 = pixelImage.image[location];
+							var this3 = this2;
+							var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
+							var this5 = this4 >> 24 & 255;
+							var a1 = this5 == 0 ? 0. : this5 / 255;
+							var this6 = this4 >> 16 & 255;
+							var r1 = this6 == 0 ? 0. : this6 / 255;
+							var this7 = this4 >> 8 & 255;
+							var g1 = this7 == 0 ? 0. : this7 / 255;
+							var this8 = this4 & 255;
+							var b1 = this8 == 0 ? 0. : this8 / 255;
+							var this9 = color >> 24 & 255;
+							var a2 = this9 == 0 ? 0. : this9 / 255;
+							var this10 = color >> 16 & 255;
+							var r2 = this10 == 0 ? 0. : this10 / 255;
+							var this11 = color >> 8 & 255;
+							var g2 = this11 == 0 ? 0. : this11 / 255;
+							var this12 = color & 255;
+							var b2 = this12 == 0 ? 0. : this12 / 255;
+							var a3 = a1 * (1 - a2);
+							var r = 255 * (r1 * a3 + r2 * a2) | 0;
+							var g = 255 * (g1 * a3 + g2 * a2) | 0;
+							var b = 255 * (b1 * a3 + b2 * a2) | 0;
+							var a = 255 * (a3 + a2) | 0;
+							var blended = a << 24 | r << 16 | g << 8 | b;
+							pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+						} else {
+							pixelImage.image[pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
+						}
+						foundY = true;
+					} else if(foundY) {
+						break;
+					}
+				}
+			}
+			if(hasHit3 == true) {
+				var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1);
+			}
+			var bx1 = cx;
+			var by1 = cy;
+			var cx1 = dx;
+			var cy1 = dy;
+			var hasHit1 = hasHit2;
+			if(hasHit1 == null) {
+				hasHit1 = false;
+			}
+			var adjustWinding = bx * by1 - bx1 * by + (bx1 * cy1 - cx1 * by1) + (cx1 * by - bx * cy1) > 0;
+			if(!adjustWinding) {
+				var bx_ = bx1;
+				var by_ = by1;
+				bx1 = cx1;
+				by1 = cy1;
+				cx1 = bx_;
+				cy1 = by_;
+			}
+			var hasHit3 = hasHit1;
+			if(hasHit3 == null) {
+				hasHit3 = false;
+			}
+			var s0 = by * cx1 - bx * cy1;
+			var sx = cy1 - by;
+			var sy = bx - cx1;
+			var t0 = bx * by1 - by * bx1;
+			var tx = by - by1;
+			var ty = bx1 - bx;
+			var A = -by1 * cx1 + by * (-bx1 + cx1) + bx * (by1 - cy1) + bx1 * cy1;
+			var yIter3;
+			if(by > by1) {
+				if(by > cy1) {
+					var ii_min = by1 > cy1 ? Math.floor(cy1) : Math.floor(by1);
+					var ii_max = Math.ceil(by);
+					var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+					yIter3 = this1;
+				} else {
+					var ii_min = Math.floor(by1);
+					var ii_max = Math.ceil(cy1);
+					var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+					yIter3 = this1;
+				}
+			} else if(by1 > cy1) {
+				var ii_min = by > cy1 ? Math.floor(cy1) : Math.ceil(by);
+				var ii_max = Math.ceil(by1);
+				var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+				yIter3 = this1;
+			} else {
+				var ii_min = Math.floor(by);
+				var ii_max = Math.ceil(cy1);
+				var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+				yIter3 = this1;
+			}
+			var foundY = false;
+			var s = 0.;
+			var t = 0.;
+			var sxx = 0.;
+			var txx = 0.;
+			var this1;
+			if(bx > bx1) {
+				if(bx > cx1) {
+					var ii_min = bx1 > cx1 ? Math.floor(cx1) : Math.floor(bx1);
+					var ii_max = Math.ceil(bx);
+					var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+					this1 = this2;
+				} else {
+					var ii_min = Math.floor(bx1);
+					var ii_max = Math.ceil(cx1);
+					var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+					this1 = this2;
+				}
+			} else if(bx1 > cx1) {
+				var ii_min = bx > cx1 ? Math.floor(cx1) : Math.ceil(bx);
+				var ii_max = Math.ceil(bx1);
+				var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+				this1 = this2;
+			} else {
+				var ii_min = Math.floor(bx);
+				var ii_max = Math.ceil(cx1);
+				var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+				this1 = this2;
+			}
+			var _g_min = this1.start;
+			var _g_max = this1.max;
+			while(_g_min < _g_max) {
+				var x = _g_min++;
+				sxx = sx * x;
+				txx = tx * x;
+				foundY = false;
+				var _g_min1 = yIter3.start;
+				var _g_max1 = yIter3.max;
+				while(_g_min1 < _g_max1) {
+					var y = _g_min1++;
+					s = s0 + sxx + sy * y;
+					t = t0 + txx + ty * y;
+					if(s <= 0 || t <= 0) {
+						if(foundY) {
+							break;
+						}
+					} else if(s + t < A) {
+						var this1 = color;
+						var c = this1;
+						if((c >> 24 & 255) < 254 && pixelImage.transparent) {
+							var location = pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0;
+							var this2 = pixelImage.image[location];
+							var this3 = this2;
+							var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
+							var this5 = this4 >> 24 & 255;
+							var a1 = this5 == 0 ? 0. : this5 / 255;
+							var this6 = this4 >> 16 & 255;
+							var r1 = this6 == 0 ? 0. : this6 / 255;
+							var this7 = this4 >> 8 & 255;
+							var g1 = this7 == 0 ? 0. : this7 / 255;
+							var this8 = this4 & 255;
+							var b1 = this8 == 0 ? 0. : this8 / 255;
+							var this9 = color >> 24 & 255;
+							var a2 = this9 == 0 ? 0. : this9 / 255;
+							var this10 = color >> 16 & 255;
+							var r2 = this10 == 0 ? 0. : this10 / 255;
+							var this11 = color >> 8 & 255;
+							var g2 = this11 == 0 ? 0. : this11 / 255;
+							var this12 = color & 255;
+							var b2 = this12 == 0 ? 0. : this12 / 255;
+							var a3 = a1 * (1 - a2);
+							var r = 255 * (r1 * a3 + r2 * a2) | 0;
+							var g = 255 * (g1 * a3 + g2 * a2) | 0;
+							var b = 255 * (b1 * a3 + b2 * a2) | 0;
+							var a = 255 * (a3 + a2) | 0;
+							var blended = a << 24 | r << 16 | g << 8 | b;
+							pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+						} else {
+							pixelImage.image[pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
+						}
+						foundY = true;
+					} else if(foundY) {
+						break;
+					}
+				}
+			}
+			if(hasHit3 == true) {
+				var v = new pixelimage_algo_HitTri(bx,by,bx1,by1,cx1,cy1);
+			}
+			var hitQuad;
+			if(hasHit2 == true) {
+				var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy);
+				hitQuad = v;
+			} else {
+				hitQuad = null;
+			}
+			var cx = h2;
+			var cy = radius2;
+			var bx = h2;
+			var by = -radius2;
+			var dx = hSmall;
+			var dy = radius2;
+			var ax = hSmall;
+			var ay = -radius2;
+			temp = px + (bx * cos - by * sin);
+			by = py + (by * cos + bx * sin);
+			bx = temp;
+			temp = px + (cx * cos - cy * sin);
+			cy = py + (cy * cos + cx * sin);
+			cx = temp;
+			temp = px + (ax * cos - ay * sin);
+			ay = py + (ay * cos + ax * sin);
+			ax = temp;
+			temp = px + (dx * cos - dy * sin);
+			dy = py + (dy * cos + dx * sin);
+			dx = temp;
+			var bx1 = bx;
+			var by1 = by;
+			var cx1 = cx;
+			var cy1 = cy;
+			var hasHit1 = hasHit;
+			if(hasHit1 == null) {
+				hasHit1 = false;
+			}
+			var adjustWinding = qx * by1 - bx1 * qy + (bx1 * cy1 - cx1 * by1) + (cx1 * qy - qx * cy1) > 0;
+			if(!adjustWinding) {
+				var bx_ = bx1;
+				var by_ = by1;
+				bx1 = cx1;
+				by1 = cy1;
+				cx1 = bx_;
+				cy1 = by_;
+			}
+			var hasHit2 = hasHit1;
+			if(hasHit2 == null) {
+				hasHit2 = false;
+			}
+			var s0 = qy * cx1 - qx * cy1;
+			var sx = cy1 - qy;
+			var sy = qx - cx1;
+			var t0 = qx * by1 - qy * bx1;
+			var tx = qy - by1;
+			var ty = bx1 - qx;
+			var A = -by1 * cx1 + qy * (-bx1 + cx1) + qx * (by1 - cy1) + bx1 * cy1;
+			var yIter3;
+			if(qy > by1) {
+				if(qy > cy1) {
+					var ii_min = by1 > cy1 ? Math.floor(cy1) : Math.floor(by1);
+					var ii_max = Math.ceil(qy);
+					var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+					yIter3 = this1;
+				} else {
+					var ii_min = Math.floor(by1);
+					var ii_max = Math.ceil(cy1);
+					var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+					yIter3 = this1;
+				}
+			} else if(by1 > cy1) {
+				var ii_min = qy > cy1 ? Math.floor(cy1) : Math.ceil(qy);
+				var ii_max = Math.ceil(by1);
+				var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+				yIter3 = this1;
+			} else {
+				var ii_min = Math.floor(qy);
+				var ii_max = Math.ceil(cy1);
+				var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+				yIter3 = this1;
+			}
+			var foundY = false;
+			var s = 0.;
+			var t = 0.;
+			var sxx = 0.;
+			var txx = 0.;
+			var this1;
+			if(qx > bx1) {
+				if(qx > cx1) {
+					var ii_min = bx1 > cx1 ? Math.floor(cx1) : Math.floor(bx1);
+					var ii_max = Math.ceil(qx);
+					var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+					this1 = this2;
+				} else {
+					var ii_min = Math.floor(bx1);
+					var ii_max = Math.ceil(cx1);
+					var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+					this1 = this2;
+				}
+			} else if(bx1 > cx1) {
+				var ii_min = qx > cx1 ? Math.floor(cx1) : Math.ceil(qx);
+				var ii_max = Math.ceil(bx1);
+				var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+				this1 = this2;
+			} else {
+				var ii_min = Math.floor(qx);
+				var ii_max = Math.ceil(cx1);
+				var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+				this1 = this2;
+			}
+			var _g_min = this1.start;
+			var _g_max = this1.max;
+			while(_g_min < _g_max) {
+				var x = _g_min++;
+				sxx = sx * x;
+				txx = tx * x;
+				foundY = false;
+				var _g_min1 = yIter3.start;
+				var _g_max1 = yIter3.max;
+				while(_g_min1 < _g_max1) {
+					var y = _g_min1++;
+					s = s0 + sxx + sy * y;
+					t = t0 + txx + ty * y;
+					if(s <= 0 || t <= 0) {
+						if(foundY) {
+							break;
+						}
+					} else if(s + t < A) {
+						var this1 = color;
+						var c = this1;
+						if((c >> 24 & 255) < 254 && pixelImage.transparent) {
+							var location = pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0;
+							var this2 = pixelImage.image[location];
+							var this3 = this2;
+							var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
+							var this5 = this4 >> 24 & 255;
+							var a1 = this5 == 0 ? 0. : this5 / 255;
+							var this6 = this4 >> 16 & 255;
+							var r1 = this6 == 0 ? 0. : this6 / 255;
+							var this7 = this4 >> 8 & 255;
+							var g1 = this7 == 0 ? 0. : this7 / 255;
+							var this8 = this4 & 255;
+							var b1 = this8 == 0 ? 0. : this8 / 255;
+							var this9 = color >> 24 & 255;
+							var a2 = this9 == 0 ? 0. : this9 / 255;
+							var this10 = color >> 16 & 255;
+							var r2 = this10 == 0 ? 0. : this10 / 255;
+							var this11 = color >> 8 & 255;
+							var g2 = this11 == 0 ? 0. : this11 / 255;
+							var this12 = color & 255;
+							var b2 = this12 == 0 ? 0. : this12 / 255;
+							var a3 = a1 * (1 - a2);
+							var r = 255 * (r1 * a3 + r2 * a2) | 0;
+							var g = 255 * (g1 * a3 + g2 * a2) | 0;
+							var b = 255 * (b1 * a3 + b2 * a2) | 0;
+							var a = 255 * (a3 + a2) | 0;
+							var blended = a << 24 | r << 16 | g << 8 | b;
+							pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+						} else {
+							pixelImage.image[pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
+						}
+						foundY = true;
+					} else if(foundY) {
+						break;
+					}
+				}
+			}
+			var hitTriTop;
+			if(hasHit2 == true) {
+				var v = new pixelimage_algo_HitTri(qx,qy,bx1,by1,cx1,cy1);
+				hitTriTop = v;
+			} else {
+				hitTriTop = null;
+			}
+			var bx = ax;
+			var by = ay;
+			var cx = dx;
+			var cy = dy;
+			var hasHit1 = hasHit;
+			if(hasHit1 == null) {
+				hasHit1 = false;
+			}
+			var adjustWinding = px * by - bx * py + (bx * cy - cx * by) + (cx * py - px * cy) > 0;
+			if(!adjustWinding) {
+				var bx_ = bx;
+				var by_ = by;
+				bx = cx;
+				by = cy;
+				cx = bx_;
+				cy = by_;
+			}
+			var hasHit2 = hasHit1;
+			if(hasHit2 == null) {
+				hasHit2 = false;
+			}
+			var s0 = py * cx - px * cy;
+			var sx = cy - py;
+			var sy = px - cx;
+			var t0 = px * by - py * bx;
+			var tx = py - by;
+			var ty = bx - px;
+			var A = -by * cx + py * (-bx + cx) + px * (by - cy) + bx * cy;
+			var yIter3;
+			if(py > by) {
+				if(py > cy) {
+					var ii_min = by > cy ? Math.floor(cy) : Math.floor(by);
+					var ii_max = Math.ceil(py);
+					var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+					yIter3 = this1;
+				} else {
+					var ii_min = Math.floor(by);
+					var ii_max = Math.ceil(cy);
+					var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+					yIter3 = this1;
+				}
+			} else if(by > cy) {
+				var ii_min = py > cy ? Math.floor(cy) : Math.ceil(py);
+				var ii_max = Math.ceil(by);
+				var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+				yIter3 = this1;
+			} else {
+				var ii_min = Math.floor(py);
+				var ii_max = Math.ceil(cy);
+				var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+				yIter3 = this1;
+			}
+			var foundY = false;
+			var s = 0.;
+			var t = 0.;
+			var sxx = 0.;
+			var txx = 0.;
+			var this1;
+			if(px > bx) {
+				if(px > cx) {
+					var ii_min = bx > cx ? Math.floor(cx) : Math.floor(bx);
+					var ii_max = Math.ceil(px);
+					var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+					this1 = this2;
+				} else {
+					var ii_min = Math.floor(bx);
+					var ii_max = Math.ceil(cx);
+					var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+					this1 = this2;
+				}
+			} else if(bx > cx) {
+				var ii_min = px > cx ? Math.floor(cx) : Math.ceil(px);
+				var ii_max = Math.ceil(bx);
+				var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+				this1 = this2;
+			} else {
+				var ii_min = Math.floor(px);
+				var ii_max = Math.ceil(cx);
+				var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+				this1 = this2;
+			}
+			var _g_min = this1.start;
+			var _g_max = this1.max;
+			while(_g_min < _g_max) {
+				var x = _g_min++;
+				sxx = sx * x;
+				txx = tx * x;
+				foundY = false;
+				var _g_min1 = yIter3.start;
+				var _g_max1 = yIter3.max;
+				while(_g_min1 < _g_max1) {
+					var y = _g_min1++;
+					s = s0 + sxx + sy * y;
+					t = t0 + txx + ty * y;
+					if(s <= 0 || t <= 0) {
+						if(foundY) {
+							break;
+						}
+					} else if(s + t < A) {
+						var this1 = color;
+						var c = this1;
+						if((c >> 24 & 255) < 254 && pixelImage.transparent) {
+							var location = pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0;
+							var this2 = pixelImage.image[location];
+							var this3 = this2;
+							var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
+							var this5 = this4 >> 24 & 255;
+							var a1 = this5 == 0 ? 0. : this5 / 255;
+							var this6 = this4 >> 16 & 255;
+							var r1 = this6 == 0 ? 0. : this6 / 255;
+							var this7 = this4 >> 8 & 255;
+							var g1 = this7 == 0 ? 0. : this7 / 255;
+							var this8 = this4 & 255;
+							var b1 = this8 == 0 ? 0. : this8 / 255;
+							var this9 = color >> 24 & 255;
+							var a2 = this9 == 0 ? 0. : this9 / 255;
+							var this10 = color >> 16 & 255;
+							var r2 = this10 == 0 ? 0. : this10 / 255;
+							var this11 = color >> 8 & 255;
+							var g2 = this11 == 0 ? 0. : this11 / 255;
+							var this12 = color & 255;
+							var b2 = this12 == 0 ? 0. : this12 / 255;
+							var a3 = a1 * (1 - a2);
+							var r = 255 * (r1 * a3 + r2 * a2) | 0;
+							var g = 255 * (g1 * a3 + g2 * a2) | 0;
+							var b = 255 * (b1 * a3 + b2 * a2) | 0;
+							var a = 255 * (a3 + a2) | 0;
+							var blended = a << 24 | r << 16 | g << 8 | b;
+							pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+						} else {
+							pixelImage.image[pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
+						}
+						foundY = true;
+					} else if(foundY) {
+						break;
+					}
+				}
+			}
+			var hitTriBottom;
+			if(hasHit2 == true) {
+				var v = new pixelimage_algo_HitTri(px,py,bx,by,cx,cy);
+				hitTriBottom = v;
+			} else {
+				hitTriBottom = null;
+			}
+			if(hasHit) {
+				var hitArr = new pixelimage_algo_HitTriArray([hitTriTop,hitTriBottom]);
+				if(hitQuad != null) {
+					hitArr.triArr.push(hitQuad.triABD);
+				}
+				hitArr.triArr.push(hitQuad.triBCD);
+			}
+		} else {
+			var px = this.x1;
+			var py = this.y1;
+			var qx = this.x2;
+			var qy = this.y2;
+			var thick = this.strokeWidth;
+			var color = this.strokeColor;
+			var hasHit = true;
+			if(hasHit == null) {
+				hasHit = false;
+			}
+			var goldenRatio = 1.61803398875;
+			var o = qy - py;
+			var a = qx - px;
+			var h = Math.pow(o * o + a * a,0.5);
+			var theta = Math.atan2(o,a);
+			var thicker = 2 * thick * goldenRatio;
+			var sin = Math.sin(theta);
+			var cos = Math.cos(theta);
+			var radius = thick / 2;
+			var radius2 = thicker / 2;
+			var h2 = h / goldenRatio;
+			var hSmall = h - h2;
+			var px_ = hSmall;
+			var py_ = 0.;
+			var temp = 0.;
+			temp = px + (px_ * cos - py_ * sin);
+			py_ = py + (py_ * cos + px_ * sin);
+			px_ = temp;
+			var h = h2 - hSmall;
+			var hasHit1 = true;
+			if(hasHit1 == null) {
+				hasHit1 = false;
+			}
+			var sin1 = Math.sin(theta);
+			var cos1 = Math.cos(theta);
+			var radius = thick / 2;
+			var dx = 0.1;
+			var dy = radius;
+			var cx = h;
+			var cy = radius;
+			var bx = h;
+			var by = -radius;
+			var ax = 0.1;
+			var ay = -radius;
+			var temp1 = 0.;
+			temp1 = px_ + (ax * cos1 - ay * sin1);
+			ay = py_ + (ay * cos1 + ax * sin1);
+			ax = temp1;
+			temp1 = px_ + (bx * cos1 - by * sin1);
+			by = py_ + (by * cos1 + bx * sin1);
+			bx = temp1;
+			temp1 = px_ + (cx * cos1 - cy * sin1);
+			cy = py_ + (cy * cos1 + cx * sin1);
+			cx = temp1;
+			temp1 = px_ + (dx * cos1 - dy * sin1);
+			dy = py_ + (dy * cos1 + dx * sin1);
+			dx = temp1;
+			var hasHit2 = hasHit1;
+			if(hasHit2 == null) {
+				hasHit2 = false;
+			}
+			var bx1 = bx;
+			var by1 = by;
+			var cx1 = dx;
+			var cy1 = dy;
+			var hasHit1 = hasHit2;
+			if(hasHit1 == null) {
+				hasHit1 = false;
+			}
+			var adjustWinding = ax * by1 - bx1 * ay + (bx1 * cy1 - cx1 * by1) + (cx1 * ay - ax * cy1) > 0;
+			if(!adjustWinding) {
+				var bx_ = bx1;
+				var by_ = by1;
+				bx1 = cx1;
+				by1 = cy1;
+				cx1 = bx_;
+				cy1 = by_;
+			}
+			var hasHit3 = hasHit1;
+			if(hasHit3 == null) {
+				hasHit3 = false;
+			}
+			var s0 = ay * cx1 - ax * cy1;
+			var sx = cy1 - ay;
+			var sy = ax - cx1;
+			var t0 = ax * by1 - ay * bx1;
+			var tx = ay - by1;
+			var ty = bx1 - ax;
+			var A = -by1 * cx1 + ay * (-bx1 + cx1) + ax * (by1 - cy1) + bx1 * cy1;
+			var yIter3;
+			if(ay > by1) {
+				if(ay > cy1) {
+					var ii_min = by1 > cy1 ? Math.floor(cy1) : Math.floor(by1);
+					var ii_max = Math.ceil(ay);
+					var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+					yIter3 = this1;
+				} else {
+					var ii_min = Math.floor(by1);
+					var ii_max = Math.ceil(cy1);
+					var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+					yIter3 = this1;
+				}
+			} else if(by1 > cy1) {
+				var ii_min = ay > cy1 ? Math.floor(cy1) : Math.ceil(ay);
+				var ii_max = Math.ceil(by1);
+				var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+				yIter3 = this1;
+			} else {
+				var ii_min = Math.floor(ay);
+				var ii_max = Math.ceil(cy1);
+				var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+				yIter3 = this1;
+			}
+			var foundY = false;
+			var s = 0.;
+			var t = 0.;
+			var sxx = 0.;
+			var txx = 0.;
+			var this1;
+			if(ax > bx1) {
+				if(ax > cx1) {
+					var ii_min = bx1 > cx1 ? Math.floor(cx1) : Math.floor(bx1);
+					var ii_max = Math.ceil(ax);
+					var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+					this1 = this2;
+				} else {
+					var ii_min = Math.floor(bx1);
+					var ii_max = Math.ceil(cx1);
+					var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+					this1 = this2;
+				}
+			} else if(bx1 > cx1) {
+				var ii_min = ax > cx1 ? Math.floor(cx1) : Math.ceil(ax);
+				var ii_max = Math.ceil(bx1);
+				var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+				this1 = this2;
+			} else {
+				var ii_min = Math.floor(ax);
+				var ii_max = Math.ceil(cx1);
+				var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+				this1 = this2;
+			}
+			var _g_min = this1.start;
+			var _g_max = this1.max;
+			while(_g_min < _g_max) {
+				var x = _g_min++;
+				sxx = sx * x;
+				txx = tx * x;
+				foundY = false;
+				var _g_min1 = yIter3.start;
+				var _g_max1 = yIter3.max;
+				while(_g_min1 < _g_max1) {
+					var y = _g_min1++;
+					s = s0 + sxx + sy * y;
+					t = t0 + txx + ty * y;
+					if(s <= 0 || t <= 0) {
+						if(foundY) {
+							break;
+						}
+					} else if(s + t < A) {
+						var this1 = color;
+						var c = this1;
+						if((c >> 24 & 255) < 254 && pixelImage.transparent) {
+							var location = pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0;
+							var this2 = pixelImage.image[location];
+							var this3 = this2;
+							var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
+							var this5 = this4 >> 24 & 255;
+							var a1 = this5 == 0 ? 0. : this5 / 255;
+							var this6 = this4 >> 16 & 255;
+							var r1 = this6 == 0 ? 0. : this6 / 255;
+							var this7 = this4 >> 8 & 255;
+							var g1 = this7 == 0 ? 0. : this7 / 255;
+							var this8 = this4 & 255;
+							var b1 = this8 == 0 ? 0. : this8 / 255;
+							var this9 = color >> 24 & 255;
+							var a2 = this9 == 0 ? 0. : this9 / 255;
+							var this10 = color >> 16 & 255;
+							var r2 = this10 == 0 ? 0. : this10 / 255;
+							var this11 = color >> 8 & 255;
+							var g2 = this11 == 0 ? 0. : this11 / 255;
+							var this12 = color & 255;
+							var b2 = this12 == 0 ? 0. : this12 / 255;
+							var a3 = a1 * (1 - a2);
+							var r = 255 * (r1 * a3 + r2 * a2) | 0;
+							var g = 255 * (g1 * a3 + g2 * a2) | 0;
+							var b = 255 * (b1 * a3 + b2 * a2) | 0;
+							var a = 255 * (a3 + a2) | 0;
+							var blended = a << 24 | r << 16 | g << 8 | b;
+							pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+						} else {
+							pixelImage.image[pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
+						}
+						foundY = true;
+					} else if(foundY) {
+						break;
+					}
+				}
+			}
+			if(hasHit3 == true) {
+				var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1);
+			}
+			var bx1 = cx;
+			var by1 = cy;
+			var cx1 = dx;
+			var cy1 = dy;
+			var hasHit1 = hasHit2;
+			if(hasHit1 == null) {
+				hasHit1 = false;
+			}
+			var adjustWinding = bx * by1 - bx1 * by + (bx1 * cy1 - cx1 * by1) + (cx1 * by - bx * cy1) > 0;
+			if(!adjustWinding) {
+				var bx_ = bx1;
+				var by_ = by1;
+				bx1 = cx1;
+				by1 = cy1;
+				cx1 = bx_;
+				cy1 = by_;
+			}
+			var hasHit3 = hasHit1;
+			if(hasHit3 == null) {
+				hasHit3 = false;
+			}
+			var s0 = by * cx1 - bx * cy1;
+			var sx = cy1 - by;
+			var sy = bx - cx1;
+			var t0 = bx * by1 - by * bx1;
+			var tx = by - by1;
+			var ty = bx1 - bx;
+			var A = -by1 * cx1 + by * (-bx1 + cx1) + bx * (by1 - cy1) + bx1 * cy1;
+			var yIter3;
+			if(by > by1) {
+				if(by > cy1) {
+					var ii_min = by1 > cy1 ? Math.floor(cy1) : Math.floor(by1);
+					var ii_max = Math.ceil(by);
+					var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+					yIter3 = this1;
+				} else {
+					var ii_min = Math.floor(by1);
+					var ii_max = Math.ceil(cy1);
+					var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+					yIter3 = this1;
+				}
+			} else if(by1 > cy1) {
+				var ii_min = by > cy1 ? Math.floor(cy1) : Math.ceil(by);
+				var ii_max = Math.ceil(by1);
+				var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+				yIter3 = this1;
+			} else {
+				var ii_min = Math.floor(by);
+				var ii_max = Math.ceil(cy1);
+				var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+				yIter3 = this1;
+			}
+			var foundY = false;
+			var s = 0.;
+			var t = 0.;
+			var sxx = 0.;
+			var txx = 0.;
+			var this1;
+			if(bx > bx1) {
+				if(bx > cx1) {
+					var ii_min = bx1 > cx1 ? Math.floor(cx1) : Math.floor(bx1);
+					var ii_max = Math.ceil(bx);
+					var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+					this1 = this2;
+				} else {
+					var ii_min = Math.floor(bx1);
+					var ii_max = Math.ceil(cx1);
+					var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+					this1 = this2;
+				}
+			} else if(bx1 > cx1) {
+				var ii_min = bx > cx1 ? Math.floor(cx1) : Math.ceil(bx);
+				var ii_max = Math.ceil(bx1);
+				var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+				this1 = this2;
+			} else {
+				var ii_min = Math.floor(bx);
+				var ii_max = Math.ceil(cx1);
+				var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+				this1 = this2;
+			}
+			var _g_min = this1.start;
+			var _g_max = this1.max;
+			while(_g_min < _g_max) {
+				var x = _g_min++;
+				sxx = sx * x;
+				txx = tx * x;
+				foundY = false;
+				var _g_min1 = yIter3.start;
+				var _g_max1 = yIter3.max;
+				while(_g_min1 < _g_max1) {
+					var y = _g_min1++;
+					s = s0 + sxx + sy * y;
+					t = t0 + txx + ty * y;
+					if(s <= 0 || t <= 0) {
+						if(foundY) {
+							break;
+						}
+					} else if(s + t < A) {
+						var this1 = color;
+						var c = this1;
+						if((c >> 24 & 255) < 254 && pixelImage.transparent) {
+							var location = pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0;
+							var this2 = pixelImage.image[location];
+							var this3 = this2;
+							var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
+							var this5 = this4 >> 24 & 255;
+							var a1 = this5 == 0 ? 0. : this5 / 255;
+							var this6 = this4 >> 16 & 255;
+							var r1 = this6 == 0 ? 0. : this6 / 255;
+							var this7 = this4 >> 8 & 255;
+							var g1 = this7 == 0 ? 0. : this7 / 255;
+							var this8 = this4 & 255;
+							var b1 = this8 == 0 ? 0. : this8 / 255;
+							var this9 = color >> 24 & 255;
+							var a2 = this9 == 0 ? 0. : this9 / 255;
+							var this10 = color >> 16 & 255;
+							var r2 = this10 == 0 ? 0. : this10 / 255;
+							var this11 = color >> 8 & 255;
+							var g2 = this11 == 0 ? 0. : this11 / 255;
+							var this12 = color & 255;
+							var b2 = this12 == 0 ? 0. : this12 / 255;
+							var a3 = a1 * (1 - a2);
+							var r = 255 * (r1 * a3 + r2 * a2) | 0;
+							var g = 255 * (g1 * a3 + g2 * a2) | 0;
+							var b = 255 * (b1 * a3 + b2 * a2) | 0;
+							var a = 255 * (a3 + a2) | 0;
+							var blended = a << 24 | r << 16 | g << 8 | b;
+							pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+						} else {
+							pixelImage.image[pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
+						}
+						foundY = true;
+					} else if(foundY) {
+						break;
+					}
+				}
+			}
+			if(hasHit3 == true) {
+				var v = new pixelimage_algo_HitTri(bx,by,bx1,by1,cx1,cy1);
+			}
+			var hitQuad;
+			if(hasHit2 == true) {
+				var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy);
+				hitQuad = v;
+			} else {
+				hitQuad = null;
+			}
+			var cx = h2;
+			var cy = radius2;
+			var bx = h2;
+			var by = -radius2;
+			var dx = hSmall;
+			var dy = radius2;
+			var ax = hSmall;
+			var ay = -radius2;
+			temp = px + (bx * cos - by * sin);
+			by = py + (by * cos + bx * sin);
+			bx = temp;
+			temp = px + (cx * cos - cy * sin);
+			cy = py + (cy * cos + cx * sin);
+			cx = temp;
+			temp = px + (ax * cos - ay * sin);
+			ay = py + (ay * cos + ax * sin);
+			ax = temp;
+			temp = px + (dx * cos - dy * sin);
+			dy = py + (dy * cos + dx * sin);
+			dx = temp;
+			var bx1 = bx;
+			var by1 = by;
+			var cx1 = cx;
+			var cy1 = cy;
+			var hasHit1 = hasHit;
+			if(hasHit1 == null) {
+				hasHit1 = false;
+			}
+			var adjustWinding = qx * by1 - bx1 * qy + (bx1 * cy1 - cx1 * by1) + (cx1 * qy - qx * cy1) > 0;
+			if(!adjustWinding) {
+				var bx_ = bx1;
+				var by_ = by1;
+				bx1 = cx1;
+				by1 = cy1;
+				cx1 = bx_;
+				cy1 = by_;
+			}
+			var hasHit2 = hasHit1;
+			if(hasHit2 == null) {
+				hasHit2 = false;
+			}
+			var s0 = qy * cx1 - qx * cy1;
+			var sx = cy1 - qy;
+			var sy = qx - cx1;
+			var t0 = qx * by1 - qy * bx1;
+			var tx = qy - by1;
+			var ty = bx1 - qx;
+			var A = -by1 * cx1 + qy * (-bx1 + cx1) + qx * (by1 - cy1) + bx1 * cy1;
+			var yIter3;
+			if(qy > by1) {
+				if(qy > cy1) {
+					var ii_min = by1 > cy1 ? Math.floor(cy1) : Math.floor(by1);
+					var ii_max = Math.ceil(qy);
+					var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+					yIter3 = this1;
+				} else {
+					var ii_min = Math.floor(by1);
+					var ii_max = Math.ceil(cy1);
+					var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+					yIter3 = this1;
+				}
+			} else if(by1 > cy1) {
+				var ii_min = qy > cy1 ? Math.floor(cy1) : Math.ceil(qy);
+				var ii_max = Math.ceil(by1);
+				var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+				yIter3 = this1;
+			} else {
+				var ii_min = Math.floor(qy);
+				var ii_max = Math.ceil(cy1);
+				var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+				yIter3 = this1;
+			}
+			var foundY = false;
+			var s = 0.;
+			var t = 0.;
+			var sxx = 0.;
+			var txx = 0.;
+			var this1;
+			if(qx > bx1) {
+				if(qx > cx1) {
+					var ii_min = bx1 > cx1 ? Math.floor(cx1) : Math.floor(bx1);
+					var ii_max = Math.ceil(qx);
+					var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+					this1 = this2;
+				} else {
+					var ii_min = Math.floor(bx1);
+					var ii_max = Math.ceil(cx1);
+					var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+					this1 = this2;
+				}
+			} else if(bx1 > cx1) {
+				var ii_min = qx > cx1 ? Math.floor(cx1) : Math.ceil(qx);
+				var ii_max = Math.ceil(bx1);
+				var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+				this1 = this2;
+			} else {
+				var ii_min = Math.floor(qx);
+				var ii_max = Math.ceil(cx1);
+				var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+				this1 = this2;
+			}
+			var _g_min = this1.start;
+			var _g_max = this1.max;
+			while(_g_min < _g_max) {
+				var x = _g_min++;
+				sxx = sx * x;
+				txx = tx * x;
+				foundY = false;
+				var _g_min1 = yIter3.start;
+				var _g_max1 = yIter3.max;
+				while(_g_min1 < _g_max1) {
+					var y = _g_min1++;
+					s = s0 + sxx + sy * y;
+					t = t0 + txx + ty * y;
+					if(s <= 0 || t <= 0) {
+						if(foundY) {
+							break;
+						}
+					} else if(s + t < A) {
+						var this1 = color;
+						var c = this1;
+						if((c >> 24 & 255) < 254 && pixelImage.transparent) {
+							var location = pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0;
+							var this2 = pixelImage.image[location];
+							var this3 = this2;
+							var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
+							var this5 = this4 >> 24 & 255;
+							var a1 = this5 == 0 ? 0. : this5 / 255;
+							var this6 = this4 >> 16 & 255;
+							var r1 = this6 == 0 ? 0. : this6 / 255;
+							var this7 = this4 >> 8 & 255;
+							var g1 = this7 == 0 ? 0. : this7 / 255;
+							var this8 = this4 & 255;
+							var b1 = this8 == 0 ? 0. : this8 / 255;
+							var this9 = color >> 24 & 255;
+							var a2 = this9 == 0 ? 0. : this9 / 255;
+							var this10 = color >> 16 & 255;
+							var r2 = this10 == 0 ? 0. : this10 / 255;
+							var this11 = color >> 8 & 255;
+							var g2 = this11 == 0 ? 0. : this11 / 255;
+							var this12 = color & 255;
+							var b2 = this12 == 0 ? 0. : this12 / 255;
+							var a3 = a1 * (1 - a2);
+							var r = 255 * (r1 * a3 + r2 * a2) | 0;
+							var g = 255 * (g1 * a3 + g2 * a2) | 0;
+							var b = 255 * (b1 * a3 + b2 * a2) | 0;
+							var a = 255 * (a3 + a2) | 0;
+							var blended = a << 24 | r << 16 | g << 8 | b;
+							pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+						} else {
+							pixelImage.image[pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
+						}
+						foundY = true;
+					} else if(foundY) {
+						break;
+					}
+				}
+			}
+			var hitTriTop;
+			if(hasHit2 == true) {
+				var v = new pixelimage_algo_HitTri(qx,qy,bx1,by1,cx1,cy1);
+				hitTriTop = v;
+			} else {
+				hitTriTop = null;
+			}
+			var bx = ax;
+			var by = ay;
+			var cx = dx;
+			var cy = dy;
+			var hasHit1 = hasHit;
+			if(hasHit1 == null) {
+				hasHit1 = false;
+			}
+			var adjustWinding = px * by - bx * py + (bx * cy - cx * by) + (cx * py - px * cy) > 0;
+			if(!adjustWinding) {
+				var bx_ = bx;
+				var by_ = by;
+				bx = cx;
+				by = cy;
+				cx = bx_;
+				cy = by_;
+			}
+			var hasHit2 = hasHit1;
+			if(hasHit2 == null) {
+				hasHit2 = false;
+			}
+			var s0 = py * cx - px * cy;
+			var sx = cy - py;
+			var sy = px - cx;
+			var t0 = px * by - py * bx;
+			var tx = py - by;
+			var ty = bx - px;
+			var A = -by * cx + py * (-bx + cx) + px * (by - cy) + bx * cy;
+			var yIter3;
+			if(py > by) {
+				if(py > cy) {
+					var ii_min = by > cy ? Math.floor(cy) : Math.floor(by);
+					var ii_max = Math.ceil(py);
+					var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+					yIter3 = this1;
+				} else {
+					var ii_min = Math.floor(by);
+					var ii_max = Math.ceil(cy);
+					var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+					yIter3 = this1;
+				}
+			} else if(by > cy) {
+				var ii_min = py > cy ? Math.floor(cy) : Math.ceil(py);
+				var ii_max = Math.ceil(by);
+				var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+				yIter3 = this1;
+			} else {
+				var ii_min = Math.floor(py);
+				var ii_max = Math.ceil(cy);
+				var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+				yIter3 = this1;
+			}
+			var foundY = false;
+			var s = 0.;
+			var t = 0.;
+			var sxx = 0.;
+			var txx = 0.;
+			var this1;
+			if(px > bx) {
+				if(px > cx) {
+					var ii_min = bx > cx ? Math.floor(cx) : Math.floor(bx);
+					var ii_max = Math.ceil(px);
+					var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+					this1 = this2;
+				} else {
+					var ii_min = Math.floor(bx);
+					var ii_max = Math.ceil(cx);
+					var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+					this1 = this2;
+				}
+			} else if(bx > cx) {
+				var ii_min = px > cx ? Math.floor(cx) : Math.ceil(px);
+				var ii_max = Math.ceil(bx);
+				var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+				this1 = this2;
+			} else {
+				var ii_min = Math.floor(px);
+				var ii_max = Math.ceil(cx);
+				var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+				this1 = this2;
+			}
+			var _g_min = this1.start;
+			var _g_max = this1.max;
+			while(_g_min < _g_max) {
+				var x = _g_min++;
+				sxx = sx * x;
+				txx = tx * x;
+				foundY = false;
+				var _g_min1 = yIter3.start;
+				var _g_max1 = yIter3.max;
+				while(_g_min1 < _g_max1) {
+					var y = _g_min1++;
+					s = s0 + sxx + sy * y;
+					t = t0 + txx + ty * y;
+					if(s <= 0 || t <= 0) {
+						if(foundY) {
+							break;
+						}
+					} else if(s + t < A) {
+						var this1 = color;
+						var c = this1;
+						if((c >> 24 & 255) < 254 && pixelImage.transparent) {
+							var location = pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0;
+							var this2 = pixelImage.image[location];
+							var this3 = this2;
+							var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
+							var this5 = this4 >> 24 & 255;
+							var a1 = this5 == 0 ? 0. : this5 / 255;
+							var this6 = this4 >> 16 & 255;
+							var r1 = this6 == 0 ? 0. : this6 / 255;
+							var this7 = this4 >> 8 & 255;
+							var g1 = this7 == 0 ? 0. : this7 / 255;
+							var this8 = this4 & 255;
+							var b1 = this8 == 0 ? 0. : this8 / 255;
+							var this9 = color >> 24 & 255;
+							var a2 = this9 == 0 ? 0. : this9 / 255;
+							var this10 = color >> 16 & 255;
+							var r2 = this10 == 0 ? 0. : this10 / 255;
+							var this11 = color >> 8 & 255;
+							var g2 = this11 == 0 ? 0. : this11 / 255;
+							var this12 = color & 255;
+							var b2 = this12 == 0 ? 0. : this12 / 255;
+							var a3 = a1 * (1 - a2);
+							var r = 255 * (r1 * a3 + r2 * a2) | 0;
+							var g = 255 * (g1 * a3 + g2 * a2) | 0;
+							var b = 255 * (b1 * a3 + b2 * a2) | 0;
+							var a = 255 * (a3 + a2) | 0;
+							var blended = a << 24 | r << 16 | g << 8 | b;
+							pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+						} else {
+							pixelImage.image[pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
+						}
+						foundY = true;
+					} else if(foundY) {
+						break;
+					}
+				}
+			}
+			var hitTriBottom;
+			if(hasHit2 == true) {
+				var v = new pixelimage_algo_HitTri(px,py,bx,by,cx,cy);
+				hitTriBottom = v;
+			} else {
+				hitTriBottom = null;
+			}
+			if(hasHit) {
+				var hitArr = new pixelimage_algo_HitTriArray([hitTriTop,hitTriBottom]);
+				if(hitQuad != null) {
+					hitArr.triArr.push(hitQuad.triABD);
+				}
+				hitArr.triArr.push(hitQuad.triBCD);
+			}
+		}
+		return pixelimage_triGML_coreShape_BasicShape.prototype.render.call(this,pixelImage);
+	}
+	,__class__: pixelimage_triGML_contour_ArrowShape
+});
+var pixelimage_triGML_coreShape_FillShape = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill) {
+	if(fill == null) {
+		fill = 0;
+	}
+	if(strokeWidth == null) {
+		strokeWidth = 1.;
+	}
+	if(strokeColor == null) {
+		strokeColor = 0;
+	}
+	if(visibility == null) {
+		visibility = true;
+	}
+	if(opacity == null) {
+		opacity = 1.;
+	}
+	pixelimage_triGML_coreShape_BasicShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray);
+	this.fill = fill;
+};
+pixelimage_triGML_coreShape_FillShape.__name__ = "pixelimage.triGML.coreShape.FillShape";
+pixelimage_triGML_coreShape_FillShape.__super__ = pixelimage_triGML_coreShape_BasicShape;
+pixelimage_triGML_coreShape_FillShape.prototype = $extend(pixelimage_triGML_coreShape_BasicShape.prototype,{
+	setParameter: function(name,value) {
+		if(name == "fill") {
+			this.fill = Std.parseInt(value);
+		} else {
+			pixelimage_triGML_coreShape_BasicShape.prototype.setParameter.call(this,name,value);
+		}
+	}
+	,__class__: pixelimage_triGML_coreShape_FillShape
+});
+var pixelimage_triGML_contour_CubicCurveShape = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill,x1,y1,x2,y2,x3,y3,x4,y4) {
+	if(y4 == null) {
+		y4 = 0.;
+	}
+	if(x4 == null) {
+		x4 = 0.;
+	}
+	if(y3 == null) {
+		y3 = 0.;
+	}
+	if(x3 == null) {
+		x3 = 0.;
+	}
+	if(y2 == null) {
+		y2 = 0.;
+	}
+	if(x2 == null) {
+		x2 = 0.;
+	}
+	if(y1 == null) {
+		y1 = 0.;
+	}
+	if(x1 == null) {
+		x1 = 0.;
+	}
+	if(fill == null) {
+		fill = 0;
+	}
+	if(strokeWidth == null) {
+		strokeWidth = 1.;
+	}
+	if(strokeColor == null) {
+		strokeColor = 0;
+	}
+	if(visibility == null) {
+		visibility = true;
+	}
+	if(opacity == null) {
+		opacity = 1.;
+	}
+	pixelimage_triGML_coreShape_FillShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill);
+	this.x1 = x1;
+	this.y1 = y1;
+	this.x2 = x2;
+	this.y2 = y2;
+	this.x3 = x3;
+	this.y3 = y3;
+	this.x4 = x4;
+	this.y4 = y4;
+};
+pixelimage_triGML_contour_CubicCurveShape.__name__ = "pixelimage.triGML.contour.CubicCurveShape";
+pixelimage_triGML_contour_CubicCurveShape.__super__ = pixelimage_triGML_coreShape_FillShape;
+pixelimage_triGML_contour_CubicCurveShape.prototype = $extend(pixelimage_triGML_coreShape_FillShape.prototype,{
+	setParameter: function(name,value) {
+		switch(name) {
+		case "x1":
+			this.x1 = parseFloat(value);
+			break;
+		case "x2":
+			this.x2 = parseFloat(value);
+			break;
+		case "x3":
+			this.x3 = parseFloat(value);
+			break;
+		case "x4":
+			this.x4 = parseFloat(value);
+			break;
+		case "y1":
+			this.y1 = parseFloat(value);
+			break;
+		case "y2":
+			this.y2 = parseFloat(value);
+			break;
+		case "y3":
+			this.y3 = parseFloat(value);
+			break;
+		case "y4":
+			this.y4 = parseFloat(value);
+			break;
+		default:
+			pixelimage_triGML_coreShape_FillShape.prototype.setParameter.call(this,name,value);
+		}
+	}
+	,render: function(pixelImage) {
+		var drawing = new pixelimage_triGML_coreShape_DrawShapeHelper(pixelImage,this.strokeWidth,this.strokeColor);
+		drawing.moveTo(this.x1,this.y1);
+		drawing.curveTo(this.x2,this.y2,this.x3,this.y3,this.x4,this.y4);
+		haxe_Log.trace("render CubicCurveShape",{ fileName : "pixelimage/triGML/contour/CubicCurveShape.hx", lineNumber : 69, className : "pixelimage.triGML.contour.CubicCurveShape", methodName : "render"});
+		return pixelimage_triGML_coreShape_FillShape.prototype.render.call(this,pixelImage);
+	}
+	,__class__: pixelimage_triGML_contour_CubicCurveShape
+});
+var pixelimage_triGML_contour_LineGridShape = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,left,top,width,height,delta,deltaH) {
+	if(deltaH == null) {
+		deltaH = 0.;
+	}
+	if(delta == null) {
+		delta = 1.;
+	}
+	if(height == null) {
+		height = 1.;
+	}
+	if(width == null) {
+		width = 1.;
+	}
+	if(top == null) {
+		top = 0.;
+	}
+	if(left == null) {
+		left = 0.;
+	}
+	if(strokeWidth == null) {
+		strokeWidth = 1.;
+	}
+	if(strokeColor == null) {
+		strokeColor = -1048576;
+	}
+	if(visibility == null) {
+		visibility = true;
+	}
+	if(opacity == null) {
+		opacity = 1.;
+	}
+	pixelimage_triGML_coreShape_BasicShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray);
+	this.left = left;
+	this.top = top;
+	this.width = width;
+	this.height = height;
+	this.delta = delta;
+	this.deltaH = deltaH;
+};
+pixelimage_triGML_contour_LineGridShape.__name__ = "pixelimage.triGML.contour.LineGridShape";
+pixelimage_triGML_contour_LineGridShape.__super__ = pixelimage_triGML_coreShape_BasicShape;
+pixelimage_triGML_contour_LineGridShape.prototype = $extend(pixelimage_triGML_coreShape_BasicShape.prototype,{
+	setParameter: function(name,value) {
+		switch(name) {
+		case "delta":
+			this.delta = parseFloat(value);
+			break;
+		case "deltaH":
+			this.deltaH = parseFloat(value);
+			break;
+		case "height":
+			this.height = parseFloat(value);
+			break;
+		case "left":
+			this.left = parseFloat(value);
+			break;
+		case "top":
+			this.top = parseFloat(value);
+			break;
+		case "width":
+			this.width = parseFloat(value);
+			break;
+		default:
+			pixelimage_triGML_coreShape_BasicShape.prototype.setParameter.call(this,name,value);
+		}
+	}
+	,render: function(pixelImage) {
+		var pixelShape = pixelImage;
+		if(this.deltaH != 0.) {
+			var x = this.left;
+			var y = this.top;
+			var w = this.width;
+			var h = this.height;
+			var deltaW = this.delta;
+			var deltaH = this.deltaH;
+			var thick = this.strokeWidth;
+			var color = this.strokeColor;
+			var h_ = Math.floor(h / deltaH) * deltaH;
+			var w_ = Math.floor(w / deltaW) * deltaW;
+			var _g = 0;
+			var _g1 = Math.floor(w / deltaW) + 1;
+			while(_g < _g1) {
+				var i = _g++;
+				var x1 = x + i * deltaW - thick / 2;
+				var p = x1 | 0;
+				var xx = p;
+				var q = y | 0;
+				var maxX = x1 + thick | 0;
+				var maxY = y + h_ | 0;
+				while(true) {
+					var x2 = p++;
+					var this1 = color;
+					var c = this1;
+					if((c >> 24 & 255) < 254 && pixelShape.transparent) {
+						var location = pixelShape.useVirtualPos ? (q - pixelShape.virtualY) * pixelShape.width + x2 - pixelShape.virtualX | 0 : q * pixelShape.width + x2 | 0;
+						var this2 = pixelShape.image[location];
+						var this3 = this2;
+						var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
+						var this5 = this4 >> 24 & 255;
+						var a1 = this5 == 0 ? 0. : this5 / 255;
+						var this6 = this4 >> 16 & 255;
+						var r1 = this6 == 0 ? 0. : this6 / 255;
+						var this7 = this4 >> 8 & 255;
+						var g1 = this7 == 0 ? 0. : this7 / 255;
+						var this8 = this4 & 255;
+						var b1 = this8 == 0 ? 0. : this8 / 255;
+						var this9 = color >> 24 & 255;
+						var a2 = this9 == 0 ? 0. : this9 / 255;
+						var this10 = color >> 16 & 255;
+						var r2 = this10 == 0 ? 0. : this10 / 255;
+						var this11 = color >> 8 & 255;
+						var g2 = this11 == 0 ? 0. : this11 / 255;
+						var this12 = color & 255;
+						var b2 = this12 == 0 ? 0. : this12 / 255;
+						var a3 = a1 * (1 - a2);
+						var r = 255 * (r1 * a3 + r2 * a2) | 0;
+						var g = 255 * (g1 * a3 + g2 * a2) | 0;
+						var b = 255 * (b1 * a3 + b2 * a2) | 0;
+						var a = 255 * (a3 + a2) | 0;
+						var blended = a << 24 | r << 16 | g << 8 | b;
+						pixelShape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+					} else {
+						pixelShape.image[pixelShape.useVirtualPos ? (q - pixelShape.virtualY) * pixelShape.width + x2 - pixelShape.virtualX | 0 : q * pixelShape.width + x2 | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
+					}
+					if(p > maxX) {
+						p = xx;
+						++q;
+					}
+					if(q > maxY) {
+						break;
+					}
+				}
+			}
+			var _g = 0;
+			var _g1 = Math.floor(h / deltaH) + 1;
+			while(_g < _g1) {
+				var i = _g++;
+				var y1 = y + i * deltaH - thick / 2;
+				var p = x | 0;
+				var xx = p;
+				var q = y1 | 0;
+				var maxX = x + w_ | 0;
+				var maxY = y1 + thick | 0;
+				while(true) {
+					var x1 = p++;
+					var this1 = color;
+					var c = this1;
+					if((c >> 24 & 255) < 254 && pixelShape.transparent) {
+						var location = pixelShape.useVirtualPos ? (q - pixelShape.virtualY) * pixelShape.width + x1 - pixelShape.virtualX | 0 : q * pixelShape.width + x1 | 0;
+						var this2 = pixelShape.image[location];
+						var this3 = this2;
+						var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
+						var this5 = this4 >> 24 & 255;
+						var a1 = this5 == 0 ? 0. : this5 / 255;
+						var this6 = this4 >> 16 & 255;
+						var r1 = this6 == 0 ? 0. : this6 / 255;
+						var this7 = this4 >> 8 & 255;
+						var g1 = this7 == 0 ? 0. : this7 / 255;
+						var this8 = this4 & 255;
+						var b1 = this8 == 0 ? 0. : this8 / 255;
+						var this9 = color >> 24 & 255;
+						var a2 = this9 == 0 ? 0. : this9 / 255;
+						var this10 = color >> 16 & 255;
+						var r2 = this10 == 0 ? 0. : this10 / 255;
+						var this11 = color >> 8 & 255;
+						var g2 = this11 == 0 ? 0. : this11 / 255;
+						var this12 = color & 255;
+						var b2 = this12 == 0 ? 0. : this12 / 255;
+						var a3 = a1 * (1 - a2);
+						var r = 255 * (r1 * a3 + r2 * a2) | 0;
+						var g = 255 * (g1 * a3 + g2 * a2) | 0;
+						var b = 255 * (b1 * a3 + b2 * a2) | 0;
+						var a = 255 * (a3 + a2) | 0;
+						var blended = a << 24 | r << 16 | g << 8 | b;
+						pixelShape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+					} else {
+						pixelShape.image[pixelShape.useVirtualPos ? (q - pixelShape.virtualY) * pixelShape.width + x1 - pixelShape.virtualX | 0 : q * pixelShape.width + x1 | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
+					}
+					if(p > maxX) {
+						p = xx;
+						++q;
+					}
+					if(q > maxY) {
+						break;
+					}
+				}
+			}
+		} else {
+			var x = this.left;
+			var y = this.top;
+			var w = this.width;
+			var h = this.height;
+			var delta = this.delta;
+			var thick = this.strokeWidth;
+			var color = this.strokeColor;
+			var h_ = Math.floor(h / delta) * delta;
+			var w_ = Math.floor(w / delta) * delta;
+			var _g = 0;
+			var _g1 = Math.floor(w / delta) + 1;
+			while(_g < _g1) {
+				var i = _g++;
+				var x1 = x + i * delta - thick / 2;
+				var p = x1 | 0;
+				var xx = p;
+				var q = y | 0;
+				var maxX = x1 + thick | 0;
+				var maxY = y + h_ | 0;
+				while(true) {
+					var x2 = p++;
+					var this1 = color;
+					var c = this1;
+					if((c >> 24 & 255) < 254 && pixelShape.transparent) {
+						var location = pixelShape.useVirtualPos ? (q - pixelShape.virtualY) * pixelShape.width + x2 - pixelShape.virtualX | 0 : q * pixelShape.width + x2 | 0;
+						var this2 = pixelShape.image[location];
+						var this3 = this2;
+						var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
+						var this5 = this4 >> 24 & 255;
+						var a1 = this5 == 0 ? 0. : this5 / 255;
+						var this6 = this4 >> 16 & 255;
+						var r1 = this6 == 0 ? 0. : this6 / 255;
+						var this7 = this4 >> 8 & 255;
+						var g1 = this7 == 0 ? 0. : this7 / 255;
+						var this8 = this4 & 255;
+						var b1 = this8 == 0 ? 0. : this8 / 255;
+						var this9 = color >> 24 & 255;
+						var a2 = this9 == 0 ? 0. : this9 / 255;
+						var this10 = color >> 16 & 255;
+						var r2 = this10 == 0 ? 0. : this10 / 255;
+						var this11 = color >> 8 & 255;
+						var g2 = this11 == 0 ? 0. : this11 / 255;
+						var this12 = color & 255;
+						var b2 = this12 == 0 ? 0. : this12 / 255;
+						var a3 = a1 * (1 - a2);
+						var r = 255 * (r1 * a3 + r2 * a2) | 0;
+						var g = 255 * (g1 * a3 + g2 * a2) | 0;
+						var b = 255 * (b1 * a3 + b2 * a2) | 0;
+						var a = 255 * (a3 + a2) | 0;
+						var blended = a << 24 | r << 16 | g << 8 | b;
+						pixelShape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+					} else {
+						pixelShape.image[pixelShape.useVirtualPos ? (q - pixelShape.virtualY) * pixelShape.width + x2 - pixelShape.virtualX | 0 : q * pixelShape.width + x2 | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
+					}
+					if(p > maxX) {
+						p = xx;
+						++q;
+					}
+					if(q > maxY) {
+						break;
+					}
+				}
+			}
+			var _g = 0;
+			var _g1 = Math.floor(h / delta) + 1;
+			while(_g < _g1) {
+				var i = _g++;
+				var y1 = y + i * delta - thick / 2;
+				var p = x | 0;
+				var xx = p;
+				var q = y1 | 0;
+				var maxX = x + w_ | 0;
+				var maxY = y1 + thick | 0;
+				while(true) {
+					var x1 = p++;
+					var this1 = color;
+					var c = this1;
+					if((c >> 24 & 255) < 254 && pixelShape.transparent) {
+						var location = pixelShape.useVirtualPos ? (q - pixelShape.virtualY) * pixelShape.width + x1 - pixelShape.virtualX | 0 : q * pixelShape.width + x1 | 0;
+						var this2 = pixelShape.image[location];
+						var this3 = this2;
+						var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
+						var this5 = this4 >> 24 & 255;
+						var a1 = this5 == 0 ? 0. : this5 / 255;
+						var this6 = this4 >> 16 & 255;
+						var r1 = this6 == 0 ? 0. : this6 / 255;
+						var this7 = this4 >> 8 & 255;
+						var g1 = this7 == 0 ? 0. : this7 / 255;
+						var this8 = this4 & 255;
+						var b1 = this8 == 0 ? 0. : this8 / 255;
+						var this9 = color >> 24 & 255;
+						var a2 = this9 == 0 ? 0. : this9 / 255;
+						var this10 = color >> 16 & 255;
+						var r2 = this10 == 0 ? 0. : this10 / 255;
+						var this11 = color >> 8 & 255;
+						var g2 = this11 == 0 ? 0. : this11 / 255;
+						var this12 = color & 255;
+						var b2 = this12 == 0 ? 0. : this12 / 255;
+						var a3 = a1 * (1 - a2);
+						var r = 255 * (r1 * a3 + r2 * a2) | 0;
+						var g = 255 * (g1 * a3 + g2 * a2) | 0;
+						var b = 255 * (b1 * a3 + b2 * a2) | 0;
+						var a = 255 * (a3 + a2) | 0;
+						var blended = a << 24 | r << 16 | g << 8 | b;
+						pixelShape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+					} else {
+						pixelShape.image[pixelShape.useVirtualPos ? (q - pixelShape.virtualY) * pixelShape.width + x1 - pixelShape.virtualX | 0 : q * pixelShape.width + x1 | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
+					}
+					if(p > maxX) {
+						p = xx;
+						++q;
+					}
+					if(q > maxY) {
+						break;
+					}
+				}
+			}
+		}
+		return pixelimage_triGML_coreShape_BasicShape.prototype.render.call(this,pixelImage);
+	}
+	,__class__: pixelimage_triGML_contour_LineGridShape
+});
+var pixelimage_triGML_contour_LineShape = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,x1,y1,x2,y2) {
+	if(y2 == null) {
+		y2 = 0.;
+	}
+	if(x2 == null) {
+		x2 = 0.;
+	}
+	if(y1 == null) {
+		y1 = 0.;
+	}
+	if(x1 == null) {
+		x1 = 0.;
+	}
+	if(strokeWidth == null) {
+		strokeWidth = 1.;
+	}
+	if(strokeColor == null) {
+		strokeColor = -1048576;
+	}
+	if(visibility == null) {
+		visibility = true;
+	}
+	if(opacity == null) {
+		opacity = 1.;
+	}
+	pixelimage_triGML_coreShape_BasicShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray);
+	this.x1 = x1;
+	this.y1 = y1;
+	this.x2 = x2;
+	this.y2 = y2;
+};
+pixelimage_triGML_contour_LineShape.__name__ = "pixelimage.triGML.contour.LineShape";
+pixelimage_triGML_contour_LineShape.__super__ = pixelimage_triGML_coreShape_BasicShape;
+pixelimage_triGML_contour_LineShape.prototype = $extend(pixelimage_triGML_coreShape_BasicShape.prototype,{
+	setParameter: function(name,value) {
+		switch(name) {
+		case "x1":
+			this.x1 = parseFloat(value);
+			break;
+		case "x2":
+			this.x2 = parseFloat(value);
+			break;
+		case "y1":
+			this.y1 = parseFloat(value);
+			break;
+		case "y2":
+			this.y2 = parseFloat(value);
+			break;
+		default:
+			pixelimage_triGML_coreShape_BasicShape.prototype.setParameter.call(this,name,value);
+		}
+	}
+	,render: function(pixelImage) {
+		var px = this.x1;
+		var py = this.y1;
+		var color = this.strokeColor;
+		var o = this.y2 - py;
+		var a = this.x2 - px;
+		var h = Math.pow(o * o + a * a,0.5);
+		var theta = Math.atan2(o,a);
+		var hasHit = false;
+		if(hasHit == null) {
+			hasHit = false;
+		}
+		var sin = Math.sin(theta);
+		var cos = Math.cos(theta);
+		var radius = this.strokeWidth / 2;
+		var dx = 0.1;
+		var dy = radius;
+		var cx = h;
+		var cy = radius;
+		var bx = h;
+		var by = -radius;
+		var ax = 0.1;
+		var ay = -radius;
+		var temp = 0.;
+		temp = px + (ax * cos - ay * sin);
+		ay = py + (ay * cos + ax * sin);
+		ax = temp;
+		temp = px + (bx * cos - by * sin);
+		by = py + (by * cos + bx * sin);
+		bx = temp;
+		temp = px + (cx * cos - cy * sin);
+		cy = py + (cy * cos + cx * sin);
+		cx = temp;
+		temp = px + (dx * cos - dy * sin);
+		dy = py + (dy * cos + dx * sin);
+		dx = temp;
+		var hasHit1 = hasHit;
+		if(hasHit1 == null) {
+			hasHit1 = false;
+		}
+		var bx1 = bx;
+		var by1 = by;
+		var cx1 = dx;
+		var cy1 = dy;
+		var hasHit = hasHit1;
+		if(hasHit == null) {
+			hasHit = false;
+		}
+		var adjustWinding = ax * by1 - bx1 * ay + (bx1 * cy1 - cx1 * by1) + (cx1 * ay - ax * cy1) > 0;
+		if(!adjustWinding) {
+			var bx_ = bx1;
+			var by_ = by1;
+			bx1 = cx1;
+			by1 = cy1;
+			cx1 = bx_;
+			cy1 = by_;
+		}
+		var hasHit2 = hasHit;
+		if(hasHit2 == null) {
+			hasHit2 = false;
+		}
+		var s0 = ay * cx1 - ax * cy1;
+		var sx = cy1 - ay;
+		var sy = ax - cx1;
+		var t0 = ax * by1 - ay * bx1;
+		var tx = ay - by1;
+		var ty = bx1 - ax;
+		var A = -by1 * cx1 + ay * (-bx1 + cx1) + ax * (by1 - cy1) + bx1 * cy1;
+		var yIter3;
+		if(ay > by1) {
+			if(ay > cy1) {
+				var ii_min = by1 > cy1 ? Math.floor(cy1) : Math.floor(by1);
+				var ii_max = Math.ceil(ay);
+				var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+				yIter3 = this1;
+			} else {
+				var ii_min = Math.floor(by1);
+				var ii_max = Math.ceil(cy1);
+				var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+				yIter3 = this1;
+			}
+		} else if(by1 > cy1) {
+			var ii_min = ay > cy1 ? Math.floor(cy1) : Math.ceil(ay);
+			var ii_max = Math.ceil(by1);
+			var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+			yIter3 = this1;
+		} else {
+			var ii_min = Math.floor(ay);
+			var ii_max = Math.ceil(cy1);
+			var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+			yIter3 = this1;
+		}
+		var foundY = false;
+		var s = 0.;
+		var t = 0.;
+		var sxx = 0.;
+		var txx = 0.;
+		var this1;
+		if(ax > bx1) {
+			if(ax > cx1) {
+				var ii_min = bx1 > cx1 ? Math.floor(cx1) : Math.floor(bx1);
+				var ii_max = Math.ceil(ax);
+				var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+				this1 = this2;
+			} else {
+				var ii_min = Math.floor(bx1);
+				var ii_max = Math.ceil(cx1);
+				var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+				this1 = this2;
+			}
+		} else if(bx1 > cx1) {
+			var ii_min = ax > cx1 ? Math.floor(cx1) : Math.ceil(ax);
+			var ii_max = Math.ceil(bx1);
+			var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+			this1 = this2;
+		} else {
+			var ii_min = Math.floor(ax);
+			var ii_max = Math.ceil(cx1);
+			var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+			this1 = this2;
+		}
+		var _g_min = this1.start;
+		var _g_max = this1.max;
+		while(_g_min < _g_max) {
+			var x = _g_min++;
+			sxx = sx * x;
+			txx = tx * x;
+			foundY = false;
+			var _g_min1 = yIter3.start;
+			var _g_max1 = yIter3.max;
+			while(_g_min1 < _g_max1) {
+				var y = _g_min1++;
+				s = s0 + sxx + sy * y;
+				t = t0 + txx + ty * y;
+				if(s <= 0 || t <= 0) {
+					if(foundY) {
+						break;
+					}
+				} else if(s + t < A) {
+					var this1 = color;
+					var c = this1;
+					if((c >> 24 & 255) < 254 && pixelImage.transparent) {
+						var location = pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0;
+						var this2 = pixelImage.image[location];
+						var this3 = this2;
+						var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
+						var this5 = this4 >> 24 & 255;
+						var a1 = this5 == 0 ? 0. : this5 / 255;
+						var this6 = this4 >> 16 & 255;
+						var r1 = this6 == 0 ? 0. : this6 / 255;
+						var this7 = this4 >> 8 & 255;
+						var g1 = this7 == 0 ? 0. : this7 / 255;
+						var this8 = this4 & 255;
+						var b1 = this8 == 0 ? 0. : this8 / 255;
+						var this9 = color >> 24 & 255;
+						var a2 = this9 == 0 ? 0. : this9 / 255;
+						var this10 = color >> 16 & 255;
+						var r2 = this10 == 0 ? 0. : this10 / 255;
+						var this11 = color >> 8 & 255;
+						var g2 = this11 == 0 ? 0. : this11 / 255;
+						var this12 = color & 255;
+						var b2 = this12 == 0 ? 0. : this12 / 255;
+						var a3 = a1 * (1 - a2);
+						var r = 255 * (r1 * a3 + r2 * a2) | 0;
+						var g = 255 * (g1 * a3 + g2 * a2) | 0;
+						var b = 255 * (b1 * a3 + b2 * a2) | 0;
+						var a = 255 * (a3 + a2) | 0;
+						var blended = a << 24 | r << 16 | g << 8 | b;
+						pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+					} else {
+						pixelImage.image[pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
+					}
+					foundY = true;
+				} else if(foundY) {
+					break;
+				}
+			}
+		}
+		if(hasHit2 == true) {
+			var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1);
+		}
+		var bx1 = cx;
+		var by1 = cy;
+		var cx1 = dx;
+		var cy1 = dy;
+		var hasHit = hasHit1;
+		if(hasHit == null) {
+			hasHit = false;
+		}
+		var adjustWinding = bx * by1 - bx1 * by + (bx1 * cy1 - cx1 * by1) + (cx1 * by - bx * cy1) > 0;
+		if(!adjustWinding) {
+			var bx_ = bx1;
+			var by_ = by1;
+			bx1 = cx1;
+			by1 = cy1;
+			cx1 = bx_;
+			cy1 = by_;
+		}
+		var hasHit2 = hasHit;
+		if(hasHit2 == null) {
+			hasHit2 = false;
+		}
+		var s0 = by * cx1 - bx * cy1;
+		var sx = cy1 - by;
+		var sy = bx - cx1;
+		var t0 = bx * by1 - by * bx1;
+		var tx = by - by1;
+		var ty = bx1 - bx;
+		var A = -by1 * cx1 + by * (-bx1 + cx1) + bx * (by1 - cy1) + bx1 * cy1;
+		var yIter3;
+		if(by > by1) {
+			if(by > cy1) {
+				var ii_min = by1 > cy1 ? Math.floor(cy1) : Math.floor(by1);
+				var ii_max = Math.ceil(by);
+				var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+				yIter3 = this1;
+			} else {
+				var ii_min = Math.floor(by1);
+				var ii_max = Math.ceil(cy1);
+				var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+				yIter3 = this1;
+			}
+		} else if(by1 > cy1) {
+			var ii_min = by > cy1 ? Math.floor(cy1) : Math.ceil(by);
+			var ii_max = Math.ceil(by1);
+			var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+			yIter3 = this1;
+		} else {
+			var ii_min = Math.floor(by);
+			var ii_max = Math.ceil(cy1);
+			var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+			yIter3 = this1;
+		}
+		var foundY = false;
+		var s = 0.;
+		var t = 0.;
+		var sxx = 0.;
+		var txx = 0.;
+		var this1;
+		if(bx > bx1) {
+			if(bx > cx1) {
+				var ii_min = bx1 > cx1 ? Math.floor(cx1) : Math.floor(bx1);
+				var ii_max = Math.ceil(bx);
+				var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+				this1 = this2;
+			} else {
+				var ii_min = Math.floor(bx1);
+				var ii_max = Math.ceil(cx1);
+				var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+				this1 = this2;
+			}
+		} else if(bx1 > cx1) {
+			var ii_min = bx > cx1 ? Math.floor(cx1) : Math.ceil(bx);
+			var ii_max = Math.ceil(bx1);
+			var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+			this1 = this2;
+		} else {
+			var ii_min = Math.floor(bx);
+			var ii_max = Math.ceil(cx1);
+			var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+			this1 = this2;
+		}
+		var _g_min = this1.start;
+		var _g_max = this1.max;
+		while(_g_min < _g_max) {
+			var x = _g_min++;
+			sxx = sx * x;
+			txx = tx * x;
+			foundY = false;
+			var _g_min1 = yIter3.start;
+			var _g_max1 = yIter3.max;
+			while(_g_min1 < _g_max1) {
+				var y = _g_min1++;
+				s = s0 + sxx + sy * y;
+				t = t0 + txx + ty * y;
+				if(s <= 0 || t <= 0) {
+					if(foundY) {
+						break;
+					}
+				} else if(s + t < A) {
+					var this1 = color;
+					var c = this1;
+					if((c >> 24 & 255) < 254 && pixelImage.transparent) {
+						var location = pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0;
+						var this2 = pixelImage.image[location];
+						var this3 = this2;
+						var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
+						var this5 = this4 >> 24 & 255;
+						var a1 = this5 == 0 ? 0. : this5 / 255;
+						var this6 = this4 >> 16 & 255;
+						var r1 = this6 == 0 ? 0. : this6 / 255;
+						var this7 = this4 >> 8 & 255;
+						var g1 = this7 == 0 ? 0. : this7 / 255;
+						var this8 = this4 & 255;
+						var b1 = this8 == 0 ? 0. : this8 / 255;
+						var this9 = color >> 24 & 255;
+						var a2 = this9 == 0 ? 0. : this9 / 255;
+						var this10 = color >> 16 & 255;
+						var r2 = this10 == 0 ? 0. : this10 / 255;
+						var this11 = color >> 8 & 255;
+						var g2 = this11 == 0 ? 0. : this11 / 255;
+						var this12 = color & 255;
+						var b2 = this12 == 0 ? 0. : this12 / 255;
+						var a3 = a1 * (1 - a2);
+						var r = 255 * (r1 * a3 + r2 * a2) | 0;
+						var g = 255 * (g1 * a3 + g2 * a2) | 0;
+						var b = 255 * (b1 * a3 + b2 * a2) | 0;
+						var a = 255 * (a3 + a2) | 0;
+						var blended = a << 24 | r << 16 | g << 8 | b;
+						pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+					} else {
+						pixelImage.image[pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
+					}
+					foundY = true;
+				} else if(foundY) {
+					break;
+				}
+			}
+		}
+		if(hasHit2 == true) {
+			var v = new pixelimage_algo_HitTri(bx,by,bx1,by1,cx1,cy1);
+		}
+		if(hasHit1 == true) {
+			var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy);
+		}
+		return pixelimage_triGML_coreShape_BasicShape.prototype.render.call(this,pixelImage);
+	}
+	,__class__: pixelimage_triGML_contour_LineShape
+});
+var pixelimage_triGML_contour_PolyLineShape = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill,points) {
+	if(fill == null) {
+		fill = 0;
+	}
+	if(strokeWidth == null) {
+		strokeWidth = 1.;
+	}
+	if(strokeColor == null) {
+		strokeColor = 0;
+	}
+	if(visibility == null) {
+		visibility = true;
+	}
+	if(opacity == null) {
+		opacity = 1.;
+	}
+	pixelimage_triGML_coreShape_FillShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill);
+	this.points = points;
+};
+pixelimage_triGML_contour_PolyLineShape.__name__ = "pixelimage.triGML.contour.PolyLineShape";
+pixelimage_triGML_contour_PolyLineShape.__super__ = pixelimage_triGML_coreShape_FillShape;
+pixelimage_triGML_contour_PolyLineShape.prototype = $extend(pixelimage_triGML_coreShape_FillShape.prototype,{
+	setParameter: function(name,value) {
+		if(name == "points") {
+			value = value.split("[")[1].split("]")[0];
+			var _g = [];
+			var _g1 = 0;
+			var _g2 = value.split(",");
+			while(_g1 < _g2.length) {
+				var n = _g2[_g1];
+				++_g1;
+				_g.push(parseFloat(n));
+			}
+			this.points = _g;
+		} else {
+			pixelimage_triGML_coreShape_FillShape.prototype.setParameter.call(this,name,value);
+		}
+	}
+	,render: function(pixelImage) {
+		var drawing = new pixelimage_triGML_coreShape_DrawShapeHelper(pixelImage,this.strokeWidth,this.strokeColor);
+		var l = this.points.length;
+		if(l < 4) {
+			return pixelImage;
+		}
+		if(l % 2 != 0) {
+			return pixelImage;
+		}
+		var i = 0;
+		var x = 0.;
+		var y = 0.;
+		x = this.points[i];
+		++i;
+		y = this.points[i];
+		++i;
+		drawing.moveTo(x,y);
+		while(i < l) {
+			x = this.points[i];
+			++i;
+			y = this.points[i];
+			++i;
+			drawing.lineTo(x,y);
+		}
+		return pixelimage_triGML_coreShape_FillShape.prototype.render.call(this,pixelImage);
+	}
+	,__class__: pixelimage_triGML_contour_PolyLineShape
+});
+var pixelimage_triGML_contour_QuadCurveShape = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill,thru,x1,y1,x2,y2,x3,y3) {
+	if(y3 == null) {
+		y3 = 0.;
+	}
+	if(x3 == null) {
+		x3 = 0.;
+	}
+	if(y2 == null) {
+		y2 = 0.;
+	}
+	if(x2 == null) {
+		x2 = 0.;
+	}
+	if(y1 == null) {
+		y1 = 0.;
+	}
+	if(x1 == null) {
+		x1 = 0.;
+	}
+	if(thru == null) {
+		thru = false;
+	}
+	if(fill == null) {
+		fill = 0;
+	}
+	if(strokeWidth == null) {
+		strokeWidth = 1.;
+	}
+	if(strokeColor == null) {
+		strokeColor = 0;
+	}
+	if(visibility == null) {
+		visibility = true;
+	}
+	if(opacity == null) {
+		opacity = 1.;
+	}
+	pixelimage_triGML_coreShape_FillShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill);
+	this.thru = thru;
+	this.x1 = x1;
+	this.y1 = y1;
+	this.x2 = x2;
+	this.y2 = y2;
+	this.x3 = x3;
+	this.y3 = y3;
+};
+pixelimage_triGML_contour_QuadCurveShape.__name__ = "pixelimage.triGML.contour.QuadCurveShape";
+pixelimage_triGML_contour_QuadCurveShape.__super__ = pixelimage_triGML_coreShape_FillShape;
+pixelimage_triGML_contour_QuadCurveShape.prototype = $extend(pixelimage_triGML_coreShape_FillShape.prototype,{
+	setParameter: function(name,value) {
+		switch(name) {
+		case "thru":
+			this.thru = value.toLowerCase() == "true";
+			break;
+		case "x1":
+			this.x1 = parseFloat(value);
+			break;
+		case "x2":
+			this.x2 = parseFloat(value);
+			break;
+		case "x3":
+			this.x3 = parseFloat(value);
+			break;
+		case "y1":
+			this.y1 = parseFloat(value);
+			break;
+		case "y2":
+			this.y2 = parseFloat(value);
+			break;
+		case "y3":
+			this.y3 = parseFloat(value);
+			break;
+		default:
+			pixelimage_triGML_coreShape_FillShape.prototype.setParameter.call(this,name,value);
+		}
+	}
+	,render: function(pixelImage) {
+		var drawing = new pixelimage_triGML_coreShape_DrawShapeHelper(pixelImage,this.strokeWidth,this.strokeColor);
+		drawing.moveTo(this.x1,this.y1);
+		drawing.quadTo(this.x2,this.y2,this.x3,this.y3);
+		return pixelimage_triGML_coreShape_FillShape.prototype.render.call(this,pixelImage);
+	}
+	,__class__: pixelimage_triGML_contour_QuadCurveShape
+});
+var pixelimage_triGML_contour_QuadShape = function(opacity,visibility,strokeColor,aX,aY,bX,bY,cX,cY,dX,dY) {
+	if(dY == null) {
+		dY = 1.;
+	}
+	if(dX == null) {
+		dX = 0.;
+	}
+	if(cY == null) {
+		cY = 1.;
+	}
+	if(cX == null) {
+		cX = 1.;
+	}
+	if(bY == null) {
+		bY = 0.;
+	}
+	if(bX == null) {
+		bX = 1.;
+	}
+	if(aY == null) {
+		aY = 0.;
+	}
+	if(aX == null) {
+		aX = 0.;
+	}
+	if(strokeColor == null) {
+		strokeColor = -1048576;
+	}
+	if(visibility == null) {
+		visibility = true;
+	}
+	if(opacity == null) {
+		opacity = 1.;
+	}
+	pixelimage_triGML_coreShape_BasicShape.call(this,opacity,visibility,strokeColor,0.,null);
+	this.aX = aX;
+	this.aY = aY;
+	this.bX = bX;
+	this.bY = bY;
+	this.cX = cX;
+	this.cY = cY;
+	this.dX = dX;
+	this.dY = dY;
+};
+pixelimage_triGML_contour_QuadShape.__name__ = "pixelimage.triGML.contour.QuadShape";
+pixelimage_triGML_contour_QuadShape.__super__ = pixelimage_triGML_coreShape_BasicShape;
+pixelimage_triGML_contour_QuadShape.prototype = $extend(pixelimage_triGML_coreShape_BasicShape.prototype,{
+	setParameter: function(name,value) {
+		switch(name) {
+		case "aX":
+			this.aX = parseFloat(value);
+			break;
+		case "aY":
+			this.aY = parseFloat(value);
+			break;
+		case "bX":
+			this.bX = parseFloat(value);
+			break;
+		case "bY":
+			this.bY = parseFloat(value);
+			break;
+		case "cX":
+			this.cX = parseFloat(value);
+			break;
+		case "cY":
+			this.cY = parseFloat(value);
+			break;
+		case "dX":
+			this.dX = parseFloat(value);
+			break;
+		case "dY":
+			this.dY = parseFloat(value);
+			break;
+		default:
+			pixelimage_triGML_coreShape_BasicShape.prototype.setParameter.call(this,name,value);
+		}
+	}
+	,render: function(pixelImage) {
+		var ax = this.aX;
+		var ay = this.aY;
+		var bx = this.bX;
+		var by = this.bY;
+		var cx = this.cX;
+		var cy = this.cY;
+		var dx = this.dX;
+		var dy = this.dY;
+		var color = this.strokeColor;
+		var hasHit = false;
+		if(hasHit == null) {
+			hasHit = false;
+		}
+		var bx1 = bx;
+		var by1 = by;
+		var cx1 = dx;
+		var cy1 = dy;
+		var hasHit1 = hasHit;
+		if(hasHit1 == null) {
+			hasHit1 = false;
+		}
+		var adjustWinding = ax * by1 - bx1 * ay + (bx1 * cy1 - cx1 * by1) + (cx1 * ay - ax * cy1) > 0;
+		if(!adjustWinding) {
+			var bx_ = bx1;
+			var by_ = by1;
+			bx1 = cx1;
+			by1 = cy1;
+			cx1 = bx_;
+			cy1 = by_;
+		}
+		var hasHit2 = hasHit1;
+		if(hasHit2 == null) {
+			hasHit2 = false;
+		}
+		var s0 = ay * cx1 - ax * cy1;
+		var sx = cy1 - ay;
+		var sy = ax - cx1;
+		var t0 = ax * by1 - ay * bx1;
+		var tx = ay - by1;
+		var ty = bx1 - ax;
+		var A = -by1 * cx1 + ay * (-bx1 + cx1) + ax * (by1 - cy1) + bx1 * cy1;
+		var yIter3;
+		if(ay > by1) {
+			if(ay > cy1) {
+				var ii_min = by1 > cy1 ? Math.floor(cy1) : Math.floor(by1);
+				var ii_max = Math.ceil(ay);
+				var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+				yIter3 = this1;
+			} else {
+				var ii_min = Math.floor(by1);
+				var ii_max = Math.ceil(cy1);
+				var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+				yIter3 = this1;
+			}
+		} else if(by1 > cy1) {
+			var ii_min = ay > cy1 ? Math.floor(cy1) : Math.ceil(ay);
+			var ii_max = Math.ceil(by1);
+			var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+			yIter3 = this1;
+		} else {
+			var ii_min = Math.floor(ay);
+			var ii_max = Math.ceil(cy1);
+			var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+			yIter3 = this1;
+		}
+		var foundY = false;
+		var s = 0.;
+		var t = 0.;
+		var sxx = 0.;
+		var txx = 0.;
+		var this1;
+		if(ax > bx1) {
+			if(ax > cx1) {
+				var ii_min = bx1 > cx1 ? Math.floor(cx1) : Math.floor(bx1);
+				var ii_max = Math.ceil(ax);
+				var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+				this1 = this2;
+			} else {
+				var ii_min = Math.floor(bx1);
+				var ii_max = Math.ceil(cx1);
+				var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+				this1 = this2;
+			}
+		} else if(bx1 > cx1) {
+			var ii_min = ax > cx1 ? Math.floor(cx1) : Math.ceil(ax);
+			var ii_max = Math.ceil(bx1);
+			var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+			this1 = this2;
+		} else {
+			var ii_min = Math.floor(ax);
+			var ii_max = Math.ceil(cx1);
+			var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+			this1 = this2;
+		}
+		var _g_min = this1.start;
+		var _g_max = this1.max;
+		while(_g_min < _g_max) {
+			var x = _g_min++;
+			sxx = sx * x;
+			txx = tx * x;
+			foundY = false;
+			var _g_min1 = yIter3.start;
+			var _g_max1 = yIter3.max;
+			while(_g_min1 < _g_max1) {
+				var y = _g_min1++;
+				s = s0 + sxx + sy * y;
+				t = t0 + txx + ty * y;
+				if(s <= 0 || t <= 0) {
+					if(foundY) {
+						break;
+					}
+				} else if(s + t < A) {
+					var this1 = color;
+					var c = this1;
+					if((c >> 24 & 255) < 254 && pixelImage.transparent) {
+						var location = pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0;
+						var this2 = pixelImage.image[location];
+						var this3 = this2;
+						var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
+						var this5 = this4 >> 24 & 255;
+						var a1 = this5 == 0 ? 0. : this5 / 255;
+						var this6 = this4 >> 16 & 255;
+						var r1 = this6 == 0 ? 0. : this6 / 255;
+						var this7 = this4 >> 8 & 255;
+						var g1 = this7 == 0 ? 0. : this7 / 255;
+						var this8 = this4 & 255;
+						var b1 = this8 == 0 ? 0. : this8 / 255;
+						var this9 = color >> 24 & 255;
+						var a2 = this9 == 0 ? 0. : this9 / 255;
+						var this10 = color >> 16 & 255;
+						var r2 = this10 == 0 ? 0. : this10 / 255;
+						var this11 = color >> 8 & 255;
+						var g2 = this11 == 0 ? 0. : this11 / 255;
+						var this12 = color & 255;
+						var b2 = this12 == 0 ? 0. : this12 / 255;
+						var a3 = a1 * (1 - a2);
+						var r = 255 * (r1 * a3 + r2 * a2) | 0;
+						var g = 255 * (g1 * a3 + g2 * a2) | 0;
+						var b = 255 * (b1 * a3 + b2 * a2) | 0;
+						var a = 255 * (a3 + a2) | 0;
+						var blended = a << 24 | r << 16 | g << 8 | b;
+						pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+					} else {
+						pixelImage.image[pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
+					}
+					foundY = true;
+				} else if(foundY) {
+					break;
+				}
+			}
+		}
+		if(hasHit2 == true) {
+			var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1);
+		}
+		var bx1 = cx;
+		var by1 = cy;
+		var cx1 = dx;
+		var cy1 = dy;
+		var hasHit1 = hasHit;
+		if(hasHit1 == null) {
+			hasHit1 = false;
+		}
+		var adjustWinding = bx * by1 - bx1 * by + (bx1 * cy1 - cx1 * by1) + (cx1 * by - bx * cy1) > 0;
+		if(!adjustWinding) {
+			var bx_ = bx1;
+			var by_ = by1;
+			bx1 = cx1;
+			by1 = cy1;
+			cx1 = bx_;
+			cy1 = by_;
+		}
+		var hasHit2 = hasHit1;
+		if(hasHit2 == null) {
+			hasHit2 = false;
+		}
+		var s0 = by * cx1 - bx * cy1;
+		var sx = cy1 - by;
+		var sy = bx - cx1;
+		var t0 = bx * by1 - by * bx1;
+		var tx = by - by1;
+		var ty = bx1 - bx;
+		var A = -by1 * cx1 + by * (-bx1 + cx1) + bx * (by1 - cy1) + bx1 * cy1;
+		var yIter3;
+		if(by > by1) {
+			if(by > cy1) {
+				var ii_min = by1 > cy1 ? Math.floor(cy1) : Math.floor(by1);
+				var ii_max = Math.ceil(by);
+				var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+				yIter3 = this1;
+			} else {
+				var ii_min = Math.floor(by1);
+				var ii_max = Math.ceil(cy1);
+				var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+				yIter3 = this1;
+			}
+		} else if(by1 > cy1) {
+			var ii_min = by > cy1 ? Math.floor(cy1) : Math.ceil(by);
+			var ii_max = Math.ceil(by1);
+			var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+			yIter3 = this1;
+		} else {
+			var ii_min = Math.floor(by);
+			var ii_max = Math.ceil(cy1);
+			var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+			yIter3 = this1;
+		}
+		var foundY = false;
+		var s = 0.;
+		var t = 0.;
+		var sxx = 0.;
+		var txx = 0.;
+		var this1;
+		if(bx > bx1) {
+			if(bx > cx1) {
+				var ii_min = bx1 > cx1 ? Math.floor(cx1) : Math.floor(bx1);
+				var ii_max = Math.ceil(bx);
+				var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+				this1 = this2;
+			} else {
+				var ii_min = Math.floor(bx1);
+				var ii_max = Math.ceil(cx1);
+				var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+				this1 = this2;
+			}
+		} else if(bx1 > cx1) {
+			var ii_min = bx > cx1 ? Math.floor(cx1) : Math.ceil(bx);
+			var ii_max = Math.ceil(bx1);
+			var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+			this1 = this2;
+		} else {
+			var ii_min = Math.floor(bx);
+			var ii_max = Math.ceil(cx1);
+			var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+			this1 = this2;
+		}
+		var _g_min = this1.start;
+		var _g_max = this1.max;
+		while(_g_min < _g_max) {
+			var x = _g_min++;
+			sxx = sx * x;
+			txx = tx * x;
+			foundY = false;
+			var _g_min1 = yIter3.start;
+			var _g_max1 = yIter3.max;
+			while(_g_min1 < _g_max1) {
+				var y = _g_min1++;
+				s = s0 + sxx + sy * y;
+				t = t0 + txx + ty * y;
+				if(s <= 0 || t <= 0) {
+					if(foundY) {
+						break;
+					}
+				} else if(s + t < A) {
+					var this1 = color;
+					var c = this1;
+					if((c >> 24 & 255) < 254 && pixelImage.transparent) {
+						var location = pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0;
+						var this2 = pixelImage.image[location];
+						var this3 = this2;
+						var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
+						var this5 = this4 >> 24 & 255;
+						var a1 = this5 == 0 ? 0. : this5 / 255;
+						var this6 = this4 >> 16 & 255;
+						var r1 = this6 == 0 ? 0. : this6 / 255;
+						var this7 = this4 >> 8 & 255;
+						var g1 = this7 == 0 ? 0. : this7 / 255;
+						var this8 = this4 & 255;
+						var b1 = this8 == 0 ? 0. : this8 / 255;
+						var this9 = color >> 24 & 255;
+						var a2 = this9 == 0 ? 0. : this9 / 255;
+						var this10 = color >> 16 & 255;
+						var r2 = this10 == 0 ? 0. : this10 / 255;
+						var this11 = color >> 8 & 255;
+						var g2 = this11 == 0 ? 0. : this11 / 255;
+						var this12 = color & 255;
+						var b2 = this12 == 0 ? 0. : this12 / 255;
+						var a3 = a1 * (1 - a2);
+						var r = 255 * (r1 * a3 + r2 * a2) | 0;
+						var g = 255 * (g1 * a3 + g2 * a2) | 0;
+						var b = 255 * (b1 * a3 + b2 * a2) | 0;
+						var a = 255 * (a3 + a2) | 0;
+						var blended = a << 24 | r << 16 | g << 8 | b;
+						pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+					} else {
+						pixelImage.image[pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
+					}
+					foundY = true;
+				} else if(foundY) {
+					break;
+				}
+			}
+		}
+		if(hasHit2 == true) {
+			var v = new pixelimage_algo_HitTri(bx,by,bx1,by1,cx1,cy1);
+		}
+		if(hasHit == true) {
+			var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy);
+		}
+		return pixelimage_triGML_coreShape_BasicShape.prototype.render.call(this,pixelImage);
+	}
+	,__class__: pixelimage_triGML_contour_QuadShape
+});
+var pixelimage_triGML_contour_ThruCurveShape = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill,x1,y1,x2,y2,x3,y3) {
+	if(y3 == null) {
+		y3 = 0.;
+	}
+	if(x3 == null) {
+		x3 = 0.;
+	}
+	if(y2 == null) {
+		y2 = 0.;
+	}
+	if(x2 == null) {
+		x2 = 0.;
+	}
+	if(y1 == null) {
+		y1 = 0.;
+	}
+	if(x1 == null) {
+		x1 = 0.;
+	}
+	if(fill == null) {
+		fill = 0;
+	}
+	if(strokeWidth == null) {
+		strokeWidth = 1.;
+	}
+	if(strokeColor == null) {
+		strokeColor = 0;
+	}
+	if(visibility == null) {
+		visibility = true;
+	}
+	if(opacity == null) {
+		opacity = 1.;
+	}
+	pixelimage_triGML_coreShape_FillShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill);
+	this.x1 = x1;
+	this.y1 = y1;
+	this.x2 = x2;
+	this.y2 = y2;
+	this.x3 = x3;
+	this.y3 = y3;
+};
+pixelimage_triGML_contour_ThruCurveShape.__name__ = "pixelimage.triGML.contour.ThruCurveShape";
+pixelimage_triGML_contour_ThruCurveShape.__super__ = pixelimage_triGML_coreShape_FillShape;
+pixelimage_triGML_contour_ThruCurveShape.prototype = $extend(pixelimage_triGML_coreShape_FillShape.prototype,{
+	setParameter: function(name,value) {
+		switch(name) {
+		case "x1":
+			this.x1 = parseFloat(value);
+			break;
+		case "x2":
+			this.x2 = parseFloat(value);
+			break;
+		case "x3":
+			this.x3 = parseFloat(value);
+			break;
+		case "y1":
+			this.y1 = parseFloat(value);
+			break;
+		case "y2":
+			this.y2 = parseFloat(value);
+			break;
+		case "y3":
+			this.y3 = parseFloat(value);
+			break;
+		default:
+			pixelimage_triGML_coreShape_FillShape.prototype.setParameter.call(this,name,value);
+		}
+	}
+	,render: function(pixelImage) {
+		var drawing = new pixelimage_triGML_coreShape_DrawShapeHelper(pixelImage,this.strokeWidth,this.strokeColor);
+		drawing.moveTo(this.x1,this.y1);
+		drawing.quadThru(this.x2,this.y2,this.x3,this.y3);
+		drawing = null;
+		return pixelimage_triGML_coreShape_FillShape.prototype.render.call(this,pixelImage);
+	}
+	,__class__: pixelimage_triGML_contour_ThruCurveShape
+});
+var pixelimage_triGML_coreShape_BasicGradient = function(opacity,visibility,cornerColors) {
+	if(visibility == null) {
+		visibility = true;
+	}
+	if(opacity == null) {
+		opacity = 1.;
+	}
+	this.cornerColors = [];
+	pixelimage_triGML_coreShape_GroupShape.call(this,opacity,visibility);
+	if(cornerColors != null) {
+		this.cornerColors = cornerColors;
+	}
+};
+pixelimage_triGML_coreShape_BasicGradient.__name__ = "pixelimage.triGML.coreShape.BasicGradient";
+pixelimage_triGML_coreShape_BasicGradient.__super__ = pixelimage_triGML_coreShape_GroupShape;
+pixelimage_triGML_coreShape_BasicGradient.prototype = $extend(pixelimage_triGML_coreShape_GroupShape.prototype,{
+	setParameter: function(name,value) {
+		if(name == "cornerColors") {
+			value = value.split("[")[1].split("]")[0];
+			var _g = [];
+			var _g1 = 0;
+			var _g2 = value.split(",");
+			while(_g1 < _g2.length) {
+				var n = _g2[_g1];
+				++_g1;
+				_g.push(Std.parseInt(n));
+			}
+			this.cornerColors = _g;
+		} else {
+			pixelimage_triGML_coreShape_GroupShape.prototype.setParameter.call(this,name,value);
+		}
+	}
+	,__class__: pixelimage_triGML_coreShape_BasicGradient
+});
+var pixelimage_triGML_coreShape_DrawShapeHelper = function(pixelImage,strokeWidth,strokeColor,translateX,translateY,scaleX,scaleY) {
 	if(scaleY == null) {
 		scaleY = 1.;
 	}
@@ -13313,12 +18532,12 @@ var pixelimage_draw_DrawShapeHelper = function(pixelImage,strokeWidth,strokeColo
 	this.scaleY = scaleY;
 	this.svgLinePath = new justPath_SvgLinePath(this);
 };
-pixelimage_draw_DrawShapeHelper.__name__ = "pixelimage.draw.DrawShapeHelper";
-pixelimage_draw_DrawShapeHelper.__interfaces__ = [justPath_ILinePathContext];
-pixelimage_draw_DrawShapeHelper.prototype = {
+pixelimage_triGML_coreShape_DrawShapeHelper.__name__ = "pixelimage.triGML.coreShape.DrawShapeHelper";
+pixelimage_triGML_coreShape_DrawShapeHelper.__interfaces__ = [justPath_ILinePathContext];
+pixelimage_triGML_coreShape_DrawShapeHelper.prototype = {
 	lineSegmentTo: function(x2,y2) {
 		if(this.toggleDraw) {
-			this.oldInfo = this.info;
+			var oldInfo = this.info;
 			var this1 = this.pixelImage;
 			var px = this.x0 * this.scaleX + this.translateX;
 			var py = this.y0 * this.scaleY + this.translateY;
@@ -13498,7 +18717,7 @@ pixelimage_draw_DrawShapeHelper.prototype = {
 				}
 			}
 			if(hasHit2 == true) {
-				var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1,true);
+				var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1);
 			}
 			var bx1 = cx;
 			var by1 = cy;
@@ -13639,26 +18858,26 @@ pixelimage_draw_DrawShapeHelper.prototype = {
 				}
 			}
 			if(hasHit2 == true) {
-				var v = new pixelimage_algo_HitTri(bx,by,bx1,by1,cx1,cy1,true);
+				var v = new pixelimage_algo_HitTri(bx,by,bx1,by1,cx1,cy1);
 			}
 			var tmp;
 			if(hasHit1 == true) {
-				var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy,true);
+				var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy);
 				tmp = v;
 			} else {
 				tmp = null;
 			}
 			this.info = tmp;
-			if(this.info != null && this.oldInfo != null) {
+			if(this.info != null && oldInfo != null) {
 				var this1 = this.pixelImage;
-				var ax = this.oldInfo.bx * this.scaleX + this.translateX;
-				var ay = this.oldInfo.by * this.scaleY + this.translateY;
+				var ax = oldInfo.bx * this.scaleX + this.translateX;
+				var ay = oldInfo.by * this.scaleY + this.translateY;
 				var bx = this.info.ax * this.scaleX + this.translateX;
 				var by = this.info.ay * this.scaleY + this.translateY;
 				var cx = this.info.dx * this.scaleX + this.translateX;
 				var cy = this.info.dy * this.scaleY + this.translateY;
-				var dx = this.oldInfo.cx * this.scaleX + this.translateX;
-				var dy = this.oldInfo.cy * this.scaleY + this.translateY;
+				var dx = oldInfo.cx * this.scaleX + this.translateX;
+				var dy = oldInfo.cy * this.scaleY + this.translateY;
 				var color = this.strokeColor;
 				var hasHit = true;
 				if(hasHit == null) {
@@ -13807,7 +19026,7 @@ pixelimage_draw_DrawShapeHelper.prototype = {
 					}
 				}
 				if(hasHit2 == true) {
-					var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1,true);
+					var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1);
 				}
 				var bx1 = cx;
 				var by1 = cy;
@@ -13948,10 +19167,10 @@ pixelimage_draw_DrawShapeHelper.prototype = {
 					}
 				}
 				if(hasHit2 == true) {
-					var v = new pixelimage_algo_HitTri(bx,by,bx1,by1,cx1,cy1,true);
+					var v = new pixelimage_algo_HitTri(bx,by,bx1,by1,cx1,cy1);
 				}
 				if(hasHit1 == true) {
-					var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy,true);
+					var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy);
 				}
 			}
 		}
@@ -13960,7 +19179,7 @@ pixelimage_draw_DrawShapeHelper.prototype = {
 		this.y0 = y2;
 	}
 	,lineTo: function(x2,y2) {
-		this.oldInfo = this.info;
+		var oldInfo = this.info;
 		var this1 = this.pixelImage;
 		var px = this.x0 * this.scaleX + this.translateX;
 		var py = this.y0 * this.scaleY + this.translateY;
@@ -14140,7 +19359,7 @@ pixelimage_draw_DrawShapeHelper.prototype = {
 			}
 		}
 		if(hasHit2 == true) {
-			var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1,true);
+			var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1);
 		}
 		var bx1 = cx;
 		var by1 = cy;
@@ -14281,26 +19500,26 @@ pixelimage_draw_DrawShapeHelper.prototype = {
 			}
 		}
 		if(hasHit2 == true) {
-			var v = new pixelimage_algo_HitTri(bx,by,bx1,by1,cx1,cy1,true);
+			var v = new pixelimage_algo_HitTri(bx,by,bx1,by1,cx1,cy1);
 		}
 		var tmp;
 		if(hasHit1 == true) {
-			var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy,true);
+			var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy);
 			tmp = v;
 		} else {
 			tmp = null;
 		}
 		this.info = tmp;
-		if(this.info != null && this.oldInfo != null) {
+		if(this.info != null && oldInfo != null) {
 			var this1 = this.pixelImage;
-			var ax = this.oldInfo.bx * this.scaleX + this.translateX;
-			var ay = this.oldInfo.by * this.scaleY + this.translateY;
+			var ax = oldInfo.bx * this.scaleX + this.translateX;
+			var ay = oldInfo.by * this.scaleY + this.translateY;
 			var bx = this.info.ax * this.scaleX + this.translateX;
 			var by = this.info.ay * this.scaleY + this.translateY;
 			var cx = this.info.dx * this.scaleX + this.translateX;
 			var cy = this.info.dy * this.scaleY + this.translateY;
-			var dx = this.oldInfo.cx * this.scaleX + this.translateX;
-			var dy = this.oldInfo.cy * this.scaleY + this.translateY;
+			var dx = oldInfo.cx * this.scaleX + this.translateX;
+			var dy = oldInfo.cy * this.scaleY + this.translateY;
 			var color = this.strokeColor;
 			var hasHit = true;
 			if(hasHit == null) {
@@ -14449,7 +19668,7 @@ pixelimage_draw_DrawShapeHelper.prototype = {
 				}
 			}
 			if(hasHit2 == true) {
-				var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1,true);
+				var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1);
 			}
 			var bx1 = cx;
 			var by1 = cy;
@@ -14590,10 +19809,10 @@ pixelimage_draw_DrawShapeHelper.prototype = {
 				}
 			}
 			if(hasHit2 == true) {
-				var v = new pixelimage_algo_HitTri(bx,by,bx1,by1,cx1,cy1,true);
+				var v = new pixelimage_algo_HitTri(bx,by,bx1,by1,cx1,cy1);
 			}
 			if(hasHit1 == true) {
-				var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy,true);
+				var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy);
 			}
 		}
 		this.x0 = x2;
@@ -14751,9 +19970,9 @@ pixelimage_draw_DrawShapeHelper.prototype = {
 		_this.px = x3;
 		_this.py = y3;
 	}
-	,__class__: pixelimage_draw_DrawShapeHelper
+	,__class__: pixelimage_triGML_coreShape_DrawShapeHelper
 };
-var pixelimage_draw_DrawTileHelper = function(pixelImage,strokeWidth,tileImageStroke,translateX,translateY,scaleX,scaleY) {
+var pixelimage_triGML_coreShape_DrawTileHelper = function(pixelImage,strokeWidth,tileImageStroke,translateX,translateY,scaleX,scaleY) {
 	if(scaleY == null) {
 		scaleY = 1.;
 	}
@@ -14770,19 +19989,18 @@ var pixelimage_draw_DrawTileHelper = function(pixelImage,strokeWidth,tileImageSt
 	this.y0 = 0.;
 	this.x0 = 0.;
 	this.pixelImage = pixelImage;
-	this.strokeWidth = strokeWidth;
 	this.translateX = translateX;
 	this.translateY = translateY;
 	this.scaleX = scaleX;
 	this.scaleY = scaleY;
 	this.svgLinePath = new justPath_SvgLinePath(this);
 };
-pixelimage_draw_DrawTileHelper.__name__ = "pixelimage.draw.DrawTileHelper";
-pixelimage_draw_DrawTileHelper.__interfaces__ = [justPath_ILinePathContext];
-pixelimage_draw_DrawTileHelper.prototype = {
+pixelimage_triGML_coreShape_DrawTileHelper.__name__ = "pixelimage.triGML.coreShape.DrawTileHelper";
+pixelimage_triGML_coreShape_DrawTileHelper.__interfaces__ = [justPath_ILinePathContext];
+pixelimage_triGML_coreShape_DrawTileHelper.prototype = {
 	lineSegmentTo: function(x2,y2) {
 		if(this.toggleDraw) {
-			this.oldInfo = this.info;
+			var oldInfo = this.info;
 			var this1 = this.pixelImage;
 			var px = this.x0 * this.scaleX + this.translateX;
 			var py = this.y0 * this.scaleY + this.translateY;
@@ -15172,7 +20390,7 @@ pixelimage_draw_DrawTileHelper.prototype = {
 				}
 			}
 			if(hasHit2 == false) {
-				var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1,true);
+				var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1);
 			}
 			var bx1 = cx;
 			var by1 = cy;
@@ -15317,26 +20535,26 @@ pixelimage_draw_DrawTileHelper.prototype = {
 				}
 			}
 			if(hasHit2 == false) {
-				var v = new pixelimage_algo_HitTri(bx,by,bx1,by1,cx1,cy1,true);
+				var v = new pixelimage_algo_HitTri(bx,by,bx1,by1,cx1,cy1);
 			}
 			var tmp;
 			if(hasHit1 == true) {
-				var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy,true);
+				var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy);
 				tmp = v;
 			} else {
 				tmp = null;
 			}
 			this.info = tmp;
-			if(this.info != null && this.oldInfo != null) {
+			if(this.info != null && oldInfo != null) {
 				var this1 = this.pixelImage;
-				var ax = this.oldInfo.bx * this.scaleX + this.translateX;
-				var ay = this.oldInfo.by * this.scaleY + this.translateY;
+				var ax = oldInfo.bx * this.scaleX + this.translateX;
+				var ay = oldInfo.by * this.scaleY + this.translateY;
 				var bx = this.info.ax * this.scaleX + this.translateX;
 				var by = this.info.ay * this.scaleY + this.translateY;
 				var cx = this.info.dx * this.scaleX + this.translateX;
 				var cy = this.info.dy * this.scaleY + this.translateY;
-				var dx = this.oldInfo.cx * this.scaleX + this.translateX;
-				var dy = this.oldInfo.cy * this.scaleY + this.translateY;
+				var dx = oldInfo.cx * this.scaleX + this.translateX;
+				var dy = oldInfo.cy * this.scaleY + this.translateY;
 				var tileImage = this.tileImageStroke;
 				var hasHit = false;
 				if(hasHit == null) {
@@ -15485,7 +20703,7 @@ pixelimage_draw_DrawTileHelper.prototype = {
 					}
 				}
 				if(hasHit2 == false) {
-					var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1,true);
+					var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1);
 				}
 				var bx1 = cx;
 				var by1 = cy;
@@ -15630,10 +20848,10 @@ pixelimage_draw_DrawTileHelper.prototype = {
 					}
 				}
 				if(hasHit2 == false) {
-					var v = new pixelimage_algo_HitTri(bx,by,bx1,by1,cx1,cy1,true);
+					var v = new pixelimage_algo_HitTri(bx,by,bx1,by1,cx1,cy1);
 				}
 				if(hasHit == true) {
-					var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy,true);
+					var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy);
 				}
 			}
 		}
@@ -15642,7 +20860,7 @@ pixelimage_draw_DrawTileHelper.prototype = {
 		this.y0 = y2;
 	}
 	,lineTo: function(x2,y2) {
-		this.oldInfo = this.info;
+		var oldInfo = this.info;
 		var this1 = this.pixelImage;
 		var px = this.x0 * this.scaleX + this.translateX;
 		var py = this.y0 * this.scaleY + this.translateY;
@@ -16036,7 +21254,7 @@ pixelimage_draw_DrawTileHelper.prototype = {
 			}
 		}
 		if(hasHit2 == false) {
-			var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1,true);
+			var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1);
 		}
 		var bx1 = cx;
 		var by1 = cy;
@@ -16181,26 +21399,26 @@ pixelimage_draw_DrawTileHelper.prototype = {
 			}
 		}
 		if(hasHit2 == false) {
-			var v = new pixelimage_algo_HitTri(bx,by,bx1,by1,cx1,cy1,true);
+			var v = new pixelimage_algo_HitTri(bx,by,bx1,by1,cx1,cy1);
 		}
 		var tmp;
 		if(hasHit == true) {
-			var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy,true);
+			var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy);
 			tmp = v;
 		} else {
 			tmp = null;
 		}
 		this.info = tmp;
-		if(this.info != null && this.oldInfo != null) {
+		if(this.info != null && oldInfo != null) {
 			var this1 = this.pixelImage;
-			var ax = this.oldInfo.bx * this.scaleX + this.translateX;
-			var ay = this.oldInfo.by * this.scaleY + this.translateY;
+			var ax = oldInfo.bx * this.scaleX + this.translateX;
+			var ay = oldInfo.by * this.scaleY + this.translateY;
 			var bx = this.info.ax * this.scaleX + this.translateX;
 			var by = this.info.ay * this.scaleY + this.translateY;
 			var cx = this.info.dx * this.scaleX + this.translateX;
 			var cy = this.info.dy * this.scaleY + this.translateY;
-			var dx = this.oldInfo.cx * this.scaleX + this.translateX;
-			var dy = this.oldInfo.cy * this.scaleY + this.translateY;
+			var dx = oldInfo.cx * this.scaleX + this.translateX;
+			var dy = oldInfo.cy * this.scaleY + this.translateY;
 			var tileImage = this.tileImageStroke;
 			var hasHit = true;
 			if(hasHit == null) {
@@ -16353,7 +21571,7 @@ pixelimage_draw_DrawTileHelper.prototype = {
 				}
 			}
 			if(hasHit2 == false) {
-				var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1,true);
+				var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1);
 			}
 			var bx1 = cx;
 			var by1 = cy;
@@ -16498,10 +21716,10 @@ pixelimage_draw_DrawTileHelper.prototype = {
 				}
 			}
 			if(hasHit2 == false) {
-				var v = new pixelimage_algo_HitTri(bx,by,bx1,by1,cx1,cy1,true);
+				var v = new pixelimage_algo_HitTri(bx,by,bx1,by1,cx1,cy1);
 			}
 			if(hasHit1 == true) {
-				var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy,true);
+				var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy);
 			}
 		}
 		this.x0 = x2;
@@ -16563,5330 +21781,9 @@ pixelimage_draw_DrawTileHelper.prototype = {
 		_this.px = x4;
 		_this.py = y4;
 	}
-	,__class__: pixelimage_draw_DrawTileHelper
+	,__class__: pixelimage_triGML_coreShape_DrawTileHelper
 };
-var pixelimage_iter_IntIterStart = function(min_,max_) {
-	this.start = min_;
-	this.max = max_;
-};
-pixelimage_iter_IntIterStart.__name__ = "pixelimage.iter.IntIterStart";
-pixelimage_iter_IntIterStart.prototype = {
-	__class__: pixelimage_iter_IntIterStart
-};
-var pixelimage_pixel__$TwoGrad_TwoGrad_$ = function(colorClock,colorAnti) {
-	this.colorClock = colorClock;
-	this.colorAnti = colorAnti;
-};
-pixelimage_pixel__$TwoGrad_TwoGrad_$.__name__ = "pixelimage.pixel._TwoGrad.TwoGrad_";
-pixelimage_pixel__$TwoGrad_TwoGrad_$.prototype = {
-	__class__: pixelimage_pixel__$TwoGrad_TwoGrad_$
-};
-var pixelimage_triangleGML_coreShape_ShapeInterface = function() { };
-pixelimage_triangleGML_coreShape_ShapeInterface.__name__ = "pixelimage.triangleGML.coreShape.ShapeInterface";
-pixelimage_triangleGML_coreShape_ShapeInterface.__isInterface__ = true;
-pixelimage_triangleGML_coreShape_ShapeInterface.prototype = {
-	__class__: pixelimage_triangleGML_coreShape_ShapeInterface
-};
-var pixelimage_triangleGML_coreShape_GroupShape = function(opacity,visibility) {
-	if(visibility == null) {
-		visibility = true;
-	}
-	if(opacity == null) {
-		opacity = 1.;
-	}
-	this.visibility = visibility;
-	this.opacity = opacity;
-};
-pixelimage_triangleGML_coreShape_GroupShape.__name__ = "pixelimage.triangleGML.coreShape.GroupShape";
-pixelimage_triangleGML_coreShape_GroupShape.__interfaces__ = [pixelimage_triangleGML_coreShape_ShapeInterface];
-pixelimage_triangleGML_coreShape_GroupShape.prototype = {
-	setParameter: function(name,value) {
-		switch(name) {
-		case "opacity":
-			this.opacity = parseFloat(value);
-			break;
-		case "visibility":
-			this.visibility = value.toLowerCase() == "true";
-			break;
-		default:
-			haxe_Log.trace("property not found " + name,{ fileName : "pixelimage/triangleGML/coreShape/GroupShape.hx", lineNumber : 20, className : "pixelimage.triangleGML.coreShape.GroupShape", methodName : "setParameter"});
-		}
-	}
-	,render: function(pixelShape) {
-		return pixelShape;
-	}
-	,__class__: pixelimage_triangleGML_coreShape_GroupShape
-};
-var pixelimage_triangleGML_coreShape_BasicShape = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray) {
-	if(strokeWidth == null) {
-		strokeWidth = 1.;
-	}
-	if(strokeColor == null) {
-		strokeColor = 0;
-	}
-	if(visibility == null) {
-		visibility = true;
-	}
-	if(opacity == null) {
-		opacity = 1.;
-	}
-	pixelimage_triangleGML_coreShape_GroupShape.call(this,opacity,visibility);
-	this.strokeColor = strokeColor;
-	this.strokeWidth = strokeWidth;
-	this.strokeDashGapArray = strokeDashGapArray;
-};
-pixelimage_triangleGML_coreShape_BasicShape.__name__ = "pixelimage.triangleGML.coreShape.BasicShape";
-pixelimage_triangleGML_coreShape_BasicShape.__super__ = pixelimage_triangleGML_coreShape_GroupShape;
-pixelimage_triangleGML_coreShape_BasicShape.prototype = $extend(pixelimage_triangleGML_coreShape_GroupShape.prototype,{
-	setParameter: function(name,value) {
-		switch(name) {
-		case "strokeColor":
-			this.strokeColor = Std.parseInt(value);
-			break;
-		case "strokeDashGapArray":
-			this.strokeDashGapArray = null;
-			break;
-		case "strokeWidth":
-			this.strokeWidth = parseFloat(value);
-			break;
-		default:
-			pixelimage_triangleGML_coreShape_GroupShape.prototype.setParameter.call(this,name,value);
-		}
-	}
-	,__class__: pixelimage_triangleGML_coreShape_BasicShape
-});
-var pixelimage_triangleGML_contour_ArrowShape = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,both,flare,reverseFlare,x1,y1,x2,y2,arrowWidth,arrowHeight) {
-	if(arrowHeight == null) {
-		arrowHeight = 0.;
-	}
-	if(arrowWidth == null) {
-		arrowWidth = 0.;
-	}
-	if(y2 == null) {
-		y2 = 0.;
-	}
-	if(x2 == null) {
-		x2 = 0.;
-	}
-	if(y1 == null) {
-		y1 = 0.;
-	}
-	if(x1 == null) {
-		x1 = 0.;
-	}
-	if(reverseFlare == null) {
-		reverseFlare = false;
-	}
-	if(flare == null) {
-		flare = false;
-	}
-	if(both == null) {
-		both = false;
-	}
-	if(strokeWidth == null) {
-		strokeWidth = 1.;
-	}
-	if(strokeColor == null) {
-		strokeColor = -1048576;
-	}
-	if(visibility == null) {
-		visibility = true;
-	}
-	if(opacity == null) {
-		opacity = 1.;
-	}
-	pixelimage_triangleGML_coreShape_BasicShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray);
-	this.both = both;
-	this.flare = flare;
-	this.reverseFlare = reverseFlare;
-	this.x1 = x1;
-	this.y1 = y1;
-	this.x2 = x2;
-	this.y2 = y2;
-};
-pixelimage_triangleGML_contour_ArrowShape.__name__ = "pixelimage.triangleGML.contour.ArrowShape";
-pixelimage_triangleGML_contour_ArrowShape.__super__ = pixelimage_triangleGML_coreShape_BasicShape;
-pixelimage_triangleGML_contour_ArrowShape.prototype = $extend(pixelimage_triangleGML_coreShape_BasicShape.prototype,{
-	setParameter: function(name,value) {
-		switch(name) {
-		case "arrowHeight":
-			this.arrowHeight = parseFloat(value);
-			break;
-		case "arrowWidth":
-			this.arrowWidth = parseFloat(value);
-			break;
-		case "both":
-			this.both = StringTools.trim(value).toLowerCase() == "true";
-			break;
-		case "flare":
-			this.flare = StringTools.trim(value).toLowerCase() == "true";
-			break;
-		case "reverseFlare":
-			this.reverseFlare = StringTools.trim(value).toLowerCase() == "true";
-			break;
-		case "x1":
-			this.x1 = parseFloat(value);
-			break;
-		case "x2":
-			this.x2 = parseFloat(value);
-			break;
-		case "y1":
-			this.y1 = parseFloat(value);
-			break;
-		case "y2":
-			this.y2 = parseFloat(value);
-			break;
-		default:
-			pixelimage_triangleGML_coreShape_BasicShape.prototype.setParameter.call(this,name,value);
-		}
-	}
-	,render: function(pixelImage) {
-		if(this.both == false) {
-			if(this.arrowHeight > 0. || this.arrowWidth > 0.) {
-				var px = this.x1;
-				var py = this.y1;
-				var qx = this.x2;
-				var qy = this.y2;
-				var arrowWidth = this.arrowWidth;
-				var arrowHeight = this.arrowHeight;
-				var thick = this.strokeWidth;
-				var color = this.strokeColor;
-				var flare = this.flare;
-				var reverseFlare = this.reverseFlare;
-				if(reverseFlare == null) {
-					reverseFlare = false;
-				}
-				if(flare == null) {
-					flare = false;
-				}
-				haxe_Log.trace("pixelimage.fillArrow",{ fileName : "pixelimage/Pixelshape.hx", lineNumber : 527, className : "pixelimage._Pixelshape.Pixelshape_Impl_", methodName : "fillFixArrow"});
-				var flare1 = flare;
-				var reverseFlare1 = reverseFlare;
-				var hasHit = true;
-				if(hasHit == null) {
-					hasHit = false;
-				}
-				if(reverseFlare1 == null) {
-					reverseFlare1 = false;
-				}
-				if(flare1 == null) {
-					flare1 = false;
-				}
-				var goldenRatio = 1.61803398875;
-				haxe_Log.trace("fillLineFixedArrow",{ fileName : "pixelimage/algo/ArrowPixel.hx", lineNumber : 249, className : "pixelimage.algo._ArrowPixel.ArrowPixel_Fields_", methodName : "fillLineFixedArrow"});
-				var o = qy - py;
-				var a = qx - px;
-				var h = Math.pow(o * o + a * a,0.5);
-				var theta = Math.atan2(o,a);
-				var thicker = arrowWidth > thick * 1.1 ? arrowWidth : 2 * thick * goldenRatio;
-				var sin = Math.sin(theta);
-				var cos = Math.cos(theta);
-				var radius = thick / 2;
-				var radius2 = thicker / 2;
-				var h2 = arrowHeight < h * 1.1 ? h - arrowHeight : h / goldenRatio;
-				var hitQuad;
-				if(flare1) {
-					if(reverseFlare1) {
-						var hasHit1 = true;
-						if(hasHit1 == null) {
-							hasHit1 = false;
-						}
-						var sin1 = Math.sin(theta);
-						var cos1 = Math.cos(theta);
-						var radius1 = thick / 2;
-						var radius21 = (thicker - (thicker - thick) / goldenRatio) / 2;
-						var dx = 0.1;
-						var dy = radius1;
-						var cx = h2;
-						var cy = radius21;
-						var bx = h2;
-						var by = -radius21;
-						var ax = 0.1;
-						var ay = -radius1;
-						var temp = 0.;
-						temp = px + (ax * cos1 - ay * sin1);
-						ay = py + (ay * cos1 + ax * sin1);
-						ax = temp;
-						temp = px + (bx * cos1 - by * sin1);
-						by = py + (by * cos1 + bx * sin1);
-						bx = temp;
-						temp = px + (cx * cos1 - cy * sin1);
-						cy = py + (cy * cos1 + cx * sin1);
-						cx = temp;
-						temp = px + (dx * cos1 - dy * sin1);
-						dy = py + (dy * cos1 + dx * sin1);
-						dx = temp;
-						var hasHit2 = hasHit1;
-						if(hasHit2 == null) {
-							hasHit2 = false;
-						}
-						var bx1 = bx;
-						var by1 = by;
-						var cx1 = dx;
-						var cy1 = dy;
-						var hasHit1 = hasHit2;
-						if(hasHit1 == null) {
-							hasHit1 = false;
-						}
-						var adjustWinding = ax * by1 - bx1 * ay + (bx1 * cy1 - cx1 * by1) + (cx1 * ay - ax * cy1) > 0;
-						if(!adjustWinding) {
-							var bx_ = bx1;
-							var by_ = by1;
-							bx1 = cx1;
-							by1 = cy1;
-							cx1 = bx_;
-							cy1 = by_;
-						}
-						var hasHit3 = hasHit1;
-						if(hasHit3 == null) {
-							hasHit3 = false;
-						}
-						var s0 = ay * cx1 - ax * cy1;
-						var sx = cy1 - ay;
-						var sy = ax - cx1;
-						var t0 = ax * by1 - ay * bx1;
-						var tx = ay - by1;
-						var ty = bx1 - ax;
-						var A = -by1 * cx1 + ay * (-bx1 + cx1) + ax * (by1 - cy1) + bx1 * cy1;
-						var yIter3;
-						if(ay > by1) {
-							if(ay > cy1) {
-								var ii_min = by1 > cy1 ? Math.floor(cy1) : Math.floor(by1);
-								var ii_max = Math.ceil(ay);
-								var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-								yIter3 = this1;
-							} else {
-								var ii_min = Math.floor(by1);
-								var ii_max = Math.ceil(cy1);
-								var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-								yIter3 = this1;
-							}
-						} else if(by1 > cy1) {
-							var ii_min = ay > cy1 ? Math.floor(cy1) : Math.ceil(ay);
-							var ii_max = Math.ceil(by1);
-							var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-							yIter3 = this1;
-						} else {
-							var ii_min = Math.floor(ay);
-							var ii_max = Math.ceil(cy1);
-							var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-							yIter3 = this1;
-						}
-						var foundY = false;
-						var s = 0.;
-						var t = 0.;
-						var sxx = 0.;
-						var txx = 0.;
-						var this1;
-						if(ax > bx1) {
-							if(ax > cx1) {
-								var ii_min = bx1 > cx1 ? Math.floor(cx1) : Math.floor(bx1);
-								var ii_max = Math.ceil(ax);
-								var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-								this1 = this2;
-							} else {
-								var ii_min = Math.floor(bx1);
-								var ii_max = Math.ceil(cx1);
-								var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-								this1 = this2;
-							}
-						} else if(bx1 > cx1) {
-							var ii_min = ax > cx1 ? Math.floor(cx1) : Math.ceil(ax);
-							var ii_max = Math.ceil(bx1);
-							var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-							this1 = this2;
-						} else {
-							var ii_min = Math.floor(ax);
-							var ii_max = Math.ceil(cx1);
-							var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-							this1 = this2;
-						}
-						var _g_min = this1.start;
-						var _g_max = this1.max;
-						while(_g_min < _g_max) {
-							var x = _g_min++;
-							sxx = sx * x;
-							txx = tx * x;
-							foundY = false;
-							var _g_min1 = yIter3.start;
-							var _g_max1 = yIter3.max;
-							while(_g_min1 < _g_max1) {
-								var y = _g_min1++;
-								s = s0 + sxx + sy * y;
-								t = t0 + txx + ty * y;
-								if(s <= 0 || t <= 0) {
-									if(foundY) {
-										break;
-									}
-								} else if(s + t < A) {
-									var this1 = color;
-									var c = this1;
-									if((c >> 24 & 255) < 254 && pixelImage.transparent) {
-										var location = pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0;
-										var this2 = pixelImage.image[location];
-										var this3 = this2;
-										var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
-										var this5 = this4 >> 24 & 255;
-										var a1 = this5 == 0 ? 0. : this5 / 255;
-										var this6 = this4 >> 16 & 255;
-										var r1 = this6 == 0 ? 0. : this6 / 255;
-										var this7 = this4 >> 8 & 255;
-										var g1 = this7 == 0 ? 0. : this7 / 255;
-										var this8 = this4 & 255;
-										var b1 = this8 == 0 ? 0. : this8 / 255;
-										var this9 = color >> 24 & 255;
-										var a2 = this9 == 0 ? 0. : this9 / 255;
-										var this10 = color >> 16 & 255;
-										var r2 = this10 == 0 ? 0. : this10 / 255;
-										var this11 = color >> 8 & 255;
-										var g2 = this11 == 0 ? 0. : this11 / 255;
-										var this12 = color & 255;
-										var b2 = this12 == 0 ? 0. : this12 / 255;
-										var a3 = a1 * (1 - a2);
-										var r = 255 * (r1 * a3 + r2 * a2) | 0;
-										var g = 255 * (g1 * a3 + g2 * a2) | 0;
-										var b = 255 * (b1 * a3 + b2 * a2) | 0;
-										var a = 255 * (a3 + a2) | 0;
-										var blended = a << 24 | r << 16 | g << 8 | b;
-										pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
-									} else {
-										pixelImage.image[pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
-									}
-									foundY = true;
-								} else if(foundY) {
-									break;
-								}
-							}
-						}
-						if(hasHit3 == true) {
-							var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1,true);
-						}
-						var bx1 = cx;
-						var by1 = cy;
-						var cx1 = dx;
-						var cy1 = dy;
-						var hasHit1 = hasHit2;
-						if(hasHit1 == null) {
-							hasHit1 = false;
-						}
-						var adjustWinding = bx * by1 - bx1 * by + (bx1 * cy1 - cx1 * by1) + (cx1 * by - bx * cy1) > 0;
-						if(!adjustWinding) {
-							var bx_ = bx1;
-							var by_ = by1;
-							bx1 = cx1;
-							by1 = cy1;
-							cx1 = bx_;
-							cy1 = by_;
-						}
-						var hasHit3 = hasHit1;
-						if(hasHit3 == null) {
-							hasHit3 = false;
-						}
-						var s0 = by * cx1 - bx * cy1;
-						var sx = cy1 - by;
-						var sy = bx - cx1;
-						var t0 = bx * by1 - by * bx1;
-						var tx = by - by1;
-						var ty = bx1 - bx;
-						var A = -by1 * cx1 + by * (-bx1 + cx1) + bx * (by1 - cy1) + bx1 * cy1;
-						var yIter3;
-						if(by > by1) {
-							if(by > cy1) {
-								var ii_min = by1 > cy1 ? Math.floor(cy1) : Math.floor(by1);
-								var ii_max = Math.ceil(by);
-								var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-								yIter3 = this1;
-							} else {
-								var ii_min = Math.floor(by1);
-								var ii_max = Math.ceil(cy1);
-								var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-								yIter3 = this1;
-							}
-						} else if(by1 > cy1) {
-							var ii_min = by > cy1 ? Math.floor(cy1) : Math.ceil(by);
-							var ii_max = Math.ceil(by1);
-							var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-							yIter3 = this1;
-						} else {
-							var ii_min = Math.floor(by);
-							var ii_max = Math.ceil(cy1);
-							var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-							yIter3 = this1;
-						}
-						var foundY = false;
-						var s = 0.;
-						var t = 0.;
-						var sxx = 0.;
-						var txx = 0.;
-						var this1;
-						if(bx > bx1) {
-							if(bx > cx1) {
-								var ii_min = bx1 > cx1 ? Math.floor(cx1) : Math.floor(bx1);
-								var ii_max = Math.ceil(bx);
-								var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-								this1 = this2;
-							} else {
-								var ii_min = Math.floor(bx1);
-								var ii_max = Math.ceil(cx1);
-								var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-								this1 = this2;
-							}
-						} else if(bx1 > cx1) {
-							var ii_min = bx > cx1 ? Math.floor(cx1) : Math.ceil(bx);
-							var ii_max = Math.ceil(bx1);
-							var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-							this1 = this2;
-						} else {
-							var ii_min = Math.floor(bx);
-							var ii_max = Math.ceil(cx1);
-							var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-							this1 = this2;
-						}
-						var _g_min = this1.start;
-						var _g_max = this1.max;
-						while(_g_min < _g_max) {
-							var x = _g_min++;
-							sxx = sx * x;
-							txx = tx * x;
-							foundY = false;
-							var _g_min1 = yIter3.start;
-							var _g_max1 = yIter3.max;
-							while(_g_min1 < _g_max1) {
-								var y = _g_min1++;
-								s = s0 + sxx + sy * y;
-								t = t0 + txx + ty * y;
-								if(s <= 0 || t <= 0) {
-									if(foundY) {
-										break;
-									}
-								} else if(s + t < A) {
-									var this1 = color;
-									var c = this1;
-									if((c >> 24 & 255) < 254 && pixelImage.transparent) {
-										var location = pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0;
-										var this2 = pixelImage.image[location];
-										var this3 = this2;
-										var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
-										var this5 = this4 >> 24 & 255;
-										var a1 = this5 == 0 ? 0. : this5 / 255;
-										var this6 = this4 >> 16 & 255;
-										var r1 = this6 == 0 ? 0. : this6 / 255;
-										var this7 = this4 >> 8 & 255;
-										var g1 = this7 == 0 ? 0. : this7 / 255;
-										var this8 = this4 & 255;
-										var b1 = this8 == 0 ? 0. : this8 / 255;
-										var this9 = color >> 24 & 255;
-										var a2 = this9 == 0 ? 0. : this9 / 255;
-										var this10 = color >> 16 & 255;
-										var r2 = this10 == 0 ? 0. : this10 / 255;
-										var this11 = color >> 8 & 255;
-										var g2 = this11 == 0 ? 0. : this11 / 255;
-										var this12 = color & 255;
-										var b2 = this12 == 0 ? 0. : this12 / 255;
-										var a3 = a1 * (1 - a2);
-										var r = 255 * (r1 * a3 + r2 * a2) | 0;
-										var g = 255 * (g1 * a3 + g2 * a2) | 0;
-										var b = 255 * (b1 * a3 + b2 * a2) | 0;
-										var a = 255 * (a3 + a2) | 0;
-										var blended = a << 24 | r << 16 | g << 8 | b;
-										pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
-									} else {
-										pixelImage.image[pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
-									}
-									foundY = true;
-								} else if(foundY) {
-									break;
-								}
-							}
-						}
-						if(hasHit3 == true) {
-							var v = new pixelimage_algo_HitTri(bx,by,bx1,by1,cx1,cy1,true);
-						}
-						if(hasHit2 == true) {
-							var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy,true);
-							hitQuad = v;
-						} else {
-							hitQuad = null;
-						}
-					} else {
-						var hasHit1 = true;
-						if(hasHit1 == null) {
-							hasHit1 = false;
-						}
-						var sin1 = Math.sin(theta);
-						var cos1 = Math.cos(theta);
-						var radius1 = (thicker - (thicker - thick) / goldenRatio) / 2;
-						var radius21 = thick / 2;
-						var dx = 0.1;
-						var dy = radius1;
-						var cx = h2;
-						var cy = radius21;
-						var bx = h2;
-						var by = -radius21;
-						var ax = 0.1;
-						var ay = -radius1;
-						var temp = 0.;
-						temp = px + (ax * cos1 - ay * sin1);
-						ay = py + (ay * cos1 + ax * sin1);
-						ax = temp;
-						temp = px + (bx * cos1 - by * sin1);
-						by = py + (by * cos1 + bx * sin1);
-						bx = temp;
-						temp = px + (cx * cos1 - cy * sin1);
-						cy = py + (cy * cos1 + cx * sin1);
-						cx = temp;
-						temp = px + (dx * cos1 - dy * sin1);
-						dy = py + (dy * cos1 + dx * sin1);
-						dx = temp;
-						var hasHit2 = hasHit1;
-						if(hasHit2 == null) {
-							hasHit2 = false;
-						}
-						var bx1 = bx;
-						var by1 = by;
-						var cx1 = dx;
-						var cy1 = dy;
-						var hasHit1 = hasHit2;
-						if(hasHit1 == null) {
-							hasHit1 = false;
-						}
-						var adjustWinding = ax * by1 - bx1 * ay + (bx1 * cy1 - cx1 * by1) + (cx1 * ay - ax * cy1) > 0;
-						if(!adjustWinding) {
-							var bx_ = bx1;
-							var by_ = by1;
-							bx1 = cx1;
-							by1 = cy1;
-							cx1 = bx_;
-							cy1 = by_;
-						}
-						var hasHit3 = hasHit1;
-						if(hasHit3 == null) {
-							hasHit3 = false;
-						}
-						var s0 = ay * cx1 - ax * cy1;
-						var sx = cy1 - ay;
-						var sy = ax - cx1;
-						var t0 = ax * by1 - ay * bx1;
-						var tx = ay - by1;
-						var ty = bx1 - ax;
-						var A = -by1 * cx1 + ay * (-bx1 + cx1) + ax * (by1 - cy1) + bx1 * cy1;
-						var yIter3;
-						if(ay > by1) {
-							if(ay > cy1) {
-								var ii_min = by1 > cy1 ? Math.floor(cy1) : Math.floor(by1);
-								var ii_max = Math.ceil(ay);
-								var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-								yIter3 = this1;
-							} else {
-								var ii_min = Math.floor(by1);
-								var ii_max = Math.ceil(cy1);
-								var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-								yIter3 = this1;
-							}
-						} else if(by1 > cy1) {
-							var ii_min = ay > cy1 ? Math.floor(cy1) : Math.ceil(ay);
-							var ii_max = Math.ceil(by1);
-							var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-							yIter3 = this1;
-						} else {
-							var ii_min = Math.floor(ay);
-							var ii_max = Math.ceil(cy1);
-							var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-							yIter3 = this1;
-						}
-						var foundY = false;
-						var s = 0.;
-						var t = 0.;
-						var sxx = 0.;
-						var txx = 0.;
-						var this1;
-						if(ax > bx1) {
-							if(ax > cx1) {
-								var ii_min = bx1 > cx1 ? Math.floor(cx1) : Math.floor(bx1);
-								var ii_max = Math.ceil(ax);
-								var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-								this1 = this2;
-							} else {
-								var ii_min = Math.floor(bx1);
-								var ii_max = Math.ceil(cx1);
-								var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-								this1 = this2;
-							}
-						} else if(bx1 > cx1) {
-							var ii_min = ax > cx1 ? Math.floor(cx1) : Math.ceil(ax);
-							var ii_max = Math.ceil(bx1);
-							var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-							this1 = this2;
-						} else {
-							var ii_min = Math.floor(ax);
-							var ii_max = Math.ceil(cx1);
-							var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-							this1 = this2;
-						}
-						var _g_min = this1.start;
-						var _g_max = this1.max;
-						while(_g_min < _g_max) {
-							var x = _g_min++;
-							sxx = sx * x;
-							txx = tx * x;
-							foundY = false;
-							var _g_min1 = yIter3.start;
-							var _g_max1 = yIter3.max;
-							while(_g_min1 < _g_max1) {
-								var y = _g_min1++;
-								s = s0 + sxx + sy * y;
-								t = t0 + txx + ty * y;
-								if(s <= 0 || t <= 0) {
-									if(foundY) {
-										break;
-									}
-								} else if(s + t < A) {
-									var this1 = color;
-									var c = this1;
-									if((c >> 24 & 255) < 254 && pixelImage.transparent) {
-										var location = pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0;
-										var this2 = pixelImage.image[location];
-										var this3 = this2;
-										var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
-										var this5 = this4 >> 24 & 255;
-										var a1 = this5 == 0 ? 0. : this5 / 255;
-										var this6 = this4 >> 16 & 255;
-										var r1 = this6 == 0 ? 0. : this6 / 255;
-										var this7 = this4 >> 8 & 255;
-										var g1 = this7 == 0 ? 0. : this7 / 255;
-										var this8 = this4 & 255;
-										var b1 = this8 == 0 ? 0. : this8 / 255;
-										var this9 = color >> 24 & 255;
-										var a2 = this9 == 0 ? 0. : this9 / 255;
-										var this10 = color >> 16 & 255;
-										var r2 = this10 == 0 ? 0. : this10 / 255;
-										var this11 = color >> 8 & 255;
-										var g2 = this11 == 0 ? 0. : this11 / 255;
-										var this12 = color & 255;
-										var b2 = this12 == 0 ? 0. : this12 / 255;
-										var a3 = a1 * (1 - a2);
-										var r = 255 * (r1 * a3 + r2 * a2) | 0;
-										var g = 255 * (g1 * a3 + g2 * a2) | 0;
-										var b = 255 * (b1 * a3 + b2 * a2) | 0;
-										var a = 255 * (a3 + a2) | 0;
-										var blended = a << 24 | r << 16 | g << 8 | b;
-										pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
-									} else {
-										pixelImage.image[pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
-									}
-									foundY = true;
-								} else if(foundY) {
-									break;
-								}
-							}
-						}
-						if(hasHit3 == true) {
-							var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1,true);
-						}
-						var bx1 = cx;
-						var by1 = cy;
-						var cx1 = dx;
-						var cy1 = dy;
-						var hasHit1 = hasHit2;
-						if(hasHit1 == null) {
-							hasHit1 = false;
-						}
-						var adjustWinding = bx * by1 - bx1 * by + (bx1 * cy1 - cx1 * by1) + (cx1 * by - bx * cy1) > 0;
-						if(!adjustWinding) {
-							var bx_ = bx1;
-							var by_ = by1;
-							bx1 = cx1;
-							by1 = cy1;
-							cx1 = bx_;
-							cy1 = by_;
-						}
-						var hasHit3 = hasHit1;
-						if(hasHit3 == null) {
-							hasHit3 = false;
-						}
-						var s0 = by * cx1 - bx * cy1;
-						var sx = cy1 - by;
-						var sy = bx - cx1;
-						var t0 = bx * by1 - by * bx1;
-						var tx = by - by1;
-						var ty = bx1 - bx;
-						var A = -by1 * cx1 + by * (-bx1 + cx1) + bx * (by1 - cy1) + bx1 * cy1;
-						var yIter3;
-						if(by > by1) {
-							if(by > cy1) {
-								var ii_min = by1 > cy1 ? Math.floor(cy1) : Math.floor(by1);
-								var ii_max = Math.ceil(by);
-								var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-								yIter3 = this1;
-							} else {
-								var ii_min = Math.floor(by1);
-								var ii_max = Math.ceil(cy1);
-								var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-								yIter3 = this1;
-							}
-						} else if(by1 > cy1) {
-							var ii_min = by > cy1 ? Math.floor(cy1) : Math.ceil(by);
-							var ii_max = Math.ceil(by1);
-							var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-							yIter3 = this1;
-						} else {
-							var ii_min = Math.floor(by);
-							var ii_max = Math.ceil(cy1);
-							var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-							yIter3 = this1;
-						}
-						var foundY = false;
-						var s = 0.;
-						var t = 0.;
-						var sxx = 0.;
-						var txx = 0.;
-						var this1;
-						if(bx > bx1) {
-							if(bx > cx1) {
-								var ii_min = bx1 > cx1 ? Math.floor(cx1) : Math.floor(bx1);
-								var ii_max = Math.ceil(bx);
-								var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-								this1 = this2;
-							} else {
-								var ii_min = Math.floor(bx1);
-								var ii_max = Math.ceil(cx1);
-								var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-								this1 = this2;
-							}
-						} else if(bx1 > cx1) {
-							var ii_min = bx > cx1 ? Math.floor(cx1) : Math.ceil(bx);
-							var ii_max = Math.ceil(bx1);
-							var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-							this1 = this2;
-						} else {
-							var ii_min = Math.floor(bx);
-							var ii_max = Math.ceil(cx1);
-							var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-							this1 = this2;
-						}
-						var _g_min = this1.start;
-						var _g_max = this1.max;
-						while(_g_min < _g_max) {
-							var x = _g_min++;
-							sxx = sx * x;
-							txx = tx * x;
-							foundY = false;
-							var _g_min1 = yIter3.start;
-							var _g_max1 = yIter3.max;
-							while(_g_min1 < _g_max1) {
-								var y = _g_min1++;
-								s = s0 + sxx + sy * y;
-								t = t0 + txx + ty * y;
-								if(s <= 0 || t <= 0) {
-									if(foundY) {
-										break;
-									}
-								} else if(s + t < A) {
-									var this1 = color;
-									var c = this1;
-									if((c >> 24 & 255) < 254 && pixelImage.transparent) {
-										var location = pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0;
-										var this2 = pixelImage.image[location];
-										var this3 = this2;
-										var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
-										var this5 = this4 >> 24 & 255;
-										var a1 = this5 == 0 ? 0. : this5 / 255;
-										var this6 = this4 >> 16 & 255;
-										var r1 = this6 == 0 ? 0. : this6 / 255;
-										var this7 = this4 >> 8 & 255;
-										var g1 = this7 == 0 ? 0. : this7 / 255;
-										var this8 = this4 & 255;
-										var b1 = this8 == 0 ? 0. : this8 / 255;
-										var this9 = color >> 24 & 255;
-										var a2 = this9 == 0 ? 0. : this9 / 255;
-										var this10 = color >> 16 & 255;
-										var r2 = this10 == 0 ? 0. : this10 / 255;
-										var this11 = color >> 8 & 255;
-										var g2 = this11 == 0 ? 0. : this11 / 255;
-										var this12 = color & 255;
-										var b2 = this12 == 0 ? 0. : this12 / 255;
-										var a3 = a1 * (1 - a2);
-										var r = 255 * (r1 * a3 + r2 * a2) | 0;
-										var g = 255 * (g1 * a3 + g2 * a2) | 0;
-										var b = 255 * (b1 * a3 + b2 * a2) | 0;
-										var a = 255 * (a3 + a2) | 0;
-										var blended = a << 24 | r << 16 | g << 8 | b;
-										pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
-									} else {
-										pixelImage.image[pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
-									}
-									foundY = true;
-								} else if(foundY) {
-									break;
-								}
-							}
-						}
-						if(hasHit3 == true) {
-							var v = new pixelimage_algo_HitTri(bx,by,bx1,by1,cx1,cy1,true);
-						}
-						if(hasHit2 == true) {
-							var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy,true);
-							hitQuad = v;
-						} else {
-							hitQuad = null;
-						}
-					}
-				} else {
-					var hasHit1 = true;
-					if(hasHit1 == null) {
-						hasHit1 = false;
-					}
-					var sin1 = Math.sin(theta);
-					var cos1 = Math.cos(theta);
-					var radius = thick / 2;
-					var dx = 0.1;
-					var dy = radius;
-					var cx = h2;
-					var cy = radius;
-					var bx = h2;
-					var by = -radius;
-					var ax = 0.1;
-					var ay = -radius;
-					var temp = 0.;
-					temp = px + (ax * cos1 - ay * sin1);
-					ay = py + (ay * cos1 + ax * sin1);
-					ax = temp;
-					temp = px + (bx * cos1 - by * sin1);
-					by = py + (by * cos1 + bx * sin1);
-					bx = temp;
-					temp = px + (cx * cos1 - cy * sin1);
-					cy = py + (cy * cos1 + cx * sin1);
-					cx = temp;
-					temp = px + (dx * cos1 - dy * sin1);
-					dy = py + (dy * cos1 + dx * sin1);
-					dx = temp;
-					var hasHit2 = hasHit1;
-					if(hasHit2 == null) {
-						hasHit2 = false;
-					}
-					var bx1 = bx;
-					var by1 = by;
-					var cx1 = dx;
-					var cy1 = dy;
-					var hasHit1 = hasHit2;
-					if(hasHit1 == null) {
-						hasHit1 = false;
-					}
-					var adjustWinding = ax * by1 - bx1 * ay + (bx1 * cy1 - cx1 * by1) + (cx1 * ay - ax * cy1) > 0;
-					if(!adjustWinding) {
-						var bx_ = bx1;
-						var by_ = by1;
-						bx1 = cx1;
-						by1 = cy1;
-						cx1 = bx_;
-						cy1 = by_;
-					}
-					var hasHit3 = hasHit1;
-					if(hasHit3 == null) {
-						hasHit3 = false;
-					}
-					var s0 = ay * cx1 - ax * cy1;
-					var sx = cy1 - ay;
-					var sy = ax - cx1;
-					var t0 = ax * by1 - ay * bx1;
-					var tx = ay - by1;
-					var ty = bx1 - ax;
-					var A = -by1 * cx1 + ay * (-bx1 + cx1) + ax * (by1 - cy1) + bx1 * cy1;
-					var yIter3;
-					if(ay > by1) {
-						if(ay > cy1) {
-							var ii_min = by1 > cy1 ? Math.floor(cy1) : Math.floor(by1);
-							var ii_max = Math.ceil(ay);
-							var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-							yIter3 = this1;
-						} else {
-							var ii_min = Math.floor(by1);
-							var ii_max = Math.ceil(cy1);
-							var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-							yIter3 = this1;
-						}
-					} else if(by1 > cy1) {
-						var ii_min = ay > cy1 ? Math.floor(cy1) : Math.ceil(ay);
-						var ii_max = Math.ceil(by1);
-						var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-						yIter3 = this1;
-					} else {
-						var ii_min = Math.floor(ay);
-						var ii_max = Math.ceil(cy1);
-						var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-						yIter3 = this1;
-					}
-					var foundY = false;
-					var s = 0.;
-					var t = 0.;
-					var sxx = 0.;
-					var txx = 0.;
-					var this1;
-					if(ax > bx1) {
-						if(ax > cx1) {
-							var ii_min = bx1 > cx1 ? Math.floor(cx1) : Math.floor(bx1);
-							var ii_max = Math.ceil(ax);
-							var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-							this1 = this2;
-						} else {
-							var ii_min = Math.floor(bx1);
-							var ii_max = Math.ceil(cx1);
-							var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-							this1 = this2;
-						}
-					} else if(bx1 > cx1) {
-						var ii_min = ax > cx1 ? Math.floor(cx1) : Math.ceil(ax);
-						var ii_max = Math.ceil(bx1);
-						var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-						this1 = this2;
-					} else {
-						var ii_min = Math.floor(ax);
-						var ii_max = Math.ceil(cx1);
-						var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-						this1 = this2;
-					}
-					var _g_min = this1.start;
-					var _g_max = this1.max;
-					while(_g_min < _g_max) {
-						var x = _g_min++;
-						sxx = sx * x;
-						txx = tx * x;
-						foundY = false;
-						var _g_min1 = yIter3.start;
-						var _g_max1 = yIter3.max;
-						while(_g_min1 < _g_max1) {
-							var y = _g_min1++;
-							s = s0 + sxx + sy * y;
-							t = t0 + txx + ty * y;
-							if(s <= 0 || t <= 0) {
-								if(foundY) {
-									break;
-								}
-							} else if(s + t < A) {
-								var this1 = color;
-								var c = this1;
-								if((c >> 24 & 255) < 254 && pixelImage.transparent) {
-									var location = pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0;
-									var this2 = pixelImage.image[location];
-									var this3 = this2;
-									var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
-									var this5 = this4 >> 24 & 255;
-									var a1 = this5 == 0 ? 0. : this5 / 255;
-									var this6 = this4 >> 16 & 255;
-									var r1 = this6 == 0 ? 0. : this6 / 255;
-									var this7 = this4 >> 8 & 255;
-									var g1 = this7 == 0 ? 0. : this7 / 255;
-									var this8 = this4 & 255;
-									var b1 = this8 == 0 ? 0. : this8 / 255;
-									var this9 = color >> 24 & 255;
-									var a2 = this9 == 0 ? 0. : this9 / 255;
-									var this10 = color >> 16 & 255;
-									var r2 = this10 == 0 ? 0. : this10 / 255;
-									var this11 = color >> 8 & 255;
-									var g2 = this11 == 0 ? 0. : this11 / 255;
-									var this12 = color & 255;
-									var b2 = this12 == 0 ? 0. : this12 / 255;
-									var a3 = a1 * (1 - a2);
-									var r = 255 * (r1 * a3 + r2 * a2) | 0;
-									var g = 255 * (g1 * a3 + g2 * a2) | 0;
-									var b = 255 * (b1 * a3 + b2 * a2) | 0;
-									var a = 255 * (a3 + a2) | 0;
-									var blended = a << 24 | r << 16 | g << 8 | b;
-									pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
-								} else {
-									pixelImage.image[pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
-								}
-								foundY = true;
-							} else if(foundY) {
-								break;
-							}
-						}
-					}
-					if(hasHit3 == true) {
-						var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1,true);
-					}
-					var bx1 = cx;
-					var by1 = cy;
-					var cx1 = dx;
-					var cy1 = dy;
-					var hasHit1 = hasHit2;
-					if(hasHit1 == null) {
-						hasHit1 = false;
-					}
-					var adjustWinding = bx * by1 - bx1 * by + (bx1 * cy1 - cx1 * by1) + (cx1 * by - bx * cy1) > 0;
-					if(!adjustWinding) {
-						var bx_ = bx1;
-						var by_ = by1;
-						bx1 = cx1;
-						by1 = cy1;
-						cx1 = bx_;
-						cy1 = by_;
-					}
-					var hasHit3 = hasHit1;
-					if(hasHit3 == null) {
-						hasHit3 = false;
-					}
-					var s0 = by * cx1 - bx * cy1;
-					var sx = cy1 - by;
-					var sy = bx - cx1;
-					var t0 = bx * by1 - by * bx1;
-					var tx = by - by1;
-					var ty = bx1 - bx;
-					var A = -by1 * cx1 + by * (-bx1 + cx1) + bx * (by1 - cy1) + bx1 * cy1;
-					var yIter3;
-					if(by > by1) {
-						if(by > cy1) {
-							var ii_min = by1 > cy1 ? Math.floor(cy1) : Math.floor(by1);
-							var ii_max = Math.ceil(by);
-							var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-							yIter3 = this1;
-						} else {
-							var ii_min = Math.floor(by1);
-							var ii_max = Math.ceil(cy1);
-							var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-							yIter3 = this1;
-						}
-					} else if(by1 > cy1) {
-						var ii_min = by > cy1 ? Math.floor(cy1) : Math.ceil(by);
-						var ii_max = Math.ceil(by1);
-						var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-						yIter3 = this1;
-					} else {
-						var ii_min = Math.floor(by);
-						var ii_max = Math.ceil(cy1);
-						var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-						yIter3 = this1;
-					}
-					var foundY = false;
-					var s = 0.;
-					var t = 0.;
-					var sxx = 0.;
-					var txx = 0.;
-					var this1;
-					if(bx > bx1) {
-						if(bx > cx1) {
-							var ii_min = bx1 > cx1 ? Math.floor(cx1) : Math.floor(bx1);
-							var ii_max = Math.ceil(bx);
-							var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-							this1 = this2;
-						} else {
-							var ii_min = Math.floor(bx1);
-							var ii_max = Math.ceil(cx1);
-							var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-							this1 = this2;
-						}
-					} else if(bx1 > cx1) {
-						var ii_min = bx > cx1 ? Math.floor(cx1) : Math.ceil(bx);
-						var ii_max = Math.ceil(bx1);
-						var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-						this1 = this2;
-					} else {
-						var ii_min = Math.floor(bx);
-						var ii_max = Math.ceil(cx1);
-						var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-						this1 = this2;
-					}
-					var _g_min = this1.start;
-					var _g_max = this1.max;
-					while(_g_min < _g_max) {
-						var x = _g_min++;
-						sxx = sx * x;
-						txx = tx * x;
-						foundY = false;
-						var _g_min1 = yIter3.start;
-						var _g_max1 = yIter3.max;
-						while(_g_min1 < _g_max1) {
-							var y = _g_min1++;
-							s = s0 + sxx + sy * y;
-							t = t0 + txx + ty * y;
-							if(s <= 0 || t <= 0) {
-								if(foundY) {
-									break;
-								}
-							} else if(s + t < A) {
-								var this1 = color;
-								var c = this1;
-								if((c >> 24 & 255) < 254 && pixelImage.transparent) {
-									var location = pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0;
-									var this2 = pixelImage.image[location];
-									var this3 = this2;
-									var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
-									var this5 = this4 >> 24 & 255;
-									var a1 = this5 == 0 ? 0. : this5 / 255;
-									var this6 = this4 >> 16 & 255;
-									var r1 = this6 == 0 ? 0. : this6 / 255;
-									var this7 = this4 >> 8 & 255;
-									var g1 = this7 == 0 ? 0. : this7 / 255;
-									var this8 = this4 & 255;
-									var b1 = this8 == 0 ? 0. : this8 / 255;
-									var this9 = color >> 24 & 255;
-									var a2 = this9 == 0 ? 0. : this9 / 255;
-									var this10 = color >> 16 & 255;
-									var r2 = this10 == 0 ? 0. : this10 / 255;
-									var this11 = color >> 8 & 255;
-									var g2 = this11 == 0 ? 0. : this11 / 255;
-									var this12 = color & 255;
-									var b2 = this12 == 0 ? 0. : this12 / 255;
-									var a3 = a1 * (1 - a2);
-									var r = 255 * (r1 * a3 + r2 * a2) | 0;
-									var g = 255 * (g1 * a3 + g2 * a2) | 0;
-									var b = 255 * (b1 * a3 + b2 * a2) | 0;
-									var a = 255 * (a3 + a2) | 0;
-									var blended = a << 24 | r << 16 | g << 8 | b;
-									pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
-								} else {
-									pixelImage.image[pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
-								}
-								foundY = true;
-							} else if(foundY) {
-								break;
-							}
-						}
-					}
-					if(hasHit3 == true) {
-						var v = new pixelimage_algo_HitTri(bx,by,bx1,by1,cx1,cy1,true);
-					}
-					if(hasHit2 == true) {
-						var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy,true);
-						hitQuad = v;
-					} else {
-						hitQuad = null;
-					}
-				}
-				var cx = h2;
-				var cy = radius2;
-				var bx = h2;
-				var by = -radius2;
-				var temp = 0.;
-				temp = px + (bx * cos - by * sin);
-				by = py + (by * cos + bx * sin);
-				bx = temp;
-				temp = px + (cx * cos - cy * sin);
-				cy = py + (cy * cos + cx * sin);
-				cx = temp;
-				var bx1 = bx;
-				var by1 = by;
-				var cx1 = cx;
-				var cy1 = cy;
-				var hasHit1 = hasHit;
-				if(hasHit1 == null) {
-					hasHit1 = false;
-				}
-				var adjustWinding = qx * by1 - bx1 * qy + (bx1 * cy1 - cx1 * by1) + (cx1 * qy - qx * cy1) > 0;
-				if(!adjustWinding) {
-					var bx_ = bx1;
-					var by_ = by1;
-					bx1 = cx1;
-					by1 = cy1;
-					cx1 = bx_;
-					cy1 = by_;
-				}
-				var hasHit2 = hasHit1;
-				if(hasHit2 == null) {
-					hasHit2 = false;
-				}
-				var s0 = qy * cx1 - qx * cy1;
-				var sx = cy1 - qy;
-				var sy = qx - cx1;
-				var t0 = qx * by1 - qy * bx1;
-				var tx = qy - by1;
-				var ty = bx1 - qx;
-				var A = -by1 * cx1 + qy * (-bx1 + cx1) + qx * (by1 - cy1) + bx1 * cy1;
-				var yIter3;
-				if(qy > by1) {
-					if(qy > cy1) {
-						var ii_min = by1 > cy1 ? Math.floor(cy1) : Math.floor(by1);
-						var ii_max = Math.ceil(qy);
-						var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-						yIter3 = this1;
-					} else {
-						var ii_min = Math.floor(by1);
-						var ii_max = Math.ceil(cy1);
-						var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-						yIter3 = this1;
-					}
-				} else if(by1 > cy1) {
-					var ii_min = qy > cy1 ? Math.floor(cy1) : Math.ceil(qy);
-					var ii_max = Math.ceil(by1);
-					var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-					yIter3 = this1;
-				} else {
-					var ii_min = Math.floor(qy);
-					var ii_max = Math.ceil(cy1);
-					var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-					yIter3 = this1;
-				}
-				var foundY = false;
-				var s = 0.;
-				var t = 0.;
-				var sxx = 0.;
-				var txx = 0.;
-				var this1;
-				if(qx > bx1) {
-					if(qx > cx1) {
-						var ii_min = bx1 > cx1 ? Math.floor(cx1) : Math.floor(bx1);
-						var ii_max = Math.ceil(qx);
-						var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-						this1 = this2;
-					} else {
-						var ii_min = Math.floor(bx1);
-						var ii_max = Math.ceil(cx1);
-						var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-						this1 = this2;
-					}
-				} else if(bx1 > cx1) {
-					var ii_min = qx > cx1 ? Math.floor(cx1) : Math.ceil(qx);
-					var ii_max = Math.ceil(bx1);
-					var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-					this1 = this2;
-				} else {
-					var ii_min = Math.floor(qx);
-					var ii_max = Math.ceil(cx1);
-					var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-					this1 = this2;
-				}
-				var _g_min = this1.start;
-				var _g_max = this1.max;
-				while(_g_min < _g_max) {
-					var x = _g_min++;
-					sxx = sx * x;
-					txx = tx * x;
-					foundY = false;
-					var _g_min1 = yIter3.start;
-					var _g_max1 = yIter3.max;
-					while(_g_min1 < _g_max1) {
-						var y = _g_min1++;
-						s = s0 + sxx + sy * y;
-						t = t0 + txx + ty * y;
-						if(s <= 0 || t <= 0) {
-							if(foundY) {
-								break;
-							}
-						} else if(s + t < A) {
-							var this1 = color;
-							var c = this1;
-							if((c >> 24 & 255) < 254 && pixelImage.transparent) {
-								var location = pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0;
-								var this2 = pixelImage.image[location];
-								var this3 = this2;
-								var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
-								var this5 = this4 >> 24 & 255;
-								var a1 = this5 == 0 ? 0. : this5 / 255;
-								var this6 = this4 >> 16 & 255;
-								var r1 = this6 == 0 ? 0. : this6 / 255;
-								var this7 = this4 >> 8 & 255;
-								var g1 = this7 == 0 ? 0. : this7 / 255;
-								var this8 = this4 & 255;
-								var b1 = this8 == 0 ? 0. : this8 / 255;
-								var this9 = color >> 24 & 255;
-								var a2 = this9 == 0 ? 0. : this9 / 255;
-								var this10 = color >> 16 & 255;
-								var r2 = this10 == 0 ? 0. : this10 / 255;
-								var this11 = color >> 8 & 255;
-								var g2 = this11 == 0 ? 0. : this11 / 255;
-								var this12 = color & 255;
-								var b2 = this12 == 0 ? 0. : this12 / 255;
-								var a3 = a1 * (1 - a2);
-								var r = 255 * (r1 * a3 + r2 * a2) | 0;
-								var g = 255 * (g1 * a3 + g2 * a2) | 0;
-								var b = 255 * (b1 * a3 + b2 * a2) | 0;
-								var a = 255 * (a3 + a2) | 0;
-								var blended = a << 24 | r << 16 | g << 8 | b;
-								pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
-							} else {
-								pixelImage.image[pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
-							}
-							foundY = true;
-						} else if(foundY) {
-							break;
-						}
-					}
-				}
-				var hitTri;
-				if(hasHit2 == true) {
-					var v = new pixelimage_algo_HitTri(qx,qy,bx1,by1,cx1,cy1,true);
-					hitTri = v;
-				} else {
-					hitTri = null;
-				}
-				if(hasHit) {
-					var hitArr = new pixelimage_algo_HitTriArray([hitTri]);
-					if(hitQuad != null) {
-						hitArr.triArr.push(hitQuad.triABD);
-					}
-					hitArr.triArr.push(hitQuad.triBCD);
-				}
-			} else {
-				var px = this.x1;
-				var py = this.y1;
-				var qx = this.x2;
-				var qy = this.y2;
-				var thick = this.strokeWidth;
-				var color = this.strokeColor;
-				var flare = this.flare;
-				var reverseFlare = this.reverseFlare;
-				if(reverseFlare == null) {
-					reverseFlare = false;
-				}
-				if(flare == null) {
-					flare = false;
-				}
-				haxe_Log.trace("pixelimage.fillArrow",{ fileName : "pixelimage/Pixelshape.hx", lineNumber : 516, className : "pixelimage._Pixelshape.Pixelshape_Impl_", methodName : "fillArrow"});
-				var flare1 = flare;
-				var reverseFlare1 = reverseFlare;
-				var hasHit = true;
-				if(hasHit == null) {
-					hasHit = false;
-				}
-				if(reverseFlare1 == null) {
-					reverseFlare1 = false;
-				}
-				if(flare1 == null) {
-					flare1 = false;
-				}
-				var goldenRatio = 1.61803398875;
-				var o = qy - py;
-				var a = qx - px;
-				var h = Math.pow(o * o + a * a,0.5);
-				var theta = Math.atan2(o,a);
-				var thicker = 2 * thick * goldenRatio;
-				var sin = Math.sin(theta);
-				var cos = Math.cos(theta);
-				var radius = thick / 2;
-				var radius2 = thicker / 2;
-				var h2 = h / goldenRatio;
-				var hitQuad;
-				if(flare1) {
-					if(reverseFlare1) {
-						var hasHit1 = true;
-						if(hasHit1 == null) {
-							hasHit1 = false;
-						}
-						var sin1 = Math.sin(theta);
-						var cos1 = Math.cos(theta);
-						var radius1 = thick / 2;
-						var radius21 = (thicker - (thicker - thick) / goldenRatio) / 2;
-						var dx = 0.1;
-						var dy = radius1;
-						var cx = h2;
-						var cy = radius21;
-						var bx = h2;
-						var by = -radius21;
-						var ax = 0.1;
-						var ay = -radius1;
-						var temp = 0.;
-						temp = px + (ax * cos1 - ay * sin1);
-						ay = py + (ay * cos1 + ax * sin1);
-						ax = temp;
-						temp = px + (bx * cos1 - by * sin1);
-						by = py + (by * cos1 + bx * sin1);
-						bx = temp;
-						temp = px + (cx * cos1 - cy * sin1);
-						cy = py + (cy * cos1 + cx * sin1);
-						cx = temp;
-						temp = px + (dx * cos1 - dy * sin1);
-						dy = py + (dy * cos1 + dx * sin1);
-						dx = temp;
-						var hasHit2 = hasHit1;
-						if(hasHit2 == null) {
-							hasHit2 = false;
-						}
-						var bx1 = bx;
-						var by1 = by;
-						var cx1 = dx;
-						var cy1 = dy;
-						var hasHit1 = hasHit2;
-						if(hasHit1 == null) {
-							hasHit1 = false;
-						}
-						var adjustWinding = ax * by1 - bx1 * ay + (bx1 * cy1 - cx1 * by1) + (cx1 * ay - ax * cy1) > 0;
-						if(!adjustWinding) {
-							var bx_ = bx1;
-							var by_ = by1;
-							bx1 = cx1;
-							by1 = cy1;
-							cx1 = bx_;
-							cy1 = by_;
-						}
-						var hasHit3 = hasHit1;
-						if(hasHit3 == null) {
-							hasHit3 = false;
-						}
-						var s0 = ay * cx1 - ax * cy1;
-						var sx = cy1 - ay;
-						var sy = ax - cx1;
-						var t0 = ax * by1 - ay * bx1;
-						var tx = ay - by1;
-						var ty = bx1 - ax;
-						var A = -by1 * cx1 + ay * (-bx1 + cx1) + ax * (by1 - cy1) + bx1 * cy1;
-						var yIter3;
-						if(ay > by1) {
-							if(ay > cy1) {
-								var ii_min = by1 > cy1 ? Math.floor(cy1) : Math.floor(by1);
-								var ii_max = Math.ceil(ay);
-								var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-								yIter3 = this1;
-							} else {
-								var ii_min = Math.floor(by1);
-								var ii_max = Math.ceil(cy1);
-								var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-								yIter3 = this1;
-							}
-						} else if(by1 > cy1) {
-							var ii_min = ay > cy1 ? Math.floor(cy1) : Math.ceil(ay);
-							var ii_max = Math.ceil(by1);
-							var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-							yIter3 = this1;
-						} else {
-							var ii_min = Math.floor(ay);
-							var ii_max = Math.ceil(cy1);
-							var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-							yIter3 = this1;
-						}
-						var foundY = false;
-						var s = 0.;
-						var t = 0.;
-						var sxx = 0.;
-						var txx = 0.;
-						var this1;
-						if(ax > bx1) {
-							if(ax > cx1) {
-								var ii_min = bx1 > cx1 ? Math.floor(cx1) : Math.floor(bx1);
-								var ii_max = Math.ceil(ax);
-								var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-								this1 = this2;
-							} else {
-								var ii_min = Math.floor(bx1);
-								var ii_max = Math.ceil(cx1);
-								var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-								this1 = this2;
-							}
-						} else if(bx1 > cx1) {
-							var ii_min = ax > cx1 ? Math.floor(cx1) : Math.ceil(ax);
-							var ii_max = Math.ceil(bx1);
-							var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-							this1 = this2;
-						} else {
-							var ii_min = Math.floor(ax);
-							var ii_max = Math.ceil(cx1);
-							var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-							this1 = this2;
-						}
-						var _g_min = this1.start;
-						var _g_max = this1.max;
-						while(_g_min < _g_max) {
-							var x = _g_min++;
-							sxx = sx * x;
-							txx = tx * x;
-							foundY = false;
-							var _g_min1 = yIter3.start;
-							var _g_max1 = yIter3.max;
-							while(_g_min1 < _g_max1) {
-								var y = _g_min1++;
-								s = s0 + sxx + sy * y;
-								t = t0 + txx + ty * y;
-								if(s <= 0 || t <= 0) {
-									if(foundY) {
-										break;
-									}
-								} else if(s + t < A) {
-									var this1 = color;
-									var c = this1;
-									if((c >> 24 & 255) < 254 && pixelImage.transparent) {
-										var location = pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0;
-										var this2 = pixelImage.image[location];
-										var this3 = this2;
-										var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
-										var this5 = this4 >> 24 & 255;
-										var a1 = this5 == 0 ? 0. : this5 / 255;
-										var this6 = this4 >> 16 & 255;
-										var r1 = this6 == 0 ? 0. : this6 / 255;
-										var this7 = this4 >> 8 & 255;
-										var g1 = this7 == 0 ? 0. : this7 / 255;
-										var this8 = this4 & 255;
-										var b1 = this8 == 0 ? 0. : this8 / 255;
-										var this9 = color >> 24 & 255;
-										var a2 = this9 == 0 ? 0. : this9 / 255;
-										var this10 = color >> 16 & 255;
-										var r2 = this10 == 0 ? 0. : this10 / 255;
-										var this11 = color >> 8 & 255;
-										var g2 = this11 == 0 ? 0. : this11 / 255;
-										var this12 = color & 255;
-										var b2 = this12 == 0 ? 0. : this12 / 255;
-										var a3 = a1 * (1 - a2);
-										var r = 255 * (r1 * a3 + r2 * a2) | 0;
-										var g = 255 * (g1 * a3 + g2 * a2) | 0;
-										var b = 255 * (b1 * a3 + b2 * a2) | 0;
-										var a = 255 * (a3 + a2) | 0;
-										var blended = a << 24 | r << 16 | g << 8 | b;
-										pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
-									} else {
-										pixelImage.image[pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
-									}
-									foundY = true;
-								} else if(foundY) {
-									break;
-								}
-							}
-						}
-						if(hasHit3 == true) {
-							var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1,true);
-						}
-						var bx1 = cx;
-						var by1 = cy;
-						var cx1 = dx;
-						var cy1 = dy;
-						var hasHit1 = hasHit2;
-						if(hasHit1 == null) {
-							hasHit1 = false;
-						}
-						var adjustWinding = bx * by1 - bx1 * by + (bx1 * cy1 - cx1 * by1) + (cx1 * by - bx * cy1) > 0;
-						if(!adjustWinding) {
-							var bx_ = bx1;
-							var by_ = by1;
-							bx1 = cx1;
-							by1 = cy1;
-							cx1 = bx_;
-							cy1 = by_;
-						}
-						var hasHit3 = hasHit1;
-						if(hasHit3 == null) {
-							hasHit3 = false;
-						}
-						var s0 = by * cx1 - bx * cy1;
-						var sx = cy1 - by;
-						var sy = bx - cx1;
-						var t0 = bx * by1 - by * bx1;
-						var tx = by - by1;
-						var ty = bx1 - bx;
-						var A = -by1 * cx1 + by * (-bx1 + cx1) + bx * (by1 - cy1) + bx1 * cy1;
-						var yIter3;
-						if(by > by1) {
-							if(by > cy1) {
-								var ii_min = by1 > cy1 ? Math.floor(cy1) : Math.floor(by1);
-								var ii_max = Math.ceil(by);
-								var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-								yIter3 = this1;
-							} else {
-								var ii_min = Math.floor(by1);
-								var ii_max = Math.ceil(cy1);
-								var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-								yIter3 = this1;
-							}
-						} else if(by1 > cy1) {
-							var ii_min = by > cy1 ? Math.floor(cy1) : Math.ceil(by);
-							var ii_max = Math.ceil(by1);
-							var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-							yIter3 = this1;
-						} else {
-							var ii_min = Math.floor(by);
-							var ii_max = Math.ceil(cy1);
-							var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-							yIter3 = this1;
-						}
-						var foundY = false;
-						var s = 0.;
-						var t = 0.;
-						var sxx = 0.;
-						var txx = 0.;
-						var this1;
-						if(bx > bx1) {
-							if(bx > cx1) {
-								var ii_min = bx1 > cx1 ? Math.floor(cx1) : Math.floor(bx1);
-								var ii_max = Math.ceil(bx);
-								var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-								this1 = this2;
-							} else {
-								var ii_min = Math.floor(bx1);
-								var ii_max = Math.ceil(cx1);
-								var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-								this1 = this2;
-							}
-						} else if(bx1 > cx1) {
-							var ii_min = bx > cx1 ? Math.floor(cx1) : Math.ceil(bx);
-							var ii_max = Math.ceil(bx1);
-							var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-							this1 = this2;
-						} else {
-							var ii_min = Math.floor(bx);
-							var ii_max = Math.ceil(cx1);
-							var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-							this1 = this2;
-						}
-						var _g_min = this1.start;
-						var _g_max = this1.max;
-						while(_g_min < _g_max) {
-							var x = _g_min++;
-							sxx = sx * x;
-							txx = tx * x;
-							foundY = false;
-							var _g_min1 = yIter3.start;
-							var _g_max1 = yIter3.max;
-							while(_g_min1 < _g_max1) {
-								var y = _g_min1++;
-								s = s0 + sxx + sy * y;
-								t = t0 + txx + ty * y;
-								if(s <= 0 || t <= 0) {
-									if(foundY) {
-										break;
-									}
-								} else if(s + t < A) {
-									var this1 = color;
-									var c = this1;
-									if((c >> 24 & 255) < 254 && pixelImage.transparent) {
-										var location = pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0;
-										var this2 = pixelImage.image[location];
-										var this3 = this2;
-										var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
-										var this5 = this4 >> 24 & 255;
-										var a1 = this5 == 0 ? 0. : this5 / 255;
-										var this6 = this4 >> 16 & 255;
-										var r1 = this6 == 0 ? 0. : this6 / 255;
-										var this7 = this4 >> 8 & 255;
-										var g1 = this7 == 0 ? 0. : this7 / 255;
-										var this8 = this4 & 255;
-										var b1 = this8 == 0 ? 0. : this8 / 255;
-										var this9 = color >> 24 & 255;
-										var a2 = this9 == 0 ? 0. : this9 / 255;
-										var this10 = color >> 16 & 255;
-										var r2 = this10 == 0 ? 0. : this10 / 255;
-										var this11 = color >> 8 & 255;
-										var g2 = this11 == 0 ? 0. : this11 / 255;
-										var this12 = color & 255;
-										var b2 = this12 == 0 ? 0. : this12 / 255;
-										var a3 = a1 * (1 - a2);
-										var r = 255 * (r1 * a3 + r2 * a2) | 0;
-										var g = 255 * (g1 * a3 + g2 * a2) | 0;
-										var b = 255 * (b1 * a3 + b2 * a2) | 0;
-										var a = 255 * (a3 + a2) | 0;
-										var blended = a << 24 | r << 16 | g << 8 | b;
-										pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
-									} else {
-										pixelImage.image[pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
-									}
-									foundY = true;
-								} else if(foundY) {
-									break;
-								}
-							}
-						}
-						if(hasHit3 == true) {
-							var v = new pixelimage_algo_HitTri(bx,by,bx1,by1,cx1,cy1,true);
-						}
-						if(hasHit2 == true) {
-							var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy,true);
-							hitQuad = v;
-						} else {
-							hitQuad = null;
-						}
-					} else {
-						var hasHit1 = true;
-						if(hasHit1 == null) {
-							hasHit1 = false;
-						}
-						var sin1 = Math.sin(theta);
-						var cos1 = Math.cos(theta);
-						var radius1 = (thicker - (thicker - thick) / goldenRatio) / 2;
-						var radius21 = thick / 2;
-						var dx = 0.1;
-						var dy = radius1;
-						var cx = h2;
-						var cy = radius21;
-						var bx = h2;
-						var by = -radius21;
-						var ax = 0.1;
-						var ay = -radius1;
-						var temp = 0.;
-						temp = px + (ax * cos1 - ay * sin1);
-						ay = py + (ay * cos1 + ax * sin1);
-						ax = temp;
-						temp = px + (bx * cos1 - by * sin1);
-						by = py + (by * cos1 + bx * sin1);
-						bx = temp;
-						temp = px + (cx * cos1 - cy * sin1);
-						cy = py + (cy * cos1 + cx * sin1);
-						cx = temp;
-						temp = px + (dx * cos1 - dy * sin1);
-						dy = py + (dy * cos1 + dx * sin1);
-						dx = temp;
-						var hasHit2 = hasHit1;
-						if(hasHit2 == null) {
-							hasHit2 = false;
-						}
-						var bx1 = bx;
-						var by1 = by;
-						var cx1 = dx;
-						var cy1 = dy;
-						var hasHit1 = hasHit2;
-						if(hasHit1 == null) {
-							hasHit1 = false;
-						}
-						var adjustWinding = ax * by1 - bx1 * ay + (bx1 * cy1 - cx1 * by1) + (cx1 * ay - ax * cy1) > 0;
-						if(!adjustWinding) {
-							var bx_ = bx1;
-							var by_ = by1;
-							bx1 = cx1;
-							by1 = cy1;
-							cx1 = bx_;
-							cy1 = by_;
-						}
-						var hasHit3 = hasHit1;
-						if(hasHit3 == null) {
-							hasHit3 = false;
-						}
-						var s0 = ay * cx1 - ax * cy1;
-						var sx = cy1 - ay;
-						var sy = ax - cx1;
-						var t0 = ax * by1 - ay * bx1;
-						var tx = ay - by1;
-						var ty = bx1 - ax;
-						var A = -by1 * cx1 + ay * (-bx1 + cx1) + ax * (by1 - cy1) + bx1 * cy1;
-						var yIter3;
-						if(ay > by1) {
-							if(ay > cy1) {
-								var ii_min = by1 > cy1 ? Math.floor(cy1) : Math.floor(by1);
-								var ii_max = Math.ceil(ay);
-								var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-								yIter3 = this1;
-							} else {
-								var ii_min = Math.floor(by1);
-								var ii_max = Math.ceil(cy1);
-								var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-								yIter3 = this1;
-							}
-						} else if(by1 > cy1) {
-							var ii_min = ay > cy1 ? Math.floor(cy1) : Math.ceil(ay);
-							var ii_max = Math.ceil(by1);
-							var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-							yIter3 = this1;
-						} else {
-							var ii_min = Math.floor(ay);
-							var ii_max = Math.ceil(cy1);
-							var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-							yIter3 = this1;
-						}
-						var foundY = false;
-						var s = 0.;
-						var t = 0.;
-						var sxx = 0.;
-						var txx = 0.;
-						var this1;
-						if(ax > bx1) {
-							if(ax > cx1) {
-								var ii_min = bx1 > cx1 ? Math.floor(cx1) : Math.floor(bx1);
-								var ii_max = Math.ceil(ax);
-								var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-								this1 = this2;
-							} else {
-								var ii_min = Math.floor(bx1);
-								var ii_max = Math.ceil(cx1);
-								var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-								this1 = this2;
-							}
-						} else if(bx1 > cx1) {
-							var ii_min = ax > cx1 ? Math.floor(cx1) : Math.ceil(ax);
-							var ii_max = Math.ceil(bx1);
-							var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-							this1 = this2;
-						} else {
-							var ii_min = Math.floor(ax);
-							var ii_max = Math.ceil(cx1);
-							var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-							this1 = this2;
-						}
-						var _g_min = this1.start;
-						var _g_max = this1.max;
-						while(_g_min < _g_max) {
-							var x = _g_min++;
-							sxx = sx * x;
-							txx = tx * x;
-							foundY = false;
-							var _g_min1 = yIter3.start;
-							var _g_max1 = yIter3.max;
-							while(_g_min1 < _g_max1) {
-								var y = _g_min1++;
-								s = s0 + sxx + sy * y;
-								t = t0 + txx + ty * y;
-								if(s <= 0 || t <= 0) {
-									if(foundY) {
-										break;
-									}
-								} else if(s + t < A) {
-									var this1 = color;
-									var c = this1;
-									if((c >> 24 & 255) < 254 && pixelImage.transparent) {
-										var location = pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0;
-										var this2 = pixelImage.image[location];
-										var this3 = this2;
-										var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
-										var this5 = this4 >> 24 & 255;
-										var a1 = this5 == 0 ? 0. : this5 / 255;
-										var this6 = this4 >> 16 & 255;
-										var r1 = this6 == 0 ? 0. : this6 / 255;
-										var this7 = this4 >> 8 & 255;
-										var g1 = this7 == 0 ? 0. : this7 / 255;
-										var this8 = this4 & 255;
-										var b1 = this8 == 0 ? 0. : this8 / 255;
-										var this9 = color >> 24 & 255;
-										var a2 = this9 == 0 ? 0. : this9 / 255;
-										var this10 = color >> 16 & 255;
-										var r2 = this10 == 0 ? 0. : this10 / 255;
-										var this11 = color >> 8 & 255;
-										var g2 = this11 == 0 ? 0. : this11 / 255;
-										var this12 = color & 255;
-										var b2 = this12 == 0 ? 0. : this12 / 255;
-										var a3 = a1 * (1 - a2);
-										var r = 255 * (r1 * a3 + r2 * a2) | 0;
-										var g = 255 * (g1 * a3 + g2 * a2) | 0;
-										var b = 255 * (b1 * a3 + b2 * a2) | 0;
-										var a = 255 * (a3 + a2) | 0;
-										var blended = a << 24 | r << 16 | g << 8 | b;
-										pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
-									} else {
-										pixelImage.image[pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
-									}
-									foundY = true;
-								} else if(foundY) {
-									break;
-								}
-							}
-						}
-						if(hasHit3 == true) {
-							var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1,true);
-						}
-						var bx1 = cx;
-						var by1 = cy;
-						var cx1 = dx;
-						var cy1 = dy;
-						var hasHit1 = hasHit2;
-						if(hasHit1 == null) {
-							hasHit1 = false;
-						}
-						var adjustWinding = bx * by1 - bx1 * by + (bx1 * cy1 - cx1 * by1) + (cx1 * by - bx * cy1) > 0;
-						if(!adjustWinding) {
-							var bx_ = bx1;
-							var by_ = by1;
-							bx1 = cx1;
-							by1 = cy1;
-							cx1 = bx_;
-							cy1 = by_;
-						}
-						var hasHit3 = hasHit1;
-						if(hasHit3 == null) {
-							hasHit3 = false;
-						}
-						var s0 = by * cx1 - bx * cy1;
-						var sx = cy1 - by;
-						var sy = bx - cx1;
-						var t0 = bx * by1 - by * bx1;
-						var tx = by - by1;
-						var ty = bx1 - bx;
-						var A = -by1 * cx1 + by * (-bx1 + cx1) + bx * (by1 - cy1) + bx1 * cy1;
-						var yIter3;
-						if(by > by1) {
-							if(by > cy1) {
-								var ii_min = by1 > cy1 ? Math.floor(cy1) : Math.floor(by1);
-								var ii_max = Math.ceil(by);
-								var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-								yIter3 = this1;
-							} else {
-								var ii_min = Math.floor(by1);
-								var ii_max = Math.ceil(cy1);
-								var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-								yIter3 = this1;
-							}
-						} else if(by1 > cy1) {
-							var ii_min = by > cy1 ? Math.floor(cy1) : Math.ceil(by);
-							var ii_max = Math.ceil(by1);
-							var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-							yIter3 = this1;
-						} else {
-							var ii_min = Math.floor(by);
-							var ii_max = Math.ceil(cy1);
-							var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-							yIter3 = this1;
-						}
-						var foundY = false;
-						var s = 0.;
-						var t = 0.;
-						var sxx = 0.;
-						var txx = 0.;
-						var this1;
-						if(bx > bx1) {
-							if(bx > cx1) {
-								var ii_min = bx1 > cx1 ? Math.floor(cx1) : Math.floor(bx1);
-								var ii_max = Math.ceil(bx);
-								var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-								this1 = this2;
-							} else {
-								var ii_min = Math.floor(bx1);
-								var ii_max = Math.ceil(cx1);
-								var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-								this1 = this2;
-							}
-						} else if(bx1 > cx1) {
-							var ii_min = bx > cx1 ? Math.floor(cx1) : Math.ceil(bx);
-							var ii_max = Math.ceil(bx1);
-							var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-							this1 = this2;
-						} else {
-							var ii_min = Math.floor(bx);
-							var ii_max = Math.ceil(cx1);
-							var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-							this1 = this2;
-						}
-						var _g_min = this1.start;
-						var _g_max = this1.max;
-						while(_g_min < _g_max) {
-							var x = _g_min++;
-							sxx = sx * x;
-							txx = tx * x;
-							foundY = false;
-							var _g_min1 = yIter3.start;
-							var _g_max1 = yIter3.max;
-							while(_g_min1 < _g_max1) {
-								var y = _g_min1++;
-								s = s0 + sxx + sy * y;
-								t = t0 + txx + ty * y;
-								if(s <= 0 || t <= 0) {
-									if(foundY) {
-										break;
-									}
-								} else if(s + t < A) {
-									var this1 = color;
-									var c = this1;
-									if((c >> 24 & 255) < 254 && pixelImage.transparent) {
-										var location = pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0;
-										var this2 = pixelImage.image[location];
-										var this3 = this2;
-										var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
-										var this5 = this4 >> 24 & 255;
-										var a1 = this5 == 0 ? 0. : this5 / 255;
-										var this6 = this4 >> 16 & 255;
-										var r1 = this6 == 0 ? 0. : this6 / 255;
-										var this7 = this4 >> 8 & 255;
-										var g1 = this7 == 0 ? 0. : this7 / 255;
-										var this8 = this4 & 255;
-										var b1 = this8 == 0 ? 0. : this8 / 255;
-										var this9 = color >> 24 & 255;
-										var a2 = this9 == 0 ? 0. : this9 / 255;
-										var this10 = color >> 16 & 255;
-										var r2 = this10 == 0 ? 0. : this10 / 255;
-										var this11 = color >> 8 & 255;
-										var g2 = this11 == 0 ? 0. : this11 / 255;
-										var this12 = color & 255;
-										var b2 = this12 == 0 ? 0. : this12 / 255;
-										var a3 = a1 * (1 - a2);
-										var r = 255 * (r1 * a3 + r2 * a2) | 0;
-										var g = 255 * (g1 * a3 + g2 * a2) | 0;
-										var b = 255 * (b1 * a3 + b2 * a2) | 0;
-										var a = 255 * (a3 + a2) | 0;
-										var blended = a << 24 | r << 16 | g << 8 | b;
-										pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
-									} else {
-										pixelImage.image[pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
-									}
-									foundY = true;
-								} else if(foundY) {
-									break;
-								}
-							}
-						}
-						if(hasHit3 == true) {
-							var v = new pixelimage_algo_HitTri(bx,by,bx1,by1,cx1,cy1,true);
-						}
-						if(hasHit2 == true) {
-							var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy,true);
-							hitQuad = v;
-						} else {
-							hitQuad = null;
-						}
-					}
-				} else {
-					var hasHit1 = true;
-					if(hasHit1 == null) {
-						hasHit1 = false;
-					}
-					var sin1 = Math.sin(theta);
-					var cos1 = Math.cos(theta);
-					var radius = thick / 2;
-					var dx = 0.1;
-					var dy = radius;
-					var cx = h2;
-					var cy = radius;
-					var bx = h2;
-					var by = -radius;
-					var ax = 0.1;
-					var ay = -radius;
-					var temp = 0.;
-					temp = px + (ax * cos1 - ay * sin1);
-					ay = py + (ay * cos1 + ax * sin1);
-					ax = temp;
-					temp = px + (bx * cos1 - by * sin1);
-					by = py + (by * cos1 + bx * sin1);
-					bx = temp;
-					temp = px + (cx * cos1 - cy * sin1);
-					cy = py + (cy * cos1 + cx * sin1);
-					cx = temp;
-					temp = px + (dx * cos1 - dy * sin1);
-					dy = py + (dy * cos1 + dx * sin1);
-					dx = temp;
-					var hasHit2 = hasHit1;
-					if(hasHit2 == null) {
-						hasHit2 = false;
-					}
-					var bx1 = bx;
-					var by1 = by;
-					var cx1 = dx;
-					var cy1 = dy;
-					var hasHit1 = hasHit2;
-					if(hasHit1 == null) {
-						hasHit1 = false;
-					}
-					var adjustWinding = ax * by1 - bx1 * ay + (bx1 * cy1 - cx1 * by1) + (cx1 * ay - ax * cy1) > 0;
-					if(!adjustWinding) {
-						var bx_ = bx1;
-						var by_ = by1;
-						bx1 = cx1;
-						by1 = cy1;
-						cx1 = bx_;
-						cy1 = by_;
-					}
-					var hasHit3 = hasHit1;
-					if(hasHit3 == null) {
-						hasHit3 = false;
-					}
-					var s0 = ay * cx1 - ax * cy1;
-					var sx = cy1 - ay;
-					var sy = ax - cx1;
-					var t0 = ax * by1 - ay * bx1;
-					var tx = ay - by1;
-					var ty = bx1 - ax;
-					var A = -by1 * cx1 + ay * (-bx1 + cx1) + ax * (by1 - cy1) + bx1 * cy1;
-					var yIter3;
-					if(ay > by1) {
-						if(ay > cy1) {
-							var ii_min = by1 > cy1 ? Math.floor(cy1) : Math.floor(by1);
-							var ii_max = Math.ceil(ay);
-							var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-							yIter3 = this1;
-						} else {
-							var ii_min = Math.floor(by1);
-							var ii_max = Math.ceil(cy1);
-							var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-							yIter3 = this1;
-						}
-					} else if(by1 > cy1) {
-						var ii_min = ay > cy1 ? Math.floor(cy1) : Math.ceil(ay);
-						var ii_max = Math.ceil(by1);
-						var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-						yIter3 = this1;
-					} else {
-						var ii_min = Math.floor(ay);
-						var ii_max = Math.ceil(cy1);
-						var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-						yIter3 = this1;
-					}
-					var foundY = false;
-					var s = 0.;
-					var t = 0.;
-					var sxx = 0.;
-					var txx = 0.;
-					var this1;
-					if(ax > bx1) {
-						if(ax > cx1) {
-							var ii_min = bx1 > cx1 ? Math.floor(cx1) : Math.floor(bx1);
-							var ii_max = Math.ceil(ax);
-							var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-							this1 = this2;
-						} else {
-							var ii_min = Math.floor(bx1);
-							var ii_max = Math.ceil(cx1);
-							var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-							this1 = this2;
-						}
-					} else if(bx1 > cx1) {
-						var ii_min = ax > cx1 ? Math.floor(cx1) : Math.ceil(ax);
-						var ii_max = Math.ceil(bx1);
-						var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-						this1 = this2;
-					} else {
-						var ii_min = Math.floor(ax);
-						var ii_max = Math.ceil(cx1);
-						var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-						this1 = this2;
-					}
-					var _g_min = this1.start;
-					var _g_max = this1.max;
-					while(_g_min < _g_max) {
-						var x = _g_min++;
-						sxx = sx * x;
-						txx = tx * x;
-						foundY = false;
-						var _g_min1 = yIter3.start;
-						var _g_max1 = yIter3.max;
-						while(_g_min1 < _g_max1) {
-							var y = _g_min1++;
-							s = s0 + sxx + sy * y;
-							t = t0 + txx + ty * y;
-							if(s <= 0 || t <= 0) {
-								if(foundY) {
-									break;
-								}
-							} else if(s + t < A) {
-								var this1 = color;
-								var c = this1;
-								if((c >> 24 & 255) < 254 && pixelImage.transparent) {
-									var location = pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0;
-									var this2 = pixelImage.image[location];
-									var this3 = this2;
-									var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
-									var this5 = this4 >> 24 & 255;
-									var a1 = this5 == 0 ? 0. : this5 / 255;
-									var this6 = this4 >> 16 & 255;
-									var r1 = this6 == 0 ? 0. : this6 / 255;
-									var this7 = this4 >> 8 & 255;
-									var g1 = this7 == 0 ? 0. : this7 / 255;
-									var this8 = this4 & 255;
-									var b1 = this8 == 0 ? 0. : this8 / 255;
-									var this9 = color >> 24 & 255;
-									var a2 = this9 == 0 ? 0. : this9 / 255;
-									var this10 = color >> 16 & 255;
-									var r2 = this10 == 0 ? 0. : this10 / 255;
-									var this11 = color >> 8 & 255;
-									var g2 = this11 == 0 ? 0. : this11 / 255;
-									var this12 = color & 255;
-									var b2 = this12 == 0 ? 0. : this12 / 255;
-									var a3 = a1 * (1 - a2);
-									var r = 255 * (r1 * a3 + r2 * a2) | 0;
-									var g = 255 * (g1 * a3 + g2 * a2) | 0;
-									var b = 255 * (b1 * a3 + b2 * a2) | 0;
-									var a = 255 * (a3 + a2) | 0;
-									var blended = a << 24 | r << 16 | g << 8 | b;
-									pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
-								} else {
-									pixelImage.image[pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
-								}
-								foundY = true;
-							} else if(foundY) {
-								break;
-							}
-						}
-					}
-					if(hasHit3 == true) {
-						var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1,true);
-					}
-					var bx1 = cx;
-					var by1 = cy;
-					var cx1 = dx;
-					var cy1 = dy;
-					var hasHit1 = hasHit2;
-					if(hasHit1 == null) {
-						hasHit1 = false;
-					}
-					var adjustWinding = bx * by1 - bx1 * by + (bx1 * cy1 - cx1 * by1) + (cx1 * by - bx * cy1) > 0;
-					if(!adjustWinding) {
-						var bx_ = bx1;
-						var by_ = by1;
-						bx1 = cx1;
-						by1 = cy1;
-						cx1 = bx_;
-						cy1 = by_;
-					}
-					var hasHit3 = hasHit1;
-					if(hasHit3 == null) {
-						hasHit3 = false;
-					}
-					var s0 = by * cx1 - bx * cy1;
-					var sx = cy1 - by;
-					var sy = bx - cx1;
-					var t0 = bx * by1 - by * bx1;
-					var tx = by - by1;
-					var ty = bx1 - bx;
-					var A = -by1 * cx1 + by * (-bx1 + cx1) + bx * (by1 - cy1) + bx1 * cy1;
-					var yIter3;
-					if(by > by1) {
-						if(by > cy1) {
-							var ii_min = by1 > cy1 ? Math.floor(cy1) : Math.floor(by1);
-							var ii_max = Math.ceil(by);
-							var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-							yIter3 = this1;
-						} else {
-							var ii_min = Math.floor(by1);
-							var ii_max = Math.ceil(cy1);
-							var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-							yIter3 = this1;
-						}
-					} else if(by1 > cy1) {
-						var ii_min = by > cy1 ? Math.floor(cy1) : Math.ceil(by);
-						var ii_max = Math.ceil(by1);
-						var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-						yIter3 = this1;
-					} else {
-						var ii_min = Math.floor(by);
-						var ii_max = Math.ceil(cy1);
-						var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-						yIter3 = this1;
-					}
-					var foundY = false;
-					var s = 0.;
-					var t = 0.;
-					var sxx = 0.;
-					var txx = 0.;
-					var this1;
-					if(bx > bx1) {
-						if(bx > cx1) {
-							var ii_min = bx1 > cx1 ? Math.floor(cx1) : Math.floor(bx1);
-							var ii_max = Math.ceil(bx);
-							var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-							this1 = this2;
-						} else {
-							var ii_min = Math.floor(bx1);
-							var ii_max = Math.ceil(cx1);
-							var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-							this1 = this2;
-						}
-					} else if(bx1 > cx1) {
-						var ii_min = bx > cx1 ? Math.floor(cx1) : Math.ceil(bx);
-						var ii_max = Math.ceil(bx1);
-						var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-						this1 = this2;
-					} else {
-						var ii_min = Math.floor(bx);
-						var ii_max = Math.ceil(cx1);
-						var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-						this1 = this2;
-					}
-					var _g_min = this1.start;
-					var _g_max = this1.max;
-					while(_g_min < _g_max) {
-						var x = _g_min++;
-						sxx = sx * x;
-						txx = tx * x;
-						foundY = false;
-						var _g_min1 = yIter3.start;
-						var _g_max1 = yIter3.max;
-						while(_g_min1 < _g_max1) {
-							var y = _g_min1++;
-							s = s0 + sxx + sy * y;
-							t = t0 + txx + ty * y;
-							if(s <= 0 || t <= 0) {
-								if(foundY) {
-									break;
-								}
-							} else if(s + t < A) {
-								var this1 = color;
-								var c = this1;
-								if((c >> 24 & 255) < 254 && pixelImage.transparent) {
-									var location = pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0;
-									var this2 = pixelImage.image[location];
-									var this3 = this2;
-									var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
-									var this5 = this4 >> 24 & 255;
-									var a1 = this5 == 0 ? 0. : this5 / 255;
-									var this6 = this4 >> 16 & 255;
-									var r1 = this6 == 0 ? 0. : this6 / 255;
-									var this7 = this4 >> 8 & 255;
-									var g1 = this7 == 0 ? 0. : this7 / 255;
-									var this8 = this4 & 255;
-									var b1 = this8 == 0 ? 0. : this8 / 255;
-									var this9 = color >> 24 & 255;
-									var a2 = this9 == 0 ? 0. : this9 / 255;
-									var this10 = color >> 16 & 255;
-									var r2 = this10 == 0 ? 0. : this10 / 255;
-									var this11 = color >> 8 & 255;
-									var g2 = this11 == 0 ? 0. : this11 / 255;
-									var this12 = color & 255;
-									var b2 = this12 == 0 ? 0. : this12 / 255;
-									var a3 = a1 * (1 - a2);
-									var r = 255 * (r1 * a3 + r2 * a2) | 0;
-									var g = 255 * (g1 * a3 + g2 * a2) | 0;
-									var b = 255 * (b1 * a3 + b2 * a2) | 0;
-									var a = 255 * (a3 + a2) | 0;
-									var blended = a << 24 | r << 16 | g << 8 | b;
-									pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
-								} else {
-									pixelImage.image[pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
-								}
-								foundY = true;
-							} else if(foundY) {
-								break;
-							}
-						}
-					}
-					if(hasHit3 == true) {
-						var v = new pixelimage_algo_HitTri(bx,by,bx1,by1,cx1,cy1,true);
-					}
-					if(hasHit2 == true) {
-						var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy,true);
-						hitQuad = v;
-					} else {
-						hitQuad = null;
-					}
-				}
-				var cx = h2;
-				var cy = radius2;
-				var bx = h2;
-				var by = -radius2;
-				var temp = 0.;
-				temp = px + (bx * cos - by * sin);
-				by = py + (by * cos + bx * sin);
-				bx = temp;
-				temp = px + (cx * cos - cy * sin);
-				cy = py + (cy * cos + cx * sin);
-				cx = temp;
-				var bx1 = bx;
-				var by1 = by;
-				var cx1 = cx;
-				var cy1 = cy;
-				var hasHit1 = hasHit;
-				if(hasHit1 == null) {
-					hasHit1 = false;
-				}
-				var adjustWinding = qx * by1 - bx1 * qy + (bx1 * cy1 - cx1 * by1) + (cx1 * qy - qx * cy1) > 0;
-				if(!adjustWinding) {
-					var bx_ = bx1;
-					var by_ = by1;
-					bx1 = cx1;
-					by1 = cy1;
-					cx1 = bx_;
-					cy1 = by_;
-				}
-				var hasHit2 = hasHit1;
-				if(hasHit2 == null) {
-					hasHit2 = false;
-				}
-				var s0 = qy * cx1 - qx * cy1;
-				var sx = cy1 - qy;
-				var sy = qx - cx1;
-				var t0 = qx * by1 - qy * bx1;
-				var tx = qy - by1;
-				var ty = bx1 - qx;
-				var A = -by1 * cx1 + qy * (-bx1 + cx1) + qx * (by1 - cy1) + bx1 * cy1;
-				var yIter3;
-				if(qy > by1) {
-					if(qy > cy1) {
-						var ii_min = by1 > cy1 ? Math.floor(cy1) : Math.floor(by1);
-						var ii_max = Math.ceil(qy);
-						var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-						yIter3 = this1;
-					} else {
-						var ii_min = Math.floor(by1);
-						var ii_max = Math.ceil(cy1);
-						var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-						yIter3 = this1;
-					}
-				} else if(by1 > cy1) {
-					var ii_min = qy > cy1 ? Math.floor(cy1) : Math.ceil(qy);
-					var ii_max = Math.ceil(by1);
-					var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-					yIter3 = this1;
-				} else {
-					var ii_min = Math.floor(qy);
-					var ii_max = Math.ceil(cy1);
-					var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-					yIter3 = this1;
-				}
-				var foundY = false;
-				var s = 0.;
-				var t = 0.;
-				var sxx = 0.;
-				var txx = 0.;
-				var this1;
-				if(qx > bx1) {
-					if(qx > cx1) {
-						var ii_min = bx1 > cx1 ? Math.floor(cx1) : Math.floor(bx1);
-						var ii_max = Math.ceil(qx);
-						var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-						this1 = this2;
-					} else {
-						var ii_min = Math.floor(bx1);
-						var ii_max = Math.ceil(cx1);
-						var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-						this1 = this2;
-					}
-				} else if(bx1 > cx1) {
-					var ii_min = qx > cx1 ? Math.floor(cx1) : Math.ceil(qx);
-					var ii_max = Math.ceil(bx1);
-					var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-					this1 = this2;
-				} else {
-					var ii_min = Math.floor(qx);
-					var ii_max = Math.ceil(cx1);
-					var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-					this1 = this2;
-				}
-				var _g_min = this1.start;
-				var _g_max = this1.max;
-				while(_g_min < _g_max) {
-					var x = _g_min++;
-					sxx = sx * x;
-					txx = tx * x;
-					foundY = false;
-					var _g_min1 = yIter3.start;
-					var _g_max1 = yIter3.max;
-					while(_g_min1 < _g_max1) {
-						var y = _g_min1++;
-						s = s0 + sxx + sy * y;
-						t = t0 + txx + ty * y;
-						if(s <= 0 || t <= 0) {
-							if(foundY) {
-								break;
-							}
-						} else if(s + t < A) {
-							var this1 = color;
-							var c = this1;
-							if((c >> 24 & 255) < 254 && pixelImage.transparent) {
-								var location = pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0;
-								var this2 = pixelImage.image[location];
-								var this3 = this2;
-								var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
-								var this5 = this4 >> 24 & 255;
-								var a1 = this5 == 0 ? 0. : this5 / 255;
-								var this6 = this4 >> 16 & 255;
-								var r1 = this6 == 0 ? 0. : this6 / 255;
-								var this7 = this4 >> 8 & 255;
-								var g1 = this7 == 0 ? 0. : this7 / 255;
-								var this8 = this4 & 255;
-								var b1 = this8 == 0 ? 0. : this8 / 255;
-								var this9 = color >> 24 & 255;
-								var a2 = this9 == 0 ? 0. : this9 / 255;
-								var this10 = color >> 16 & 255;
-								var r2 = this10 == 0 ? 0. : this10 / 255;
-								var this11 = color >> 8 & 255;
-								var g2 = this11 == 0 ? 0. : this11 / 255;
-								var this12 = color & 255;
-								var b2 = this12 == 0 ? 0. : this12 / 255;
-								var a3 = a1 * (1 - a2);
-								var r = 255 * (r1 * a3 + r2 * a2) | 0;
-								var g = 255 * (g1 * a3 + g2 * a2) | 0;
-								var b = 255 * (b1 * a3 + b2 * a2) | 0;
-								var a = 255 * (a3 + a2) | 0;
-								var blended = a << 24 | r << 16 | g << 8 | b;
-								pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
-							} else {
-								pixelImage.image[pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
-							}
-							foundY = true;
-						} else if(foundY) {
-							break;
-						}
-					}
-				}
-				var hitTri;
-				if(hasHit2 == true) {
-					var v = new pixelimage_algo_HitTri(qx,qy,bx1,by1,cx1,cy1,true);
-					hitTri = v;
-				} else {
-					hitTri = null;
-				}
-				if(hasHit) {
-					var hitArr = new pixelimage_algo_HitTriArray([hitTri]);
-					if(hitQuad != null) {
-						hitArr.triArr.push(hitQuad.triABD);
-					}
-					hitArr.triArr.push(hitQuad.triBCD);
-				}
-			}
-		} else if(this.arrowHeight > 0. || this.arrowWidth > 0.) {
-			var px = this.x1;
-			var py = this.y1;
-			var qx = this.x2;
-			var qy = this.y2;
-			var arrowWidth = this.arrowWidth;
-			var arrowHeight = this.arrowHeight;
-			var thick = this.strokeWidth;
-			var color = this.strokeColor;
-			var hasHit = true;
-			if(hasHit == null) {
-				hasHit = false;
-			}
-			var goldenRatio = 1.61803398875;
-			var o = qy - py;
-			var a = qx - px;
-			var h = Math.pow(o * o + a * a,0.5);
-			var theta = Math.atan2(o,a);
-			var thicker = arrowWidth > thick * 1.1 ? arrowWidth : 2 * thick * goldenRatio;
-			var sin = Math.sin(theta);
-			var cos = Math.cos(theta);
-			var radius = thick / 2;
-			var radius2 = thicker / 2;
-			var h2 = arrowHeight < h * 1.1 ? h - arrowHeight : h / goldenRatio;
-			var hSmall = h - h2;
-			var px_ = hSmall;
-			var py_ = 0.;
-			var temp = 0.;
-			temp = px + (px_ * cos - py_ * sin);
-			py_ = py + (py_ * cos + px_ * sin);
-			px_ = temp;
-			var h = h2 - hSmall;
-			var hasHit1 = true;
-			if(hasHit1 == null) {
-				hasHit1 = false;
-			}
-			var sin1 = Math.sin(theta);
-			var cos1 = Math.cos(theta);
-			var radius = thick / 2;
-			var dx = 0.1;
-			var dy = radius;
-			var cx = h;
-			var cy = radius;
-			var bx = h;
-			var by = -radius;
-			var ax = 0.1;
-			var ay = -radius;
-			var temp1 = 0.;
-			temp1 = px_ + (ax * cos1 - ay * sin1);
-			ay = py_ + (ay * cos1 + ax * sin1);
-			ax = temp1;
-			temp1 = px_ + (bx * cos1 - by * sin1);
-			by = py_ + (by * cos1 + bx * sin1);
-			bx = temp1;
-			temp1 = px_ + (cx * cos1 - cy * sin1);
-			cy = py_ + (cy * cos1 + cx * sin1);
-			cx = temp1;
-			temp1 = px_ + (dx * cos1 - dy * sin1);
-			dy = py_ + (dy * cos1 + dx * sin1);
-			dx = temp1;
-			var hasHit2 = hasHit1;
-			if(hasHit2 == null) {
-				hasHit2 = false;
-			}
-			var bx1 = bx;
-			var by1 = by;
-			var cx1 = dx;
-			var cy1 = dy;
-			var hasHit1 = hasHit2;
-			if(hasHit1 == null) {
-				hasHit1 = false;
-			}
-			var adjustWinding = ax * by1 - bx1 * ay + (bx1 * cy1 - cx1 * by1) + (cx1 * ay - ax * cy1) > 0;
-			if(!adjustWinding) {
-				var bx_ = bx1;
-				var by_ = by1;
-				bx1 = cx1;
-				by1 = cy1;
-				cx1 = bx_;
-				cy1 = by_;
-			}
-			var hasHit3 = hasHit1;
-			if(hasHit3 == null) {
-				hasHit3 = false;
-			}
-			var s0 = ay * cx1 - ax * cy1;
-			var sx = cy1 - ay;
-			var sy = ax - cx1;
-			var t0 = ax * by1 - ay * bx1;
-			var tx = ay - by1;
-			var ty = bx1 - ax;
-			var A = -by1 * cx1 + ay * (-bx1 + cx1) + ax * (by1 - cy1) + bx1 * cy1;
-			var yIter3;
-			if(ay > by1) {
-				if(ay > cy1) {
-					var ii_min = by1 > cy1 ? Math.floor(cy1) : Math.floor(by1);
-					var ii_max = Math.ceil(ay);
-					var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-					yIter3 = this1;
-				} else {
-					var ii_min = Math.floor(by1);
-					var ii_max = Math.ceil(cy1);
-					var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-					yIter3 = this1;
-				}
-			} else if(by1 > cy1) {
-				var ii_min = ay > cy1 ? Math.floor(cy1) : Math.ceil(ay);
-				var ii_max = Math.ceil(by1);
-				var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-				yIter3 = this1;
-			} else {
-				var ii_min = Math.floor(ay);
-				var ii_max = Math.ceil(cy1);
-				var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-				yIter3 = this1;
-			}
-			var foundY = false;
-			var s = 0.;
-			var t = 0.;
-			var sxx = 0.;
-			var txx = 0.;
-			var this1;
-			if(ax > bx1) {
-				if(ax > cx1) {
-					var ii_min = bx1 > cx1 ? Math.floor(cx1) : Math.floor(bx1);
-					var ii_max = Math.ceil(ax);
-					var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-					this1 = this2;
-				} else {
-					var ii_min = Math.floor(bx1);
-					var ii_max = Math.ceil(cx1);
-					var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-					this1 = this2;
-				}
-			} else if(bx1 > cx1) {
-				var ii_min = ax > cx1 ? Math.floor(cx1) : Math.ceil(ax);
-				var ii_max = Math.ceil(bx1);
-				var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-				this1 = this2;
-			} else {
-				var ii_min = Math.floor(ax);
-				var ii_max = Math.ceil(cx1);
-				var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-				this1 = this2;
-			}
-			var _g_min = this1.start;
-			var _g_max = this1.max;
-			while(_g_min < _g_max) {
-				var x = _g_min++;
-				sxx = sx * x;
-				txx = tx * x;
-				foundY = false;
-				var _g_min1 = yIter3.start;
-				var _g_max1 = yIter3.max;
-				while(_g_min1 < _g_max1) {
-					var y = _g_min1++;
-					s = s0 + sxx + sy * y;
-					t = t0 + txx + ty * y;
-					if(s <= 0 || t <= 0) {
-						if(foundY) {
-							break;
-						}
-					} else if(s + t < A) {
-						var this1 = color;
-						var c = this1;
-						if((c >> 24 & 255) < 254 && pixelImage.transparent) {
-							var location = pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0;
-							var this2 = pixelImage.image[location];
-							var this3 = this2;
-							var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
-							var this5 = this4 >> 24 & 255;
-							var a1 = this5 == 0 ? 0. : this5 / 255;
-							var this6 = this4 >> 16 & 255;
-							var r1 = this6 == 0 ? 0. : this6 / 255;
-							var this7 = this4 >> 8 & 255;
-							var g1 = this7 == 0 ? 0. : this7 / 255;
-							var this8 = this4 & 255;
-							var b1 = this8 == 0 ? 0. : this8 / 255;
-							var this9 = color >> 24 & 255;
-							var a2 = this9 == 0 ? 0. : this9 / 255;
-							var this10 = color >> 16 & 255;
-							var r2 = this10 == 0 ? 0. : this10 / 255;
-							var this11 = color >> 8 & 255;
-							var g2 = this11 == 0 ? 0. : this11 / 255;
-							var this12 = color & 255;
-							var b2 = this12 == 0 ? 0. : this12 / 255;
-							var a3 = a1 * (1 - a2);
-							var r = 255 * (r1 * a3 + r2 * a2) | 0;
-							var g = 255 * (g1 * a3 + g2 * a2) | 0;
-							var b = 255 * (b1 * a3 + b2 * a2) | 0;
-							var a = 255 * (a3 + a2) | 0;
-							var blended = a << 24 | r << 16 | g << 8 | b;
-							pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
-						} else {
-							pixelImage.image[pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
-						}
-						foundY = true;
-					} else if(foundY) {
-						break;
-					}
-				}
-			}
-			if(hasHit3 == true) {
-				var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1,true);
-			}
-			var bx1 = cx;
-			var by1 = cy;
-			var cx1 = dx;
-			var cy1 = dy;
-			var hasHit1 = hasHit2;
-			if(hasHit1 == null) {
-				hasHit1 = false;
-			}
-			var adjustWinding = bx * by1 - bx1 * by + (bx1 * cy1 - cx1 * by1) + (cx1 * by - bx * cy1) > 0;
-			if(!adjustWinding) {
-				var bx_ = bx1;
-				var by_ = by1;
-				bx1 = cx1;
-				by1 = cy1;
-				cx1 = bx_;
-				cy1 = by_;
-			}
-			var hasHit3 = hasHit1;
-			if(hasHit3 == null) {
-				hasHit3 = false;
-			}
-			var s0 = by * cx1 - bx * cy1;
-			var sx = cy1 - by;
-			var sy = bx - cx1;
-			var t0 = bx * by1 - by * bx1;
-			var tx = by - by1;
-			var ty = bx1 - bx;
-			var A = -by1 * cx1 + by * (-bx1 + cx1) + bx * (by1 - cy1) + bx1 * cy1;
-			var yIter3;
-			if(by > by1) {
-				if(by > cy1) {
-					var ii_min = by1 > cy1 ? Math.floor(cy1) : Math.floor(by1);
-					var ii_max = Math.ceil(by);
-					var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-					yIter3 = this1;
-				} else {
-					var ii_min = Math.floor(by1);
-					var ii_max = Math.ceil(cy1);
-					var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-					yIter3 = this1;
-				}
-			} else if(by1 > cy1) {
-				var ii_min = by > cy1 ? Math.floor(cy1) : Math.ceil(by);
-				var ii_max = Math.ceil(by1);
-				var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-				yIter3 = this1;
-			} else {
-				var ii_min = Math.floor(by);
-				var ii_max = Math.ceil(cy1);
-				var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-				yIter3 = this1;
-			}
-			var foundY = false;
-			var s = 0.;
-			var t = 0.;
-			var sxx = 0.;
-			var txx = 0.;
-			var this1;
-			if(bx > bx1) {
-				if(bx > cx1) {
-					var ii_min = bx1 > cx1 ? Math.floor(cx1) : Math.floor(bx1);
-					var ii_max = Math.ceil(bx);
-					var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-					this1 = this2;
-				} else {
-					var ii_min = Math.floor(bx1);
-					var ii_max = Math.ceil(cx1);
-					var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-					this1 = this2;
-				}
-			} else if(bx1 > cx1) {
-				var ii_min = bx > cx1 ? Math.floor(cx1) : Math.ceil(bx);
-				var ii_max = Math.ceil(bx1);
-				var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-				this1 = this2;
-			} else {
-				var ii_min = Math.floor(bx);
-				var ii_max = Math.ceil(cx1);
-				var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-				this1 = this2;
-			}
-			var _g_min = this1.start;
-			var _g_max = this1.max;
-			while(_g_min < _g_max) {
-				var x = _g_min++;
-				sxx = sx * x;
-				txx = tx * x;
-				foundY = false;
-				var _g_min1 = yIter3.start;
-				var _g_max1 = yIter3.max;
-				while(_g_min1 < _g_max1) {
-					var y = _g_min1++;
-					s = s0 + sxx + sy * y;
-					t = t0 + txx + ty * y;
-					if(s <= 0 || t <= 0) {
-						if(foundY) {
-							break;
-						}
-					} else if(s + t < A) {
-						var this1 = color;
-						var c = this1;
-						if((c >> 24 & 255) < 254 && pixelImage.transparent) {
-							var location = pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0;
-							var this2 = pixelImage.image[location];
-							var this3 = this2;
-							var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
-							var this5 = this4 >> 24 & 255;
-							var a1 = this5 == 0 ? 0. : this5 / 255;
-							var this6 = this4 >> 16 & 255;
-							var r1 = this6 == 0 ? 0. : this6 / 255;
-							var this7 = this4 >> 8 & 255;
-							var g1 = this7 == 0 ? 0. : this7 / 255;
-							var this8 = this4 & 255;
-							var b1 = this8 == 0 ? 0. : this8 / 255;
-							var this9 = color >> 24 & 255;
-							var a2 = this9 == 0 ? 0. : this9 / 255;
-							var this10 = color >> 16 & 255;
-							var r2 = this10 == 0 ? 0. : this10 / 255;
-							var this11 = color >> 8 & 255;
-							var g2 = this11 == 0 ? 0. : this11 / 255;
-							var this12 = color & 255;
-							var b2 = this12 == 0 ? 0. : this12 / 255;
-							var a3 = a1 * (1 - a2);
-							var r = 255 * (r1 * a3 + r2 * a2) | 0;
-							var g = 255 * (g1 * a3 + g2 * a2) | 0;
-							var b = 255 * (b1 * a3 + b2 * a2) | 0;
-							var a = 255 * (a3 + a2) | 0;
-							var blended = a << 24 | r << 16 | g << 8 | b;
-							pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
-						} else {
-							pixelImage.image[pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
-						}
-						foundY = true;
-					} else if(foundY) {
-						break;
-					}
-				}
-			}
-			if(hasHit3 == true) {
-				var v = new pixelimage_algo_HitTri(bx,by,bx1,by1,cx1,cy1,true);
-			}
-			var hitQuad;
-			if(hasHit2 == true) {
-				var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy,true);
-				hitQuad = v;
-			} else {
-				hitQuad = null;
-			}
-			var cx = h2;
-			var cy = radius2;
-			var bx = h2;
-			var by = -radius2;
-			var dx = hSmall;
-			var dy = radius2;
-			var ax = hSmall;
-			var ay = -radius2;
-			temp = px + (bx * cos - by * sin);
-			by = py + (by * cos + bx * sin);
-			bx = temp;
-			temp = px + (cx * cos - cy * sin);
-			cy = py + (cy * cos + cx * sin);
-			cx = temp;
-			temp = px + (ax * cos - ay * sin);
-			ay = py + (ay * cos + ax * sin);
-			ax = temp;
-			temp = px + (dx * cos - dy * sin);
-			dy = py + (dy * cos + dx * sin);
-			dx = temp;
-			var bx1 = bx;
-			var by1 = by;
-			var cx1 = cx;
-			var cy1 = cy;
-			var hasHit1 = hasHit;
-			if(hasHit1 == null) {
-				hasHit1 = false;
-			}
-			var adjustWinding = qx * by1 - bx1 * qy + (bx1 * cy1 - cx1 * by1) + (cx1 * qy - qx * cy1) > 0;
-			if(!adjustWinding) {
-				var bx_ = bx1;
-				var by_ = by1;
-				bx1 = cx1;
-				by1 = cy1;
-				cx1 = bx_;
-				cy1 = by_;
-			}
-			var hasHit2 = hasHit1;
-			if(hasHit2 == null) {
-				hasHit2 = false;
-			}
-			var s0 = qy * cx1 - qx * cy1;
-			var sx = cy1 - qy;
-			var sy = qx - cx1;
-			var t0 = qx * by1 - qy * bx1;
-			var tx = qy - by1;
-			var ty = bx1 - qx;
-			var A = -by1 * cx1 + qy * (-bx1 + cx1) + qx * (by1 - cy1) + bx1 * cy1;
-			var yIter3;
-			if(qy > by1) {
-				if(qy > cy1) {
-					var ii_min = by1 > cy1 ? Math.floor(cy1) : Math.floor(by1);
-					var ii_max = Math.ceil(qy);
-					var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-					yIter3 = this1;
-				} else {
-					var ii_min = Math.floor(by1);
-					var ii_max = Math.ceil(cy1);
-					var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-					yIter3 = this1;
-				}
-			} else if(by1 > cy1) {
-				var ii_min = qy > cy1 ? Math.floor(cy1) : Math.ceil(qy);
-				var ii_max = Math.ceil(by1);
-				var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-				yIter3 = this1;
-			} else {
-				var ii_min = Math.floor(qy);
-				var ii_max = Math.ceil(cy1);
-				var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-				yIter3 = this1;
-			}
-			var foundY = false;
-			var s = 0.;
-			var t = 0.;
-			var sxx = 0.;
-			var txx = 0.;
-			var this1;
-			if(qx > bx1) {
-				if(qx > cx1) {
-					var ii_min = bx1 > cx1 ? Math.floor(cx1) : Math.floor(bx1);
-					var ii_max = Math.ceil(qx);
-					var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-					this1 = this2;
-				} else {
-					var ii_min = Math.floor(bx1);
-					var ii_max = Math.ceil(cx1);
-					var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-					this1 = this2;
-				}
-			} else if(bx1 > cx1) {
-				var ii_min = qx > cx1 ? Math.floor(cx1) : Math.ceil(qx);
-				var ii_max = Math.ceil(bx1);
-				var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-				this1 = this2;
-			} else {
-				var ii_min = Math.floor(qx);
-				var ii_max = Math.ceil(cx1);
-				var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-				this1 = this2;
-			}
-			var _g_min = this1.start;
-			var _g_max = this1.max;
-			while(_g_min < _g_max) {
-				var x = _g_min++;
-				sxx = sx * x;
-				txx = tx * x;
-				foundY = false;
-				var _g_min1 = yIter3.start;
-				var _g_max1 = yIter3.max;
-				while(_g_min1 < _g_max1) {
-					var y = _g_min1++;
-					s = s0 + sxx + sy * y;
-					t = t0 + txx + ty * y;
-					if(s <= 0 || t <= 0) {
-						if(foundY) {
-							break;
-						}
-					} else if(s + t < A) {
-						var this1 = color;
-						var c = this1;
-						if((c >> 24 & 255) < 254 && pixelImage.transparent) {
-							var location = pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0;
-							var this2 = pixelImage.image[location];
-							var this3 = this2;
-							var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
-							var this5 = this4 >> 24 & 255;
-							var a1 = this5 == 0 ? 0. : this5 / 255;
-							var this6 = this4 >> 16 & 255;
-							var r1 = this6 == 0 ? 0. : this6 / 255;
-							var this7 = this4 >> 8 & 255;
-							var g1 = this7 == 0 ? 0. : this7 / 255;
-							var this8 = this4 & 255;
-							var b1 = this8 == 0 ? 0. : this8 / 255;
-							var this9 = color >> 24 & 255;
-							var a2 = this9 == 0 ? 0. : this9 / 255;
-							var this10 = color >> 16 & 255;
-							var r2 = this10 == 0 ? 0. : this10 / 255;
-							var this11 = color >> 8 & 255;
-							var g2 = this11 == 0 ? 0. : this11 / 255;
-							var this12 = color & 255;
-							var b2 = this12 == 0 ? 0. : this12 / 255;
-							var a3 = a1 * (1 - a2);
-							var r = 255 * (r1 * a3 + r2 * a2) | 0;
-							var g = 255 * (g1 * a3 + g2 * a2) | 0;
-							var b = 255 * (b1 * a3 + b2 * a2) | 0;
-							var a = 255 * (a3 + a2) | 0;
-							var blended = a << 24 | r << 16 | g << 8 | b;
-							pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
-						} else {
-							pixelImage.image[pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
-						}
-						foundY = true;
-					} else if(foundY) {
-						break;
-					}
-				}
-			}
-			var hitTriTop;
-			if(hasHit2 == true) {
-				var v = new pixelimage_algo_HitTri(qx,qy,bx1,by1,cx1,cy1,true);
-				hitTriTop = v;
-			} else {
-				hitTriTop = null;
-			}
-			var bx = ax;
-			var by = ay;
-			var cx = dx;
-			var cy = dy;
-			var hasHit1 = hasHit;
-			if(hasHit1 == null) {
-				hasHit1 = false;
-			}
-			var adjustWinding = px * by - bx * py + (bx * cy - cx * by) + (cx * py - px * cy) > 0;
-			if(!adjustWinding) {
-				var bx_ = bx;
-				var by_ = by;
-				bx = cx;
-				by = cy;
-				cx = bx_;
-				cy = by_;
-			}
-			var hasHit2 = hasHit1;
-			if(hasHit2 == null) {
-				hasHit2 = false;
-			}
-			var s0 = py * cx - px * cy;
-			var sx = cy - py;
-			var sy = px - cx;
-			var t0 = px * by - py * bx;
-			var tx = py - by;
-			var ty = bx - px;
-			var A = -by * cx + py * (-bx + cx) + px * (by - cy) + bx * cy;
-			var yIter3;
-			if(py > by) {
-				if(py > cy) {
-					var ii_min = by > cy ? Math.floor(cy) : Math.floor(by);
-					var ii_max = Math.ceil(py);
-					var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-					yIter3 = this1;
-				} else {
-					var ii_min = Math.floor(by);
-					var ii_max = Math.ceil(cy);
-					var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-					yIter3 = this1;
-				}
-			} else if(by > cy) {
-				var ii_min = py > cy ? Math.floor(cy) : Math.ceil(py);
-				var ii_max = Math.ceil(by);
-				var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-				yIter3 = this1;
-			} else {
-				var ii_min = Math.floor(py);
-				var ii_max = Math.ceil(cy);
-				var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-				yIter3 = this1;
-			}
-			var foundY = false;
-			var s = 0.;
-			var t = 0.;
-			var sxx = 0.;
-			var txx = 0.;
-			var this1;
-			if(px > bx) {
-				if(px > cx) {
-					var ii_min = bx > cx ? Math.floor(cx) : Math.floor(bx);
-					var ii_max = Math.ceil(px);
-					var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-					this1 = this2;
-				} else {
-					var ii_min = Math.floor(bx);
-					var ii_max = Math.ceil(cx);
-					var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-					this1 = this2;
-				}
-			} else if(bx > cx) {
-				var ii_min = px > cx ? Math.floor(cx) : Math.ceil(px);
-				var ii_max = Math.ceil(bx);
-				var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-				this1 = this2;
-			} else {
-				var ii_min = Math.floor(px);
-				var ii_max = Math.ceil(cx);
-				var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-				this1 = this2;
-			}
-			var _g_min = this1.start;
-			var _g_max = this1.max;
-			while(_g_min < _g_max) {
-				var x = _g_min++;
-				sxx = sx * x;
-				txx = tx * x;
-				foundY = false;
-				var _g_min1 = yIter3.start;
-				var _g_max1 = yIter3.max;
-				while(_g_min1 < _g_max1) {
-					var y = _g_min1++;
-					s = s0 + sxx + sy * y;
-					t = t0 + txx + ty * y;
-					if(s <= 0 || t <= 0) {
-						if(foundY) {
-							break;
-						}
-					} else if(s + t < A) {
-						var this1 = color;
-						var c = this1;
-						if((c >> 24 & 255) < 254 && pixelImage.transparent) {
-							var location = pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0;
-							var this2 = pixelImage.image[location];
-							var this3 = this2;
-							var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
-							var this5 = this4 >> 24 & 255;
-							var a1 = this5 == 0 ? 0. : this5 / 255;
-							var this6 = this4 >> 16 & 255;
-							var r1 = this6 == 0 ? 0. : this6 / 255;
-							var this7 = this4 >> 8 & 255;
-							var g1 = this7 == 0 ? 0. : this7 / 255;
-							var this8 = this4 & 255;
-							var b1 = this8 == 0 ? 0. : this8 / 255;
-							var this9 = color >> 24 & 255;
-							var a2 = this9 == 0 ? 0. : this9 / 255;
-							var this10 = color >> 16 & 255;
-							var r2 = this10 == 0 ? 0. : this10 / 255;
-							var this11 = color >> 8 & 255;
-							var g2 = this11 == 0 ? 0. : this11 / 255;
-							var this12 = color & 255;
-							var b2 = this12 == 0 ? 0. : this12 / 255;
-							var a3 = a1 * (1 - a2);
-							var r = 255 * (r1 * a3 + r2 * a2) | 0;
-							var g = 255 * (g1 * a3 + g2 * a2) | 0;
-							var b = 255 * (b1 * a3 + b2 * a2) | 0;
-							var a = 255 * (a3 + a2) | 0;
-							var blended = a << 24 | r << 16 | g << 8 | b;
-							pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
-						} else {
-							pixelImage.image[pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
-						}
-						foundY = true;
-					} else if(foundY) {
-						break;
-					}
-				}
-			}
-			var hitTriBottom;
-			if(hasHit2 == true) {
-				var v = new pixelimage_algo_HitTri(px,py,bx,by,cx,cy,true);
-				hitTriBottom = v;
-			} else {
-				hitTriBottom = null;
-			}
-			if(hasHit) {
-				var hitArr = new pixelimage_algo_HitTriArray([hitTriTop,hitTriBottom]);
-				if(hitQuad != null) {
-					hitArr.triArr.push(hitQuad.triABD);
-				}
-				hitArr.triArr.push(hitQuad.triBCD);
-			}
-		} else {
-			var px = this.x1;
-			var py = this.y1;
-			var qx = this.x2;
-			var qy = this.y2;
-			var thick = this.strokeWidth;
-			var color = this.strokeColor;
-			var hasHit = true;
-			if(hasHit == null) {
-				hasHit = false;
-			}
-			var goldenRatio = 1.61803398875;
-			var o = qy - py;
-			var a = qx - px;
-			var h = Math.pow(o * o + a * a,0.5);
-			var theta = Math.atan2(o,a);
-			var thicker = 2 * thick * goldenRatio;
-			var sin = Math.sin(theta);
-			var cos = Math.cos(theta);
-			var radius = thick / 2;
-			var radius2 = thicker / 2;
-			var h2 = h / goldenRatio;
-			var hSmall = h - h2;
-			var px_ = hSmall;
-			var py_ = 0.;
-			var temp = 0.;
-			temp = px + (px_ * cos - py_ * sin);
-			py_ = py + (py_ * cos + px_ * sin);
-			px_ = temp;
-			var h = h2 - hSmall;
-			var hasHit1 = true;
-			if(hasHit1 == null) {
-				hasHit1 = false;
-			}
-			var sin1 = Math.sin(theta);
-			var cos1 = Math.cos(theta);
-			var radius = thick / 2;
-			var dx = 0.1;
-			var dy = radius;
-			var cx = h;
-			var cy = radius;
-			var bx = h;
-			var by = -radius;
-			var ax = 0.1;
-			var ay = -radius;
-			var temp1 = 0.;
-			temp1 = px_ + (ax * cos1 - ay * sin1);
-			ay = py_ + (ay * cos1 + ax * sin1);
-			ax = temp1;
-			temp1 = px_ + (bx * cos1 - by * sin1);
-			by = py_ + (by * cos1 + bx * sin1);
-			bx = temp1;
-			temp1 = px_ + (cx * cos1 - cy * sin1);
-			cy = py_ + (cy * cos1 + cx * sin1);
-			cx = temp1;
-			temp1 = px_ + (dx * cos1 - dy * sin1);
-			dy = py_ + (dy * cos1 + dx * sin1);
-			dx = temp1;
-			var hasHit2 = hasHit1;
-			if(hasHit2 == null) {
-				hasHit2 = false;
-			}
-			var bx1 = bx;
-			var by1 = by;
-			var cx1 = dx;
-			var cy1 = dy;
-			var hasHit1 = hasHit2;
-			if(hasHit1 == null) {
-				hasHit1 = false;
-			}
-			var adjustWinding = ax * by1 - bx1 * ay + (bx1 * cy1 - cx1 * by1) + (cx1 * ay - ax * cy1) > 0;
-			if(!adjustWinding) {
-				var bx_ = bx1;
-				var by_ = by1;
-				bx1 = cx1;
-				by1 = cy1;
-				cx1 = bx_;
-				cy1 = by_;
-			}
-			var hasHit3 = hasHit1;
-			if(hasHit3 == null) {
-				hasHit3 = false;
-			}
-			var s0 = ay * cx1 - ax * cy1;
-			var sx = cy1 - ay;
-			var sy = ax - cx1;
-			var t0 = ax * by1 - ay * bx1;
-			var tx = ay - by1;
-			var ty = bx1 - ax;
-			var A = -by1 * cx1 + ay * (-bx1 + cx1) + ax * (by1 - cy1) + bx1 * cy1;
-			var yIter3;
-			if(ay > by1) {
-				if(ay > cy1) {
-					var ii_min = by1 > cy1 ? Math.floor(cy1) : Math.floor(by1);
-					var ii_max = Math.ceil(ay);
-					var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-					yIter3 = this1;
-				} else {
-					var ii_min = Math.floor(by1);
-					var ii_max = Math.ceil(cy1);
-					var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-					yIter3 = this1;
-				}
-			} else if(by1 > cy1) {
-				var ii_min = ay > cy1 ? Math.floor(cy1) : Math.ceil(ay);
-				var ii_max = Math.ceil(by1);
-				var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-				yIter3 = this1;
-			} else {
-				var ii_min = Math.floor(ay);
-				var ii_max = Math.ceil(cy1);
-				var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-				yIter3 = this1;
-			}
-			var foundY = false;
-			var s = 0.;
-			var t = 0.;
-			var sxx = 0.;
-			var txx = 0.;
-			var this1;
-			if(ax > bx1) {
-				if(ax > cx1) {
-					var ii_min = bx1 > cx1 ? Math.floor(cx1) : Math.floor(bx1);
-					var ii_max = Math.ceil(ax);
-					var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-					this1 = this2;
-				} else {
-					var ii_min = Math.floor(bx1);
-					var ii_max = Math.ceil(cx1);
-					var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-					this1 = this2;
-				}
-			} else if(bx1 > cx1) {
-				var ii_min = ax > cx1 ? Math.floor(cx1) : Math.ceil(ax);
-				var ii_max = Math.ceil(bx1);
-				var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-				this1 = this2;
-			} else {
-				var ii_min = Math.floor(ax);
-				var ii_max = Math.ceil(cx1);
-				var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-				this1 = this2;
-			}
-			var _g_min = this1.start;
-			var _g_max = this1.max;
-			while(_g_min < _g_max) {
-				var x = _g_min++;
-				sxx = sx * x;
-				txx = tx * x;
-				foundY = false;
-				var _g_min1 = yIter3.start;
-				var _g_max1 = yIter3.max;
-				while(_g_min1 < _g_max1) {
-					var y = _g_min1++;
-					s = s0 + sxx + sy * y;
-					t = t0 + txx + ty * y;
-					if(s <= 0 || t <= 0) {
-						if(foundY) {
-							break;
-						}
-					} else if(s + t < A) {
-						var this1 = color;
-						var c = this1;
-						if((c >> 24 & 255) < 254 && pixelImage.transparent) {
-							var location = pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0;
-							var this2 = pixelImage.image[location];
-							var this3 = this2;
-							var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
-							var this5 = this4 >> 24 & 255;
-							var a1 = this5 == 0 ? 0. : this5 / 255;
-							var this6 = this4 >> 16 & 255;
-							var r1 = this6 == 0 ? 0. : this6 / 255;
-							var this7 = this4 >> 8 & 255;
-							var g1 = this7 == 0 ? 0. : this7 / 255;
-							var this8 = this4 & 255;
-							var b1 = this8 == 0 ? 0. : this8 / 255;
-							var this9 = color >> 24 & 255;
-							var a2 = this9 == 0 ? 0. : this9 / 255;
-							var this10 = color >> 16 & 255;
-							var r2 = this10 == 0 ? 0. : this10 / 255;
-							var this11 = color >> 8 & 255;
-							var g2 = this11 == 0 ? 0. : this11 / 255;
-							var this12 = color & 255;
-							var b2 = this12 == 0 ? 0. : this12 / 255;
-							var a3 = a1 * (1 - a2);
-							var r = 255 * (r1 * a3 + r2 * a2) | 0;
-							var g = 255 * (g1 * a3 + g2 * a2) | 0;
-							var b = 255 * (b1 * a3 + b2 * a2) | 0;
-							var a = 255 * (a3 + a2) | 0;
-							var blended = a << 24 | r << 16 | g << 8 | b;
-							pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
-						} else {
-							pixelImage.image[pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
-						}
-						foundY = true;
-					} else if(foundY) {
-						break;
-					}
-				}
-			}
-			if(hasHit3 == true) {
-				var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1,true);
-			}
-			var bx1 = cx;
-			var by1 = cy;
-			var cx1 = dx;
-			var cy1 = dy;
-			var hasHit1 = hasHit2;
-			if(hasHit1 == null) {
-				hasHit1 = false;
-			}
-			var adjustWinding = bx * by1 - bx1 * by + (bx1 * cy1 - cx1 * by1) + (cx1 * by - bx * cy1) > 0;
-			if(!adjustWinding) {
-				var bx_ = bx1;
-				var by_ = by1;
-				bx1 = cx1;
-				by1 = cy1;
-				cx1 = bx_;
-				cy1 = by_;
-			}
-			var hasHit3 = hasHit1;
-			if(hasHit3 == null) {
-				hasHit3 = false;
-			}
-			var s0 = by * cx1 - bx * cy1;
-			var sx = cy1 - by;
-			var sy = bx - cx1;
-			var t0 = bx * by1 - by * bx1;
-			var tx = by - by1;
-			var ty = bx1 - bx;
-			var A = -by1 * cx1 + by * (-bx1 + cx1) + bx * (by1 - cy1) + bx1 * cy1;
-			var yIter3;
-			if(by > by1) {
-				if(by > cy1) {
-					var ii_min = by1 > cy1 ? Math.floor(cy1) : Math.floor(by1);
-					var ii_max = Math.ceil(by);
-					var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-					yIter3 = this1;
-				} else {
-					var ii_min = Math.floor(by1);
-					var ii_max = Math.ceil(cy1);
-					var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-					yIter3 = this1;
-				}
-			} else if(by1 > cy1) {
-				var ii_min = by > cy1 ? Math.floor(cy1) : Math.ceil(by);
-				var ii_max = Math.ceil(by1);
-				var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-				yIter3 = this1;
-			} else {
-				var ii_min = Math.floor(by);
-				var ii_max = Math.ceil(cy1);
-				var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-				yIter3 = this1;
-			}
-			var foundY = false;
-			var s = 0.;
-			var t = 0.;
-			var sxx = 0.;
-			var txx = 0.;
-			var this1;
-			if(bx > bx1) {
-				if(bx > cx1) {
-					var ii_min = bx1 > cx1 ? Math.floor(cx1) : Math.floor(bx1);
-					var ii_max = Math.ceil(bx);
-					var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-					this1 = this2;
-				} else {
-					var ii_min = Math.floor(bx1);
-					var ii_max = Math.ceil(cx1);
-					var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-					this1 = this2;
-				}
-			} else if(bx1 > cx1) {
-				var ii_min = bx > cx1 ? Math.floor(cx1) : Math.ceil(bx);
-				var ii_max = Math.ceil(bx1);
-				var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-				this1 = this2;
-			} else {
-				var ii_min = Math.floor(bx);
-				var ii_max = Math.ceil(cx1);
-				var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-				this1 = this2;
-			}
-			var _g_min = this1.start;
-			var _g_max = this1.max;
-			while(_g_min < _g_max) {
-				var x = _g_min++;
-				sxx = sx * x;
-				txx = tx * x;
-				foundY = false;
-				var _g_min1 = yIter3.start;
-				var _g_max1 = yIter3.max;
-				while(_g_min1 < _g_max1) {
-					var y = _g_min1++;
-					s = s0 + sxx + sy * y;
-					t = t0 + txx + ty * y;
-					if(s <= 0 || t <= 0) {
-						if(foundY) {
-							break;
-						}
-					} else if(s + t < A) {
-						var this1 = color;
-						var c = this1;
-						if((c >> 24 & 255) < 254 && pixelImage.transparent) {
-							var location = pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0;
-							var this2 = pixelImage.image[location];
-							var this3 = this2;
-							var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
-							var this5 = this4 >> 24 & 255;
-							var a1 = this5 == 0 ? 0. : this5 / 255;
-							var this6 = this4 >> 16 & 255;
-							var r1 = this6 == 0 ? 0. : this6 / 255;
-							var this7 = this4 >> 8 & 255;
-							var g1 = this7 == 0 ? 0. : this7 / 255;
-							var this8 = this4 & 255;
-							var b1 = this8 == 0 ? 0. : this8 / 255;
-							var this9 = color >> 24 & 255;
-							var a2 = this9 == 0 ? 0. : this9 / 255;
-							var this10 = color >> 16 & 255;
-							var r2 = this10 == 0 ? 0. : this10 / 255;
-							var this11 = color >> 8 & 255;
-							var g2 = this11 == 0 ? 0. : this11 / 255;
-							var this12 = color & 255;
-							var b2 = this12 == 0 ? 0. : this12 / 255;
-							var a3 = a1 * (1 - a2);
-							var r = 255 * (r1 * a3 + r2 * a2) | 0;
-							var g = 255 * (g1 * a3 + g2 * a2) | 0;
-							var b = 255 * (b1 * a3 + b2 * a2) | 0;
-							var a = 255 * (a3 + a2) | 0;
-							var blended = a << 24 | r << 16 | g << 8 | b;
-							pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
-						} else {
-							pixelImage.image[pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
-						}
-						foundY = true;
-					} else if(foundY) {
-						break;
-					}
-				}
-			}
-			if(hasHit3 == true) {
-				var v = new pixelimage_algo_HitTri(bx,by,bx1,by1,cx1,cy1,true);
-			}
-			var hitQuad;
-			if(hasHit2 == true) {
-				var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy,true);
-				hitQuad = v;
-			} else {
-				hitQuad = null;
-			}
-			var cx = h2;
-			var cy = radius2;
-			var bx = h2;
-			var by = -radius2;
-			var dx = hSmall;
-			var dy = radius2;
-			var ax = hSmall;
-			var ay = -radius2;
-			temp = px + (bx * cos - by * sin);
-			by = py + (by * cos + bx * sin);
-			bx = temp;
-			temp = px + (cx * cos - cy * sin);
-			cy = py + (cy * cos + cx * sin);
-			cx = temp;
-			temp = px + (ax * cos - ay * sin);
-			ay = py + (ay * cos + ax * sin);
-			ax = temp;
-			temp = px + (dx * cos - dy * sin);
-			dy = py + (dy * cos + dx * sin);
-			dx = temp;
-			var bx1 = bx;
-			var by1 = by;
-			var cx1 = cx;
-			var cy1 = cy;
-			var hasHit1 = hasHit;
-			if(hasHit1 == null) {
-				hasHit1 = false;
-			}
-			var adjustWinding = qx * by1 - bx1 * qy + (bx1 * cy1 - cx1 * by1) + (cx1 * qy - qx * cy1) > 0;
-			if(!adjustWinding) {
-				var bx_ = bx1;
-				var by_ = by1;
-				bx1 = cx1;
-				by1 = cy1;
-				cx1 = bx_;
-				cy1 = by_;
-			}
-			var hasHit2 = hasHit1;
-			if(hasHit2 == null) {
-				hasHit2 = false;
-			}
-			var s0 = qy * cx1 - qx * cy1;
-			var sx = cy1 - qy;
-			var sy = qx - cx1;
-			var t0 = qx * by1 - qy * bx1;
-			var tx = qy - by1;
-			var ty = bx1 - qx;
-			var A = -by1 * cx1 + qy * (-bx1 + cx1) + qx * (by1 - cy1) + bx1 * cy1;
-			var yIter3;
-			if(qy > by1) {
-				if(qy > cy1) {
-					var ii_min = by1 > cy1 ? Math.floor(cy1) : Math.floor(by1);
-					var ii_max = Math.ceil(qy);
-					var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-					yIter3 = this1;
-				} else {
-					var ii_min = Math.floor(by1);
-					var ii_max = Math.ceil(cy1);
-					var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-					yIter3 = this1;
-				}
-			} else if(by1 > cy1) {
-				var ii_min = qy > cy1 ? Math.floor(cy1) : Math.ceil(qy);
-				var ii_max = Math.ceil(by1);
-				var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-				yIter3 = this1;
-			} else {
-				var ii_min = Math.floor(qy);
-				var ii_max = Math.ceil(cy1);
-				var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-				yIter3 = this1;
-			}
-			var foundY = false;
-			var s = 0.;
-			var t = 0.;
-			var sxx = 0.;
-			var txx = 0.;
-			var this1;
-			if(qx > bx1) {
-				if(qx > cx1) {
-					var ii_min = bx1 > cx1 ? Math.floor(cx1) : Math.floor(bx1);
-					var ii_max = Math.ceil(qx);
-					var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-					this1 = this2;
-				} else {
-					var ii_min = Math.floor(bx1);
-					var ii_max = Math.ceil(cx1);
-					var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-					this1 = this2;
-				}
-			} else if(bx1 > cx1) {
-				var ii_min = qx > cx1 ? Math.floor(cx1) : Math.ceil(qx);
-				var ii_max = Math.ceil(bx1);
-				var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-				this1 = this2;
-			} else {
-				var ii_min = Math.floor(qx);
-				var ii_max = Math.ceil(cx1);
-				var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-				this1 = this2;
-			}
-			var _g_min = this1.start;
-			var _g_max = this1.max;
-			while(_g_min < _g_max) {
-				var x = _g_min++;
-				sxx = sx * x;
-				txx = tx * x;
-				foundY = false;
-				var _g_min1 = yIter3.start;
-				var _g_max1 = yIter3.max;
-				while(_g_min1 < _g_max1) {
-					var y = _g_min1++;
-					s = s0 + sxx + sy * y;
-					t = t0 + txx + ty * y;
-					if(s <= 0 || t <= 0) {
-						if(foundY) {
-							break;
-						}
-					} else if(s + t < A) {
-						var this1 = color;
-						var c = this1;
-						if((c >> 24 & 255) < 254 && pixelImage.transparent) {
-							var location = pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0;
-							var this2 = pixelImage.image[location];
-							var this3 = this2;
-							var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
-							var this5 = this4 >> 24 & 255;
-							var a1 = this5 == 0 ? 0. : this5 / 255;
-							var this6 = this4 >> 16 & 255;
-							var r1 = this6 == 0 ? 0. : this6 / 255;
-							var this7 = this4 >> 8 & 255;
-							var g1 = this7 == 0 ? 0. : this7 / 255;
-							var this8 = this4 & 255;
-							var b1 = this8 == 0 ? 0. : this8 / 255;
-							var this9 = color >> 24 & 255;
-							var a2 = this9 == 0 ? 0. : this9 / 255;
-							var this10 = color >> 16 & 255;
-							var r2 = this10 == 0 ? 0. : this10 / 255;
-							var this11 = color >> 8 & 255;
-							var g2 = this11 == 0 ? 0. : this11 / 255;
-							var this12 = color & 255;
-							var b2 = this12 == 0 ? 0. : this12 / 255;
-							var a3 = a1 * (1 - a2);
-							var r = 255 * (r1 * a3 + r2 * a2) | 0;
-							var g = 255 * (g1 * a3 + g2 * a2) | 0;
-							var b = 255 * (b1 * a3 + b2 * a2) | 0;
-							var a = 255 * (a3 + a2) | 0;
-							var blended = a << 24 | r << 16 | g << 8 | b;
-							pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
-						} else {
-							pixelImage.image[pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
-						}
-						foundY = true;
-					} else if(foundY) {
-						break;
-					}
-				}
-			}
-			var hitTriTop;
-			if(hasHit2 == true) {
-				var v = new pixelimage_algo_HitTri(qx,qy,bx1,by1,cx1,cy1,true);
-				hitTriTop = v;
-			} else {
-				hitTriTop = null;
-			}
-			var bx = ax;
-			var by = ay;
-			var cx = dx;
-			var cy = dy;
-			var hasHit1 = hasHit;
-			if(hasHit1 == null) {
-				hasHit1 = false;
-			}
-			var adjustWinding = px * by - bx * py + (bx * cy - cx * by) + (cx * py - px * cy) > 0;
-			if(!adjustWinding) {
-				var bx_ = bx;
-				var by_ = by;
-				bx = cx;
-				by = cy;
-				cx = bx_;
-				cy = by_;
-			}
-			var hasHit2 = hasHit1;
-			if(hasHit2 == null) {
-				hasHit2 = false;
-			}
-			var s0 = py * cx - px * cy;
-			var sx = cy - py;
-			var sy = px - cx;
-			var t0 = px * by - py * bx;
-			var tx = py - by;
-			var ty = bx - px;
-			var A = -by * cx + py * (-bx + cx) + px * (by - cy) + bx * cy;
-			var yIter3;
-			if(py > by) {
-				if(py > cy) {
-					var ii_min = by > cy ? Math.floor(cy) : Math.floor(by);
-					var ii_max = Math.ceil(py);
-					var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-					yIter3 = this1;
-				} else {
-					var ii_min = Math.floor(by);
-					var ii_max = Math.ceil(cy);
-					var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-					yIter3 = this1;
-				}
-			} else if(by > cy) {
-				var ii_min = py > cy ? Math.floor(cy) : Math.ceil(py);
-				var ii_max = Math.ceil(by);
-				var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-				yIter3 = this1;
-			} else {
-				var ii_min = Math.floor(py);
-				var ii_max = Math.ceil(cy);
-				var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-				yIter3 = this1;
-			}
-			var foundY = false;
-			var s = 0.;
-			var t = 0.;
-			var sxx = 0.;
-			var txx = 0.;
-			var this1;
-			if(px > bx) {
-				if(px > cx) {
-					var ii_min = bx > cx ? Math.floor(cx) : Math.floor(bx);
-					var ii_max = Math.ceil(px);
-					var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-					this1 = this2;
-				} else {
-					var ii_min = Math.floor(bx);
-					var ii_max = Math.ceil(cx);
-					var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-					this1 = this2;
-				}
-			} else if(bx > cx) {
-				var ii_min = px > cx ? Math.floor(cx) : Math.ceil(px);
-				var ii_max = Math.ceil(bx);
-				var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-				this1 = this2;
-			} else {
-				var ii_min = Math.floor(px);
-				var ii_max = Math.ceil(cx);
-				var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-				this1 = this2;
-			}
-			var _g_min = this1.start;
-			var _g_max = this1.max;
-			while(_g_min < _g_max) {
-				var x = _g_min++;
-				sxx = sx * x;
-				txx = tx * x;
-				foundY = false;
-				var _g_min1 = yIter3.start;
-				var _g_max1 = yIter3.max;
-				while(_g_min1 < _g_max1) {
-					var y = _g_min1++;
-					s = s0 + sxx + sy * y;
-					t = t0 + txx + ty * y;
-					if(s <= 0 || t <= 0) {
-						if(foundY) {
-							break;
-						}
-					} else if(s + t < A) {
-						var this1 = color;
-						var c = this1;
-						if((c >> 24 & 255) < 254 && pixelImage.transparent) {
-							var location = pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0;
-							var this2 = pixelImage.image[location];
-							var this3 = this2;
-							var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
-							var this5 = this4 >> 24 & 255;
-							var a1 = this5 == 0 ? 0. : this5 / 255;
-							var this6 = this4 >> 16 & 255;
-							var r1 = this6 == 0 ? 0. : this6 / 255;
-							var this7 = this4 >> 8 & 255;
-							var g1 = this7 == 0 ? 0. : this7 / 255;
-							var this8 = this4 & 255;
-							var b1 = this8 == 0 ? 0. : this8 / 255;
-							var this9 = color >> 24 & 255;
-							var a2 = this9 == 0 ? 0. : this9 / 255;
-							var this10 = color >> 16 & 255;
-							var r2 = this10 == 0 ? 0. : this10 / 255;
-							var this11 = color >> 8 & 255;
-							var g2 = this11 == 0 ? 0. : this11 / 255;
-							var this12 = color & 255;
-							var b2 = this12 == 0 ? 0. : this12 / 255;
-							var a3 = a1 * (1 - a2);
-							var r = 255 * (r1 * a3 + r2 * a2) | 0;
-							var g = 255 * (g1 * a3 + g2 * a2) | 0;
-							var b = 255 * (b1 * a3 + b2 * a2) | 0;
-							var a = 255 * (a3 + a2) | 0;
-							var blended = a << 24 | r << 16 | g << 8 | b;
-							pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
-						} else {
-							pixelImage.image[pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
-						}
-						foundY = true;
-					} else if(foundY) {
-						break;
-					}
-				}
-			}
-			var hitTriBottom;
-			if(hasHit2 == true) {
-				var v = new pixelimage_algo_HitTri(px,py,bx,by,cx,cy,true);
-				hitTriBottom = v;
-			} else {
-				hitTriBottom = null;
-			}
-			if(hasHit) {
-				var hitArr = new pixelimage_algo_HitTriArray([hitTriTop,hitTriBottom]);
-				if(hitQuad != null) {
-					hitArr.triArr.push(hitQuad.triABD);
-				}
-				hitArr.triArr.push(hitQuad.triBCD);
-			}
-		}
-		return pixelimage_triangleGML_coreShape_BasicShape.prototype.render.call(this,pixelImage);
-	}
-	,__class__: pixelimage_triangleGML_contour_ArrowShape
-});
-var pixelimage_triangleGML_coreShape_FillShape = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill) {
-	if(fill == null) {
-		fill = 0;
-	}
-	if(strokeWidth == null) {
-		strokeWidth = 1.;
-	}
-	if(strokeColor == null) {
-		strokeColor = 0;
-	}
-	if(visibility == null) {
-		visibility = true;
-	}
-	if(opacity == null) {
-		opacity = 1.;
-	}
-	pixelimage_triangleGML_coreShape_BasicShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray);
-	this.fill = fill;
-};
-pixelimage_triangleGML_coreShape_FillShape.__name__ = "pixelimage.triangleGML.coreShape.FillShape";
-pixelimage_triangleGML_coreShape_FillShape.__super__ = pixelimage_triangleGML_coreShape_BasicShape;
-pixelimage_triangleGML_coreShape_FillShape.prototype = $extend(pixelimage_triangleGML_coreShape_BasicShape.prototype,{
-	setParameter: function(name,value) {
-		if(name == "fill") {
-			this.fill = Std.parseInt(value);
-		} else {
-			pixelimage_triangleGML_coreShape_BasicShape.prototype.setParameter.call(this,name,value);
-		}
-	}
-	,__class__: pixelimage_triangleGML_coreShape_FillShape
-});
-var pixelimage_triangleGML_contour_CubicCurveShape = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill,x1,y1,x2,y2,x3,y3,x4,y4) {
-	if(y4 == null) {
-		y4 = 0.;
-	}
-	if(x4 == null) {
-		x4 = 0.;
-	}
-	if(y3 == null) {
-		y3 = 0.;
-	}
-	if(x3 == null) {
-		x3 = 0.;
-	}
-	if(y2 == null) {
-		y2 = 0.;
-	}
-	if(x2 == null) {
-		x2 = 0.;
-	}
-	if(y1 == null) {
-		y1 = 0.;
-	}
-	if(x1 == null) {
-		x1 = 0.;
-	}
-	if(fill == null) {
-		fill = 0;
-	}
-	if(strokeWidth == null) {
-		strokeWidth = 1.;
-	}
-	if(strokeColor == null) {
-		strokeColor = 0;
-	}
-	if(visibility == null) {
-		visibility = true;
-	}
-	if(opacity == null) {
-		opacity = 1.;
-	}
-	pixelimage_triangleGML_coreShape_FillShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill);
-	this.x1 = x1;
-	this.y1 = y1;
-	this.x2 = x2;
-	this.y2 = y2;
-	this.x3 = x3;
-	this.y3 = y3;
-	this.x4 = x4;
-	this.y4 = y4;
-};
-pixelimage_triangleGML_contour_CubicCurveShape.__name__ = "pixelimage.triangleGML.contour.CubicCurveShape";
-pixelimage_triangleGML_contour_CubicCurveShape.__super__ = pixelimage_triangleGML_coreShape_FillShape;
-pixelimage_triangleGML_contour_CubicCurveShape.prototype = $extend(pixelimage_triangleGML_coreShape_FillShape.prototype,{
-	setParameter: function(name,value) {
-		switch(name) {
-		case "x1":
-			this.x1 = parseFloat(value);
-			break;
-		case "x2":
-			this.x2 = parseFloat(value);
-			break;
-		case "x3":
-			this.x3 = parseFloat(value);
-			break;
-		case "x4":
-			this.x4 = parseFloat(value);
-			break;
-		case "y1":
-			this.y1 = parseFloat(value);
-			break;
-		case "y2":
-			this.y2 = parseFloat(value);
-			break;
-		case "y3":
-			this.y3 = parseFloat(value);
-			break;
-		case "y4":
-			this.y4 = parseFloat(value);
-			break;
-		default:
-			pixelimage_triangleGML_coreShape_FillShape.prototype.setParameter.call(this,name,value);
-		}
-	}
-	,render: function(pixelShape) {
-		var drawing = new pixelimage_draw_DrawShapeHelper(pixelShape,this.strokeWidth,this.strokeColor);
-		drawing.moveTo(this.x1,this.y1);
-		drawing.curveTo(this.x2,this.y2,this.x3,this.y3,this.x4,this.y4);
-		haxe_Log.trace("render CubicCurveShape",{ fileName : "pixelimage/triangleGML/contour/CubicCurveShape.hx", lineNumber : 69, className : "pixelimage.triangleGML.contour.CubicCurveShape", methodName : "render"});
-		return pixelimage_triangleGML_coreShape_FillShape.prototype.render.call(this,pixelShape);
-	}
-	,__class__: pixelimage_triangleGML_contour_CubicCurveShape
-});
-var pixelimage_triangleGML_contour_LineGridShape = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,left,top,width,height,delta,deltaH) {
-	if(deltaH == null) {
-		deltaH = 0.;
-	}
-	if(delta == null) {
-		delta = 1.;
-	}
-	if(height == null) {
-		height = 1.;
-	}
-	if(width == null) {
-		width = 1.;
-	}
-	if(top == null) {
-		top = 0.;
-	}
-	if(left == null) {
-		left = 0.;
-	}
-	if(strokeWidth == null) {
-		strokeWidth = 1.;
-	}
-	if(strokeColor == null) {
-		strokeColor = -1048576;
-	}
-	if(visibility == null) {
-		visibility = true;
-	}
-	if(opacity == null) {
-		opacity = 1.;
-	}
-	pixelimage_triangleGML_coreShape_BasicShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray);
-	this.left = left;
-	this.top = top;
-	this.width = width;
-	this.height = height;
-	this.delta = delta;
-	this.deltaH = deltaH;
-};
-pixelimage_triangleGML_contour_LineGridShape.__name__ = "pixelimage.triangleGML.contour.LineGridShape";
-pixelimage_triangleGML_contour_LineGridShape.__super__ = pixelimage_triangleGML_coreShape_BasicShape;
-pixelimage_triangleGML_contour_LineGridShape.prototype = $extend(pixelimage_triangleGML_coreShape_BasicShape.prototype,{
-	setParameter: function(name,value) {
-		switch(name) {
-		case "delta":
-			this.delta = parseFloat(value);
-			break;
-		case "deltaH":
-			this.deltaH = parseFloat(value);
-			break;
-		case "height":
-			this.height = parseFloat(value);
-			break;
-		case "left":
-			this.left = parseFloat(value);
-			break;
-		case "top":
-			this.top = parseFloat(value);
-			break;
-		case "width":
-			this.width = parseFloat(value);
-			break;
-		default:
-			pixelimage_triangleGML_coreShape_BasicShape.prototype.setParameter.call(this,name,value);
-		}
-	}
-	,render: function(pixelShape) {
-		if(this.deltaH != 0.) {
-			var x = this.left;
-			var y = this.top;
-			var w = this.width;
-			var h = this.height;
-			var deltaW = this.delta;
-			var deltaH = this.deltaH;
-			var thick = this.strokeWidth;
-			var color = this.strokeColor;
-			var h_ = Math.floor(h / deltaH) * deltaH;
-			var w_ = Math.floor(w / deltaW) * deltaW;
-			var _g = 0;
-			var _g1 = Math.floor(w / deltaW) + 1;
-			while(_g < _g1) {
-				var i = _g++;
-				var x1 = x + i * deltaW - thick / 2;
-				var p = x1 | 0;
-				var xx = p;
-				var q = y | 0;
-				var maxX = x1 + thick | 0;
-				var maxY = y + h_ | 0;
-				while(true) {
-					var x2 = p++;
-					var this1 = color;
-					var c = this1;
-					if((c >> 24 & 255) < 254 && pixelShape.transparent) {
-						var location = pixelShape.useVirtualPos ? (q - pixelShape.virtualY) * pixelShape.width + x2 - pixelShape.virtualX | 0 : q * pixelShape.width + x2 | 0;
-						var this2 = pixelShape.image[location];
-						var this3 = this2;
-						var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
-						var this5 = this4 >> 24 & 255;
-						var a1 = this5 == 0 ? 0. : this5 / 255;
-						var this6 = this4 >> 16 & 255;
-						var r1 = this6 == 0 ? 0. : this6 / 255;
-						var this7 = this4 >> 8 & 255;
-						var g1 = this7 == 0 ? 0. : this7 / 255;
-						var this8 = this4 & 255;
-						var b1 = this8 == 0 ? 0. : this8 / 255;
-						var this9 = color >> 24 & 255;
-						var a2 = this9 == 0 ? 0. : this9 / 255;
-						var this10 = color >> 16 & 255;
-						var r2 = this10 == 0 ? 0. : this10 / 255;
-						var this11 = color >> 8 & 255;
-						var g2 = this11 == 0 ? 0. : this11 / 255;
-						var this12 = color & 255;
-						var b2 = this12 == 0 ? 0. : this12 / 255;
-						var a3 = a1 * (1 - a2);
-						var r = 255 * (r1 * a3 + r2 * a2) | 0;
-						var g = 255 * (g1 * a3 + g2 * a2) | 0;
-						var b = 255 * (b1 * a3 + b2 * a2) | 0;
-						var a = 255 * (a3 + a2) | 0;
-						var blended = a << 24 | r << 16 | g << 8 | b;
-						pixelShape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
-					} else {
-						pixelShape.image[pixelShape.useVirtualPos ? (q - pixelShape.virtualY) * pixelShape.width + x2 - pixelShape.virtualX | 0 : q * pixelShape.width + x2 | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
-					}
-					if(p > maxX) {
-						p = xx;
-						++q;
-					}
-					if(q > maxY) {
-						break;
-					}
-				}
-			}
-			var _g = 0;
-			var _g1 = Math.floor(h / deltaH) + 1;
-			while(_g < _g1) {
-				var i = _g++;
-				var y1 = y + i * deltaH - thick / 2;
-				var p = x | 0;
-				var xx = p;
-				var q = y1 | 0;
-				var maxX = x + w_ | 0;
-				var maxY = y1 + thick | 0;
-				while(true) {
-					var x1 = p++;
-					var this1 = color;
-					var c = this1;
-					if((c >> 24 & 255) < 254 && pixelShape.transparent) {
-						var location = pixelShape.useVirtualPos ? (q - pixelShape.virtualY) * pixelShape.width + x1 - pixelShape.virtualX | 0 : q * pixelShape.width + x1 | 0;
-						var this2 = pixelShape.image[location];
-						var this3 = this2;
-						var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
-						var this5 = this4 >> 24 & 255;
-						var a1 = this5 == 0 ? 0. : this5 / 255;
-						var this6 = this4 >> 16 & 255;
-						var r1 = this6 == 0 ? 0. : this6 / 255;
-						var this7 = this4 >> 8 & 255;
-						var g1 = this7 == 0 ? 0. : this7 / 255;
-						var this8 = this4 & 255;
-						var b1 = this8 == 0 ? 0. : this8 / 255;
-						var this9 = color >> 24 & 255;
-						var a2 = this9 == 0 ? 0. : this9 / 255;
-						var this10 = color >> 16 & 255;
-						var r2 = this10 == 0 ? 0. : this10 / 255;
-						var this11 = color >> 8 & 255;
-						var g2 = this11 == 0 ? 0. : this11 / 255;
-						var this12 = color & 255;
-						var b2 = this12 == 0 ? 0. : this12 / 255;
-						var a3 = a1 * (1 - a2);
-						var r = 255 * (r1 * a3 + r2 * a2) | 0;
-						var g = 255 * (g1 * a3 + g2 * a2) | 0;
-						var b = 255 * (b1 * a3 + b2 * a2) | 0;
-						var a = 255 * (a3 + a2) | 0;
-						var blended = a << 24 | r << 16 | g << 8 | b;
-						pixelShape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
-					} else {
-						pixelShape.image[pixelShape.useVirtualPos ? (q - pixelShape.virtualY) * pixelShape.width + x1 - pixelShape.virtualX | 0 : q * pixelShape.width + x1 | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
-					}
-					if(p > maxX) {
-						p = xx;
-						++q;
-					}
-					if(q > maxY) {
-						break;
-					}
-				}
-			}
-		} else {
-			var x = this.left;
-			var y = this.top;
-			var w = this.width;
-			var h = this.height;
-			var delta = this.delta;
-			var thick = this.strokeWidth;
-			var color = this.strokeColor;
-			var h_ = Math.floor(h / delta) * delta;
-			var w_ = Math.floor(w / delta) * delta;
-			var _g = 0;
-			var _g1 = Math.floor(w / delta) + 1;
-			while(_g < _g1) {
-				var i = _g++;
-				var x1 = x + i * delta - thick / 2;
-				var p = x1 | 0;
-				var xx = p;
-				var q = y | 0;
-				var maxX = x1 + thick | 0;
-				var maxY = y + h_ | 0;
-				while(true) {
-					var x2 = p++;
-					var this1 = color;
-					var c = this1;
-					if((c >> 24 & 255) < 254 && pixelShape.transparent) {
-						var location = pixelShape.useVirtualPos ? (q - pixelShape.virtualY) * pixelShape.width + x2 - pixelShape.virtualX | 0 : q * pixelShape.width + x2 | 0;
-						var this2 = pixelShape.image[location];
-						var this3 = this2;
-						var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
-						var this5 = this4 >> 24 & 255;
-						var a1 = this5 == 0 ? 0. : this5 / 255;
-						var this6 = this4 >> 16 & 255;
-						var r1 = this6 == 0 ? 0. : this6 / 255;
-						var this7 = this4 >> 8 & 255;
-						var g1 = this7 == 0 ? 0. : this7 / 255;
-						var this8 = this4 & 255;
-						var b1 = this8 == 0 ? 0. : this8 / 255;
-						var this9 = color >> 24 & 255;
-						var a2 = this9 == 0 ? 0. : this9 / 255;
-						var this10 = color >> 16 & 255;
-						var r2 = this10 == 0 ? 0. : this10 / 255;
-						var this11 = color >> 8 & 255;
-						var g2 = this11 == 0 ? 0. : this11 / 255;
-						var this12 = color & 255;
-						var b2 = this12 == 0 ? 0. : this12 / 255;
-						var a3 = a1 * (1 - a2);
-						var r = 255 * (r1 * a3 + r2 * a2) | 0;
-						var g = 255 * (g1 * a3 + g2 * a2) | 0;
-						var b = 255 * (b1 * a3 + b2 * a2) | 0;
-						var a = 255 * (a3 + a2) | 0;
-						var blended = a << 24 | r << 16 | g << 8 | b;
-						pixelShape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
-					} else {
-						pixelShape.image[pixelShape.useVirtualPos ? (q - pixelShape.virtualY) * pixelShape.width + x2 - pixelShape.virtualX | 0 : q * pixelShape.width + x2 | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
-					}
-					if(p > maxX) {
-						p = xx;
-						++q;
-					}
-					if(q > maxY) {
-						break;
-					}
-				}
-			}
-			var _g = 0;
-			var _g1 = Math.floor(h / delta) + 1;
-			while(_g < _g1) {
-				var i = _g++;
-				var y1 = y + i * delta - thick / 2;
-				var p = x | 0;
-				var xx = p;
-				var q = y1 | 0;
-				var maxX = x + w_ | 0;
-				var maxY = y1 + thick | 0;
-				while(true) {
-					var x1 = p++;
-					var this1 = color;
-					var c = this1;
-					if((c >> 24 & 255) < 254 && pixelShape.transparent) {
-						var location = pixelShape.useVirtualPos ? (q - pixelShape.virtualY) * pixelShape.width + x1 - pixelShape.virtualX | 0 : q * pixelShape.width + x1 | 0;
-						var this2 = pixelShape.image[location];
-						var this3 = this2;
-						var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
-						var this5 = this4 >> 24 & 255;
-						var a1 = this5 == 0 ? 0. : this5 / 255;
-						var this6 = this4 >> 16 & 255;
-						var r1 = this6 == 0 ? 0. : this6 / 255;
-						var this7 = this4 >> 8 & 255;
-						var g1 = this7 == 0 ? 0. : this7 / 255;
-						var this8 = this4 & 255;
-						var b1 = this8 == 0 ? 0. : this8 / 255;
-						var this9 = color >> 24 & 255;
-						var a2 = this9 == 0 ? 0. : this9 / 255;
-						var this10 = color >> 16 & 255;
-						var r2 = this10 == 0 ? 0. : this10 / 255;
-						var this11 = color >> 8 & 255;
-						var g2 = this11 == 0 ? 0. : this11 / 255;
-						var this12 = color & 255;
-						var b2 = this12 == 0 ? 0. : this12 / 255;
-						var a3 = a1 * (1 - a2);
-						var r = 255 * (r1 * a3 + r2 * a2) | 0;
-						var g = 255 * (g1 * a3 + g2 * a2) | 0;
-						var b = 255 * (b1 * a3 + b2 * a2) | 0;
-						var a = 255 * (a3 + a2) | 0;
-						var blended = a << 24 | r << 16 | g << 8 | b;
-						pixelShape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
-					} else {
-						pixelShape.image[pixelShape.useVirtualPos ? (q - pixelShape.virtualY) * pixelShape.width + x1 - pixelShape.virtualX | 0 : q * pixelShape.width + x1 | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
-					}
-					if(p > maxX) {
-						p = xx;
-						++q;
-					}
-					if(q > maxY) {
-						break;
-					}
-				}
-			}
-		}
-		return pixelimage_triangleGML_coreShape_BasicShape.prototype.render.call(this,pixelShape);
-	}
-	,__class__: pixelimage_triangleGML_contour_LineGridShape
-});
-var pixelimage_triangleGML_contour_LineShape = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,x1,y1,x2,y2) {
-	if(y2 == null) {
-		y2 = 0.;
-	}
-	if(x2 == null) {
-		x2 = 0.;
-	}
-	if(y1 == null) {
-		y1 = 0.;
-	}
-	if(x1 == null) {
-		x1 = 0.;
-	}
-	if(strokeWidth == null) {
-		strokeWidth = 1.;
-	}
-	if(strokeColor == null) {
-		strokeColor = -1048576;
-	}
-	if(visibility == null) {
-		visibility = true;
-	}
-	if(opacity == null) {
-		opacity = 1.;
-	}
-	pixelimage_triangleGML_coreShape_BasicShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray);
-	this.x1 = x1;
-	this.y1 = y1;
-	this.x2 = x2;
-	this.y2 = y2;
-};
-pixelimage_triangleGML_contour_LineShape.__name__ = "pixelimage.triangleGML.contour.LineShape";
-pixelimage_triangleGML_contour_LineShape.__super__ = pixelimage_triangleGML_coreShape_BasicShape;
-pixelimage_triangleGML_contour_LineShape.prototype = $extend(pixelimage_triangleGML_coreShape_BasicShape.prototype,{
-	setParameter: function(name,value) {
-		switch(name) {
-		case "x1":
-			this.x1 = parseFloat(value);
-			break;
-		case "x2":
-			this.x2 = parseFloat(value);
-			break;
-		case "y1":
-			this.y1 = parseFloat(value);
-			break;
-		case "y2":
-			this.y2 = parseFloat(value);
-			break;
-		default:
-			pixelimage_triangleGML_coreShape_BasicShape.prototype.setParameter.call(this,name,value);
-		}
-	}
-	,render: function(pixelShape) {
-		var px = this.x1;
-		var py = this.y1;
-		var color = this.strokeColor;
-		var o = this.y2 - py;
-		var a = this.x2 - px;
-		var h = Math.pow(o * o + a * a,0.5);
-		var theta = Math.atan2(o,a);
-		var hasHit = false;
-		if(hasHit == null) {
-			hasHit = false;
-		}
-		var sin = Math.sin(theta);
-		var cos = Math.cos(theta);
-		var radius = this.strokeWidth / 2;
-		var dx = 0.1;
-		var dy = radius;
-		var cx = h;
-		var cy = radius;
-		var bx = h;
-		var by = -radius;
-		var ax = 0.1;
-		var ay = -radius;
-		var temp = 0.;
-		temp = px + (ax * cos - ay * sin);
-		ay = py + (ay * cos + ax * sin);
-		ax = temp;
-		temp = px + (bx * cos - by * sin);
-		by = py + (by * cos + bx * sin);
-		bx = temp;
-		temp = px + (cx * cos - cy * sin);
-		cy = py + (cy * cos + cx * sin);
-		cx = temp;
-		temp = px + (dx * cos - dy * sin);
-		dy = py + (dy * cos + dx * sin);
-		dx = temp;
-		var hasHit1 = hasHit;
-		if(hasHit1 == null) {
-			hasHit1 = false;
-		}
-		var bx1 = bx;
-		var by1 = by;
-		var cx1 = dx;
-		var cy1 = dy;
-		var hasHit = hasHit1;
-		if(hasHit == null) {
-			hasHit = false;
-		}
-		var adjustWinding = ax * by1 - bx1 * ay + (bx1 * cy1 - cx1 * by1) + (cx1 * ay - ax * cy1) > 0;
-		if(!adjustWinding) {
-			var bx_ = bx1;
-			var by_ = by1;
-			bx1 = cx1;
-			by1 = cy1;
-			cx1 = bx_;
-			cy1 = by_;
-		}
-		var hasHit2 = hasHit;
-		if(hasHit2 == null) {
-			hasHit2 = false;
-		}
-		var s0 = ay * cx1 - ax * cy1;
-		var sx = cy1 - ay;
-		var sy = ax - cx1;
-		var t0 = ax * by1 - ay * bx1;
-		var tx = ay - by1;
-		var ty = bx1 - ax;
-		var A = -by1 * cx1 + ay * (-bx1 + cx1) + ax * (by1 - cy1) + bx1 * cy1;
-		var yIter3;
-		if(ay > by1) {
-			if(ay > cy1) {
-				var ii_min = by1 > cy1 ? Math.floor(cy1) : Math.floor(by1);
-				var ii_max = Math.ceil(ay);
-				var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-				yIter3 = this1;
-			} else {
-				var ii_min = Math.floor(by1);
-				var ii_max = Math.ceil(cy1);
-				var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-				yIter3 = this1;
-			}
-		} else if(by1 > cy1) {
-			var ii_min = ay > cy1 ? Math.floor(cy1) : Math.ceil(ay);
-			var ii_max = Math.ceil(by1);
-			var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-			yIter3 = this1;
-		} else {
-			var ii_min = Math.floor(ay);
-			var ii_max = Math.ceil(cy1);
-			var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-			yIter3 = this1;
-		}
-		var foundY = false;
-		var s = 0.;
-		var t = 0.;
-		var sxx = 0.;
-		var txx = 0.;
-		var this1;
-		if(ax > bx1) {
-			if(ax > cx1) {
-				var ii_min = bx1 > cx1 ? Math.floor(cx1) : Math.floor(bx1);
-				var ii_max = Math.ceil(ax);
-				var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-				this1 = this2;
-			} else {
-				var ii_min = Math.floor(bx1);
-				var ii_max = Math.ceil(cx1);
-				var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-				this1 = this2;
-			}
-		} else if(bx1 > cx1) {
-			var ii_min = ax > cx1 ? Math.floor(cx1) : Math.ceil(ax);
-			var ii_max = Math.ceil(bx1);
-			var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-			this1 = this2;
-		} else {
-			var ii_min = Math.floor(ax);
-			var ii_max = Math.ceil(cx1);
-			var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-			this1 = this2;
-		}
-		var _g_min = this1.start;
-		var _g_max = this1.max;
-		while(_g_min < _g_max) {
-			var x = _g_min++;
-			sxx = sx * x;
-			txx = tx * x;
-			foundY = false;
-			var _g_min1 = yIter3.start;
-			var _g_max1 = yIter3.max;
-			while(_g_min1 < _g_max1) {
-				var y = _g_min1++;
-				s = s0 + sxx + sy * y;
-				t = t0 + txx + ty * y;
-				if(s <= 0 || t <= 0) {
-					if(foundY) {
-						break;
-					}
-				} else if(s + t < A) {
-					var this1 = color;
-					var c = this1;
-					if((c >> 24 & 255) < 254 && pixelShape.transparent) {
-						var location = pixelShape.useVirtualPos ? (y - pixelShape.virtualY) * pixelShape.width + x - pixelShape.virtualX | 0 : y * pixelShape.width + x | 0;
-						var this2 = pixelShape.image[location];
-						var this3 = this2;
-						var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
-						var this5 = this4 >> 24 & 255;
-						var a1 = this5 == 0 ? 0. : this5 / 255;
-						var this6 = this4 >> 16 & 255;
-						var r1 = this6 == 0 ? 0. : this6 / 255;
-						var this7 = this4 >> 8 & 255;
-						var g1 = this7 == 0 ? 0. : this7 / 255;
-						var this8 = this4 & 255;
-						var b1 = this8 == 0 ? 0. : this8 / 255;
-						var this9 = color >> 24 & 255;
-						var a2 = this9 == 0 ? 0. : this9 / 255;
-						var this10 = color >> 16 & 255;
-						var r2 = this10 == 0 ? 0. : this10 / 255;
-						var this11 = color >> 8 & 255;
-						var g2 = this11 == 0 ? 0. : this11 / 255;
-						var this12 = color & 255;
-						var b2 = this12 == 0 ? 0. : this12 / 255;
-						var a3 = a1 * (1 - a2);
-						var r = 255 * (r1 * a3 + r2 * a2) | 0;
-						var g = 255 * (g1 * a3 + g2 * a2) | 0;
-						var b = 255 * (b1 * a3 + b2 * a2) | 0;
-						var a = 255 * (a3 + a2) | 0;
-						var blended = a << 24 | r << 16 | g << 8 | b;
-						pixelShape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
-					} else {
-						pixelShape.image[pixelShape.useVirtualPos ? (y - pixelShape.virtualY) * pixelShape.width + x - pixelShape.virtualX | 0 : y * pixelShape.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
-					}
-					foundY = true;
-				} else if(foundY) {
-					break;
-				}
-			}
-		}
-		if(hasHit2 == true) {
-			var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1,true);
-		}
-		var bx1 = cx;
-		var by1 = cy;
-		var cx1 = dx;
-		var cy1 = dy;
-		var hasHit = hasHit1;
-		if(hasHit == null) {
-			hasHit = false;
-		}
-		var adjustWinding = bx * by1 - bx1 * by + (bx1 * cy1 - cx1 * by1) + (cx1 * by - bx * cy1) > 0;
-		if(!adjustWinding) {
-			var bx_ = bx1;
-			var by_ = by1;
-			bx1 = cx1;
-			by1 = cy1;
-			cx1 = bx_;
-			cy1 = by_;
-		}
-		var hasHit2 = hasHit;
-		if(hasHit2 == null) {
-			hasHit2 = false;
-		}
-		var s0 = by * cx1 - bx * cy1;
-		var sx = cy1 - by;
-		var sy = bx - cx1;
-		var t0 = bx * by1 - by * bx1;
-		var tx = by - by1;
-		var ty = bx1 - bx;
-		var A = -by1 * cx1 + by * (-bx1 + cx1) + bx * (by1 - cy1) + bx1 * cy1;
-		var yIter3;
-		if(by > by1) {
-			if(by > cy1) {
-				var ii_min = by1 > cy1 ? Math.floor(cy1) : Math.floor(by1);
-				var ii_max = Math.ceil(by);
-				var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-				yIter3 = this1;
-			} else {
-				var ii_min = Math.floor(by1);
-				var ii_max = Math.ceil(cy1);
-				var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-				yIter3 = this1;
-			}
-		} else if(by1 > cy1) {
-			var ii_min = by > cy1 ? Math.floor(cy1) : Math.ceil(by);
-			var ii_max = Math.ceil(by1);
-			var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-			yIter3 = this1;
-		} else {
-			var ii_min = Math.floor(by);
-			var ii_max = Math.ceil(cy1);
-			var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-			yIter3 = this1;
-		}
-		var foundY = false;
-		var s = 0.;
-		var t = 0.;
-		var sxx = 0.;
-		var txx = 0.;
-		var this1;
-		if(bx > bx1) {
-			if(bx > cx1) {
-				var ii_min = bx1 > cx1 ? Math.floor(cx1) : Math.floor(bx1);
-				var ii_max = Math.ceil(bx);
-				var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-				this1 = this2;
-			} else {
-				var ii_min = Math.floor(bx1);
-				var ii_max = Math.ceil(cx1);
-				var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-				this1 = this2;
-			}
-		} else if(bx1 > cx1) {
-			var ii_min = bx > cx1 ? Math.floor(cx1) : Math.ceil(bx);
-			var ii_max = Math.ceil(bx1);
-			var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-			this1 = this2;
-		} else {
-			var ii_min = Math.floor(bx);
-			var ii_max = Math.ceil(cx1);
-			var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-			this1 = this2;
-		}
-		var _g_min = this1.start;
-		var _g_max = this1.max;
-		while(_g_min < _g_max) {
-			var x = _g_min++;
-			sxx = sx * x;
-			txx = tx * x;
-			foundY = false;
-			var _g_min1 = yIter3.start;
-			var _g_max1 = yIter3.max;
-			while(_g_min1 < _g_max1) {
-				var y = _g_min1++;
-				s = s0 + sxx + sy * y;
-				t = t0 + txx + ty * y;
-				if(s <= 0 || t <= 0) {
-					if(foundY) {
-						break;
-					}
-				} else if(s + t < A) {
-					var this1 = color;
-					var c = this1;
-					if((c >> 24 & 255) < 254 && pixelShape.transparent) {
-						var location = pixelShape.useVirtualPos ? (y - pixelShape.virtualY) * pixelShape.width + x - pixelShape.virtualX | 0 : y * pixelShape.width + x | 0;
-						var this2 = pixelShape.image[location];
-						var this3 = this2;
-						var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
-						var this5 = this4 >> 24 & 255;
-						var a1 = this5 == 0 ? 0. : this5 / 255;
-						var this6 = this4 >> 16 & 255;
-						var r1 = this6 == 0 ? 0. : this6 / 255;
-						var this7 = this4 >> 8 & 255;
-						var g1 = this7 == 0 ? 0. : this7 / 255;
-						var this8 = this4 & 255;
-						var b1 = this8 == 0 ? 0. : this8 / 255;
-						var this9 = color >> 24 & 255;
-						var a2 = this9 == 0 ? 0. : this9 / 255;
-						var this10 = color >> 16 & 255;
-						var r2 = this10 == 0 ? 0. : this10 / 255;
-						var this11 = color >> 8 & 255;
-						var g2 = this11 == 0 ? 0. : this11 / 255;
-						var this12 = color & 255;
-						var b2 = this12 == 0 ? 0. : this12 / 255;
-						var a3 = a1 * (1 - a2);
-						var r = 255 * (r1 * a3 + r2 * a2) | 0;
-						var g = 255 * (g1 * a3 + g2 * a2) | 0;
-						var b = 255 * (b1 * a3 + b2 * a2) | 0;
-						var a = 255 * (a3 + a2) | 0;
-						var blended = a << 24 | r << 16 | g << 8 | b;
-						pixelShape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
-					} else {
-						pixelShape.image[pixelShape.useVirtualPos ? (y - pixelShape.virtualY) * pixelShape.width + x - pixelShape.virtualX | 0 : y * pixelShape.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
-					}
-					foundY = true;
-				} else if(foundY) {
-					break;
-				}
-			}
-		}
-		if(hasHit2 == true) {
-			var v = new pixelimage_algo_HitTri(bx,by,bx1,by1,cx1,cy1,true);
-		}
-		if(hasHit1 == true) {
-			var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy,true);
-		}
-		return pixelimage_triangleGML_coreShape_BasicShape.prototype.render.call(this,pixelShape);
-	}
-	,__class__: pixelimage_triangleGML_contour_LineShape
-});
-var pixelimage_triangleGML_contour_PolyLineShape = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill,points) {
-	if(fill == null) {
-		fill = 0;
-	}
-	if(strokeWidth == null) {
-		strokeWidth = 1.;
-	}
-	if(strokeColor == null) {
-		strokeColor = 0;
-	}
-	if(visibility == null) {
-		visibility = true;
-	}
-	if(opacity == null) {
-		opacity = 1.;
-	}
-	pixelimage_triangleGML_coreShape_FillShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill);
-	this.points = points;
-};
-pixelimage_triangleGML_contour_PolyLineShape.__name__ = "pixelimage.triangleGML.contour.PolyLineShape";
-pixelimage_triangleGML_contour_PolyLineShape.__super__ = pixelimage_triangleGML_coreShape_FillShape;
-pixelimage_triangleGML_contour_PolyLineShape.prototype = $extend(pixelimage_triangleGML_coreShape_FillShape.prototype,{
-	setParameter: function(name,value) {
-		if(name == "points") {
-			value = value.split("[")[1].split("]")[0];
-			var _g = [];
-			var _g1 = 0;
-			var _g2 = value.split(",");
-			while(_g1 < _g2.length) {
-				var n = _g2[_g1];
-				++_g1;
-				_g.push(parseFloat(n));
-			}
-			this.points = _g;
-		} else {
-			pixelimage_triangleGML_coreShape_FillShape.prototype.setParameter.call(this,name,value);
-		}
-	}
-	,render: function(pixelShape) {
-		var drawing = new pixelimage_draw_DrawShapeHelper(pixelShape,this.strokeWidth,this.strokeColor);
-		var l = this.points.length;
-		if(l < 4) {
-			return pixelShape;
-		}
-		if(l % 2 != 0) {
-			return pixelShape;
-		}
-		var i = 0;
-		var x = 0.;
-		var y = 0.;
-		x = this.points[i];
-		++i;
-		y = this.points[i];
-		++i;
-		drawing.moveTo(x,y);
-		while(i < l) {
-			x = this.points[i];
-			++i;
-			y = this.points[i];
-			++i;
-			drawing.lineTo(x,y);
-		}
-		return pixelimage_triangleGML_coreShape_FillShape.prototype.render.call(this,pixelShape);
-	}
-	,__class__: pixelimage_triangleGML_contour_PolyLineShape
-});
-var pixelimage_triangleGML_contour_QuadCurveShape = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill,thru,x1,y1,x2,y2,x3,y3) {
-	if(y3 == null) {
-		y3 = 0.;
-	}
-	if(x3 == null) {
-		x3 = 0.;
-	}
-	if(y2 == null) {
-		y2 = 0.;
-	}
-	if(x2 == null) {
-		x2 = 0.;
-	}
-	if(y1 == null) {
-		y1 = 0.;
-	}
-	if(x1 == null) {
-		x1 = 0.;
-	}
-	if(thru == null) {
-		thru = false;
-	}
-	if(fill == null) {
-		fill = 0;
-	}
-	if(strokeWidth == null) {
-		strokeWidth = 1.;
-	}
-	if(strokeColor == null) {
-		strokeColor = 0;
-	}
-	if(visibility == null) {
-		visibility = true;
-	}
-	if(opacity == null) {
-		opacity = 1.;
-	}
-	pixelimage_triangleGML_coreShape_FillShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill);
-	this.thru = thru;
-	this.x1 = x1;
-	this.y1 = y1;
-	this.x2 = x2;
-	this.y2 = y2;
-	this.x3 = x3;
-	this.y3 = y3;
-};
-pixelimage_triangleGML_contour_QuadCurveShape.__name__ = "pixelimage.triangleGML.contour.QuadCurveShape";
-pixelimage_triangleGML_contour_QuadCurveShape.__super__ = pixelimage_triangleGML_coreShape_FillShape;
-pixelimage_triangleGML_contour_QuadCurveShape.prototype = $extend(pixelimage_triangleGML_coreShape_FillShape.prototype,{
-	setParameter: function(name,value) {
-		switch(name) {
-		case "thru":
-			this.thru = value.toLowerCase() == "true";
-			break;
-		case "x1":
-			this.x1 = parseFloat(value);
-			break;
-		case "x2":
-			this.x2 = parseFloat(value);
-			break;
-		case "x3":
-			this.x3 = parseFloat(value);
-			break;
-		case "y1":
-			this.y1 = parseFloat(value);
-			break;
-		case "y2":
-			this.y2 = parseFloat(value);
-			break;
-		case "y3":
-			this.y3 = parseFloat(value);
-			break;
-		default:
-			pixelimage_triangleGML_coreShape_FillShape.prototype.setParameter.call(this,name,value);
-		}
-	}
-	,render: function(pixelShape) {
-		var drawing = new pixelimage_draw_DrawShapeHelper(pixelShape,this.strokeWidth,this.strokeColor);
-		drawing.moveTo(this.x1,this.y1);
-		drawing.quadTo(this.x2,this.y2,this.x3,this.y3);
-		return pixelimage_triangleGML_coreShape_FillShape.prototype.render.call(this,pixelShape);
-	}
-	,__class__: pixelimage_triangleGML_contour_QuadCurveShape
-});
-var pixelimage_triangleGML_contour_QuadShape = function(opacity,visibility,strokeColor,aX,aY,bX,bY,cX,cY,dX,dY) {
-	if(dY == null) {
-		dY = 1.;
-	}
-	if(dX == null) {
-		dX = 0.;
-	}
-	if(cY == null) {
-		cY = 1.;
-	}
-	if(cX == null) {
-		cX = 1.;
-	}
-	if(bY == null) {
-		bY = 0.;
-	}
-	if(bX == null) {
-		bX = 1.;
-	}
-	if(aY == null) {
-		aY = 0.;
-	}
-	if(aX == null) {
-		aX = 0.;
-	}
-	if(strokeColor == null) {
-		strokeColor = -1048576;
-	}
-	if(visibility == null) {
-		visibility = true;
-	}
-	if(opacity == null) {
-		opacity = 1.;
-	}
-	pixelimage_triangleGML_coreShape_BasicShape.call(this,opacity,visibility,strokeColor,0.,null);
-	this.aX = aX;
-	this.aY = aY;
-	this.bX = bX;
-	this.bY = bY;
-	this.cX = cX;
-	this.cY = cY;
-	this.dX = dX;
-	this.dY = dY;
-};
-pixelimage_triangleGML_contour_QuadShape.__name__ = "pixelimage.triangleGML.contour.QuadShape";
-pixelimage_triangleGML_contour_QuadShape.__super__ = pixelimage_triangleGML_coreShape_BasicShape;
-pixelimage_triangleGML_contour_QuadShape.prototype = $extend(pixelimage_triangleGML_coreShape_BasicShape.prototype,{
-	setParameter: function(name,value) {
-		switch(name) {
-		case "aX":
-			this.aX = parseFloat(value);
-			break;
-		case "aY":
-			this.aY = parseFloat(value);
-			break;
-		case "bX":
-			this.bX = parseFloat(value);
-			break;
-		case "bY":
-			this.bY = parseFloat(value);
-			break;
-		case "cX":
-			this.cX = parseFloat(value);
-			break;
-		case "cY":
-			this.cY = parseFloat(value);
-			break;
-		case "dX":
-			this.dX = parseFloat(value);
-			break;
-		case "dY":
-			this.dY = parseFloat(value);
-			break;
-		default:
-			pixelimage_triangleGML_coreShape_BasicShape.prototype.setParameter.call(this,name,value);
-		}
-	}
-	,render: function(pixelShape) {
-		var ax = this.aX;
-		var ay = this.aY;
-		var bx = this.bX;
-		var by = this.bY;
-		var cx = this.cX;
-		var cy = this.cY;
-		var dx = this.dX;
-		var dy = this.dY;
-		var color = this.strokeColor;
-		var hasHit = false;
-		if(hasHit == null) {
-			hasHit = false;
-		}
-		var bx1 = bx;
-		var by1 = by;
-		var cx1 = dx;
-		var cy1 = dy;
-		var hasHit1 = hasHit;
-		if(hasHit1 == null) {
-			hasHit1 = false;
-		}
-		var adjustWinding = ax * by1 - bx1 * ay + (bx1 * cy1 - cx1 * by1) + (cx1 * ay - ax * cy1) > 0;
-		if(!adjustWinding) {
-			var bx_ = bx1;
-			var by_ = by1;
-			bx1 = cx1;
-			by1 = cy1;
-			cx1 = bx_;
-			cy1 = by_;
-		}
-		var hasHit2 = hasHit1;
-		if(hasHit2 == null) {
-			hasHit2 = false;
-		}
-		var s0 = ay * cx1 - ax * cy1;
-		var sx = cy1 - ay;
-		var sy = ax - cx1;
-		var t0 = ax * by1 - ay * bx1;
-		var tx = ay - by1;
-		var ty = bx1 - ax;
-		var A = -by1 * cx1 + ay * (-bx1 + cx1) + ax * (by1 - cy1) + bx1 * cy1;
-		var yIter3;
-		if(ay > by1) {
-			if(ay > cy1) {
-				var ii_min = by1 > cy1 ? Math.floor(cy1) : Math.floor(by1);
-				var ii_max = Math.ceil(ay);
-				var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-				yIter3 = this1;
-			} else {
-				var ii_min = Math.floor(by1);
-				var ii_max = Math.ceil(cy1);
-				var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-				yIter3 = this1;
-			}
-		} else if(by1 > cy1) {
-			var ii_min = ay > cy1 ? Math.floor(cy1) : Math.ceil(ay);
-			var ii_max = Math.ceil(by1);
-			var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-			yIter3 = this1;
-		} else {
-			var ii_min = Math.floor(ay);
-			var ii_max = Math.ceil(cy1);
-			var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-			yIter3 = this1;
-		}
-		var foundY = false;
-		var s = 0.;
-		var t = 0.;
-		var sxx = 0.;
-		var txx = 0.;
-		var this1;
-		if(ax > bx1) {
-			if(ax > cx1) {
-				var ii_min = bx1 > cx1 ? Math.floor(cx1) : Math.floor(bx1);
-				var ii_max = Math.ceil(ax);
-				var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-				this1 = this2;
-			} else {
-				var ii_min = Math.floor(bx1);
-				var ii_max = Math.ceil(cx1);
-				var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-				this1 = this2;
-			}
-		} else if(bx1 > cx1) {
-			var ii_min = ax > cx1 ? Math.floor(cx1) : Math.ceil(ax);
-			var ii_max = Math.ceil(bx1);
-			var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-			this1 = this2;
-		} else {
-			var ii_min = Math.floor(ax);
-			var ii_max = Math.ceil(cx1);
-			var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-			this1 = this2;
-		}
-		var _g_min = this1.start;
-		var _g_max = this1.max;
-		while(_g_min < _g_max) {
-			var x = _g_min++;
-			sxx = sx * x;
-			txx = tx * x;
-			foundY = false;
-			var _g_min1 = yIter3.start;
-			var _g_max1 = yIter3.max;
-			while(_g_min1 < _g_max1) {
-				var y = _g_min1++;
-				s = s0 + sxx + sy * y;
-				t = t0 + txx + ty * y;
-				if(s <= 0 || t <= 0) {
-					if(foundY) {
-						break;
-					}
-				} else if(s + t < A) {
-					var this1 = color;
-					var c = this1;
-					if((c >> 24 & 255) < 254 && pixelShape.transparent) {
-						var location = pixelShape.useVirtualPos ? (y - pixelShape.virtualY) * pixelShape.width + x - pixelShape.virtualX | 0 : y * pixelShape.width + x | 0;
-						var this2 = pixelShape.image[location];
-						var this3 = this2;
-						var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
-						var this5 = this4 >> 24 & 255;
-						var a1 = this5 == 0 ? 0. : this5 / 255;
-						var this6 = this4 >> 16 & 255;
-						var r1 = this6 == 0 ? 0. : this6 / 255;
-						var this7 = this4 >> 8 & 255;
-						var g1 = this7 == 0 ? 0. : this7 / 255;
-						var this8 = this4 & 255;
-						var b1 = this8 == 0 ? 0. : this8 / 255;
-						var this9 = color >> 24 & 255;
-						var a2 = this9 == 0 ? 0. : this9 / 255;
-						var this10 = color >> 16 & 255;
-						var r2 = this10 == 0 ? 0. : this10 / 255;
-						var this11 = color >> 8 & 255;
-						var g2 = this11 == 0 ? 0. : this11 / 255;
-						var this12 = color & 255;
-						var b2 = this12 == 0 ? 0. : this12 / 255;
-						var a3 = a1 * (1 - a2);
-						var r = 255 * (r1 * a3 + r2 * a2) | 0;
-						var g = 255 * (g1 * a3 + g2 * a2) | 0;
-						var b = 255 * (b1 * a3 + b2 * a2) | 0;
-						var a = 255 * (a3 + a2) | 0;
-						var blended = a << 24 | r << 16 | g << 8 | b;
-						pixelShape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
-					} else {
-						pixelShape.image[pixelShape.useVirtualPos ? (y - pixelShape.virtualY) * pixelShape.width + x - pixelShape.virtualX | 0 : y * pixelShape.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
-					}
-					foundY = true;
-				} else if(foundY) {
-					break;
-				}
-			}
-		}
-		if(hasHit2 == true) {
-			var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1,true);
-		}
-		var bx1 = cx;
-		var by1 = cy;
-		var cx1 = dx;
-		var cy1 = dy;
-		var hasHit1 = hasHit;
-		if(hasHit1 == null) {
-			hasHit1 = false;
-		}
-		var adjustWinding = bx * by1 - bx1 * by + (bx1 * cy1 - cx1 * by1) + (cx1 * by - bx * cy1) > 0;
-		if(!adjustWinding) {
-			var bx_ = bx1;
-			var by_ = by1;
-			bx1 = cx1;
-			by1 = cy1;
-			cx1 = bx_;
-			cy1 = by_;
-		}
-		var hasHit2 = hasHit1;
-		if(hasHit2 == null) {
-			hasHit2 = false;
-		}
-		var s0 = by * cx1 - bx * cy1;
-		var sx = cy1 - by;
-		var sy = bx - cx1;
-		var t0 = bx * by1 - by * bx1;
-		var tx = by - by1;
-		var ty = bx1 - bx;
-		var A = -by1 * cx1 + by * (-bx1 + cx1) + bx * (by1 - cy1) + bx1 * cy1;
-		var yIter3;
-		if(by > by1) {
-			if(by > cy1) {
-				var ii_min = by1 > cy1 ? Math.floor(cy1) : Math.floor(by1);
-				var ii_max = Math.ceil(by);
-				var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-				yIter3 = this1;
-			} else {
-				var ii_min = Math.floor(by1);
-				var ii_max = Math.ceil(cy1);
-				var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-				yIter3 = this1;
-			}
-		} else if(by1 > cy1) {
-			var ii_min = by > cy1 ? Math.floor(cy1) : Math.ceil(by);
-			var ii_max = Math.ceil(by1);
-			var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-			yIter3 = this1;
-		} else {
-			var ii_min = Math.floor(by);
-			var ii_max = Math.ceil(cy1);
-			var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-			yIter3 = this1;
-		}
-		var foundY = false;
-		var s = 0.;
-		var t = 0.;
-		var sxx = 0.;
-		var txx = 0.;
-		var this1;
-		if(bx > bx1) {
-			if(bx > cx1) {
-				var ii_min = bx1 > cx1 ? Math.floor(cx1) : Math.floor(bx1);
-				var ii_max = Math.ceil(bx);
-				var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-				this1 = this2;
-			} else {
-				var ii_min = Math.floor(bx1);
-				var ii_max = Math.ceil(cx1);
-				var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-				this1 = this2;
-			}
-		} else if(bx1 > cx1) {
-			var ii_min = bx > cx1 ? Math.floor(cx1) : Math.ceil(bx);
-			var ii_max = Math.ceil(bx1);
-			var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-			this1 = this2;
-		} else {
-			var ii_min = Math.floor(bx);
-			var ii_max = Math.ceil(cx1);
-			var this2 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-			this1 = this2;
-		}
-		var _g_min = this1.start;
-		var _g_max = this1.max;
-		while(_g_min < _g_max) {
-			var x = _g_min++;
-			sxx = sx * x;
-			txx = tx * x;
-			foundY = false;
-			var _g_min1 = yIter3.start;
-			var _g_max1 = yIter3.max;
-			while(_g_min1 < _g_max1) {
-				var y = _g_min1++;
-				s = s0 + sxx + sy * y;
-				t = t0 + txx + ty * y;
-				if(s <= 0 || t <= 0) {
-					if(foundY) {
-						break;
-					}
-				} else if(s + t < A) {
-					var this1 = color;
-					var c = this1;
-					if((c >> 24 & 255) < 254 && pixelShape.transparent) {
-						var location = pixelShape.useVirtualPos ? (y - pixelShape.virtualY) * pixelShape.width + x - pixelShape.virtualX | 0 : y * pixelShape.width + x | 0;
-						var this2 = pixelShape.image[location];
-						var this3 = this2;
-						var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
-						var this5 = this4 >> 24 & 255;
-						var a1 = this5 == 0 ? 0. : this5 / 255;
-						var this6 = this4 >> 16 & 255;
-						var r1 = this6 == 0 ? 0. : this6 / 255;
-						var this7 = this4 >> 8 & 255;
-						var g1 = this7 == 0 ? 0. : this7 / 255;
-						var this8 = this4 & 255;
-						var b1 = this8 == 0 ? 0. : this8 / 255;
-						var this9 = color >> 24 & 255;
-						var a2 = this9 == 0 ? 0. : this9 / 255;
-						var this10 = color >> 16 & 255;
-						var r2 = this10 == 0 ? 0. : this10 / 255;
-						var this11 = color >> 8 & 255;
-						var g2 = this11 == 0 ? 0. : this11 / 255;
-						var this12 = color & 255;
-						var b2 = this12 == 0 ? 0. : this12 / 255;
-						var a3 = a1 * (1 - a2);
-						var r = 255 * (r1 * a3 + r2 * a2) | 0;
-						var g = 255 * (g1 * a3 + g2 * a2) | 0;
-						var b = 255 * (b1 * a3 + b2 * a2) | 0;
-						var a = 255 * (a3 + a2) | 0;
-						var blended = a << 24 | r << 16 | g << 8 | b;
-						pixelShape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
-					} else {
-						pixelShape.image[pixelShape.useVirtualPos ? (y - pixelShape.virtualY) * pixelShape.width + x - pixelShape.virtualX | 0 : y * pixelShape.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
-					}
-					foundY = true;
-				} else if(foundY) {
-					break;
-				}
-			}
-		}
-		if(hasHit2 == true) {
-			var v = new pixelimage_algo_HitTri(bx,by,bx1,by1,cx1,cy1,true);
-		}
-		if(hasHit == true) {
-			var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy,true);
-		}
-		return pixelimage_triangleGML_coreShape_BasicShape.prototype.render.call(this,pixelShape);
-	}
-	,__class__: pixelimage_triangleGML_contour_QuadShape
-});
-var pixelimage_triangleGML_contour_ThruCurveShape = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill,x1,y1,x2,y2,x3,y3) {
-	if(y3 == null) {
-		y3 = 0.;
-	}
-	if(x3 == null) {
-		x3 = 0.;
-	}
-	if(y2 == null) {
-		y2 = 0.;
-	}
-	if(x2 == null) {
-		x2 = 0.;
-	}
-	if(y1 == null) {
-		y1 = 0.;
-	}
-	if(x1 == null) {
-		x1 = 0.;
-	}
-	if(fill == null) {
-		fill = 0;
-	}
-	if(strokeWidth == null) {
-		strokeWidth = 1.;
-	}
-	if(strokeColor == null) {
-		strokeColor = 0;
-	}
-	if(visibility == null) {
-		visibility = true;
-	}
-	if(opacity == null) {
-		opacity = 1.;
-	}
-	pixelimage_triangleGML_coreShape_FillShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill);
-	this.x1 = x1;
-	this.y1 = y1;
-	this.x2 = x2;
-	this.y2 = y2;
-	this.x3 = x3;
-	this.y3 = y3;
-};
-pixelimage_triangleGML_contour_ThruCurveShape.__name__ = "pixelimage.triangleGML.contour.ThruCurveShape";
-pixelimage_triangleGML_contour_ThruCurveShape.__super__ = pixelimage_triangleGML_coreShape_FillShape;
-pixelimage_triangleGML_contour_ThruCurveShape.prototype = $extend(pixelimage_triangleGML_coreShape_FillShape.prototype,{
-	setParameter: function(name,value) {
-		switch(name) {
-		case "x1":
-			this.x1 = parseFloat(value);
-			break;
-		case "x2":
-			this.x2 = parseFloat(value);
-			break;
-		case "x3":
-			this.x3 = parseFloat(value);
-			break;
-		case "y1":
-			this.y1 = parseFloat(value);
-			break;
-		case "y2":
-			this.y2 = parseFloat(value);
-			break;
-		case "y3":
-			this.y3 = parseFloat(value);
-			break;
-		default:
-			pixelimage_triangleGML_coreShape_FillShape.prototype.setParameter.call(this,name,value);
-		}
-	}
-	,render: function(pixelShape) {
-		var drawing = new pixelimage_draw_DrawShapeHelper(pixelShape,this.strokeWidth,this.strokeColor);
-		drawing.moveTo(this.x1,this.y1);
-		drawing.quadThru(this.x2,this.y2,this.x3,this.y3);
-		drawing = null;
-		return pixelimage_triangleGML_coreShape_FillShape.prototype.render.call(this,pixelShape);
-	}
-	,__class__: pixelimage_triangleGML_contour_ThruCurveShape
-});
-var pixelimage_triangleGML_coreShape_BasicGradient = function(opacity,visibility,cornerColors) {
-	if(visibility == null) {
-		visibility = true;
-	}
-	if(opacity == null) {
-		opacity = 1.;
-	}
-	this.cornerColors = [];
-	pixelimage_triangleGML_coreShape_GroupShape.call(this,opacity,visibility);
-	if(cornerColors != null) {
-		this.cornerColors = cornerColors;
-	}
-};
-pixelimage_triangleGML_coreShape_BasicGradient.__name__ = "pixelimage.triangleGML.coreShape.BasicGradient";
-pixelimage_triangleGML_coreShape_BasicGradient.__super__ = pixelimage_triangleGML_coreShape_GroupShape;
-pixelimage_triangleGML_coreShape_BasicGradient.prototype = $extend(pixelimage_triangleGML_coreShape_GroupShape.prototype,{
-	setParameter: function(name,value) {
-		if(name == "cornerColors") {
-			value = value.split("[")[1].split("]")[0];
-			var _g = [];
-			var _g1 = 0;
-			var _g2 = value.split(",");
-			while(_g1 < _g2.length) {
-				var n = _g2[_g1];
-				++_g1;
-				_g.push(Std.parseInt(n));
-			}
-			this.cornerColors = _g;
-		} else {
-			pixelimage_triangleGML_coreShape_GroupShape.prototype.setParameter.call(this,name,value);
-		}
-	}
-	,__class__: pixelimage_triangleGML_coreShape_BasicGradient
-});
-var pixelimage_triangleGML_coreShape_PatternShape = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,strokeColor0,strokeColor1,fillColor0,fillColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale,fillPatternFill,fillPatternWidth,fillPatternHeight,fillPatternAcross,fillPatternScale) {
+var pixelimage_triGML_coreShape_PatternShape = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,strokeColor0,strokeColor1,fillColor0,fillColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale,fillPatternFill,fillPatternWidth,fillPatternHeight,fillPatternAcross,fillPatternScale) {
 	if(fillPatternScale == null) {
 		fillPatternScale = 1;
 	}
@@ -21929,7 +21826,7 @@ var pixelimage_triangleGML_coreShape_PatternShape = function(opacity,visibility,
 	if(opacity == null) {
 		opacity = 1.;
 	}
-	pixelimage_triangleGML_coreShape_BasicShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray);
+	pixelimage_triGML_coreShape_BasicShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray);
 	this.strokeColor0 = strokeColor0;
 	this.strokeColor1 = strokeColor1;
 	this.fillColor0 = fillColor0;
@@ -21949,9 +21846,9 @@ var pixelimage_triangleGML_coreShape_PatternShape = function(opacity,visibility,
 	this.fillPatternAcross = fillPatternAcross;
 	this.fillPatternScale = fillPatternScale;
 };
-pixelimage_triangleGML_coreShape_PatternShape.__name__ = "pixelimage.triangleGML.coreShape.PatternShape";
-pixelimage_triangleGML_coreShape_PatternShape.__super__ = pixelimage_triangleGML_coreShape_BasicShape;
-pixelimage_triangleGML_coreShape_PatternShape.prototype = $extend(pixelimage_triangleGML_coreShape_BasicShape.prototype,{
+pixelimage_triGML_coreShape_PatternShape.__name__ = "pixelimage.triGML.coreShape.PatternShape";
+pixelimage_triGML_coreShape_PatternShape.__super__ = pixelimage_triGML_coreShape_BasicShape;
+pixelimage_triGML_coreShape_PatternShape.prototype = $extend(pixelimage_triGML_coreShape_BasicShape.prototype,{
 	setParameter: function(name,value) {
 		switch(name) {
 		case "fillColor0":
@@ -22019,13 +21916,13 @@ pixelimage_triangleGML_coreShape_PatternShape.prototype = $extend(pixelimage_tri
 			this.strokePatternWidth = Std.parseInt(value);
 			break;
 		default:
-			pixelimage_triangleGML_coreShape_BasicShape.prototype.setParameter.call(this,name,value);
+			pixelimage_triGML_coreShape_BasicShape.prototype.setParameter.call(this,name,value);
 		}
 	}
-	,render: function(pixelShape) {
+	,render: function(pixelImage) {
 		this.tileImageStroke = null;
 		this.tileImageFill = null;
-		return pixelimage_triangleGML_coreShape_BasicShape.prototype.render.call(this,pixelShape);
+		return pixelimage_triGML_coreShape_BasicShape.prototype.render.call(this,pixelImage);
 	}
 	,buildPatternTemplates: function() {
 		this.tileImageStroke = null;
@@ -22035,8 +21932,7 @@ pixelimage_triangleGML_coreShape_PatternShape.prototype = $extend(pixelimage_tri
 			var h = this.strokePatternHeight;
 			var this1 = new Uint32Array(w * h | 0);
 			var this2 = new pixelimage_ImageStruct(w,h,this1);
-			var this1 = this2;
-			this.tileImageStroke = this1;
+			this.tileImageStroke = this2;
 			this.tileImageStroke.transparent = false;
 			if(this.strokePatternAcross) {
 				var this1 = this.tileImageStroke;
@@ -22234,87 +22130,6 @@ pixelimage_triangleGML_coreShape_PatternShape.prototype = $extend(pixelimage_tri
 						break;
 					}
 				}
-				if(this1.mask != null && false) {
-					var this2 = this1.mask;
-					var scaleW1 = scaleW;
-					var scaleH1 = scaleH;
-					var transparent = this1.mask.transparent;
-					var includeMask = false;
-					if(includeMask == null) {
-						includeMask = false;
-					}
-					if(scaleH1 == null) {
-						scaleH1 = 2;
-					}
-					if(scaleW1 == null) {
-						scaleW1 = 2;
-					}
-					var p = 0;
-					var xx = p;
-					var q = 0;
-					var wNew = this2.width * scaleW1 | 0;
-					var hNew = this2.height * scaleH1 | 0;
-					var this1 = new Uint32Array(wNew * hNew | 0);
-					var this3 = new pixelimage_ImageStruct(wNew,hNew,this1);
-					var pixelImage1 = this3;
-					var maxX = wNew;
-					var maxY = hNew;
-					while(true) {
-						var x = p / scaleW1 | 0;
-						var y = q / scaleH1 | 0;
-						var c = this2.image[this2.useVirtualPos ? (y - this2.virtualY) * this2.width + x - this2.virtualX | 0 : y * this2.width + x | 0];
-						var color = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
-						var x1 = p++;
-						var this1 = color;
-						var c1 = this1;
-						if((c1 >> 24 & 255) < 254 && pixelImage1.transparent) {
-							var location = pixelImage1.useVirtualPos ? (q - pixelImage1.virtualY) * pixelImage1.width + x1 - pixelImage1.virtualX | 0 : q * pixelImage1.width + x1 | 0;
-							var this3 = pixelImage1.image[location];
-							var this4 = this3;
-							var this5 = pixelimage_Endian_isLittleEndian ? (this4 >> 24 & 255) << 24 | (this4 & 255) << 16 | (this4 >> 8 & 255) << 8 | this4 >> 16 & 255 : this4;
-							var this6 = this5 >> 24 & 255;
-							var a1 = this6 == 0 ? 0. : this6 / 255;
-							var this7 = this5 >> 16 & 255;
-							var r1 = this7 == 0 ? 0. : this7 / 255;
-							var this8 = this5 >> 8 & 255;
-							var g1 = this8 == 0 ? 0. : this8 / 255;
-							var this9 = this5 & 255;
-							var b1 = this9 == 0 ? 0. : this9 / 255;
-							var this10 = color >> 24 & 255;
-							var a2 = this10 == 0 ? 0. : this10 / 255;
-							var this11 = color >> 16 & 255;
-							var r2 = this11 == 0 ? 0. : this11 / 255;
-							var this12 = color >> 8 & 255;
-							var g2 = this12 == 0 ? 0. : this12 / 255;
-							var this13 = color & 255;
-							var b2 = this13 == 0 ? 0. : this13 / 255;
-							var a3 = a1 * (1 - a2);
-							var r = 255 * (r1 * a3 + r2 * a2) | 0;
-							var g = 255 * (g1 * a3 + g2 * a2) | 0;
-							var b = 255 * (b1 * a3 + b2 * a2) | 0;
-							var a = 255 * (a3 + a2) | 0;
-							var blended = a << 24 | r << 16 | g << 8 | b;
-							pixelImage1.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
-						} else {
-							pixelImage1.image[pixelImage1.useVirtualPos ? (q - pixelImage1.virtualY) * pixelImage1.width + x1 - pixelImage1.virtualX | 0 : q * pixelImage1.width + x1 | 0] = pixelimage_Endian_isLittleEndian ? (c1 >> 24 & 255) << 24 | (c1 & 255) << 16 | (c1 >> 8 & 255) << 8 | c1 >> 16 & 255 : c1;
-						}
-						if(p > maxX) {
-							p = xx;
-							++q;
-						}
-						if(q > maxY) {
-							break;
-						}
-					}
-					if(this2.mask != null && includeMask) {
-						var v = pixelimage_Pixelimage.scaleUpInt(this2.mask,scaleW1,scaleH1,this2.mask.transparent,includeMask);
-						pixelImage1.useMask = true;
-						pixelImage1.mask = v;
-					}
-					var v = pixelImage1;
-					pixelImage.useMask = true;
-					pixelImage.mask = v;
-				}
 				this.tileImageStroke = pixelImage;
 			}
 		}
@@ -22322,8 +22137,7 @@ pixelimage_triangleGML_coreShape_PatternShape.prototype = $extend(pixelimage_tri
 		var h = this.fillPatternHeight;
 		var this1 = new Uint32Array(w * h | 0);
 		var this2 = new pixelimage_ImageStruct(w,h,this1);
-		var this1 = this2;
-		this.tileImageFill = this1;
+		this.tileImageFill = this2;
 		this.tileImageFill.transparent = false;
 		if(this.fillPatternAcross) {
 			var this1 = this.tileImageFill;
@@ -22521,93 +22335,12 @@ pixelimage_triangleGML_coreShape_PatternShape.prototype = $extend(pixelimage_tri
 					break;
 				}
 			}
-			if(this1.mask != null && false) {
-				var this2 = this1.mask;
-				var scaleW1 = scaleW;
-				var scaleH1 = scaleH;
-				var transparent = this1.mask.transparent;
-				var includeMask = false;
-				if(includeMask == null) {
-					includeMask = false;
-				}
-				if(scaleH1 == null) {
-					scaleH1 = 2;
-				}
-				if(scaleW1 == null) {
-					scaleW1 = 2;
-				}
-				var p = 0;
-				var xx = p;
-				var q = 0;
-				var wNew = this2.width * scaleW1 | 0;
-				var hNew = this2.height * scaleH1 | 0;
-				var this1 = new Uint32Array(wNew * hNew | 0);
-				var this3 = new pixelimage_ImageStruct(wNew,hNew,this1);
-				var pixelImage1 = this3;
-				var maxX = wNew;
-				var maxY = hNew;
-				while(true) {
-					var x = p / scaleW1 | 0;
-					var y = q / scaleH1 | 0;
-					var c = this2.image[this2.useVirtualPos ? (y - this2.virtualY) * this2.width + x - this2.virtualX | 0 : y * this2.width + x | 0];
-					var color = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
-					var x1 = p++;
-					var this1 = color;
-					var c1 = this1;
-					if((c1 >> 24 & 255) < 254 && pixelImage1.transparent) {
-						var location = pixelImage1.useVirtualPos ? (q - pixelImage1.virtualY) * pixelImage1.width + x1 - pixelImage1.virtualX | 0 : q * pixelImage1.width + x1 | 0;
-						var this3 = pixelImage1.image[location];
-						var this4 = this3;
-						var this5 = pixelimage_Endian_isLittleEndian ? (this4 >> 24 & 255) << 24 | (this4 & 255) << 16 | (this4 >> 8 & 255) << 8 | this4 >> 16 & 255 : this4;
-						var this6 = this5 >> 24 & 255;
-						var a1 = this6 == 0 ? 0. : this6 / 255;
-						var this7 = this5 >> 16 & 255;
-						var r1 = this7 == 0 ? 0. : this7 / 255;
-						var this8 = this5 >> 8 & 255;
-						var g1 = this8 == 0 ? 0. : this8 / 255;
-						var this9 = this5 & 255;
-						var b1 = this9 == 0 ? 0. : this9 / 255;
-						var this10 = color >> 24 & 255;
-						var a2 = this10 == 0 ? 0. : this10 / 255;
-						var this11 = color >> 16 & 255;
-						var r2 = this11 == 0 ? 0. : this11 / 255;
-						var this12 = color >> 8 & 255;
-						var g2 = this12 == 0 ? 0. : this12 / 255;
-						var this13 = color & 255;
-						var b2 = this13 == 0 ? 0. : this13 / 255;
-						var a3 = a1 * (1 - a2);
-						var r = 255 * (r1 * a3 + r2 * a2) | 0;
-						var g = 255 * (g1 * a3 + g2 * a2) | 0;
-						var b = 255 * (b1 * a3 + b2 * a2) | 0;
-						var a = 255 * (a3 + a2) | 0;
-						var blended = a << 24 | r << 16 | g << 8 | b;
-						pixelImage1.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
-					} else {
-						pixelImage1.image[pixelImage1.useVirtualPos ? (q - pixelImage1.virtualY) * pixelImage1.width + x1 - pixelImage1.virtualX | 0 : q * pixelImage1.width + x1 | 0] = pixelimage_Endian_isLittleEndian ? (c1 >> 24 & 255) << 24 | (c1 & 255) << 16 | (c1 >> 8 & 255) << 8 | c1 >> 16 & 255 : c1;
-					}
-					if(p > maxX) {
-						p = xx;
-						++q;
-					}
-					if(q > maxY) {
-						break;
-					}
-				}
-				if(this2.mask != null && includeMask) {
-					var v = pixelimage_Pixelimage.scaleUpInt(this2.mask,scaleW1,scaleH1,this2.mask.transparent,includeMask);
-					pixelImage1.useMask = true;
-					pixelImage1.mask = v;
-				}
-				var v = pixelImage1;
-				pixelImage.useMask = true;
-				pixelImage.mask = v;
-			}
 			this.tileImageFill = pixelImage;
 		}
 	}
-	,__class__: pixelimage_triangleGML_coreShape_PatternShape
+	,__class__: pixelimage_triGML_coreShape_PatternShape
 });
-var pixelimage_triangleGML_coreShape_PatternStroke = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,strokeColor0,strokeColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale) {
+var pixelimage_triGML_coreShape_PatternStroke = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,strokeColor0,strokeColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale) {
 	if(strokePatternScale == null) {
 		strokePatternScale = 1;
 	}
@@ -22632,7 +22365,7 @@ var pixelimage_triangleGML_coreShape_PatternStroke = function(opacity,visibility
 	if(opacity == null) {
 		opacity = 1.;
 	}
-	pixelimage_triangleGML_coreShape_BasicShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray);
+	pixelimage_triGML_coreShape_BasicShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray);
 	this.strokeColor0 = strokeColor0;
 	this.strokeColor1 = strokeColor1;
 	this.strokePatternFill = strokePatternFill;
@@ -22641,9 +22374,9 @@ var pixelimage_triangleGML_coreShape_PatternStroke = function(opacity,visibility
 	this.strokePatternAcross = strokePatternAcross;
 	this.strokePatternScale = strokePatternScale;
 };
-pixelimage_triangleGML_coreShape_PatternStroke.__name__ = "pixelimage.triangleGML.coreShape.PatternStroke";
-pixelimage_triangleGML_coreShape_PatternStroke.__super__ = pixelimage_triangleGML_coreShape_BasicShape;
-pixelimage_triangleGML_coreShape_PatternStroke.prototype = $extend(pixelimage_triangleGML_coreShape_BasicShape.prototype,{
+pixelimage_triGML_coreShape_PatternStroke.__name__ = "pixelimage.triGML.coreShape.PatternStroke";
+pixelimage_triGML_coreShape_PatternStroke.__super__ = pixelimage_triGML_coreShape_BasicShape;
+pixelimage_triGML_coreShape_PatternStroke.prototype = $extend(pixelimage_triGML_coreShape_BasicShape.prototype,{
 	setParameter: function(name,value) {
 		switch(name) {
 		case "strokeColor0":
@@ -22679,20 +22412,19 @@ pixelimage_triangleGML_coreShape_PatternStroke.prototype = $extend(pixelimage_tr
 			this.strokePatternWidth = Std.parseInt(value);
 			break;
 		default:
-			pixelimage_triangleGML_coreShape_BasicShape.prototype.setParameter.call(this,name,value);
+			pixelimage_triGML_coreShape_BasicShape.prototype.setParameter.call(this,name,value);
 		}
 	}
-	,render: function(pixelShape) {
+	,render: function(pixelImage) {
 		this.tileImageStroke = null;
-		return pixelimage_triangleGML_coreShape_BasicShape.prototype.render.call(this,pixelShape);
+		return pixelimage_triGML_coreShape_BasicShape.prototype.render.call(this,pixelImage);
 	}
 	,buildPatternTemplates: function() {
 		var w = this.strokePatternWidth;
 		var h = this.strokePatternHeight;
 		var this1 = new Uint32Array(w * h | 0);
 		var this2 = new pixelimage_ImageStruct(w,h,this1);
-		var this1 = this2;
-		this.tileImageStroke = this1;
+		this.tileImageStroke = this2;
 		this.tileImageStroke.transparent = false;
 		if(this.strokePatternAcross) {
 			var this1 = this.tileImageStroke;
@@ -22890,99 +22622,135 @@ pixelimage_triangleGML_coreShape_PatternStroke.prototype = $extend(pixelimage_tr
 					break;
 				}
 			}
-			if(this1.mask != null && false) {
-				var this2 = this1.mask;
-				var scaleW1 = scaleW;
-				var scaleH1 = scaleH;
-				var transparent = this1.mask.transparent;
-				var includeMask = false;
-				if(includeMask == null) {
-					includeMask = false;
-				}
-				if(scaleH1 == null) {
-					scaleH1 = 2;
-				}
-				if(scaleW1 == null) {
-					scaleW1 = 2;
-				}
-				var p = 0;
-				var xx = p;
-				var q = 0;
-				var wNew = this2.width * scaleW1 | 0;
-				var hNew = this2.height * scaleH1 | 0;
-				var this1 = new Uint32Array(wNew * hNew | 0);
-				var this3 = new pixelimage_ImageStruct(wNew,hNew,this1);
-				var pixelImage1 = this3;
-				var maxX = wNew;
-				var maxY = hNew;
-				while(true) {
-					var x = p / scaleW1 | 0;
-					var y = q / scaleH1 | 0;
-					var c = this2.image[this2.useVirtualPos ? (y - this2.virtualY) * this2.width + x - this2.virtualX | 0 : y * this2.width + x | 0];
-					var color = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
-					var x1 = p++;
-					var this1 = color;
-					var c1 = this1;
-					if((c1 >> 24 & 255) < 254 && pixelImage1.transparent) {
-						var location = pixelImage1.useVirtualPos ? (q - pixelImage1.virtualY) * pixelImage1.width + x1 - pixelImage1.virtualX | 0 : q * pixelImage1.width + x1 | 0;
-						var this3 = pixelImage1.image[location];
-						var this4 = this3;
-						var this5 = pixelimage_Endian_isLittleEndian ? (this4 >> 24 & 255) << 24 | (this4 & 255) << 16 | (this4 >> 8 & 255) << 8 | this4 >> 16 & 255 : this4;
-						var this6 = this5 >> 24 & 255;
-						var a1 = this6 == 0 ? 0. : this6 / 255;
-						var this7 = this5 >> 16 & 255;
-						var r1 = this7 == 0 ? 0. : this7 / 255;
-						var this8 = this5 >> 8 & 255;
-						var g1 = this8 == 0 ? 0. : this8 / 255;
-						var this9 = this5 & 255;
-						var b1 = this9 == 0 ? 0. : this9 / 255;
-						var this10 = color >> 24 & 255;
-						var a2 = this10 == 0 ? 0. : this10 / 255;
-						var this11 = color >> 16 & 255;
-						var r2 = this11 == 0 ? 0. : this11 / 255;
-						var this12 = color >> 8 & 255;
-						var g2 = this12 == 0 ? 0. : this12 / 255;
-						var this13 = color & 255;
-						var b2 = this13 == 0 ? 0. : this13 / 255;
-						var a3 = a1 * (1 - a2);
-						var r = 255 * (r1 * a3 + r2 * a2) | 0;
-						var g = 255 * (g1 * a3 + g2 * a2) | 0;
-						var b = 255 * (b1 * a3 + b2 * a2) | 0;
-						var a = 255 * (a3 + a2) | 0;
-						var blended = a << 24 | r << 16 | g << 8 | b;
-						pixelImage1.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
-					} else {
-						pixelImage1.image[pixelImage1.useVirtualPos ? (q - pixelImage1.virtualY) * pixelImage1.width + x1 - pixelImage1.virtualX | 0 : q * pixelImage1.width + x1 | 0] = pixelimage_Endian_isLittleEndian ? (c1 >> 24 & 255) << 24 | (c1 & 255) << 16 | (c1 >> 8 & 255) << 8 | c1 >> 16 & 255 : c1;
-					}
-					if(p > maxX) {
-						p = xx;
-						++q;
-					}
-					if(q > maxY) {
-						break;
-					}
-				}
-				if(this2.mask != null && includeMask) {
-					var v = pixelimage_Pixelimage.scaleUpInt(this2.mask,scaleW1,scaleH1,this2.mask.transparent,includeMask);
-					pixelImage1.useMask = true;
-					pixelImage1.mask = v;
-				}
-				var v = pixelImage1;
-				pixelImage.useMask = true;
-				pixelImage.mask = v;
-			}
 			this.tileImageStroke = pixelImage;
 		}
 	}
-	,__class__: pixelimage_triangleGML_coreShape_PatternStroke
+	,__class__: pixelimage_triGML_coreShape_PatternStroke
 });
-var pixelimage_triangleGML_coreShape_TriangleGML = function(pixelShape,xml) {
-	this.pixelShape = pixelShape;
+function pixelimage_triGML_coreShape_TriGML_getTriGML(nodeName) {
+	var triGMLname = nodeName;
+	var s;
+	switch(triGMLname) {
+	case "ArcPattern":
+		s = new pixelimage_triGML_patternShape_ArcPattern();
+		break;
+	case "ArcShape":
+		s = new pixelimage_triGML_shape_ArcShape();
+		break;
+	case "ArrowShape":
+		s = new pixelimage_triGML_contour_ArrowShape();
+		break;
+	case "ArrowThickGradient":
+		s = new pixelimage_triGML_gradient_ArrowThickGradient();
+		break;
+	case "CirclePattern":
+		s = new pixelimage_triGML_patternShape_CirclePattern();
+		break;
+	case "CircleShape":
+		s = new pixelimage_triGML_shape_CircleShape();
+		break;
+	case "CubicCurvePattern":
+		s = new pixelimage_triGML_patternContour_CubicCurvePattern();
+		break;
+	case "CubicCurveShape":
+		s = new pixelimage_triGML_contour_CubicCurveShape();
+		break;
+	case "EllipsePattern":
+		s = new pixelimage_triGML_patternShape_EllipsePattern();
+		break;
+	case "EllipseRadialGradient":
+		s = new pixelimage_triGML_gradient_EllipseRadialGradient();
+		break;
+	case "EllipseShape":
+		s = new pixelimage_triGML_shape_EllipseShape();
+		break;
+	case "LineGradient":
+		s = new pixelimage_triGML_gradientContour_LineGradient();
+		break;
+	case "LineGridShape":
+		s = new pixelimage_triGML_contour_LineGridShape();
+		break;
+	case "LinePattern":
+		s = new pixelimage_triGML_patternContour_LinePattern();
+		break;
+	case "LineShape":
+		s = new pixelimage_triGML_contour_LineShape();
+		break;
+	case "PathElementPattern":
+		s = new pixelimage_triGML_patternShape_PathElementPattern();
+		break;
+	case "PathElementShape":
+		s = new pixelimage_triGML_shape_PathElementShape();
+		break;
+	case "PathElementThickGradient":
+		s = new pixelimage_triGML_gradient_PathElementThickGradient();
+		break;
+	case "PolyLineGradient":
+		s = new pixelimage_triGML_gradientContour_PolyLineGradient();
+		break;
+	case "PolyLineShape":
+		s = new pixelimage_triGML_contour_PolyLineShape();
+		break;
+	case "QuadCurveShape":
+		s = new pixelimage_triGML_contour_QuadCurveShape();
+		break;
+	case "QuadGradient":
+		s = new pixelimage_triGML_gradient_QuadGradient();
+		break;
+	case "QuadPattern":
+		s = new pixelimage_triGML_patternContour_QuadPattern();
+		break;
+	case "QuadShape":
+		s = new pixelimage_triGML_contour_QuadShape();
+		break;
+	case "QuadrilateralPattern":
+		s = new pixelimage_triGML_patternShape_QuadrilateralPattern();
+		break;
+	case "QuadrilateralShape":
+		s = new pixelimage_triGML_shape_QuadrilateralShape();
+		break;
+	case "RectanglePattern":
+		s = new pixelimage_triGML_patternShape_RectanglePattern();
+		break;
+	case "RectangleShape":
+		s = new pixelimage_triGML_shape_RectangleShape();
+		break;
+	case "SquarePattern":
+		s = new pixelimage_triGML_patternShape_SquarePattern();
+		break;
+	case "SquareShape":
+		s = new pixelimage_triGML_shape_SquareShape();
+		break;
+	case "Star6Shape":
+		s = new pixelimage_triGML_shape_Star6Shape();
+		break;
+	case "ThruCurveShape":
+		s = new pixelimage_triGML_contour_ThruCurveShape();
+		break;
+	case "TriangleGradient":
+		s = new pixelimage_triGML_gradient_TriangleGradient();
+		break;
+	case "TrianglePattern":
+		s = new pixelimage_triGML_patternContour_TrianglePattern();
+		break;
+	case "TriangleShape":
+		s = new pixelimage_triGML_shape_TriangleShape();
+		break;
+	case "VePathElementShape":
+		s = new pixelimage_triGML_shape_VePathElementShape();
+		break;
+	default:
+		throw haxe_Exception.thrown("shape unfound");
+	}
+	return s;
+}
+var pixelimage_triGML_coreShape_XMLshape = function(pixelImage,xml) {
+	this.pixelImage = pixelImage;
 	this.xml = xml;
 	this.process();
 };
-pixelimage_triangleGML_coreShape_TriangleGML.__name__ = "pixelimage.triangleGML.coreShape.TriangleGML";
-pixelimage_triangleGML_coreShape_TriangleGML.prototype = {
+pixelimage_triGML_coreShape_XMLshape.__name__ = "pixelimage.triGML.coreShape.XMLshape";
+pixelimage_triGML_coreShape_XMLshape.prototype = {
 	process: function() {
 		var e = this.xml.elements();
 		while(e.hasNext()) {
@@ -22995,135 +22763,18 @@ pixelimage_triangleGML_coreShape_TriangleGML.prototype = {
 			throw haxe_Exception.thrown("Bad node type, expected Element but found " + (x.nodeType == null ? "null" : XmlType.toString(x.nodeType)));
 		}
 		var name = x.nodeName;
-		var s = pixelimage_triangleGML_coreShape_TriangleGML_getTriangleGML(name);
+		var s = pixelimage_triGML_coreShape_TriGML_getTriGML(name);
 		var att = x.attributes();
 		while(att.hasNext()) {
 			var att1 = att.next();
-			haxe_Log.trace(att1 + " " + x.get(att1),{ fileName : "pixelimage/triangleGML/coreShape/TriangleGML.hx", lineNumber : 39, className : "pixelimage.triangleGML.coreShape.TriangleGML", methodName : "processShape"});
+			haxe_Log.trace(att1 + " " + x.get(att1),{ fileName : "pixelimage/triGML/coreShape/XMLshape.hx", lineNumber : 31, className : "pixelimage.triGML.coreShape.XMLshape", methodName : "processShape"});
 			s.setParameter(att1,x.get(att1));
 		}
-		s.render(this.pixelShape);
+		s.render(this.pixelImage);
 	}
-	,__class__: pixelimage_triangleGML_coreShape_TriangleGML
+	,__class__: pixelimage_triGML_coreShape_XMLshape
 };
-function pixelimage_triangleGML_coreShape_TriangleGML_getTriangleGML(nodeName) {
-	var triangleGMLname = nodeName;
-	var s;
-	switch(triangleGMLname) {
-	case "ArcPattern":
-		s = new pixelimage_triangleGML_patternShape_ArcPattern();
-		break;
-	case "ArcShape":
-		s = new pixelimage_triangleGML_shape_ArcShape();
-		break;
-	case "ArrowShape":
-		s = new pixelimage_triangleGML_contour_ArrowShape();
-		break;
-	case "ArrowThickGradient":
-		s = new pixelimage_triangleGML_gradient_ArrowThickGradient();
-		break;
-	case "CirclePattern":
-		s = new pixelimage_triangleGML_patternShape_CirclePattern();
-		break;
-	case "CircleShape":
-		s = new pixelimage_triangleGML_shape_CircleShape();
-		break;
-	case "CubicCurvePattern":
-		s = new pixelimage_triangleGML_patternContour_CubicCurvePattern();
-		break;
-	case "CubicCurveShape":
-		s = new pixelimage_triangleGML_contour_CubicCurveShape();
-		break;
-	case "EllipsePattern":
-		s = new pixelimage_triangleGML_patternShape_EllipsePattern();
-		break;
-	case "EllipseRadialGradient":
-		s = new pixelimage_triangleGML_gradient_EllipseRadialGradient();
-		break;
-	case "EllipseShape":
-		s = new pixelimage_triangleGML_shape_EllipseShape();
-		break;
-	case "LineGradient":
-		s = new pixelimage_triangleGML_gradientContour_LineGradient();
-		break;
-	case "LineGridShape":
-		s = new pixelimage_triangleGML_contour_LineGridShape();
-		break;
-	case "LinePattern":
-		s = new pixelimage_triangleGML_patternContour_LinePattern();
-		break;
-	case "LineShape":
-		s = new pixelimage_triangleGML_contour_LineShape();
-		break;
-	case "PathElementPattern":
-		s = new pixelimage_triangleGML_patternShape_PathElementPattern();
-		break;
-	case "PathElementShape":
-		s = new pixelimage_triangleGML_shape_PathElementShape();
-		break;
-	case "PathElementThickGradient":
-		s = new pixelimage_triangleGML_gradient_PathElementThickGradient();
-		break;
-	case "PolyLineGradient":
-		s = new pixelimage_triangleGML_gradientContour_PolyLineGradient();
-		break;
-	case "PolyLineShape":
-		s = new pixelimage_triangleGML_contour_PolyLineShape();
-		break;
-	case "QuadCurveShape":
-		s = new pixelimage_triangleGML_contour_QuadCurveShape();
-		break;
-	case "QuadGradient":
-		s = new pixelimage_triangleGML_gradient_QuadGradient();
-		break;
-	case "QuadPattern":
-		s = new pixelimage_triangleGML_patternContour_QuadPattern();
-		break;
-	case "QuadShape":
-		s = new pixelimage_triangleGML_contour_QuadShape();
-		break;
-	case "QuadrilateralPattern":
-		s = new pixelimage_triangleGML_patternShape_QuadrilateralPattern();
-		break;
-	case "QuadrilateralShape":
-		s = new pixelimage_triangleGML_shape_QuadrilateralShape();
-		break;
-	case "RectanglePattern":
-		s = new pixelimage_triangleGML_patternShape_RectanglePattern();
-		break;
-	case "RectangleShape":
-		s = new pixelimage_triangleGML_shape_RectangleShape();
-		break;
-	case "SquarePattern":
-		s = new pixelimage_triangleGML_patternShape_SquarePattern();
-		break;
-	case "SquareShape":
-		s = new pixelimage_triangleGML_shape_SquareShape();
-		break;
-	case "Star6Shape":
-		s = new pixelimage_triangleGML_shape_Star6Shape();
-		break;
-	case "ThruCurveShape":
-		s = new pixelimage_triangleGML_contour_ThruCurveShape();
-		break;
-	case "TriangleGradient":
-		s = new pixelimage_triangleGML_gradient_TriangleGradient();
-		break;
-	case "TrianglePattern":
-		s = new pixelimage_triangleGML_patternContour_TrianglePattern();
-		break;
-	case "TriangleShape":
-		s = new pixelimage_triangleGML_shape_TriangleShape();
-		break;
-	case "VePathElementShape":
-		s = new pixelimage_triangleGML_shape_VePathElementShape();
-		break;
-	default:
-		throw haxe_Exception.thrown("shape unfound");
-	}
-	return s;
-}
-var pixelimage_triangleGML_gradient_ArrowThickGradient = function(opacity,visibility,strokeTopColor,strokeBottomColor,strokeWidth,strokeDashGapArray,both,flare,reverseFlare,x1,y1,x2,y2,arrowWidth,arrowHeight) {
+var pixelimage_triGML_gradient_ArrowThickGradient = function(opacity,visibility,strokeTopColor,strokeBottomColor,strokeWidth,strokeDashGapArray,both,flare,reverseFlare,x1,y1,x2,y2,arrowWidth,arrowHeight) {
 	if(arrowHeight == null) {
 		arrowHeight = 0.;
 	}
@@ -23166,7 +22817,7 @@ var pixelimage_triangleGML_gradient_ArrowThickGradient = function(opacity,visibi
 	if(opacity == null) {
 		opacity = 1.;
 	}
-	pixelimage_triangleGML_coreShape_FillShape.call(this,opacity,visibility,-16777216,1.,strokeDashGapArray,this.fill);
+	pixelimage_triGML_coreShape_FillShape.call(this,opacity,visibility,-16777216,1.,strokeDashGapArray,this.fill);
 	this.both = both;
 	this.flare = flare;
 	this.x1 = x1;
@@ -23176,9 +22827,9 @@ var pixelimage_triangleGML_gradient_ArrowThickGradient = function(opacity,visibi
 	this.strokeTopColor = strokeTopColor;
 	this.strokeBottomColor = strokeBottomColor;
 };
-pixelimage_triangleGML_gradient_ArrowThickGradient.__name__ = "pixelimage.triangleGML.gradient.ArrowThickGradient";
-pixelimage_triangleGML_gradient_ArrowThickGradient.__super__ = pixelimage_triangleGML_coreShape_FillShape;
-pixelimage_triangleGML_gradient_ArrowThickGradient.prototype = $extend(pixelimage_triangleGML_coreShape_FillShape.prototype,{
+pixelimage_triGML_gradient_ArrowThickGradient.__name__ = "pixelimage.triGML.gradient.ArrowThickGradient";
+pixelimage_triGML_gradient_ArrowThickGradient.__super__ = pixelimage_triGML_coreShape_FillShape;
+pixelimage_triGML_gradient_ArrowThickGradient.prototype = $extend(pixelimage_triGML_coreShape_FillShape.prototype,{
 	setParameter: function(name,value) {
 		switch(name) {
 		case "arrowHeight":
@@ -23215,10 +22866,10 @@ pixelimage_triangleGML_gradient_ArrowThickGradient.prototype = $extend(pixelimag
 			this.y2 = parseFloat(value);
 			break;
 		default:
-			pixelimage_triangleGML_coreShape_FillShape.prototype.setParameter.call(this,name,value);
+			pixelimage_triGML_coreShape_FillShape.prototype.setParameter.call(this,name,value);
 		}
 	}
-	,render: function(pixelShape) {
+	,render: function(pixelImage) {
 		if(this.both == false) {
 			if(this.arrowHeight > 0. || this.arrowWidth > 0.) {
 				var px = this.x1;
@@ -23421,9 +23072,9 @@ pixelimage_triangleGML_gradient_ArrowThickGradient.prototype = $extend(pixelimag
 									}
 									var this9 = i3;
 									var b = this9;
-									var location = pixelShape.useVirtualPos ? (py1 - pixelShape.virtualY) * pixelShape.width + px1 - pixelShape.virtualX | 0 : py1 * pixelShape.width + px1 | 0;
-									if(pixelShape.transparent && a < 254) {
-										var this10 = pixelShape.image[location];
+									var location = pixelImage.useVirtualPos ? (py1 - pixelImage.virtualY) * pixelImage.width + px1 - pixelImage.virtualX | 0 : py1 * pixelImage.width + px1 | 0;
+									if(pixelImage.transparent && a < 254) {
+										var this10 = pixelImage.image[location];
 										var this11 = this10;
 										var old = pixelimage_Endian_isLittleEndian ? (this11 >> 24 & 255) << 24 | (this11 & 255) << 16 | (this11 >> 8 & 255) << 8 | this11 >> 16 & 255 : this11;
 										var rhs = a << 24 | r << 16 | g << 8 | b;
@@ -23449,15 +23100,15 @@ pixelimage_triangleGML_gradient_ArrowThickGradient.prototype = $extend(pixelimag
 										var b3 = 255 * (b1 * a3 + b2 * a2) | 0;
 										var a4 = 255 * (a3 + a2) | 0;
 										var blended = a4 << 24 | r3 << 16 | g3 << 8 | b3;
-										pixelShape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+										pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 									} else {
-										pixelShape.image[location] = pixelShape.isLittle ? a << 24 | b << 16 | g << 8 | r : a << 24 | r << 16 | g << 8 | b;
+										pixelImage.image[location] = pixelImage.isLittle ? a << 24 | b << 16 | g << 8 | r : a << 24 | r << 16 | g << 8 | b;
 									}
 								}
 							}
 						}
 						if(hasHit1 == false) {
-							var v = new pixelimage_algo_HitTri(ax,ay,bx,by,dx,dy,true);
+							var v = new pixelimage_algo_HitTri(ax,ay,bx,by,dx,dy);
 						}
 						var aA = color2 >> 24 & 255;
 						var rA = color2 >> 16 & 255;
@@ -23579,9 +23230,9 @@ pixelimage_triangleGML_gradient_ArrowThickGradient.prototype = $extend(pixelimag
 									}
 									var this9 = i3;
 									var b = this9;
-									var location = pixelShape.useVirtualPos ? (py1 - pixelShape.virtualY) * pixelShape.width + px1 - pixelShape.virtualX | 0 : py1 * pixelShape.width + px1 | 0;
-									if(pixelShape.transparent && a < 254) {
-										var this10 = pixelShape.image[location];
+									var location = pixelImage.useVirtualPos ? (py1 - pixelImage.virtualY) * pixelImage.width + px1 - pixelImage.virtualX | 0 : py1 * pixelImage.width + px1 | 0;
+									if(pixelImage.transparent && a < 254) {
+										var this10 = pixelImage.image[location];
 										var this11 = this10;
 										var old = pixelimage_Endian_isLittleEndian ? (this11 >> 24 & 255) << 24 | (this11 & 255) << 16 | (this11 >> 8 & 255) << 8 | this11 >> 16 & 255 : this11;
 										var rhs = a << 24 | r << 16 | g << 8 | b;
@@ -23607,32 +23258,21 @@ pixelimage_triangleGML_gradient_ArrowThickGradient.prototype = $extend(pixelimag
 										var b3 = 255 * (b1 * a3 + b2 * a2) | 0;
 										var a4 = 255 * (a3 + a2) | 0;
 										var blended = a4 << 24 | r3 << 16 | g3 << 8 | b3;
-										pixelShape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+										pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 									} else {
-										pixelShape.image[location] = pixelShape.isLittle ? a << 24 | b << 16 | g << 8 | r : a << 24 | r << 16 | g << 8 | b;
+										pixelImage.image[location] = pixelImage.isLittle ? a << 24 | b << 16 | g << 8 | r : a << 24 | r << 16 | g << 8 | b;
 									}
 								}
 							}
 						}
 						var v_yIter3;
 						var v_xIter3;
-						var v_ty;
-						var v_tx;
-						var v_t0;
-						var v_sy;
-						var v_sx;
-						var v_s0;
-						var v_A;
 						var ax1 = bx;
 						var ay1 = by;
 						var bx1 = cx;
 						var by1 = cy;
 						var cx1 = dx;
 						var cy1 = dy;
-						var preCalculated = true;
-						if(preCalculated == null) {
-							preCalculated = true;
-						}
 						var adjustWinding = ax1 * by1 - bx1 * ay1 + (bx1 * cy1 - cx1 * by1) + (cx1 * ay1 - ax1 * cy1) > 0;
 						if(!adjustWinding) {
 							var bx_ = bx1;
@@ -23648,70 +23288,61 @@ pixelimage_triangleGML_gradient_ArrowThickGradient.prototype = $extend(pixelimag
 						var v_by = by1;
 						var v_cx = cx1;
 						var v_cy = cy1;
-						var v_preCalculated = preCalculated;
-						if(preCalculated) {
-							v_s0 = v_ay * v_cx - v_ax * v_cy;
-							v_sx = v_cy - v_ay;
-							v_sy = v_ax - v_cx;
-							v_t0 = v_ax * v_by - v_ay * v_bx;
-							v_tx = v_ay - v_by;
-							v_ty = v_bx - v_ax;
-							v_A = -v_by * v_cx + v_ay * (-v_bx + v_cx) + v_ax * (v_by - v_cy) + v_bx * v_cy;
-							var a = v_ax;
-							var b = v_bx;
-							var c = v_cx;
-							if(a > b) {
-								if(a > c) {
-									var ii_min = b > c ? Math.floor(c) : Math.floor(b);
-									var ii_max = Math.ceil(a);
-									var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-									v_xIter3 = this1;
-								} else {
-									var ii_min = Math.floor(b);
-									var ii_max = Math.ceil(c);
-									var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-									v_xIter3 = this1;
-								}
-							} else if(b > c) {
-								var ii_min = a > c ? Math.floor(c) : Math.ceil(a);
-								var ii_max = Math.ceil(b);
+						var v_s0 = ay1 * cx1 - ax1 * cy1;
+						var v_sx = cy1 - ay1;
+						var v_sy = ax1 - cx1;
+						var v_t0 = ax1 * by1 - ay1 * bx1;
+						var v_tx = ay1 - by1;
+						var v_ty = bx1 - ax1;
+						var v_A = -by1 * cx1 + ay1 * (-bx1 + cx1) + ax1 * (by1 - cy1) + bx1 * cy1;
+						if(ax1 > bx1) {
+							if(ax1 > cx1) {
+								var ii_min = bx1 > cx1 ? Math.floor(cx1) : Math.floor(bx1);
+								var ii_max = Math.ceil(ax1);
 								var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
 								v_xIter3 = this1;
 							} else {
-								var ii_min = Math.floor(a);
-								var ii_max = Math.ceil(c);
+								var ii_min = Math.floor(bx1);
+								var ii_max = Math.ceil(cx1);
 								var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
 								v_xIter3 = this1;
 							}
-							var a = v_ay;
-							var b = v_by;
-							var c = v_cy;
-							if(a > b) {
-								if(a > c) {
-									var ii_min = b > c ? Math.floor(c) : Math.floor(b);
-									var ii_max = Math.ceil(a);
-									var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-									v_yIter3 = this1;
-								} else {
-									var ii_min = Math.floor(b);
-									var ii_max = Math.ceil(c);
-									var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-									v_yIter3 = this1;
-								}
-							} else if(b > c) {
-								var ii_min = a > c ? Math.floor(c) : Math.ceil(a);
-								var ii_max = Math.ceil(b);
+						} else if(bx1 > cx1) {
+							var ii_min = ax1 > cx1 ? Math.floor(cx1) : Math.ceil(ax1);
+							var ii_max = Math.ceil(bx1);
+							var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+							v_xIter3 = this1;
+						} else {
+							var ii_min = Math.floor(ax1);
+							var ii_max = Math.ceil(cx1);
+							var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+							v_xIter3 = this1;
+						}
+						if(ay1 > by1) {
+							if(ay1 > cy1) {
+								var ii_min = by1 > cy1 ? Math.floor(cy1) : Math.floor(by1);
+								var ii_max = Math.ceil(ay1);
 								var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
 								v_yIter3 = this1;
 							} else {
-								var ii_min = Math.floor(a);
-								var ii_max = Math.ceil(c);
+								var ii_min = Math.floor(by1);
+								var ii_max = Math.ceil(cy1);
 								var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
 								v_yIter3 = this1;
 							}
+						} else if(by1 > cy1) {
+							var ii_min = ay1 > cy1 ? Math.floor(cy1) : Math.ceil(ay1);
+							var ii_max = Math.ceil(by1);
+							var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+							v_yIter3 = this1;
+						} else {
+							var ii_min = Math.floor(ay1);
+							var ii_max = Math.ceil(cy1);
+							var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+							v_yIter3 = this1;
 						}
 						if(hasHit2 == true) {
-							var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy,true);
+							var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy);
 							hitQuad = v;
 						} else {
 							hitQuad = null;
@@ -23874,9 +23505,9 @@ pixelimage_triangleGML_gradient_ArrowThickGradient.prototype = $extend(pixelimag
 									}
 									var this9 = i3;
 									var b = this9;
-									var location = pixelShape.useVirtualPos ? (py1 - pixelShape.virtualY) * pixelShape.width + px1 - pixelShape.virtualX | 0 : py1 * pixelShape.width + px1 | 0;
-									if(pixelShape.transparent && a < 254) {
-										var this10 = pixelShape.image[location];
+									var location = pixelImage.useVirtualPos ? (py1 - pixelImage.virtualY) * pixelImage.width + px1 - pixelImage.virtualX | 0 : py1 * pixelImage.width + px1 | 0;
+									if(pixelImage.transparent && a < 254) {
+										var this10 = pixelImage.image[location];
 										var this11 = this10;
 										var old = pixelimage_Endian_isLittleEndian ? (this11 >> 24 & 255) << 24 | (this11 & 255) << 16 | (this11 >> 8 & 255) << 8 | this11 >> 16 & 255 : this11;
 										var rhs = a << 24 | r << 16 | g << 8 | b;
@@ -23902,15 +23533,15 @@ pixelimage_triangleGML_gradient_ArrowThickGradient.prototype = $extend(pixelimag
 										var b3 = 255 * (b1 * a3 + b2 * a2) | 0;
 										var a4 = 255 * (a3 + a2) | 0;
 										var blended = a4 << 24 | r3 << 16 | g3 << 8 | b3;
-										pixelShape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+										pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 									} else {
-										pixelShape.image[location] = pixelShape.isLittle ? a << 24 | b << 16 | g << 8 | r : a << 24 | r << 16 | g << 8 | b;
+										pixelImage.image[location] = pixelImage.isLittle ? a << 24 | b << 16 | g << 8 | r : a << 24 | r << 16 | g << 8 | b;
 									}
 								}
 							}
 						}
 						if(hasHit1 == false) {
-							var v = new pixelimage_algo_HitTri(ax,ay,bx,by,dx,dy,true);
+							var v = new pixelimage_algo_HitTri(ax,ay,bx,by,dx,dy);
 						}
 						var aA = color2 >> 24 & 255;
 						var rA = color2 >> 16 & 255;
@@ -24032,9 +23663,9 @@ pixelimage_triangleGML_gradient_ArrowThickGradient.prototype = $extend(pixelimag
 									}
 									var this9 = i3;
 									var b = this9;
-									var location = pixelShape.useVirtualPos ? (py1 - pixelShape.virtualY) * pixelShape.width + px1 - pixelShape.virtualX | 0 : py1 * pixelShape.width + px1 | 0;
-									if(pixelShape.transparent && a < 254) {
-										var this10 = pixelShape.image[location];
+									var location = pixelImage.useVirtualPos ? (py1 - pixelImage.virtualY) * pixelImage.width + px1 - pixelImage.virtualX | 0 : py1 * pixelImage.width + px1 | 0;
+									if(pixelImage.transparent && a < 254) {
+										var this10 = pixelImage.image[location];
 										var this11 = this10;
 										var old = pixelimage_Endian_isLittleEndian ? (this11 >> 24 & 255) << 24 | (this11 & 255) << 16 | (this11 >> 8 & 255) << 8 | this11 >> 16 & 255 : this11;
 										var rhs = a << 24 | r << 16 | g << 8 | b;
@@ -24060,32 +23691,21 @@ pixelimage_triangleGML_gradient_ArrowThickGradient.prototype = $extend(pixelimag
 										var b3 = 255 * (b1 * a3 + b2 * a2) | 0;
 										var a4 = 255 * (a3 + a2) | 0;
 										var blended = a4 << 24 | r3 << 16 | g3 << 8 | b3;
-										pixelShape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+										pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 									} else {
-										pixelShape.image[location] = pixelShape.isLittle ? a << 24 | b << 16 | g << 8 | r : a << 24 | r << 16 | g << 8 | b;
+										pixelImage.image[location] = pixelImage.isLittle ? a << 24 | b << 16 | g << 8 | r : a << 24 | r << 16 | g << 8 | b;
 									}
 								}
 							}
 						}
 						var v_yIter3;
 						var v_xIter3;
-						var v_ty;
-						var v_tx;
-						var v_t0;
-						var v_sy;
-						var v_sx;
-						var v_s0;
-						var v_A;
 						var ax1 = bx;
 						var ay1 = by;
 						var bx1 = cx;
 						var by1 = cy;
 						var cx1 = dx;
 						var cy1 = dy;
-						var preCalculated = true;
-						if(preCalculated == null) {
-							preCalculated = true;
-						}
 						var adjustWinding = ax1 * by1 - bx1 * ay1 + (bx1 * cy1 - cx1 * by1) + (cx1 * ay1 - ax1 * cy1) > 0;
 						if(!adjustWinding) {
 							var bx_ = bx1;
@@ -24101,70 +23721,61 @@ pixelimage_triangleGML_gradient_ArrowThickGradient.prototype = $extend(pixelimag
 						var v_by = by1;
 						var v_cx = cx1;
 						var v_cy = cy1;
-						var v_preCalculated = preCalculated;
-						if(preCalculated) {
-							v_s0 = v_ay * v_cx - v_ax * v_cy;
-							v_sx = v_cy - v_ay;
-							v_sy = v_ax - v_cx;
-							v_t0 = v_ax * v_by - v_ay * v_bx;
-							v_tx = v_ay - v_by;
-							v_ty = v_bx - v_ax;
-							v_A = -v_by * v_cx + v_ay * (-v_bx + v_cx) + v_ax * (v_by - v_cy) + v_bx * v_cy;
-							var a = v_ax;
-							var b = v_bx;
-							var c = v_cx;
-							if(a > b) {
-								if(a > c) {
-									var ii_min = b > c ? Math.floor(c) : Math.floor(b);
-									var ii_max = Math.ceil(a);
-									var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-									v_xIter3 = this1;
-								} else {
-									var ii_min = Math.floor(b);
-									var ii_max = Math.ceil(c);
-									var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-									v_xIter3 = this1;
-								}
-							} else if(b > c) {
-								var ii_min = a > c ? Math.floor(c) : Math.ceil(a);
-								var ii_max = Math.ceil(b);
+						var v_s0 = ay1 * cx1 - ax1 * cy1;
+						var v_sx = cy1 - ay1;
+						var v_sy = ax1 - cx1;
+						var v_t0 = ax1 * by1 - ay1 * bx1;
+						var v_tx = ay1 - by1;
+						var v_ty = bx1 - ax1;
+						var v_A = -by1 * cx1 + ay1 * (-bx1 + cx1) + ax1 * (by1 - cy1) + bx1 * cy1;
+						if(ax1 > bx1) {
+							if(ax1 > cx1) {
+								var ii_min = bx1 > cx1 ? Math.floor(cx1) : Math.floor(bx1);
+								var ii_max = Math.ceil(ax1);
 								var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
 								v_xIter3 = this1;
 							} else {
-								var ii_min = Math.floor(a);
-								var ii_max = Math.ceil(c);
+								var ii_min = Math.floor(bx1);
+								var ii_max = Math.ceil(cx1);
 								var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
 								v_xIter3 = this1;
 							}
-							var a = v_ay;
-							var b = v_by;
-							var c = v_cy;
-							if(a > b) {
-								if(a > c) {
-									var ii_min = b > c ? Math.floor(c) : Math.floor(b);
-									var ii_max = Math.ceil(a);
-									var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-									v_yIter3 = this1;
-								} else {
-									var ii_min = Math.floor(b);
-									var ii_max = Math.ceil(c);
-									var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-									v_yIter3 = this1;
-								}
-							} else if(b > c) {
-								var ii_min = a > c ? Math.floor(c) : Math.ceil(a);
-								var ii_max = Math.ceil(b);
+						} else if(bx1 > cx1) {
+							var ii_min = ax1 > cx1 ? Math.floor(cx1) : Math.ceil(ax1);
+							var ii_max = Math.ceil(bx1);
+							var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+							v_xIter3 = this1;
+						} else {
+							var ii_min = Math.floor(ax1);
+							var ii_max = Math.ceil(cx1);
+							var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+							v_xIter3 = this1;
+						}
+						if(ay1 > by1) {
+							if(ay1 > cy1) {
+								var ii_min = by1 > cy1 ? Math.floor(cy1) : Math.floor(by1);
+								var ii_max = Math.ceil(ay1);
 								var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
 								v_yIter3 = this1;
 							} else {
-								var ii_min = Math.floor(a);
-								var ii_max = Math.ceil(c);
+								var ii_min = Math.floor(by1);
+								var ii_max = Math.ceil(cy1);
 								var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
 								v_yIter3 = this1;
 							}
+						} else if(by1 > cy1) {
+							var ii_min = ay1 > cy1 ? Math.floor(cy1) : Math.ceil(ay1);
+							var ii_max = Math.ceil(by1);
+							var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+							v_yIter3 = this1;
+						} else {
+							var ii_min = Math.floor(ay1);
+							var ii_max = Math.ceil(cy1);
+							var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+							v_yIter3 = this1;
 						}
 						if(hasHit2 == true) {
-							var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy,true);
+							var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy);
 							hitQuad = v;
 						} else {
 							hitQuad = null;
@@ -24327,9 +23938,9 @@ pixelimage_triangleGML_gradient_ArrowThickGradient.prototype = $extend(pixelimag
 								}
 								var this9 = i3;
 								var b = this9;
-								var location = pixelShape.useVirtualPos ? (py1 - pixelShape.virtualY) * pixelShape.width + px1 - pixelShape.virtualX | 0 : py1 * pixelShape.width + px1 | 0;
-								if(pixelShape.transparent && a < 254) {
-									var this10 = pixelShape.image[location];
+								var location = pixelImage.useVirtualPos ? (py1 - pixelImage.virtualY) * pixelImage.width + px1 - pixelImage.virtualX | 0 : py1 * pixelImage.width + px1 | 0;
+								if(pixelImage.transparent && a < 254) {
+									var this10 = pixelImage.image[location];
 									var this11 = this10;
 									var old = pixelimage_Endian_isLittleEndian ? (this11 >> 24 & 255) << 24 | (this11 & 255) << 16 | (this11 >> 8 & 255) << 8 | this11 >> 16 & 255 : this11;
 									var rhs = a << 24 | r << 16 | g << 8 | b;
@@ -24355,15 +23966,15 @@ pixelimage_triangleGML_gradient_ArrowThickGradient.prototype = $extend(pixelimag
 									var b3 = 255 * (b1 * a3 + b2 * a2) | 0;
 									var a4 = 255 * (a3 + a2) | 0;
 									var blended = a4 << 24 | r3 << 16 | g3 << 8 | b3;
-									pixelShape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+									pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 								} else {
-									pixelShape.image[location] = pixelShape.isLittle ? a << 24 | b << 16 | g << 8 | r : a << 24 | r << 16 | g << 8 | b;
+									pixelImage.image[location] = pixelImage.isLittle ? a << 24 | b << 16 | g << 8 | r : a << 24 | r << 16 | g << 8 | b;
 								}
 							}
 						}
 					}
 					if(hasHit1 == false) {
-						var v = new pixelimage_algo_HitTri(ax,ay,bx,by,dx,dy,true);
+						var v = new pixelimage_algo_HitTri(ax,ay,bx,by,dx,dy);
 					}
 					var aA = color2 >> 24 & 255;
 					var rA = color2 >> 16 & 255;
@@ -24485,9 +24096,9 @@ pixelimage_triangleGML_gradient_ArrowThickGradient.prototype = $extend(pixelimag
 								}
 								var this9 = i3;
 								var b = this9;
-								var location = pixelShape.useVirtualPos ? (py1 - pixelShape.virtualY) * pixelShape.width + px1 - pixelShape.virtualX | 0 : py1 * pixelShape.width + px1 | 0;
-								if(pixelShape.transparent && a < 254) {
-									var this10 = pixelShape.image[location];
+								var location = pixelImage.useVirtualPos ? (py1 - pixelImage.virtualY) * pixelImage.width + px1 - pixelImage.virtualX | 0 : py1 * pixelImage.width + px1 | 0;
+								if(pixelImage.transparent && a < 254) {
+									var this10 = pixelImage.image[location];
 									var this11 = this10;
 									var old = pixelimage_Endian_isLittleEndian ? (this11 >> 24 & 255) << 24 | (this11 & 255) << 16 | (this11 >> 8 & 255) << 8 | this11 >> 16 & 255 : this11;
 									var rhs = a << 24 | r << 16 | g << 8 | b;
@@ -24513,32 +24124,21 @@ pixelimage_triangleGML_gradient_ArrowThickGradient.prototype = $extend(pixelimag
 									var b3 = 255 * (b1 * a3 + b2 * a2) | 0;
 									var a4 = 255 * (a3 + a2) | 0;
 									var blended = a4 << 24 | r3 << 16 | g3 << 8 | b3;
-									pixelShape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+									pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 								} else {
-									pixelShape.image[location] = pixelShape.isLittle ? a << 24 | b << 16 | g << 8 | r : a << 24 | r << 16 | g << 8 | b;
+									pixelImage.image[location] = pixelImage.isLittle ? a << 24 | b << 16 | g << 8 | r : a << 24 | r << 16 | g << 8 | b;
 								}
 							}
 						}
 					}
 					var v_yIter3;
 					var v_xIter3;
-					var v_ty;
-					var v_tx;
-					var v_t0;
-					var v_sy;
-					var v_sx;
-					var v_s0;
-					var v_A;
 					var ax1 = bx;
 					var ay1 = by;
 					var bx1 = cx;
 					var by1 = cy;
 					var cx1 = dx;
 					var cy1 = dy;
-					var preCalculated = true;
-					if(preCalculated == null) {
-						preCalculated = true;
-					}
 					var adjustWinding = ax1 * by1 - bx1 * ay1 + (bx1 * cy1 - cx1 * by1) + (cx1 * ay1 - ax1 * cy1) > 0;
 					if(!adjustWinding) {
 						var bx_ = bx1;
@@ -24554,70 +24154,61 @@ pixelimage_triangleGML_gradient_ArrowThickGradient.prototype = $extend(pixelimag
 					var v_by = by1;
 					var v_cx = cx1;
 					var v_cy = cy1;
-					var v_preCalculated = preCalculated;
-					if(preCalculated) {
-						v_s0 = v_ay * v_cx - v_ax * v_cy;
-						v_sx = v_cy - v_ay;
-						v_sy = v_ax - v_cx;
-						v_t0 = v_ax * v_by - v_ay * v_bx;
-						v_tx = v_ay - v_by;
-						v_ty = v_bx - v_ax;
-						v_A = -v_by * v_cx + v_ay * (-v_bx + v_cx) + v_ax * (v_by - v_cy) + v_bx * v_cy;
-						var a = v_ax;
-						var b = v_bx;
-						var c = v_cx;
-						if(a > b) {
-							if(a > c) {
-								var ii_min = b > c ? Math.floor(c) : Math.floor(b);
-								var ii_max = Math.ceil(a);
-								var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-								v_xIter3 = this1;
-							} else {
-								var ii_min = Math.floor(b);
-								var ii_max = Math.ceil(c);
-								var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-								v_xIter3 = this1;
-							}
-						} else if(b > c) {
-							var ii_min = a > c ? Math.floor(c) : Math.ceil(a);
-							var ii_max = Math.ceil(b);
+					var v_s0 = ay1 * cx1 - ax1 * cy1;
+					var v_sx = cy1 - ay1;
+					var v_sy = ax1 - cx1;
+					var v_t0 = ax1 * by1 - ay1 * bx1;
+					var v_tx = ay1 - by1;
+					var v_ty = bx1 - ax1;
+					var v_A = -by1 * cx1 + ay1 * (-bx1 + cx1) + ax1 * (by1 - cy1) + bx1 * cy1;
+					if(ax1 > bx1) {
+						if(ax1 > cx1) {
+							var ii_min = bx1 > cx1 ? Math.floor(cx1) : Math.floor(bx1);
+							var ii_max = Math.ceil(ax1);
 							var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
 							v_xIter3 = this1;
 						} else {
-							var ii_min = Math.floor(a);
-							var ii_max = Math.ceil(c);
+							var ii_min = Math.floor(bx1);
+							var ii_max = Math.ceil(cx1);
 							var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
 							v_xIter3 = this1;
 						}
-						var a = v_ay;
-						var b = v_by;
-						var c = v_cy;
-						if(a > b) {
-							if(a > c) {
-								var ii_min = b > c ? Math.floor(c) : Math.floor(b);
-								var ii_max = Math.ceil(a);
-								var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-								v_yIter3 = this1;
-							} else {
-								var ii_min = Math.floor(b);
-								var ii_max = Math.ceil(c);
-								var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-								v_yIter3 = this1;
-							}
-						} else if(b > c) {
-							var ii_min = a > c ? Math.floor(c) : Math.ceil(a);
-							var ii_max = Math.ceil(b);
+					} else if(bx1 > cx1) {
+						var ii_min = ax1 > cx1 ? Math.floor(cx1) : Math.ceil(ax1);
+						var ii_max = Math.ceil(bx1);
+						var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+						v_xIter3 = this1;
+					} else {
+						var ii_min = Math.floor(ax1);
+						var ii_max = Math.ceil(cx1);
+						var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+						v_xIter3 = this1;
+					}
+					if(ay1 > by1) {
+						if(ay1 > cy1) {
+							var ii_min = by1 > cy1 ? Math.floor(cy1) : Math.floor(by1);
+							var ii_max = Math.ceil(ay1);
 							var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
 							v_yIter3 = this1;
 						} else {
-							var ii_min = Math.floor(a);
-							var ii_max = Math.ceil(c);
+							var ii_min = Math.floor(by1);
+							var ii_max = Math.ceil(cy1);
 							var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
 							v_yIter3 = this1;
 						}
+					} else if(by1 > cy1) {
+						var ii_min = ay1 > cy1 ? Math.floor(cy1) : Math.ceil(ay1);
+						var ii_max = Math.ceil(by1);
+						var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+						v_yIter3 = this1;
+					} else {
+						var ii_min = Math.floor(ay1);
+						var ii_max = Math.ceil(cy1);
+						var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+						v_yIter3 = this1;
 					}
 					if(hasHit2 == true) {
-						var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy,true);
+						var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy);
 						hitQuad = v;
 					} else {
 						hitQuad = null;
@@ -24763,9 +24354,9 @@ pixelimage_triangleGML_gradient_ArrowThickGradient.prototype = $extend(pixelimag
 							}
 							var this9 = i3;
 							var b = this9;
-							var location = pixelShape.useVirtualPos ? (py - pixelShape.virtualY) * pixelShape.width + px - pixelShape.virtualX | 0 : py * pixelShape.width + px | 0;
-							if(pixelShape.transparent && a < 254) {
-								var this10 = pixelShape.image[location];
+							var location = pixelImage.useVirtualPos ? (py - pixelImage.virtualY) * pixelImage.width + px - pixelImage.virtualX | 0 : py * pixelImage.width + px | 0;
+							if(pixelImage.transparent && a < 254) {
+								var this10 = pixelImage.image[location];
 								var this11 = this10;
 								var old = pixelimage_Endian_isLittleEndian ? (this11 >> 24 & 255) << 24 | (this11 & 255) << 16 | (this11 >> 8 & 255) << 8 | this11 >> 16 & 255 : this11;
 								var rhs = a << 24 | r << 16 | g << 8 | b;
@@ -24791,16 +24382,16 @@ pixelimage_triangleGML_gradient_ArrowThickGradient.prototype = $extend(pixelimag
 								var b3 = 255 * (b1 * a3 + b2 * a2) | 0;
 								var a4 = 255 * (a3 + a2) | 0;
 								var blended = a4 << 24 | r3 << 16 | g3 << 8 | b3;
-								pixelShape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+								pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 							} else {
-								pixelShape.image[location] = pixelShape.isLittle ? a << 24 | b << 16 | g << 8 | r : a << 24 | r << 16 | g << 8 | b;
+								pixelImage.image[location] = pixelImage.isLittle ? a << 24 | b << 16 | g << 8 | r : a << 24 | r << 16 | g << 8 | b;
 							}
 						}
 					}
 				}
 				var hitTri;
 				if(hasHit1 == false) {
-					var v = new pixelimage_algo_HitTri(qx,qy,bx,by,cx,cy,true);
+					var v = new pixelimage_algo_HitTri(qx,qy,bx,by,cx,cy);
 					hitTri = v;
 				} else {
 					hitTri = null;
@@ -25007,9 +24598,9 @@ pixelimage_triangleGML_gradient_ArrowThickGradient.prototype = $extend(pixelimag
 									}
 									var this9 = i3;
 									var b = this9;
-									var location = pixelShape.useVirtualPos ? (py1 - pixelShape.virtualY) * pixelShape.width + px1 - pixelShape.virtualX | 0 : py1 * pixelShape.width + px1 | 0;
-									if(pixelShape.transparent && a < 254) {
-										var this10 = pixelShape.image[location];
+									var location = pixelImage.useVirtualPos ? (py1 - pixelImage.virtualY) * pixelImage.width + px1 - pixelImage.virtualX | 0 : py1 * pixelImage.width + px1 | 0;
+									if(pixelImage.transparent && a < 254) {
+										var this10 = pixelImage.image[location];
 										var this11 = this10;
 										var old = pixelimage_Endian_isLittleEndian ? (this11 >> 24 & 255) << 24 | (this11 & 255) << 16 | (this11 >> 8 & 255) << 8 | this11 >> 16 & 255 : this11;
 										var rhs = a << 24 | r << 16 | g << 8 | b;
@@ -25035,15 +24626,15 @@ pixelimage_triangleGML_gradient_ArrowThickGradient.prototype = $extend(pixelimag
 										var b3 = 255 * (b1 * a3 + b2 * a2) | 0;
 										var a4 = 255 * (a3 + a2) | 0;
 										var blended = a4 << 24 | r3 << 16 | g3 << 8 | b3;
-										pixelShape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+										pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 									} else {
-										pixelShape.image[location] = pixelShape.isLittle ? a << 24 | b << 16 | g << 8 | r : a << 24 | r << 16 | g << 8 | b;
+										pixelImage.image[location] = pixelImage.isLittle ? a << 24 | b << 16 | g << 8 | r : a << 24 | r << 16 | g << 8 | b;
 									}
 								}
 							}
 						}
 						if(hasHit1 == false) {
-							var v = new pixelimage_algo_HitTri(ax,ay,bx,by,dx,dy,true);
+							var v = new pixelimage_algo_HitTri(ax,ay,bx,by,dx,dy);
 						}
 						var aA = color2 >> 24 & 255;
 						var rA = color2 >> 16 & 255;
@@ -25165,9 +24756,9 @@ pixelimage_triangleGML_gradient_ArrowThickGradient.prototype = $extend(pixelimag
 									}
 									var this9 = i3;
 									var b = this9;
-									var location = pixelShape.useVirtualPos ? (py1 - pixelShape.virtualY) * pixelShape.width + px1 - pixelShape.virtualX | 0 : py1 * pixelShape.width + px1 | 0;
-									if(pixelShape.transparent && a < 254) {
-										var this10 = pixelShape.image[location];
+									var location = pixelImage.useVirtualPos ? (py1 - pixelImage.virtualY) * pixelImage.width + px1 - pixelImage.virtualX | 0 : py1 * pixelImage.width + px1 | 0;
+									if(pixelImage.transparent && a < 254) {
+										var this10 = pixelImage.image[location];
 										var this11 = this10;
 										var old = pixelimage_Endian_isLittleEndian ? (this11 >> 24 & 255) << 24 | (this11 & 255) << 16 | (this11 >> 8 & 255) << 8 | this11 >> 16 & 255 : this11;
 										var rhs = a << 24 | r << 16 | g << 8 | b;
@@ -25193,32 +24784,21 @@ pixelimage_triangleGML_gradient_ArrowThickGradient.prototype = $extend(pixelimag
 										var b3 = 255 * (b1 * a3 + b2 * a2) | 0;
 										var a4 = 255 * (a3 + a2) | 0;
 										var blended = a4 << 24 | r3 << 16 | g3 << 8 | b3;
-										pixelShape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+										pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 									} else {
-										pixelShape.image[location] = pixelShape.isLittle ? a << 24 | b << 16 | g << 8 | r : a << 24 | r << 16 | g << 8 | b;
+										pixelImage.image[location] = pixelImage.isLittle ? a << 24 | b << 16 | g << 8 | r : a << 24 | r << 16 | g << 8 | b;
 									}
 								}
 							}
 						}
 						var v_yIter3;
 						var v_xIter3;
-						var v_ty;
-						var v_tx;
-						var v_t0;
-						var v_sy;
-						var v_sx;
-						var v_s0;
-						var v_A;
 						var ax1 = bx;
 						var ay1 = by;
 						var bx1 = cx;
 						var by1 = cy;
 						var cx1 = dx;
 						var cy1 = dy;
-						var preCalculated = true;
-						if(preCalculated == null) {
-							preCalculated = true;
-						}
 						var adjustWinding = ax1 * by1 - bx1 * ay1 + (bx1 * cy1 - cx1 * by1) + (cx1 * ay1 - ax1 * cy1) > 0;
 						if(!adjustWinding) {
 							var bx_ = bx1;
@@ -25234,70 +24814,61 @@ pixelimage_triangleGML_gradient_ArrowThickGradient.prototype = $extend(pixelimag
 						var v_by = by1;
 						var v_cx = cx1;
 						var v_cy = cy1;
-						var v_preCalculated = preCalculated;
-						if(preCalculated) {
-							v_s0 = v_ay * v_cx - v_ax * v_cy;
-							v_sx = v_cy - v_ay;
-							v_sy = v_ax - v_cx;
-							v_t0 = v_ax * v_by - v_ay * v_bx;
-							v_tx = v_ay - v_by;
-							v_ty = v_bx - v_ax;
-							v_A = -v_by * v_cx + v_ay * (-v_bx + v_cx) + v_ax * (v_by - v_cy) + v_bx * v_cy;
-							var a = v_ax;
-							var b = v_bx;
-							var c = v_cx;
-							if(a > b) {
-								if(a > c) {
-									var ii_min = b > c ? Math.floor(c) : Math.floor(b);
-									var ii_max = Math.ceil(a);
-									var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-									v_xIter3 = this1;
-								} else {
-									var ii_min = Math.floor(b);
-									var ii_max = Math.ceil(c);
-									var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-									v_xIter3 = this1;
-								}
-							} else if(b > c) {
-								var ii_min = a > c ? Math.floor(c) : Math.ceil(a);
-								var ii_max = Math.ceil(b);
+						var v_s0 = ay1 * cx1 - ax1 * cy1;
+						var v_sx = cy1 - ay1;
+						var v_sy = ax1 - cx1;
+						var v_t0 = ax1 * by1 - ay1 * bx1;
+						var v_tx = ay1 - by1;
+						var v_ty = bx1 - ax1;
+						var v_A = -by1 * cx1 + ay1 * (-bx1 + cx1) + ax1 * (by1 - cy1) + bx1 * cy1;
+						if(ax1 > bx1) {
+							if(ax1 > cx1) {
+								var ii_min = bx1 > cx1 ? Math.floor(cx1) : Math.floor(bx1);
+								var ii_max = Math.ceil(ax1);
 								var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
 								v_xIter3 = this1;
 							} else {
-								var ii_min = Math.floor(a);
-								var ii_max = Math.ceil(c);
+								var ii_min = Math.floor(bx1);
+								var ii_max = Math.ceil(cx1);
 								var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
 								v_xIter3 = this1;
 							}
-							var a = v_ay;
-							var b = v_by;
-							var c = v_cy;
-							if(a > b) {
-								if(a > c) {
-									var ii_min = b > c ? Math.floor(c) : Math.floor(b);
-									var ii_max = Math.ceil(a);
-									var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-									v_yIter3 = this1;
-								} else {
-									var ii_min = Math.floor(b);
-									var ii_max = Math.ceil(c);
-									var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-									v_yIter3 = this1;
-								}
-							} else if(b > c) {
-								var ii_min = a > c ? Math.floor(c) : Math.ceil(a);
-								var ii_max = Math.ceil(b);
+						} else if(bx1 > cx1) {
+							var ii_min = ax1 > cx1 ? Math.floor(cx1) : Math.ceil(ax1);
+							var ii_max = Math.ceil(bx1);
+							var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+							v_xIter3 = this1;
+						} else {
+							var ii_min = Math.floor(ax1);
+							var ii_max = Math.ceil(cx1);
+							var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+							v_xIter3 = this1;
+						}
+						if(ay1 > by1) {
+							if(ay1 > cy1) {
+								var ii_min = by1 > cy1 ? Math.floor(cy1) : Math.floor(by1);
+								var ii_max = Math.ceil(ay1);
 								var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
 								v_yIter3 = this1;
 							} else {
-								var ii_min = Math.floor(a);
-								var ii_max = Math.ceil(c);
+								var ii_min = Math.floor(by1);
+								var ii_max = Math.ceil(cy1);
 								var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
 								v_yIter3 = this1;
 							}
+						} else if(by1 > cy1) {
+							var ii_min = ay1 > cy1 ? Math.floor(cy1) : Math.ceil(ay1);
+							var ii_max = Math.ceil(by1);
+							var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+							v_yIter3 = this1;
+						} else {
+							var ii_min = Math.floor(ay1);
+							var ii_max = Math.ceil(cy1);
+							var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+							v_yIter3 = this1;
 						}
 						if(hasHit2 == true) {
-							var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy,true);
+							var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy);
 							hitQuad = v;
 						} else {
 							hitQuad = null;
@@ -25460,9 +25031,9 @@ pixelimage_triangleGML_gradient_ArrowThickGradient.prototype = $extend(pixelimag
 									}
 									var this9 = i3;
 									var b = this9;
-									var location = pixelShape.useVirtualPos ? (py1 - pixelShape.virtualY) * pixelShape.width + px1 - pixelShape.virtualX | 0 : py1 * pixelShape.width + px1 | 0;
-									if(pixelShape.transparent && a < 254) {
-										var this10 = pixelShape.image[location];
+									var location = pixelImage.useVirtualPos ? (py1 - pixelImage.virtualY) * pixelImage.width + px1 - pixelImage.virtualX | 0 : py1 * pixelImage.width + px1 | 0;
+									if(pixelImage.transparent && a < 254) {
+										var this10 = pixelImage.image[location];
 										var this11 = this10;
 										var old = pixelimage_Endian_isLittleEndian ? (this11 >> 24 & 255) << 24 | (this11 & 255) << 16 | (this11 >> 8 & 255) << 8 | this11 >> 16 & 255 : this11;
 										var rhs = a << 24 | r << 16 | g << 8 | b;
@@ -25488,15 +25059,15 @@ pixelimage_triangleGML_gradient_ArrowThickGradient.prototype = $extend(pixelimag
 										var b3 = 255 * (b1 * a3 + b2 * a2) | 0;
 										var a4 = 255 * (a3 + a2) | 0;
 										var blended = a4 << 24 | r3 << 16 | g3 << 8 | b3;
-										pixelShape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+										pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 									} else {
-										pixelShape.image[location] = pixelShape.isLittle ? a << 24 | b << 16 | g << 8 | r : a << 24 | r << 16 | g << 8 | b;
+										pixelImage.image[location] = pixelImage.isLittle ? a << 24 | b << 16 | g << 8 | r : a << 24 | r << 16 | g << 8 | b;
 									}
 								}
 							}
 						}
 						if(hasHit1 == false) {
-							var v = new pixelimage_algo_HitTri(ax,ay,bx,by,dx,dy,true);
+							var v = new pixelimage_algo_HitTri(ax,ay,bx,by,dx,dy);
 						}
 						var aA = color2 >> 24 & 255;
 						var rA = color2 >> 16 & 255;
@@ -25618,9 +25189,9 @@ pixelimage_triangleGML_gradient_ArrowThickGradient.prototype = $extend(pixelimag
 									}
 									var this9 = i3;
 									var b = this9;
-									var location = pixelShape.useVirtualPos ? (py1 - pixelShape.virtualY) * pixelShape.width + px1 - pixelShape.virtualX | 0 : py1 * pixelShape.width + px1 | 0;
-									if(pixelShape.transparent && a < 254) {
-										var this10 = pixelShape.image[location];
+									var location = pixelImage.useVirtualPos ? (py1 - pixelImage.virtualY) * pixelImage.width + px1 - pixelImage.virtualX | 0 : py1 * pixelImage.width + px1 | 0;
+									if(pixelImage.transparent && a < 254) {
+										var this10 = pixelImage.image[location];
 										var this11 = this10;
 										var old = pixelimage_Endian_isLittleEndian ? (this11 >> 24 & 255) << 24 | (this11 & 255) << 16 | (this11 >> 8 & 255) << 8 | this11 >> 16 & 255 : this11;
 										var rhs = a << 24 | r << 16 | g << 8 | b;
@@ -25646,32 +25217,21 @@ pixelimage_triangleGML_gradient_ArrowThickGradient.prototype = $extend(pixelimag
 										var b3 = 255 * (b1 * a3 + b2 * a2) | 0;
 										var a4 = 255 * (a3 + a2) | 0;
 										var blended = a4 << 24 | r3 << 16 | g3 << 8 | b3;
-										pixelShape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+										pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 									} else {
-										pixelShape.image[location] = pixelShape.isLittle ? a << 24 | b << 16 | g << 8 | r : a << 24 | r << 16 | g << 8 | b;
+										pixelImage.image[location] = pixelImage.isLittle ? a << 24 | b << 16 | g << 8 | r : a << 24 | r << 16 | g << 8 | b;
 									}
 								}
 							}
 						}
 						var v_yIter3;
 						var v_xIter3;
-						var v_ty;
-						var v_tx;
-						var v_t0;
-						var v_sy;
-						var v_sx;
-						var v_s0;
-						var v_A;
 						var ax1 = bx;
 						var ay1 = by;
 						var bx1 = cx;
 						var by1 = cy;
 						var cx1 = dx;
 						var cy1 = dy;
-						var preCalculated = true;
-						if(preCalculated == null) {
-							preCalculated = true;
-						}
 						var adjustWinding = ax1 * by1 - bx1 * ay1 + (bx1 * cy1 - cx1 * by1) + (cx1 * ay1 - ax1 * cy1) > 0;
 						if(!adjustWinding) {
 							var bx_ = bx1;
@@ -25687,70 +25247,61 @@ pixelimage_triangleGML_gradient_ArrowThickGradient.prototype = $extend(pixelimag
 						var v_by = by1;
 						var v_cx = cx1;
 						var v_cy = cy1;
-						var v_preCalculated = preCalculated;
-						if(preCalculated) {
-							v_s0 = v_ay * v_cx - v_ax * v_cy;
-							v_sx = v_cy - v_ay;
-							v_sy = v_ax - v_cx;
-							v_t0 = v_ax * v_by - v_ay * v_bx;
-							v_tx = v_ay - v_by;
-							v_ty = v_bx - v_ax;
-							v_A = -v_by * v_cx + v_ay * (-v_bx + v_cx) + v_ax * (v_by - v_cy) + v_bx * v_cy;
-							var a = v_ax;
-							var b = v_bx;
-							var c = v_cx;
-							if(a > b) {
-								if(a > c) {
-									var ii_min = b > c ? Math.floor(c) : Math.floor(b);
-									var ii_max = Math.ceil(a);
-									var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-									v_xIter3 = this1;
-								} else {
-									var ii_min = Math.floor(b);
-									var ii_max = Math.ceil(c);
-									var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-									v_xIter3 = this1;
-								}
-							} else if(b > c) {
-								var ii_min = a > c ? Math.floor(c) : Math.ceil(a);
-								var ii_max = Math.ceil(b);
+						var v_s0 = ay1 * cx1 - ax1 * cy1;
+						var v_sx = cy1 - ay1;
+						var v_sy = ax1 - cx1;
+						var v_t0 = ax1 * by1 - ay1 * bx1;
+						var v_tx = ay1 - by1;
+						var v_ty = bx1 - ax1;
+						var v_A = -by1 * cx1 + ay1 * (-bx1 + cx1) + ax1 * (by1 - cy1) + bx1 * cy1;
+						if(ax1 > bx1) {
+							if(ax1 > cx1) {
+								var ii_min = bx1 > cx1 ? Math.floor(cx1) : Math.floor(bx1);
+								var ii_max = Math.ceil(ax1);
 								var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
 								v_xIter3 = this1;
 							} else {
-								var ii_min = Math.floor(a);
-								var ii_max = Math.ceil(c);
+								var ii_min = Math.floor(bx1);
+								var ii_max = Math.ceil(cx1);
 								var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
 								v_xIter3 = this1;
 							}
-							var a = v_ay;
-							var b = v_by;
-							var c = v_cy;
-							if(a > b) {
-								if(a > c) {
-									var ii_min = b > c ? Math.floor(c) : Math.floor(b);
-									var ii_max = Math.ceil(a);
-									var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-									v_yIter3 = this1;
-								} else {
-									var ii_min = Math.floor(b);
-									var ii_max = Math.ceil(c);
-									var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-									v_yIter3 = this1;
-								}
-							} else if(b > c) {
-								var ii_min = a > c ? Math.floor(c) : Math.ceil(a);
-								var ii_max = Math.ceil(b);
+						} else if(bx1 > cx1) {
+							var ii_min = ax1 > cx1 ? Math.floor(cx1) : Math.ceil(ax1);
+							var ii_max = Math.ceil(bx1);
+							var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+							v_xIter3 = this1;
+						} else {
+							var ii_min = Math.floor(ax1);
+							var ii_max = Math.ceil(cx1);
+							var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+							v_xIter3 = this1;
+						}
+						if(ay1 > by1) {
+							if(ay1 > cy1) {
+								var ii_min = by1 > cy1 ? Math.floor(cy1) : Math.floor(by1);
+								var ii_max = Math.ceil(ay1);
 								var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
 								v_yIter3 = this1;
 							} else {
-								var ii_min = Math.floor(a);
-								var ii_max = Math.ceil(c);
+								var ii_min = Math.floor(by1);
+								var ii_max = Math.ceil(cy1);
 								var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
 								v_yIter3 = this1;
 							}
+						} else if(by1 > cy1) {
+							var ii_min = ay1 > cy1 ? Math.floor(cy1) : Math.ceil(ay1);
+							var ii_max = Math.ceil(by1);
+							var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+							v_yIter3 = this1;
+						} else {
+							var ii_min = Math.floor(ay1);
+							var ii_max = Math.ceil(cy1);
+							var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+							v_yIter3 = this1;
 						}
 						if(hasHit2 == true) {
-							var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy,true);
+							var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy);
 							hitQuad = v;
 						} else {
 							hitQuad = null;
@@ -25913,9 +25464,9 @@ pixelimage_triangleGML_gradient_ArrowThickGradient.prototype = $extend(pixelimag
 								}
 								var this9 = i3;
 								var b = this9;
-								var location = pixelShape.useVirtualPos ? (py1 - pixelShape.virtualY) * pixelShape.width + px1 - pixelShape.virtualX | 0 : py1 * pixelShape.width + px1 | 0;
-								if(pixelShape.transparent && a < 254) {
-									var this10 = pixelShape.image[location];
+								var location = pixelImage.useVirtualPos ? (py1 - pixelImage.virtualY) * pixelImage.width + px1 - pixelImage.virtualX | 0 : py1 * pixelImage.width + px1 | 0;
+								if(pixelImage.transparent && a < 254) {
+									var this10 = pixelImage.image[location];
 									var this11 = this10;
 									var old = pixelimage_Endian_isLittleEndian ? (this11 >> 24 & 255) << 24 | (this11 & 255) << 16 | (this11 >> 8 & 255) << 8 | this11 >> 16 & 255 : this11;
 									var rhs = a << 24 | r << 16 | g << 8 | b;
@@ -25941,15 +25492,15 @@ pixelimage_triangleGML_gradient_ArrowThickGradient.prototype = $extend(pixelimag
 									var b3 = 255 * (b1 * a3 + b2 * a2) | 0;
 									var a4 = 255 * (a3 + a2) | 0;
 									var blended = a4 << 24 | r3 << 16 | g3 << 8 | b3;
-									pixelShape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+									pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 								} else {
-									pixelShape.image[location] = pixelShape.isLittle ? a << 24 | b << 16 | g << 8 | r : a << 24 | r << 16 | g << 8 | b;
+									pixelImage.image[location] = pixelImage.isLittle ? a << 24 | b << 16 | g << 8 | r : a << 24 | r << 16 | g << 8 | b;
 								}
 							}
 						}
 					}
 					if(hasHit1 == false) {
-						var v = new pixelimage_algo_HitTri(ax,ay,bx,by,dx,dy,true);
+						var v = new pixelimage_algo_HitTri(ax,ay,bx,by,dx,dy);
 					}
 					var aA = color2 >> 24 & 255;
 					var rA = color2 >> 16 & 255;
@@ -26071,9 +25622,9 @@ pixelimage_triangleGML_gradient_ArrowThickGradient.prototype = $extend(pixelimag
 								}
 								var this9 = i3;
 								var b = this9;
-								var location = pixelShape.useVirtualPos ? (py1 - pixelShape.virtualY) * pixelShape.width + px1 - pixelShape.virtualX | 0 : py1 * pixelShape.width + px1 | 0;
-								if(pixelShape.transparent && a < 254) {
-									var this10 = pixelShape.image[location];
+								var location = pixelImage.useVirtualPos ? (py1 - pixelImage.virtualY) * pixelImage.width + px1 - pixelImage.virtualX | 0 : py1 * pixelImage.width + px1 | 0;
+								if(pixelImage.transparent && a < 254) {
+									var this10 = pixelImage.image[location];
 									var this11 = this10;
 									var old = pixelimage_Endian_isLittleEndian ? (this11 >> 24 & 255) << 24 | (this11 & 255) << 16 | (this11 >> 8 & 255) << 8 | this11 >> 16 & 255 : this11;
 									var rhs = a << 24 | r << 16 | g << 8 | b;
@@ -26099,32 +25650,21 @@ pixelimage_triangleGML_gradient_ArrowThickGradient.prototype = $extend(pixelimag
 									var b3 = 255 * (b1 * a3 + b2 * a2) | 0;
 									var a4 = 255 * (a3 + a2) | 0;
 									var blended = a4 << 24 | r3 << 16 | g3 << 8 | b3;
-									pixelShape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+									pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 								} else {
-									pixelShape.image[location] = pixelShape.isLittle ? a << 24 | b << 16 | g << 8 | r : a << 24 | r << 16 | g << 8 | b;
+									pixelImage.image[location] = pixelImage.isLittle ? a << 24 | b << 16 | g << 8 | r : a << 24 | r << 16 | g << 8 | b;
 								}
 							}
 						}
 					}
 					var v_yIter3;
 					var v_xIter3;
-					var v_ty;
-					var v_tx;
-					var v_t0;
-					var v_sy;
-					var v_sx;
-					var v_s0;
-					var v_A;
 					var ax1 = bx;
 					var ay1 = by;
 					var bx1 = cx;
 					var by1 = cy;
 					var cx1 = dx;
 					var cy1 = dy;
-					var preCalculated = true;
-					if(preCalculated == null) {
-						preCalculated = true;
-					}
 					var adjustWinding = ax1 * by1 - bx1 * ay1 + (bx1 * cy1 - cx1 * by1) + (cx1 * ay1 - ax1 * cy1) > 0;
 					if(!adjustWinding) {
 						var bx_ = bx1;
@@ -26140,70 +25680,61 @@ pixelimage_triangleGML_gradient_ArrowThickGradient.prototype = $extend(pixelimag
 					var v_by = by1;
 					var v_cx = cx1;
 					var v_cy = cy1;
-					var v_preCalculated = preCalculated;
-					if(preCalculated) {
-						v_s0 = v_ay * v_cx - v_ax * v_cy;
-						v_sx = v_cy - v_ay;
-						v_sy = v_ax - v_cx;
-						v_t0 = v_ax * v_by - v_ay * v_bx;
-						v_tx = v_ay - v_by;
-						v_ty = v_bx - v_ax;
-						v_A = -v_by * v_cx + v_ay * (-v_bx + v_cx) + v_ax * (v_by - v_cy) + v_bx * v_cy;
-						var a = v_ax;
-						var b = v_bx;
-						var c = v_cx;
-						if(a > b) {
-							if(a > c) {
-								var ii_min = b > c ? Math.floor(c) : Math.floor(b);
-								var ii_max = Math.ceil(a);
-								var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-								v_xIter3 = this1;
-							} else {
-								var ii_min = Math.floor(b);
-								var ii_max = Math.ceil(c);
-								var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-								v_xIter3 = this1;
-							}
-						} else if(b > c) {
-							var ii_min = a > c ? Math.floor(c) : Math.ceil(a);
-							var ii_max = Math.ceil(b);
+					var v_s0 = ay1 * cx1 - ax1 * cy1;
+					var v_sx = cy1 - ay1;
+					var v_sy = ax1 - cx1;
+					var v_t0 = ax1 * by1 - ay1 * bx1;
+					var v_tx = ay1 - by1;
+					var v_ty = bx1 - ax1;
+					var v_A = -by1 * cx1 + ay1 * (-bx1 + cx1) + ax1 * (by1 - cy1) + bx1 * cy1;
+					if(ax1 > bx1) {
+						if(ax1 > cx1) {
+							var ii_min = bx1 > cx1 ? Math.floor(cx1) : Math.floor(bx1);
+							var ii_max = Math.ceil(ax1);
 							var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
 							v_xIter3 = this1;
 						} else {
-							var ii_min = Math.floor(a);
-							var ii_max = Math.ceil(c);
+							var ii_min = Math.floor(bx1);
+							var ii_max = Math.ceil(cx1);
 							var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
 							v_xIter3 = this1;
 						}
-						var a = v_ay;
-						var b = v_by;
-						var c = v_cy;
-						if(a > b) {
-							if(a > c) {
-								var ii_min = b > c ? Math.floor(c) : Math.floor(b);
-								var ii_max = Math.ceil(a);
-								var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-								v_yIter3 = this1;
-							} else {
-								var ii_min = Math.floor(b);
-								var ii_max = Math.ceil(c);
-								var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-								v_yIter3 = this1;
-							}
-						} else if(b > c) {
-							var ii_min = a > c ? Math.floor(c) : Math.ceil(a);
-							var ii_max = Math.ceil(b);
+					} else if(bx1 > cx1) {
+						var ii_min = ax1 > cx1 ? Math.floor(cx1) : Math.ceil(ax1);
+						var ii_max = Math.ceil(bx1);
+						var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+						v_xIter3 = this1;
+					} else {
+						var ii_min = Math.floor(ax1);
+						var ii_max = Math.ceil(cx1);
+						var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+						v_xIter3 = this1;
+					}
+					if(ay1 > by1) {
+						if(ay1 > cy1) {
+							var ii_min = by1 > cy1 ? Math.floor(cy1) : Math.floor(by1);
+							var ii_max = Math.ceil(ay1);
 							var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
 							v_yIter3 = this1;
 						} else {
-							var ii_min = Math.floor(a);
-							var ii_max = Math.ceil(c);
+							var ii_min = Math.floor(by1);
+							var ii_max = Math.ceil(cy1);
 							var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
 							v_yIter3 = this1;
 						}
+					} else if(by1 > cy1) {
+						var ii_min = ay1 > cy1 ? Math.floor(cy1) : Math.ceil(ay1);
+						var ii_max = Math.ceil(by1);
+						var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+						v_yIter3 = this1;
+					} else {
+						var ii_min = Math.floor(ay1);
+						var ii_max = Math.ceil(cy1);
+						var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+						v_yIter3 = this1;
 					}
 					if(hasHit2 == true) {
-						var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy,true);
+						var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy);
 						hitQuad = v;
 					} else {
 						hitQuad = null;
@@ -26349,9 +25880,9 @@ pixelimage_triangleGML_gradient_ArrowThickGradient.prototype = $extend(pixelimag
 							}
 							var this9 = i3;
 							var b = this9;
-							var location = pixelShape.useVirtualPos ? (py - pixelShape.virtualY) * pixelShape.width + px - pixelShape.virtualX | 0 : py * pixelShape.width + px | 0;
-							if(pixelShape.transparent && a < 254) {
-								var this10 = pixelShape.image[location];
+							var location = pixelImage.useVirtualPos ? (py - pixelImage.virtualY) * pixelImage.width + px - pixelImage.virtualX | 0 : py * pixelImage.width + px | 0;
+							if(pixelImage.transparent && a < 254) {
+								var this10 = pixelImage.image[location];
 								var this11 = this10;
 								var old = pixelimage_Endian_isLittleEndian ? (this11 >> 24 & 255) << 24 | (this11 & 255) << 16 | (this11 >> 8 & 255) << 8 | this11 >> 16 & 255 : this11;
 								var rhs = a << 24 | r << 16 | g << 8 | b;
@@ -26377,16 +25908,16 @@ pixelimage_triangleGML_gradient_ArrowThickGradient.prototype = $extend(pixelimag
 								var b3 = 255 * (b1 * a3 + b2 * a2) | 0;
 								var a4 = 255 * (a3 + a2) | 0;
 								var blended = a4 << 24 | r3 << 16 | g3 << 8 | b3;
-								pixelShape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+								pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 							} else {
-								pixelShape.image[location] = pixelShape.isLittle ? a << 24 | b << 16 | g << 8 | r : a << 24 | r << 16 | g << 8 | b;
+								pixelImage.image[location] = pixelImage.isLittle ? a << 24 | b << 16 | g << 8 | r : a << 24 | r << 16 | g << 8 | b;
 							}
 						}
 					}
 				}
 				var hitTri;
 				if(hasHit1 == false) {
-					var v = new pixelimage_algo_HitTri(qx,qy,bx,by,cx,cy,true);
+					var v = new pixelimage_algo_HitTri(qx,qy,bx,by,cx,cy);
 					hitTri = v;
 				} else {
 					hitTri = null;
@@ -26588,9 +26119,9 @@ pixelimage_triangleGML_gradient_ArrowThickGradient.prototype = $extend(pixelimag
 						}
 						var this9 = i3;
 						var b = this9;
-						var location = pixelShape.useVirtualPos ? (py1 - pixelShape.virtualY) * pixelShape.width + px1 - pixelShape.virtualX | 0 : py1 * pixelShape.width + px1 | 0;
-						if(pixelShape.transparent && a < 254) {
-							var this10 = pixelShape.image[location];
+						var location = pixelImage.useVirtualPos ? (py1 - pixelImage.virtualY) * pixelImage.width + px1 - pixelImage.virtualX | 0 : py1 * pixelImage.width + px1 | 0;
+						if(pixelImage.transparent && a < 254) {
+							var this10 = pixelImage.image[location];
 							var this11 = this10;
 							var old = pixelimage_Endian_isLittleEndian ? (this11 >> 24 & 255) << 24 | (this11 & 255) << 16 | (this11 >> 8 & 255) << 8 | this11 >> 16 & 255 : this11;
 							var rhs = a << 24 | r << 16 | g << 8 | b;
@@ -26616,15 +26147,15 @@ pixelimage_triangleGML_gradient_ArrowThickGradient.prototype = $extend(pixelimag
 							var b3 = 255 * (b1 * a3 + b2 * a2) | 0;
 							var a4 = 255 * (a3 + a2) | 0;
 							var blended = a4 << 24 | r3 << 16 | g3 << 8 | b3;
-							pixelShape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+							pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 						} else {
-							pixelShape.image[location] = pixelShape.isLittle ? a << 24 | b << 16 | g << 8 | r : a << 24 | r << 16 | g << 8 | b;
+							pixelImage.image[location] = pixelImage.isLittle ? a << 24 | b << 16 | g << 8 | r : a << 24 | r << 16 | g << 8 | b;
 						}
 					}
 				}
 			}
 			if(hasHit1 == false) {
-				var v = new pixelimage_algo_HitTri(ax,ay,bx,by,dx,dy,true);
+				var v = new pixelimage_algo_HitTri(ax,ay,bx,by,dx,dy);
 			}
 			var aA = color2 >> 24 & 255;
 			var rA = color2 >> 16 & 255;
@@ -26746,9 +26277,9 @@ pixelimage_triangleGML_gradient_ArrowThickGradient.prototype = $extend(pixelimag
 						}
 						var this9 = i3;
 						var b = this9;
-						var location = pixelShape.useVirtualPos ? (py1 - pixelShape.virtualY) * pixelShape.width + px1 - pixelShape.virtualX | 0 : py1 * pixelShape.width + px1 | 0;
-						if(pixelShape.transparent && a < 254) {
-							var this10 = pixelShape.image[location];
+						var location = pixelImage.useVirtualPos ? (py1 - pixelImage.virtualY) * pixelImage.width + px1 - pixelImage.virtualX | 0 : py1 * pixelImage.width + px1 | 0;
+						if(pixelImage.transparent && a < 254) {
+							var this10 = pixelImage.image[location];
 							var this11 = this10;
 							var old = pixelimage_Endian_isLittleEndian ? (this11 >> 24 & 255) << 24 | (this11 & 255) << 16 | (this11 >> 8 & 255) << 8 | this11 >> 16 & 255 : this11;
 							var rhs = a << 24 | r << 16 | g << 8 | b;
@@ -26774,32 +26305,21 @@ pixelimage_triangleGML_gradient_ArrowThickGradient.prototype = $extend(pixelimag
 							var b3 = 255 * (b1 * a3 + b2 * a2) | 0;
 							var a4 = 255 * (a3 + a2) | 0;
 							var blended = a4 << 24 | r3 << 16 | g3 << 8 | b3;
-							pixelShape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+							pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 						} else {
-							pixelShape.image[location] = pixelShape.isLittle ? a << 24 | b << 16 | g << 8 | r : a << 24 | r << 16 | g << 8 | b;
+							pixelImage.image[location] = pixelImage.isLittle ? a << 24 | b << 16 | g << 8 | r : a << 24 | r << 16 | g << 8 | b;
 						}
 					}
 				}
 			}
 			var v_yIter3;
 			var v_xIter3;
-			var v_ty;
-			var v_tx;
-			var v_t0;
-			var v_sy;
-			var v_sx;
-			var v_s0;
-			var v_A;
 			var ax1 = bx;
 			var ay1 = by;
 			var bx1 = cx;
 			var by1 = cy;
 			var cx1 = dx;
 			var cy1 = dy;
-			var preCalculated = true;
-			if(preCalculated == null) {
-				preCalculated = true;
-			}
 			var adjustWinding = ax1 * by1 - bx1 * ay1 + (bx1 * cy1 - cx1 * by1) + (cx1 * ay1 - ax1 * cy1) > 0;
 			if(!adjustWinding) {
 				var bx_ = bx1;
@@ -26815,71 +26335,62 @@ pixelimage_triangleGML_gradient_ArrowThickGradient.prototype = $extend(pixelimag
 			var v_by = by1;
 			var v_cx = cx1;
 			var v_cy = cy1;
-			var v_preCalculated = preCalculated;
-			if(preCalculated) {
-				v_s0 = v_ay * v_cx - v_ax * v_cy;
-				v_sx = v_cy - v_ay;
-				v_sy = v_ax - v_cx;
-				v_t0 = v_ax * v_by - v_ay * v_bx;
-				v_tx = v_ay - v_by;
-				v_ty = v_bx - v_ax;
-				v_A = -v_by * v_cx + v_ay * (-v_bx + v_cx) + v_ax * (v_by - v_cy) + v_bx * v_cy;
-				var a = v_ax;
-				var b = v_bx;
-				var c = v_cx;
-				if(a > b) {
-					if(a > c) {
-						var ii_min = b > c ? Math.floor(c) : Math.floor(b);
-						var ii_max = Math.ceil(a);
-						var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-						v_xIter3 = this1;
-					} else {
-						var ii_min = Math.floor(b);
-						var ii_max = Math.ceil(c);
-						var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-						v_xIter3 = this1;
-					}
-				} else if(b > c) {
-					var ii_min = a > c ? Math.floor(c) : Math.ceil(a);
-					var ii_max = Math.ceil(b);
+			var v_s0 = ay1 * cx1 - ax1 * cy1;
+			var v_sx = cy1 - ay1;
+			var v_sy = ax1 - cx1;
+			var v_t0 = ax1 * by1 - ay1 * bx1;
+			var v_tx = ay1 - by1;
+			var v_ty = bx1 - ax1;
+			var v_A = -by1 * cx1 + ay1 * (-bx1 + cx1) + ax1 * (by1 - cy1) + bx1 * cy1;
+			if(ax1 > bx1) {
+				if(ax1 > cx1) {
+					var ii_min = bx1 > cx1 ? Math.floor(cx1) : Math.floor(bx1);
+					var ii_max = Math.ceil(ax1);
 					var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
 					v_xIter3 = this1;
 				} else {
-					var ii_min = Math.floor(a);
-					var ii_max = Math.ceil(c);
+					var ii_min = Math.floor(bx1);
+					var ii_max = Math.ceil(cx1);
 					var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
 					v_xIter3 = this1;
 				}
-				var a = v_ay;
-				var b = v_by;
-				var c = v_cy;
-				if(a > b) {
-					if(a > c) {
-						var ii_min = b > c ? Math.floor(c) : Math.floor(b);
-						var ii_max = Math.ceil(a);
-						var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-						v_yIter3 = this1;
-					} else {
-						var ii_min = Math.floor(b);
-						var ii_max = Math.ceil(c);
-						var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-						v_yIter3 = this1;
-					}
-				} else if(b > c) {
-					var ii_min = a > c ? Math.floor(c) : Math.ceil(a);
-					var ii_max = Math.ceil(b);
+			} else if(bx1 > cx1) {
+				var ii_min = ax1 > cx1 ? Math.floor(cx1) : Math.ceil(ax1);
+				var ii_max = Math.ceil(bx1);
+				var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+				v_xIter3 = this1;
+			} else {
+				var ii_min = Math.floor(ax1);
+				var ii_max = Math.ceil(cx1);
+				var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+				v_xIter3 = this1;
+			}
+			if(ay1 > by1) {
+				if(ay1 > cy1) {
+					var ii_min = by1 > cy1 ? Math.floor(cy1) : Math.floor(by1);
+					var ii_max = Math.ceil(ay1);
 					var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
 					v_yIter3 = this1;
 				} else {
-					var ii_min = Math.floor(a);
-					var ii_max = Math.ceil(c);
+					var ii_min = Math.floor(by1);
+					var ii_max = Math.ceil(cy1);
 					var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
 					v_yIter3 = this1;
 				}
+			} else if(by1 > cy1) {
+				var ii_min = ay1 > cy1 ? Math.floor(cy1) : Math.ceil(ay1);
+				var ii_max = Math.ceil(by1);
+				var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+				v_yIter3 = this1;
+			} else {
+				var ii_min = Math.floor(ay1);
+				var ii_max = Math.ceil(cy1);
+				var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+				v_yIter3 = this1;
 			}
 			var hitQuad;
 			if(hasHit2 == true) {
-				var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy,true);
+				var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy);
 				hitQuad = v;
 			} else {
 				hitQuad = null;
@@ -27033,9 +26544,9 @@ pixelimage_triangleGML_gradient_ArrowThickGradient.prototype = $extend(pixelimag
 						}
 						var this9 = i3;
 						var b = this9;
-						var location = pixelShape.useVirtualPos ? (py1 - pixelShape.virtualY) * pixelShape.width + px1 - pixelShape.virtualX | 0 : py1 * pixelShape.width + px1 | 0;
-						if(pixelShape.transparent && a < 254) {
-							var this10 = pixelShape.image[location];
+						var location = pixelImage.useVirtualPos ? (py1 - pixelImage.virtualY) * pixelImage.width + px1 - pixelImage.virtualX | 0 : py1 * pixelImage.width + px1 | 0;
+						if(pixelImage.transparent && a < 254) {
+							var this10 = pixelImage.image[location];
 							var this11 = this10;
 							var old = pixelimage_Endian_isLittleEndian ? (this11 >> 24 & 255) << 24 | (this11 & 255) << 16 | (this11 >> 8 & 255) << 8 | this11 >> 16 & 255 : this11;
 							var rhs = a << 24 | r << 16 | g << 8 | b;
@@ -27061,16 +26572,16 @@ pixelimage_triangleGML_gradient_ArrowThickGradient.prototype = $extend(pixelimag
 							var b3 = 255 * (b1 * a3 + b2 * a2) | 0;
 							var a4 = 255 * (a3 + a2) | 0;
 							var blended = a4 << 24 | r3 << 16 | g3 << 8 | b3;
-							pixelShape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+							pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 						} else {
-							pixelShape.image[location] = pixelShape.isLittle ? a << 24 | b << 16 | g << 8 | r : a << 24 | r << 16 | g << 8 | b;
+							pixelImage.image[location] = pixelImage.isLittle ? a << 24 | b << 16 | g << 8 | r : a << 24 | r << 16 | g << 8 | b;
 						}
 					}
 				}
 			}
 			var hitTriTop;
 			if(hasHit1 == false) {
-				var v = new pixelimage_algo_HitTri(qx,qy,bx,by,cx,cy,true);
+				var v = new pixelimage_algo_HitTri(qx,qy,bx,by,cx,cy);
 				hitTriTop = v;
 			} else {
 				hitTriTop = null;
@@ -27199,9 +26710,9 @@ pixelimage_triangleGML_gradient_ArrowThickGradient.prototype = $extend(pixelimag
 						}
 						var this9 = i3;
 						var b = this9;
-						var location = pixelShape.useVirtualPos ? (py1 - pixelShape.virtualY) * pixelShape.width + px1 - pixelShape.virtualX | 0 : py1 * pixelShape.width + px1 | 0;
-						if(pixelShape.transparent && a < 254) {
-							var this10 = pixelShape.image[location];
+						var location = pixelImage.useVirtualPos ? (py1 - pixelImage.virtualY) * pixelImage.width + px1 - pixelImage.virtualX | 0 : py1 * pixelImage.width + px1 | 0;
+						if(pixelImage.transparent && a < 254) {
+							var this10 = pixelImage.image[location];
 							var this11 = this10;
 							var old = pixelimage_Endian_isLittleEndian ? (this11 >> 24 & 255) << 24 | (this11 & 255) << 16 | (this11 >> 8 & 255) << 8 | this11 >> 16 & 255 : this11;
 							var rhs = a << 24 | r << 16 | g << 8 | b;
@@ -27227,16 +26738,16 @@ pixelimage_triangleGML_gradient_ArrowThickGradient.prototype = $extend(pixelimag
 							var b3 = 255 * (b1 * a3 + b2 * a2) | 0;
 							var a4 = 255 * (a3 + a2) | 0;
 							var blended = a4 << 24 | r3 << 16 | g3 << 8 | b3;
-							pixelShape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+							pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 						} else {
-							pixelShape.image[location] = pixelShape.isLittle ? a << 24 | b << 16 | g << 8 | r : a << 24 | r << 16 | g << 8 | b;
+							pixelImage.image[location] = pixelImage.isLittle ? a << 24 | b << 16 | g << 8 | r : a << 24 | r << 16 | g << 8 | b;
 						}
 					}
 				}
 			}
 			var hitTriBottom;
 			if(hasHit1 == false) {
-				var v = new pixelimage_algo_HitTri(px,py,ax,ay,dx,dy,true);
+				var v = new pixelimage_algo_HitTri(px,py,ax,ay,dx,dy);
 				hitTriBottom = v;
 			} else {
 				hitTriBottom = null;
@@ -27435,9 +26946,9 @@ pixelimage_triangleGML_gradient_ArrowThickGradient.prototype = $extend(pixelimag
 						}
 						var this9 = i3;
 						var b = this9;
-						var location = pixelShape.useVirtualPos ? (py1 - pixelShape.virtualY) * pixelShape.width + px1 - pixelShape.virtualX | 0 : py1 * pixelShape.width + px1 | 0;
-						if(pixelShape.transparent && a < 254) {
-							var this10 = pixelShape.image[location];
+						var location = pixelImage.useVirtualPos ? (py1 - pixelImage.virtualY) * pixelImage.width + px1 - pixelImage.virtualX | 0 : py1 * pixelImage.width + px1 | 0;
+						if(pixelImage.transparent && a < 254) {
+							var this10 = pixelImage.image[location];
 							var this11 = this10;
 							var old = pixelimage_Endian_isLittleEndian ? (this11 >> 24 & 255) << 24 | (this11 & 255) << 16 | (this11 >> 8 & 255) << 8 | this11 >> 16 & 255 : this11;
 							var rhs = a << 24 | r << 16 | g << 8 | b;
@@ -27463,15 +26974,15 @@ pixelimage_triangleGML_gradient_ArrowThickGradient.prototype = $extend(pixelimag
 							var b3 = 255 * (b1 * a3 + b2 * a2) | 0;
 							var a4 = 255 * (a3 + a2) | 0;
 							var blended = a4 << 24 | r3 << 16 | g3 << 8 | b3;
-							pixelShape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+							pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 						} else {
-							pixelShape.image[location] = pixelShape.isLittle ? a << 24 | b << 16 | g << 8 | r : a << 24 | r << 16 | g << 8 | b;
+							pixelImage.image[location] = pixelImage.isLittle ? a << 24 | b << 16 | g << 8 | r : a << 24 | r << 16 | g << 8 | b;
 						}
 					}
 				}
 			}
 			if(hasHit1 == false) {
-				var v = new pixelimage_algo_HitTri(ax,ay,bx,by,dx,dy,true);
+				var v = new pixelimage_algo_HitTri(ax,ay,bx,by,dx,dy);
 			}
 			var aA = color2 >> 24 & 255;
 			var rA = color2 >> 16 & 255;
@@ -27593,9 +27104,9 @@ pixelimage_triangleGML_gradient_ArrowThickGradient.prototype = $extend(pixelimag
 						}
 						var this9 = i3;
 						var b = this9;
-						var location = pixelShape.useVirtualPos ? (py1 - pixelShape.virtualY) * pixelShape.width + px1 - pixelShape.virtualX | 0 : py1 * pixelShape.width + px1 | 0;
-						if(pixelShape.transparent && a < 254) {
-							var this10 = pixelShape.image[location];
+						var location = pixelImage.useVirtualPos ? (py1 - pixelImage.virtualY) * pixelImage.width + px1 - pixelImage.virtualX | 0 : py1 * pixelImage.width + px1 | 0;
+						if(pixelImage.transparent && a < 254) {
+							var this10 = pixelImage.image[location];
 							var this11 = this10;
 							var old = pixelimage_Endian_isLittleEndian ? (this11 >> 24 & 255) << 24 | (this11 & 255) << 16 | (this11 >> 8 & 255) << 8 | this11 >> 16 & 255 : this11;
 							var rhs = a << 24 | r << 16 | g << 8 | b;
@@ -27621,32 +27132,21 @@ pixelimage_triangleGML_gradient_ArrowThickGradient.prototype = $extend(pixelimag
 							var b3 = 255 * (b1 * a3 + b2 * a2) | 0;
 							var a4 = 255 * (a3 + a2) | 0;
 							var blended = a4 << 24 | r3 << 16 | g3 << 8 | b3;
-							pixelShape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+							pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 						} else {
-							pixelShape.image[location] = pixelShape.isLittle ? a << 24 | b << 16 | g << 8 | r : a << 24 | r << 16 | g << 8 | b;
+							pixelImage.image[location] = pixelImage.isLittle ? a << 24 | b << 16 | g << 8 | r : a << 24 | r << 16 | g << 8 | b;
 						}
 					}
 				}
 			}
 			var v_yIter3;
 			var v_xIter3;
-			var v_ty;
-			var v_tx;
-			var v_t0;
-			var v_sy;
-			var v_sx;
-			var v_s0;
-			var v_A;
 			var ax1 = bx;
 			var ay1 = by;
 			var bx1 = cx;
 			var by1 = cy;
 			var cx1 = dx;
 			var cy1 = dy;
-			var preCalculated = true;
-			if(preCalculated == null) {
-				preCalculated = true;
-			}
 			var adjustWinding = ax1 * by1 - bx1 * ay1 + (bx1 * cy1 - cx1 * by1) + (cx1 * ay1 - ax1 * cy1) > 0;
 			if(!adjustWinding) {
 				var bx_ = bx1;
@@ -27662,71 +27162,62 @@ pixelimage_triangleGML_gradient_ArrowThickGradient.prototype = $extend(pixelimag
 			var v_by = by1;
 			var v_cx = cx1;
 			var v_cy = cy1;
-			var v_preCalculated = preCalculated;
-			if(preCalculated) {
-				v_s0 = v_ay * v_cx - v_ax * v_cy;
-				v_sx = v_cy - v_ay;
-				v_sy = v_ax - v_cx;
-				v_t0 = v_ax * v_by - v_ay * v_bx;
-				v_tx = v_ay - v_by;
-				v_ty = v_bx - v_ax;
-				v_A = -v_by * v_cx + v_ay * (-v_bx + v_cx) + v_ax * (v_by - v_cy) + v_bx * v_cy;
-				var a = v_ax;
-				var b = v_bx;
-				var c = v_cx;
-				if(a > b) {
-					if(a > c) {
-						var ii_min = b > c ? Math.floor(c) : Math.floor(b);
-						var ii_max = Math.ceil(a);
-						var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-						v_xIter3 = this1;
-					} else {
-						var ii_min = Math.floor(b);
-						var ii_max = Math.ceil(c);
-						var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-						v_xIter3 = this1;
-					}
-				} else if(b > c) {
-					var ii_min = a > c ? Math.floor(c) : Math.ceil(a);
-					var ii_max = Math.ceil(b);
+			var v_s0 = ay1 * cx1 - ax1 * cy1;
+			var v_sx = cy1 - ay1;
+			var v_sy = ax1 - cx1;
+			var v_t0 = ax1 * by1 - ay1 * bx1;
+			var v_tx = ay1 - by1;
+			var v_ty = bx1 - ax1;
+			var v_A = -by1 * cx1 + ay1 * (-bx1 + cx1) + ax1 * (by1 - cy1) + bx1 * cy1;
+			if(ax1 > bx1) {
+				if(ax1 > cx1) {
+					var ii_min = bx1 > cx1 ? Math.floor(cx1) : Math.floor(bx1);
+					var ii_max = Math.ceil(ax1);
 					var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
 					v_xIter3 = this1;
 				} else {
-					var ii_min = Math.floor(a);
-					var ii_max = Math.ceil(c);
+					var ii_min = Math.floor(bx1);
+					var ii_max = Math.ceil(cx1);
 					var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
 					v_xIter3 = this1;
 				}
-				var a = v_ay;
-				var b = v_by;
-				var c = v_cy;
-				if(a > b) {
-					if(a > c) {
-						var ii_min = b > c ? Math.floor(c) : Math.floor(b);
-						var ii_max = Math.ceil(a);
-						var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-						v_yIter3 = this1;
-					} else {
-						var ii_min = Math.floor(b);
-						var ii_max = Math.ceil(c);
-						var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-						v_yIter3 = this1;
-					}
-				} else if(b > c) {
-					var ii_min = a > c ? Math.floor(c) : Math.ceil(a);
-					var ii_max = Math.ceil(b);
+			} else if(bx1 > cx1) {
+				var ii_min = ax1 > cx1 ? Math.floor(cx1) : Math.ceil(ax1);
+				var ii_max = Math.ceil(bx1);
+				var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+				v_xIter3 = this1;
+			} else {
+				var ii_min = Math.floor(ax1);
+				var ii_max = Math.ceil(cx1);
+				var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+				v_xIter3 = this1;
+			}
+			if(ay1 > by1) {
+				if(ay1 > cy1) {
+					var ii_min = by1 > cy1 ? Math.floor(cy1) : Math.floor(by1);
+					var ii_max = Math.ceil(ay1);
 					var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
 					v_yIter3 = this1;
 				} else {
-					var ii_min = Math.floor(a);
-					var ii_max = Math.ceil(c);
+					var ii_min = Math.floor(by1);
+					var ii_max = Math.ceil(cy1);
 					var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
 					v_yIter3 = this1;
 				}
+			} else if(by1 > cy1) {
+				var ii_min = ay1 > cy1 ? Math.floor(cy1) : Math.ceil(ay1);
+				var ii_max = Math.ceil(by1);
+				var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+				v_yIter3 = this1;
+			} else {
+				var ii_min = Math.floor(ay1);
+				var ii_max = Math.ceil(cy1);
+				var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+				v_yIter3 = this1;
 			}
 			var hitQuad;
 			if(hasHit2 == true) {
-				var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy,true);
+				var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy);
 				hitQuad = v;
 			} else {
 				hitQuad = null;
@@ -27880,9 +27371,9 @@ pixelimage_triangleGML_gradient_ArrowThickGradient.prototype = $extend(pixelimag
 						}
 						var this9 = i3;
 						var b = this9;
-						var location = pixelShape.useVirtualPos ? (py1 - pixelShape.virtualY) * pixelShape.width + px1 - pixelShape.virtualX | 0 : py1 * pixelShape.width + px1 | 0;
-						if(pixelShape.transparent && a < 254) {
-							var this10 = pixelShape.image[location];
+						var location = pixelImage.useVirtualPos ? (py1 - pixelImage.virtualY) * pixelImage.width + px1 - pixelImage.virtualX | 0 : py1 * pixelImage.width + px1 | 0;
+						if(pixelImage.transparent && a < 254) {
+							var this10 = pixelImage.image[location];
 							var this11 = this10;
 							var old = pixelimage_Endian_isLittleEndian ? (this11 >> 24 & 255) << 24 | (this11 & 255) << 16 | (this11 >> 8 & 255) << 8 | this11 >> 16 & 255 : this11;
 							var rhs = a << 24 | r << 16 | g << 8 | b;
@@ -27908,16 +27399,16 @@ pixelimage_triangleGML_gradient_ArrowThickGradient.prototype = $extend(pixelimag
 							var b3 = 255 * (b1 * a3 + b2 * a2) | 0;
 							var a4 = 255 * (a3 + a2) | 0;
 							var blended = a4 << 24 | r3 << 16 | g3 << 8 | b3;
-							pixelShape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+							pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 						} else {
-							pixelShape.image[location] = pixelShape.isLittle ? a << 24 | b << 16 | g << 8 | r : a << 24 | r << 16 | g << 8 | b;
+							pixelImage.image[location] = pixelImage.isLittle ? a << 24 | b << 16 | g << 8 | r : a << 24 | r << 16 | g << 8 | b;
 						}
 					}
 				}
 			}
 			var hitTriTop;
 			if(hasHit1 == false) {
-				var v = new pixelimage_algo_HitTri(qx,qy,bx,by,cx,cy,true);
+				var v = new pixelimage_algo_HitTri(qx,qy,bx,by,cx,cy);
 				hitTriTop = v;
 			} else {
 				hitTriTop = null;
@@ -28046,9 +27537,9 @@ pixelimage_triangleGML_gradient_ArrowThickGradient.prototype = $extend(pixelimag
 						}
 						var this9 = i3;
 						var b = this9;
-						var location = pixelShape.useVirtualPos ? (py1 - pixelShape.virtualY) * pixelShape.width + px1 - pixelShape.virtualX | 0 : py1 * pixelShape.width + px1 | 0;
-						if(pixelShape.transparent && a < 254) {
-							var this10 = pixelShape.image[location];
+						var location = pixelImage.useVirtualPos ? (py1 - pixelImage.virtualY) * pixelImage.width + px1 - pixelImage.virtualX | 0 : py1 * pixelImage.width + px1 | 0;
+						if(pixelImage.transparent && a < 254) {
+							var this10 = pixelImage.image[location];
 							var this11 = this10;
 							var old = pixelimage_Endian_isLittleEndian ? (this11 >> 24 & 255) << 24 | (this11 & 255) << 16 | (this11 >> 8 & 255) << 8 | this11 >> 16 & 255 : this11;
 							var rhs = a << 24 | r << 16 | g << 8 | b;
@@ -28074,16 +27565,16 @@ pixelimage_triangleGML_gradient_ArrowThickGradient.prototype = $extend(pixelimag
 							var b3 = 255 * (b1 * a3 + b2 * a2) | 0;
 							var a4 = 255 * (a3 + a2) | 0;
 							var blended = a4 << 24 | r3 << 16 | g3 << 8 | b3;
-							pixelShape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+							pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 						} else {
-							pixelShape.image[location] = pixelShape.isLittle ? a << 24 | b << 16 | g << 8 | r : a << 24 | r << 16 | g << 8 | b;
+							pixelImage.image[location] = pixelImage.isLittle ? a << 24 | b << 16 | g << 8 | r : a << 24 | r << 16 | g << 8 | b;
 						}
 					}
 				}
 			}
 			var hitTriBottom;
 			if(hasHit1 == false) {
-				var v = new pixelimage_algo_HitTri(px,py,ax,ay,dx,dy,true);
+				var v = new pixelimage_algo_HitTri(px,py,ax,ay,dx,dy);
 				hitTriBottom = v;
 			} else {
 				hitTriBottom = null;
@@ -28096,11 +27587,11 @@ pixelimage_triangleGML_gradient_ArrowThickGradient.prototype = $extend(pixelimag
 				hitArr.triArr.push(hitQuad.triBCD);
 			}
 		}
-		return pixelimage_triangleGML_coreShape_FillShape.prototype.render.call(this,pixelShape);
+		return pixelimage_triGML_coreShape_FillShape.prototype.render.call(this,pixelImage);
 	}
-	,__class__: pixelimage_triangleGML_gradient_ArrowThickGradient
+	,__class__: pixelimage_triGML_gradient_ArrowThickGradient
 });
-var pixelimage_triangleGML_gradient_EllipseRadialGradient = function(opacity,visibility,centreX,centreY,radiusX,radiusY,colorIn,colorOut,gradientCentreX,gradientCentreY,rotation) {
+var pixelimage_triGML_gradient_EllipseRadialGradient = function(opacity,visibility,centreX,centreY,radiusX,radiusY,colorIn,colorOut,gradientCentreX,gradientCentreY,rotation) {
 	if(rotation == null) {
 		rotation = 0.;
 	}
@@ -28134,7 +27625,7 @@ var pixelimage_triangleGML_gradient_EllipseRadialGradient = function(opacity,vis
 	if(opacity == null) {
 		opacity = 1.;
 	}
-	pixelimage_triangleGML_coreShape_BasicGradient.call(this,opacity,visibility,[colorIn,colorOut]);
+	pixelimage_triGML_coreShape_BasicGradient.call(this,opacity,visibility,[colorIn,colorOut]);
 	this.centreX = centreX;
 	this.centreY = centreY;
 	this.radiusX = radiusX;
@@ -28143,9 +27634,9 @@ var pixelimage_triangleGML_gradient_EllipseRadialGradient = function(opacity,vis
 	this.gradientCentreY = gradientCentreY;
 	this.rotation = rotation;
 };
-pixelimage_triangleGML_gradient_EllipseRadialGradient.__name__ = "pixelimage.triangleGML.gradient.EllipseRadialGradient";
-pixelimage_triangleGML_gradient_EllipseRadialGradient.__super__ = pixelimage_triangleGML_coreShape_BasicGradient;
-pixelimage_triangleGML_gradient_EllipseRadialGradient.prototype = $extend(pixelimage_triangleGML_coreShape_BasicGradient.prototype,{
+pixelimage_triGML_gradient_EllipseRadialGradient.__name__ = "pixelimage.triGML.gradient.EllipseRadialGradient";
+pixelimage_triGML_gradient_EllipseRadialGradient.__super__ = pixelimage_triGML_coreShape_BasicGradient;
+pixelimage_triGML_gradient_EllipseRadialGradient.prototype = $extend(pixelimage_triGML_coreShape_BasicGradient.prototype,{
 	setParameter: function(name,value) {
 		switch(name) {
 		case "centreX":
@@ -28176,10 +27667,10 @@ pixelimage_triangleGML_gradient_EllipseRadialGradient.prototype = $extend(pixeli
 			this.rotation = parseFloat(value);
 			break;
 		default:
-			pixelimage_triangleGML_coreShape_BasicGradient.prototype.setParameter.call(this,name,value);
+			pixelimage_triGML_coreShape_BasicGradient.prototype.setParameter.call(this,name,value);
 		}
 	}
-	,render: function(pixelShape) {
+	,render: function(pixelImage) {
 		if(this.gradientCentreX == -1.) {
 			this.gradientCentreX = this.centreX;
 		}
@@ -28195,15 +27686,13 @@ pixelimage_triangleGML_gradient_EllipseRadialGradient.prototype = $extend(pixeli
 			var h = 2 * this.radiusY | 0;
 			var this1 = new Uint32Array(w * h | 0);
 			var this2 = new pixelimage_ImageStruct(w,h,this1);
-			var this1 = this2;
-			temp = this1;
+			temp = this2;
 		} else {
 			var w = 2 * rLarge + rDif | 0;
 			var h = 2 * rLarge + rDif | 0;
 			var this1 = new Uint32Array(w * h | 0);
 			var this2 = new pixelimage_ImageStruct(w,h,this1);
-			var this1 = this2;
-			temp = this1;
+			temp = this2;
 		}
 		temp.transparent = false;
 		var cx = this.centreX;
@@ -28417,23 +27906,12 @@ pixelimage_triangleGML_gradient_EllipseRadialGradient.prototype = $extend(pixeli
 				}
 				var v_yIter3;
 				var v_xIter3;
-				var v_ty;
-				var v_tx;
-				var v_t0;
-				var v_sy;
-				var v_sx;
-				var v_s0;
-				var v_A;
 				var ax = mx;
 				var ay = my;
 				var bx = lastX;
 				var by = lastY;
 				var cx1 = nextX;
 				var cy1 = nextY;
-				var preCalculated = true;
-				if(preCalculated == null) {
-					preCalculated = true;
-				}
 				var adjustWinding = ax * by - bx * ay + (bx * cy1 - cx1 * by) + (cx1 * ay - ax * cy1) > 0;
 				if(!adjustWinding) {
 					var bx_ = bx;
@@ -28449,67 +27927,58 @@ pixelimage_triangleGML_gradient_EllipseRadialGradient.prototype = $extend(pixeli
 				var v_by = by;
 				var v_cx = cx1;
 				var v_cy = cy1;
-				var v_preCalculated = preCalculated;
-				if(preCalculated) {
-					v_s0 = v_ay * v_cx - v_ax * v_cy;
-					v_sx = v_cy - v_ay;
-					v_sy = v_ax - v_cx;
-					v_t0 = v_ax * v_by - v_ay * v_bx;
-					v_tx = v_ay - v_by;
-					v_ty = v_bx - v_ax;
-					v_A = -v_by * v_cx + v_ay * (-v_bx + v_cx) + v_ax * (v_by - v_cy) + v_bx * v_cy;
-					var a5 = v_ax;
-					var b4 = v_bx;
-					var c = v_cx;
-					if(a5 > b4) {
-						if(a5 > c) {
-							var ii_min8 = b4 > c ? Math.floor(c) : Math.floor(b4);
-							var ii_max8 = Math.ceil(a5);
-							var this25 = new pixelimage_iter_IntIterStart(ii_min8,ii_max8);
-							v_xIter3 = this25;
-						} else {
-							var ii_min9 = Math.floor(b4);
-							var ii_max9 = Math.ceil(c);
-							var this26 = new pixelimage_iter_IntIterStart(ii_min9,ii_max9);
-							v_xIter3 = this26;
-						}
-					} else if(b4 > c) {
-						var ii_min10 = a5 > c ? Math.floor(c) : Math.ceil(a5);
-						var ii_max10 = Math.ceil(b4);
-						var this27 = new pixelimage_iter_IntIterStart(ii_min10,ii_max10);
-						v_xIter3 = this27;
+				var v_s0 = ay * cx1 - ax * cy1;
+				var v_sx = cy1 - ay;
+				var v_sy = ax - cx1;
+				var v_t0 = ax * by - ay * bx;
+				var v_tx = ay - by;
+				var v_ty = bx - ax;
+				var v_A = -by * cx1 + ay * (-bx + cx1) + ax * (by - cy1) + bx * cy1;
+				if(ax > bx) {
+					if(ax > cx1) {
+						var ii_min8 = bx > cx1 ? Math.floor(cx1) : Math.floor(bx);
+						var ii_max8 = Math.ceil(ax);
+						var this25 = new pixelimage_iter_IntIterStart(ii_min8,ii_max8);
+						v_xIter3 = this25;
 					} else {
-						var ii_min11 = Math.floor(a5);
-						var ii_max11 = Math.ceil(c);
-						var this28 = new pixelimage_iter_IntIterStart(ii_min11,ii_max11);
-						v_xIter3 = this28;
+						var ii_min9 = Math.floor(bx);
+						var ii_max9 = Math.ceil(cx1);
+						var this26 = new pixelimage_iter_IntIterStart(ii_min9,ii_max9);
+						v_xIter3 = this26;
 					}
-					var a6 = v_ay;
-					var b5 = v_by;
-					var c1 = v_cy;
-					if(a6 > b5) {
-						if(a6 > c1) {
-							var ii_min12 = b5 > c1 ? Math.floor(c1) : Math.floor(b5);
-							var ii_max12 = Math.ceil(a6);
-							var this29 = new pixelimage_iter_IntIterStart(ii_min12,ii_max12);
-							v_yIter3 = this29;
-						} else {
-							var ii_min13 = Math.floor(b5);
-							var ii_max13 = Math.ceil(c1);
-							var this30 = new pixelimage_iter_IntIterStart(ii_min13,ii_max13);
-							v_yIter3 = this30;
-						}
-					} else if(b5 > c1) {
-						var ii_min14 = a6 > c1 ? Math.floor(c1) : Math.ceil(a6);
-						var ii_max14 = Math.ceil(b5);
-						var this31 = new pixelimage_iter_IntIterStart(ii_min14,ii_max14);
-						v_yIter3 = this31;
+				} else if(bx > cx1) {
+					var ii_min10 = ax > cx1 ? Math.floor(cx1) : Math.ceil(ax);
+					var ii_max10 = Math.ceil(bx);
+					var this27 = new pixelimage_iter_IntIterStart(ii_min10,ii_max10);
+					v_xIter3 = this27;
+				} else {
+					var ii_min11 = Math.floor(ax);
+					var ii_max11 = Math.ceil(cx1);
+					var this28 = new pixelimage_iter_IntIterStart(ii_min11,ii_max11);
+					v_xIter3 = this28;
+				}
+				if(ay > by) {
+					if(ay > cy1) {
+						var ii_min12 = by > cy1 ? Math.floor(cy1) : Math.floor(by);
+						var ii_max12 = Math.ceil(ay);
+						var this29 = new pixelimage_iter_IntIterStart(ii_min12,ii_max12);
+						v_yIter3 = this29;
 					} else {
-						var ii_min15 = Math.floor(a6);
-						var ii_max15 = Math.ceil(c1);
-						var this32 = new pixelimage_iter_IntIterStart(ii_min15,ii_max15);
-						v_yIter3 = this32;
+						var ii_min13 = Math.floor(by);
+						var ii_max13 = Math.ceil(cy1);
+						var this30 = new pixelimage_iter_IntIterStart(ii_min13,ii_max13);
+						v_yIter3 = this30;
 					}
+				} else if(by > cy1) {
+					var ii_min14 = ay > cy1 ? Math.floor(cy1) : Math.ceil(ay);
+					var ii_max14 = Math.ceil(by);
+					var this31 = new pixelimage_iter_IntIterStart(ii_min14,ii_max14);
+					v_yIter3 = this31;
+				} else {
+					var ii_min15 = Math.floor(ay);
+					var ii_max15 = Math.ceil(cy1);
+					var this32 = new pixelimage_iter_IntIterStart(ii_min15,ii_max15);
+					v_yIter3 = this32;
 				}
 				lastX = nextX;
 				lastY = nextY;
@@ -28678,23 +28147,12 @@ pixelimage_triangleGML_gradient_EllipseRadialGradient.prototype = $extend(pixeli
 				}
 				var v_yIter3;
 				var v_xIter3;
-				var v_ty;
-				var v_tx;
-				var v_t0;
-				var v_sy;
-				var v_sx;
-				var v_s0;
-				var v_A;
 				var ax = mx;
 				var ay = my;
 				var bx = lastX;
 				var by = lastY;
 				var cx1 = nextX;
 				var cy1 = nextY;
-				var preCalculated = true;
-				if(preCalculated == null) {
-					preCalculated = true;
-				}
 				var adjustWinding = ax * by - bx * ay + (bx * cy1 - cx1 * by) + (cx1 * ay - ax * cy1) > 0;
 				if(!adjustWinding) {
 					var bx_ = bx;
@@ -28710,67 +28168,58 @@ pixelimage_triangleGML_gradient_EllipseRadialGradient.prototype = $extend(pixeli
 				var v_by = by;
 				var v_cx = cx1;
 				var v_cy = cy1;
-				var v_preCalculated = preCalculated;
-				if(preCalculated) {
-					v_s0 = v_ay * v_cx - v_ax * v_cy;
-					v_sx = v_cy - v_ay;
-					v_sy = v_ax - v_cx;
-					v_t0 = v_ax * v_by - v_ay * v_bx;
-					v_tx = v_ay - v_by;
-					v_ty = v_bx - v_ax;
-					v_A = -v_by * v_cx + v_ay * (-v_bx + v_cx) + v_ax * (v_by - v_cy) + v_bx * v_cy;
-					var a5 = v_ax;
-					var b4 = v_bx;
-					var c = v_cx;
-					if(a5 > b4) {
-						if(a5 > c) {
-							var ii_min8 = b4 > c ? Math.floor(c) : Math.floor(b4);
-							var ii_max8 = Math.ceil(a5);
-							var this25 = new pixelimage_iter_IntIterStart(ii_min8,ii_max8);
-							v_xIter3 = this25;
-						} else {
-							var ii_min9 = Math.floor(b4);
-							var ii_max9 = Math.ceil(c);
-							var this26 = new pixelimage_iter_IntIterStart(ii_min9,ii_max9);
-							v_xIter3 = this26;
-						}
-					} else if(b4 > c) {
-						var ii_min10 = a5 > c ? Math.floor(c) : Math.ceil(a5);
-						var ii_max10 = Math.ceil(b4);
-						var this27 = new pixelimage_iter_IntIterStart(ii_min10,ii_max10);
-						v_xIter3 = this27;
+				var v_s0 = ay * cx1 - ax * cy1;
+				var v_sx = cy1 - ay;
+				var v_sy = ax - cx1;
+				var v_t0 = ax * by - ay * bx;
+				var v_tx = ay - by;
+				var v_ty = bx - ax;
+				var v_A = -by * cx1 + ay * (-bx + cx1) + ax * (by - cy1) + bx * cy1;
+				if(ax > bx) {
+					if(ax > cx1) {
+						var ii_min8 = bx > cx1 ? Math.floor(cx1) : Math.floor(bx);
+						var ii_max8 = Math.ceil(ax);
+						var this25 = new pixelimage_iter_IntIterStart(ii_min8,ii_max8);
+						v_xIter3 = this25;
 					} else {
-						var ii_min11 = Math.floor(a5);
-						var ii_max11 = Math.ceil(c);
-						var this28 = new pixelimage_iter_IntIterStart(ii_min11,ii_max11);
-						v_xIter3 = this28;
+						var ii_min9 = Math.floor(bx);
+						var ii_max9 = Math.ceil(cx1);
+						var this26 = new pixelimage_iter_IntIterStart(ii_min9,ii_max9);
+						v_xIter3 = this26;
 					}
-					var a6 = v_ay;
-					var b5 = v_by;
-					var c1 = v_cy;
-					if(a6 > b5) {
-						if(a6 > c1) {
-							var ii_min12 = b5 > c1 ? Math.floor(c1) : Math.floor(b5);
-							var ii_max12 = Math.ceil(a6);
-							var this29 = new pixelimage_iter_IntIterStart(ii_min12,ii_max12);
-							v_yIter3 = this29;
-						} else {
-							var ii_min13 = Math.floor(b5);
-							var ii_max13 = Math.ceil(c1);
-							var this30 = new pixelimage_iter_IntIterStart(ii_min13,ii_max13);
-							v_yIter3 = this30;
-						}
-					} else if(b5 > c1) {
-						var ii_min14 = a6 > c1 ? Math.floor(c1) : Math.ceil(a6);
-						var ii_max14 = Math.ceil(b5);
-						var this31 = new pixelimage_iter_IntIterStart(ii_min14,ii_max14);
-						v_yIter3 = this31;
+				} else if(bx > cx1) {
+					var ii_min10 = ax > cx1 ? Math.floor(cx1) : Math.ceil(ax);
+					var ii_max10 = Math.ceil(bx);
+					var this27 = new pixelimage_iter_IntIterStart(ii_min10,ii_max10);
+					v_xIter3 = this27;
+				} else {
+					var ii_min11 = Math.floor(ax);
+					var ii_max11 = Math.ceil(cx1);
+					var this28 = new pixelimage_iter_IntIterStart(ii_min11,ii_max11);
+					v_xIter3 = this28;
+				}
+				if(ay > by) {
+					if(ay > cy1) {
+						var ii_min12 = by > cy1 ? Math.floor(cy1) : Math.floor(by);
+						var ii_max12 = Math.ceil(ay);
+						var this29 = new pixelimage_iter_IntIterStart(ii_min12,ii_max12);
+						v_yIter3 = this29;
 					} else {
-						var ii_min15 = Math.floor(a6);
-						var ii_max15 = Math.ceil(c1);
-						var this32 = new pixelimage_iter_IntIterStart(ii_min15,ii_max15);
-						v_yIter3 = this32;
+						var ii_min13 = Math.floor(by);
+						var ii_max13 = Math.ceil(cy1);
+						var this30 = new pixelimage_iter_IntIterStart(ii_min13,ii_max13);
+						v_yIter3 = this30;
 					}
+				} else if(by > cy1) {
+					var ii_min14 = ay > cy1 ? Math.floor(cy1) : Math.ceil(ay);
+					var ii_max14 = Math.ceil(by);
+					var this31 = new pixelimage_iter_IntIterStart(ii_min14,ii_max14);
+					v_yIter3 = this31;
+				} else {
+					var ii_min15 = Math.floor(ay);
+					var ii_max15 = Math.ceil(cy1);
+					var this32 = new pixelimage_iter_IntIterStart(ii_min15,ii_max15);
+					v_yIter3 = this32;
 				}
 				lastX = nextX;
 				lastY = nextY;
@@ -28820,9 +28269,9 @@ pixelimage_triangleGML_gradient_EllipseRadialGradient.prototype = $extend(pixeli
 						var y1 = y + dy;
 						var this10 = col;
 						var c2 = this10;
-						if((c2 >> 24 & 255) < 254 && pixelShape.transparent) {
-							var location = pixelShape.useVirtualPos ? (y1 - pixelShape.virtualY) * pixelShape.width + x1 - pixelShape.virtualX | 0 : y1 * pixelShape.width + x1 | 0;
-							var this11 = pixelShape.image[location];
+						if((c2 >> 24 & 255) < 254 && pixelImage.transparent) {
+							var location = pixelImage.useVirtualPos ? (y1 - pixelImage.virtualY) * pixelImage.width + x1 - pixelImage.virtualX | 0 : y1 * pixelImage.width + x1 | 0;
+							var this11 = pixelImage.image[location];
 							var this12 = this11;
 							var this13 = pixelimage_Endian_isLittleEndian ? (this12 >> 24 & 255) << 24 | (this12 & 255) << 16 | (this12 >> 8 & 255) << 8 | this12 >> 16 & 255 : this12;
 							var this14 = this13 >> 24 & 255;
@@ -28847,9 +28296,9 @@ pixelimage_triangleGML_gradient_EllipseRadialGradient.prototype = $extend(pixeli
 							var b = 255 * (b1 * a3 + b2 * a2) | 0;
 							var a = 255 * (a3 + a2) | 0;
 							var blended = a << 24 | r << 16 | g << 8 | b;
-							pixelShape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+							pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 						} else {
-							pixelShape.image[pixelShape.useVirtualPos ? (y1 - pixelShape.virtualY) * pixelShape.width + x1 - pixelShape.virtualX | 0 : y1 * pixelShape.width + x1 | 0] = pixelimage_Endian_isLittleEndian ? (c2 >> 24 & 255) << 24 | (c2 & 255) << 16 | (c2 >> 8 & 255) << 8 | c2 >> 16 & 255 : c2;
+							pixelImage.image[pixelImage.useVirtualPos ? (y1 - pixelImage.virtualY) * pixelImage.width + x1 - pixelImage.virtualX | 0 : y1 * pixelImage.width + x1 | 0] = pixelimage_Endian_isLittleEndian ? (c2 >> 24 & 255) << 24 | (c2 & 255) << 16 | (c2 >> 8 & 255) << 8 | c2 >> 16 & 255 : c2;
 						}
 					}
 				}
@@ -28898,9 +28347,9 @@ pixelimage_triangleGML_gradient_EllipseRadialGradient.prototype = $extend(pixeli
 						var y1 = y + dy;
 						var this10 = col;
 						var c2 = this10;
-						if((c2 >> 24 & 255) < 254 && pixelShape.transparent) {
-							var location = pixelShape.useVirtualPos ? (y1 - pixelShape.virtualY) * pixelShape.width + x1 - pixelShape.virtualX | 0 : y1 * pixelShape.width + x1 | 0;
-							var this11 = pixelShape.image[location];
+						if((c2 >> 24 & 255) < 254 && pixelImage.transparent) {
+							var location = pixelImage.useVirtualPos ? (y1 - pixelImage.virtualY) * pixelImage.width + x1 - pixelImage.virtualX | 0 : y1 * pixelImage.width + x1 | 0;
+							var this11 = pixelImage.image[location];
 							var this12 = this11;
 							var this13 = pixelimage_Endian_isLittleEndian ? (this12 >> 24 & 255) << 24 | (this12 & 255) << 16 | (this12 >> 8 & 255) << 8 | this12 >> 16 & 255 : this12;
 							var this14 = this13 >> 24 & 255;
@@ -28925,20 +28374,20 @@ pixelimage_triangleGML_gradient_EllipseRadialGradient.prototype = $extend(pixeli
 							var b = 255 * (b1 * a3 + b2 * a2) | 0;
 							var a = 255 * (a3 + a2) | 0;
 							var blended = a << 24 | r << 16 | g << 8 | b;
-							pixelShape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+							pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 						} else {
-							pixelShape.image[pixelShape.useVirtualPos ? (y1 - pixelShape.virtualY) * pixelShape.width + x1 - pixelShape.virtualX | 0 : y1 * pixelShape.width + x1 | 0] = pixelimage_Endian_isLittleEndian ? (c2 >> 24 & 255) << 24 | (c2 & 255) << 16 | (c2 >> 8 & 255) << 8 | c2 >> 16 & 255 : c2;
+							pixelImage.image[pixelImage.useVirtualPos ? (y1 - pixelImage.virtualY) * pixelImage.width + x1 - pixelImage.virtualX | 0 : y1 * pixelImage.width + x1 | 0] = pixelimage_Endian_isLittleEndian ? (c2 >> 24 & 255) << 24 | (c2 & 255) << 16 | (c2 >> 8 & 255) << 8 | c2 >> 16 & 255 : c2;
 						}
 					}
 				}
 			}
 		}
 		temp = null;
-		return pixelimage_triangleGML_coreShape_BasicGradient.prototype.render.call(this,pixelShape);
+		return pixelimage_triGML_coreShape_BasicGradient.prototype.render.call(this,pixelImage);
 	}
-	,__class__: pixelimage_triangleGML_gradient_EllipseRadialGradient
+	,__class__: pixelimage_triGML_gradient_EllipseRadialGradient
 });
-var pixelimage_triangleGML_gradient_PathElementThickGradient = function(opacity,visibility,strokeTopColor,strokeBottomColor,strokeWidth,strokeDashGapArray,fill,pathData,translateX,translateY,scaleX,scaleY) {
+var pixelimage_triGML_gradient_PathElementThickGradient = function(opacity,visibility,strokeTopColor,strokeBottomColor,strokeWidth,strokeDashGapArray,fill,pathData,translateX,translateY,scaleX,scaleY) {
 	if(scaleY == null) {
 		scaleY = 1.;
 	}
@@ -28975,7 +28424,7 @@ var pixelimage_triangleGML_gradient_PathElementThickGradient = function(opacity,
 	this.toggleDraw = true;
 	this.y0 = 0.;
 	this.x0 = 0.;
-	pixelimage_triangleGML_coreShape_FillShape.call(this,opacity,visibility,-16777216,1.,strokeDashGapArray,fill);
+	pixelimage_triGML_coreShape_FillShape.call(this,opacity,visibility,-16777216,1.,strokeDashGapArray,fill);
 	this.pathData = pathData;
 	this.strokeTopColor = strokeTopColor;
 	this.strokeBottomColor = strokeBottomColor;
@@ -28985,10 +28434,10 @@ var pixelimage_triangleGML_gradient_PathElementThickGradient = function(opacity,
 	this.scaleX = scaleX;
 	this.scaleY = scaleY;
 };
-pixelimage_triangleGML_gradient_PathElementThickGradient.__name__ = "pixelimage.triangleGML.gradient.PathElementThickGradient";
-pixelimage_triangleGML_gradient_PathElementThickGradient.__interfaces__ = [justPath_ILinePathContext];
-pixelimage_triangleGML_gradient_PathElementThickGradient.__super__ = pixelimage_triangleGML_coreShape_FillShape;
-pixelimage_triangleGML_gradient_PathElementThickGradient.prototype = $extend(pixelimage_triangleGML_coreShape_FillShape.prototype,{
+pixelimage_triGML_gradient_PathElementThickGradient.__name__ = "pixelimage.triGML.gradient.PathElementThickGradient";
+pixelimage_triGML_gradient_PathElementThickGradient.__interfaces__ = [justPath_ILinePathContext];
+pixelimage_triGML_gradient_PathElementThickGradient.__super__ = pixelimage_triGML_coreShape_FillShape;
+pixelimage_triGML_gradient_PathElementThickGradient.prototype = $extend(pixelimage_triGML_coreShape_FillShape.prototype,{
 	setParameter: function(name,value) {
 		switch(name) {
 		case "pathData":
@@ -29016,33 +28465,32 @@ pixelimage_triangleGML_gradient_PathElementThickGradient.prototype = $extend(pix
 			this.translateY = parseFloat(value);
 			break;
 		default:
-			pixelimage_triangleGML_coreShape_FillShape.prototype.setParameter.call(this,name,value);
+			pixelimage_triGML_coreShape_FillShape.prototype.setParameter.call(this,name,value);
 		}
 	}
-	,render: function(pixelShape) {
-		haxe_Log.trace("render pathData " + this.pathData,{ fileName : "pixelimage/triangleGML/gradient/PathElementThickGradient.hx", lineNumber : 69, className : "pixelimage.triangleGML.gradient.PathElementThickGradient", methodName : "render"});
-		var w = Math.ceil(pixelShape.width);
-		var h = Math.ceil(pixelShape.height);
+	,render: function(pixelImage) {
+		haxe_Log.trace("render pathData " + this.pathData,{ fileName : "pixelimage/triGML/gradient/PathElementThickGradient.hx", lineNumber : 69, className : "pixelimage.triGML.gradient.PathElementThickGradient", methodName : "render"});
+		var w = Math.ceil(pixelImage.width);
+		var h = Math.ceil(pixelImage.height);
 		var this1 = new Uint32Array(w * h | 0);
 		var this2 = new pixelimage_ImageStruct(w,h,this1);
-		var this1 = this2;
-		this.temp = this1;
+		this.temp = this2;
 		this.temp.transparent = true;
 		var sp = new justPath_SvgLinePath(this);
 		sp.parse(this.pathData);
-		var pixelImage = this.temp;
+		var pixelImage1 = this.temp;
 		var _g = 0;
-		var _g1 = pixelImage.height;
+		var _g1 = pixelImage1.height;
 		while(_g < _g1) {
 			var dy = _g++;
 			var _g2 = 0;
-			var _g3 = pixelImage.width;
+			var _g3 = pixelImage1.width;
 			while(_g2 < _g3) {
 				var dx = _g2++;
-				var c = pixelImage.image[pixelImage.useVirtualPos ? (dy - pixelImage.virtualY) * pixelImage.width + dx - pixelImage.virtualX | 0 : dy * pixelImage.width + dx | 0];
+				var c = pixelImage1.image[pixelImage1.useVirtualPos ? (dy - pixelImage1.virtualY) * pixelImage1.width + dx - pixelImage1.virtualX | 0 : dy * pixelImage1.width + dx | 0];
 				var col = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
-				if(pixelImage.useMask && pixelImage.mask != null) {
-					var this1 = pixelImage.mask;
+				if(pixelImage1.useMask && pixelImage1.mask != null) {
+					var this1 = pixelImage1.mask;
 					var c1 = this1.image[this1.useVirtualPos ? (dy - this1.virtualY) * this1.width + dx - this1.virtualX | 0 : dy * this1.width + dx | 0];
 					var this2 = pixelimage_Endian_isLittleEndian ? (c1 >> 24 & 255) << 24 | (c1 & 255) << 16 | (c1 >> 8 & 255) << 8 | c1 >> 16 & 255 : c1;
 					var maskPixel = this2;
@@ -29072,9 +28520,9 @@ pixelimage_triangleGML_gradient_PathElementThickGradient.prototype = $extend(pix
 					var y = dy;
 					var this10 = col;
 					var c2 = this10;
-					if((c2 >> 24 & 255) < 254 && pixelShape.transparent) {
-						var location = pixelShape.useVirtualPos ? (y - pixelShape.virtualY) * pixelShape.width + x - pixelShape.virtualX | 0 : y * pixelShape.width + x | 0;
-						var this11 = pixelShape.image[location];
+					if((c2 >> 24 & 255) < 254 && pixelImage.transparent) {
+						var location = pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0;
+						var this11 = pixelImage.image[location];
 						var this12 = this11;
 						var this13 = pixelimage_Endian_isLittleEndian ? (this12 >> 24 & 255) << 24 | (this12 & 255) << 16 | (this12 >> 8 & 255) << 8 | this12 >> 16 & 255 : this12;
 						var this14 = this13 >> 24 & 255;
@@ -29099,15 +28547,15 @@ pixelimage_triangleGML_gradient_PathElementThickGradient.prototype = $extend(pix
 						var b = 255 * (b1 * a3 + b2 * a2) | 0;
 						var a = 255 * (a3 + a2) | 0;
 						var blended = a << 24 | r << 16 | g << 8 | b;
-						pixelShape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+						pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 					} else {
-						pixelShape.image[pixelShape.useVirtualPos ? (y - pixelShape.virtualY) * pixelShape.width + x - pixelShape.virtualX | 0 : y * pixelShape.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c2 >> 24 & 255) << 24 | (c2 & 255) << 16 | (c2 >> 8 & 255) << 8 | c2 >> 16 & 255 : c2;
+						pixelImage.image[pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c2 >> 24 & 255) << 24 | (c2 & 255) << 16 | (c2 >> 8 & 255) << 8 | c2 >> 16 & 255 : c2;
 					}
 				}
 			}
 		}
 		this.temp = null;
-		return pixelimage_triangleGML_coreShape_FillShape.prototype.render.call(this,pixelShape);
+		return pixelimage_triGML_coreShape_FillShape.prototype.render.call(this,pixelImage);
 	}
 	,lineSegmentTo: function(x2,y2) {
 		if(this.toggleDraw) {
@@ -29525,7 +28973,7 @@ pixelimage_triangleGML_gradient_PathElementThickGradient.prototype = $extend(pix
 				}
 			}
 			if(hasHit1 == false) {
-				var v = new pixelimage_algo_HitTri(ax,ay,bx,by,dx,dy,true);
+				var v = new pixelimage_algo_HitTri(ax,ay,bx,by,dx,dy);
 			}
 			var aA = colorC >> 24 & 255;
 			var rA = colorC >> 16 & 255;
@@ -29684,23 +29132,12 @@ pixelimage_triangleGML_gradient_PathElementThickGradient.prototype = $extend(pix
 			}
 			var v_yIter3;
 			var v_xIter3;
-			var v_ty;
-			var v_tx;
-			var v_t0;
-			var v_sy;
-			var v_sx;
-			var v_s0;
-			var v_A;
 			var ax1 = bx;
 			var ay1 = by;
 			var bx1 = cx;
 			var by1 = cy;
 			var cx1 = dx;
 			var cy1 = dy;
-			var preCalculated = true;
-			if(preCalculated == null) {
-				preCalculated = true;
-			}
 			var adjustWinding = ax1 * by1 - bx1 * ay1 + (bx1 * cy1 - cx1 * by1) + (cx1 * ay1 - ax1 * cy1) > 0;
 			if(!adjustWinding) {
 				var bx_ = bx1;
@@ -29716,71 +29153,62 @@ pixelimage_triangleGML_gradient_PathElementThickGradient.prototype = $extend(pix
 			var v_by = by1;
 			var v_cx = cx1;
 			var v_cy = cy1;
-			var v_preCalculated = preCalculated;
-			if(preCalculated) {
-				v_s0 = v_ay * v_cx - v_ax * v_cy;
-				v_sx = v_cy - v_ay;
-				v_sy = v_ax - v_cx;
-				v_t0 = v_ax * v_by - v_ay * v_bx;
-				v_tx = v_ay - v_by;
-				v_ty = v_bx - v_ax;
-				v_A = -v_by * v_cx + v_ay * (-v_bx + v_cx) + v_ax * (v_by - v_cy) + v_bx * v_cy;
-				var a = v_ax;
-				var b = v_bx;
-				var c = v_cx;
-				if(a > b) {
-					if(a > c) {
-						var ii_min = b > c ? Math.floor(c) : Math.floor(b);
-						var ii_max = Math.ceil(a);
-						var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-						v_xIter3 = this1;
-					} else {
-						var ii_min = Math.floor(b);
-						var ii_max = Math.ceil(c);
-						var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-						v_xIter3 = this1;
-					}
-				} else if(b > c) {
-					var ii_min = a > c ? Math.floor(c) : Math.ceil(a);
-					var ii_max = Math.ceil(b);
+			var v_s0 = ay1 * cx1 - ax1 * cy1;
+			var v_sx = cy1 - ay1;
+			var v_sy = ax1 - cx1;
+			var v_t0 = ax1 * by1 - ay1 * bx1;
+			var v_tx = ay1 - by1;
+			var v_ty = bx1 - ax1;
+			var v_A = -by1 * cx1 + ay1 * (-bx1 + cx1) + ax1 * (by1 - cy1) + bx1 * cy1;
+			if(ax1 > bx1) {
+				if(ax1 > cx1) {
+					var ii_min = bx1 > cx1 ? Math.floor(cx1) : Math.floor(bx1);
+					var ii_max = Math.ceil(ax1);
 					var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
 					v_xIter3 = this1;
 				} else {
-					var ii_min = Math.floor(a);
-					var ii_max = Math.ceil(c);
+					var ii_min = Math.floor(bx1);
+					var ii_max = Math.ceil(cx1);
 					var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
 					v_xIter3 = this1;
 				}
-				var a = v_ay;
-				var b = v_by;
-				var c = v_cy;
-				if(a > b) {
-					if(a > c) {
-						var ii_min = b > c ? Math.floor(c) : Math.floor(b);
-						var ii_max = Math.ceil(a);
-						var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-						v_yIter3 = this1;
-					} else {
-						var ii_min = Math.floor(b);
-						var ii_max = Math.ceil(c);
-						var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-						v_yIter3 = this1;
-					}
-				} else if(b > c) {
-					var ii_min = a > c ? Math.floor(c) : Math.ceil(a);
-					var ii_max = Math.ceil(b);
+			} else if(bx1 > cx1) {
+				var ii_min = ax1 > cx1 ? Math.floor(cx1) : Math.ceil(ax1);
+				var ii_max = Math.ceil(bx1);
+				var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+				v_xIter3 = this1;
+			} else {
+				var ii_min = Math.floor(ax1);
+				var ii_max = Math.ceil(cx1);
+				var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+				v_xIter3 = this1;
+			}
+			if(ay1 > by1) {
+				if(ay1 > cy1) {
+					var ii_min = by1 > cy1 ? Math.floor(cy1) : Math.floor(by1);
+					var ii_max = Math.ceil(ay1);
 					var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
 					v_yIter3 = this1;
 				} else {
-					var ii_min = Math.floor(a);
-					var ii_max = Math.ceil(c);
+					var ii_min = Math.floor(by1);
+					var ii_max = Math.ceil(cy1);
 					var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
 					v_yIter3 = this1;
 				}
+			} else if(by1 > cy1) {
+				var ii_min = ay1 > cy1 ? Math.floor(cy1) : Math.ceil(ay1);
+				var ii_max = Math.ceil(by1);
+				var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+				v_yIter3 = this1;
+			} else {
+				var ii_min = Math.floor(ay1);
+				var ii_max = Math.ceil(cy1);
+				var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+				v_yIter3 = this1;
 			}
 			var tmp;
 			if(hasHit == true) {
-				var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy,true);
+				var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy);
 				tmp = v;
 			} else {
 				tmp = null;
@@ -29968,7 +29396,7 @@ pixelimage_triangleGML_gradient_PathElementThickGradient.prototype = $extend(pix
 					}
 				}
 				if(hasHit == false) {
-					var v = new pixelimage_algo_HitTri(ax,ay,bx,by,dx,dy,true);
+					var v = new pixelimage_algo_HitTri(ax,ay,bx,by,dx,dy);
 				}
 				var aA = colorC >> 24 & 255;
 				var rA = colorC >> 16 & 255;
@@ -30127,23 +29555,12 @@ pixelimage_triangleGML_gradient_PathElementThickGradient.prototype = $extend(pix
 				}
 				var v_yIter3;
 				var v_xIter3;
-				var v_ty;
-				var v_tx;
-				var v_t0;
-				var v_sy;
-				var v_sx;
-				var v_s0;
-				var v_A;
 				var ax1 = bx;
 				var ay1 = by;
 				var bx1 = cx;
 				var by1 = cy;
 				var cx1 = dx;
 				var cy1 = dy;
-				var preCalculated = true;
-				if(preCalculated == null) {
-					preCalculated = true;
-				}
 				var adjustWinding = ax1 * by1 - bx1 * ay1 + (bx1 * cy1 - cx1 * by1) + (cx1 * ay1 - ax1 * cy1) > 0;
 				if(!adjustWinding) {
 					var bx_ = bx1;
@@ -30159,70 +29576,61 @@ pixelimage_triangleGML_gradient_PathElementThickGradient.prototype = $extend(pix
 				var v_by = by1;
 				var v_cx = cx1;
 				var v_cy = cy1;
-				var v_preCalculated = preCalculated;
-				if(preCalculated) {
-					v_s0 = v_ay * v_cx - v_ax * v_cy;
-					v_sx = v_cy - v_ay;
-					v_sy = v_ax - v_cx;
-					v_t0 = v_ax * v_by - v_ay * v_bx;
-					v_tx = v_ay - v_by;
-					v_ty = v_bx - v_ax;
-					v_A = -v_by * v_cx + v_ay * (-v_bx + v_cx) + v_ax * (v_by - v_cy) + v_bx * v_cy;
-					var a = v_ax;
-					var b = v_bx;
-					var c = v_cx;
-					if(a > b) {
-						if(a > c) {
-							var ii_min = b > c ? Math.floor(c) : Math.floor(b);
-							var ii_max = Math.ceil(a);
-							var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-							v_xIter3 = this1;
-						} else {
-							var ii_min = Math.floor(b);
-							var ii_max = Math.ceil(c);
-							var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-							v_xIter3 = this1;
-						}
-					} else if(b > c) {
-						var ii_min = a > c ? Math.floor(c) : Math.ceil(a);
-						var ii_max = Math.ceil(b);
+				var v_s0 = ay1 * cx1 - ax1 * cy1;
+				var v_sx = cy1 - ay1;
+				var v_sy = ax1 - cx1;
+				var v_t0 = ax1 * by1 - ay1 * bx1;
+				var v_tx = ay1 - by1;
+				var v_ty = bx1 - ax1;
+				var v_A = -by1 * cx1 + ay1 * (-bx1 + cx1) + ax1 * (by1 - cy1) + bx1 * cy1;
+				if(ax1 > bx1) {
+					if(ax1 > cx1) {
+						var ii_min = bx1 > cx1 ? Math.floor(cx1) : Math.floor(bx1);
+						var ii_max = Math.ceil(ax1);
 						var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
 						v_xIter3 = this1;
 					} else {
-						var ii_min = Math.floor(a);
-						var ii_max = Math.ceil(c);
+						var ii_min = Math.floor(bx1);
+						var ii_max = Math.ceil(cx1);
 						var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
 						v_xIter3 = this1;
 					}
-					var a = v_ay;
-					var b = v_by;
-					var c = v_cy;
-					if(a > b) {
-						if(a > c) {
-							var ii_min = b > c ? Math.floor(c) : Math.floor(b);
-							var ii_max = Math.ceil(a);
-							var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-							v_yIter3 = this1;
-						} else {
-							var ii_min = Math.floor(b);
-							var ii_max = Math.ceil(c);
-							var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-							v_yIter3 = this1;
-						}
-					} else if(b > c) {
-						var ii_min = a > c ? Math.floor(c) : Math.ceil(a);
-						var ii_max = Math.ceil(b);
+				} else if(bx1 > cx1) {
+					var ii_min = ax1 > cx1 ? Math.floor(cx1) : Math.ceil(ax1);
+					var ii_max = Math.ceil(bx1);
+					var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+					v_xIter3 = this1;
+				} else {
+					var ii_min = Math.floor(ax1);
+					var ii_max = Math.ceil(cx1);
+					var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+					v_xIter3 = this1;
+				}
+				if(ay1 > by1) {
+					if(ay1 > cy1) {
+						var ii_min = by1 > cy1 ? Math.floor(cy1) : Math.floor(by1);
+						var ii_max = Math.ceil(ay1);
 						var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
 						v_yIter3 = this1;
 					} else {
-						var ii_min = Math.floor(a);
-						var ii_max = Math.ceil(c);
+						var ii_min = Math.floor(by1);
+						var ii_max = Math.ceil(cy1);
 						var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
 						v_yIter3 = this1;
 					}
+				} else if(by1 > cy1) {
+					var ii_min = ay1 > cy1 ? Math.floor(cy1) : Math.ceil(ay1);
+					var ii_max = Math.ceil(by1);
+					var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+					v_yIter3 = this1;
+				} else {
+					var ii_min = Math.floor(ay1);
+					var ii_max = Math.ceil(cy1);
+					var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+					v_yIter3 = this1;
 				}
 				if(hasHit1 == true) {
-					var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy,true);
+					var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy);
 				}
 			}
 		}
@@ -30645,7 +30053,7 @@ pixelimage_triangleGML_gradient_PathElementThickGradient.prototype = $extend(pix
 			}
 		}
 		if(hasHit1 == false) {
-			var v = new pixelimage_algo_HitTri(ax,ay,bx,by,dx,dy,true);
+			var v = new pixelimage_algo_HitTri(ax,ay,bx,by,dx,dy);
 		}
 		var aA = colorC >> 24 & 255;
 		var rA = colorC >> 16 & 255;
@@ -30804,23 +30212,12 @@ pixelimage_triangleGML_gradient_PathElementThickGradient.prototype = $extend(pix
 		}
 		var v_yIter3;
 		var v_xIter3;
-		var v_ty;
-		var v_tx;
-		var v_t0;
-		var v_sy;
-		var v_sx;
-		var v_s0;
-		var v_A;
 		var ax1 = bx;
 		var ay1 = by;
 		var bx1 = cx;
 		var by1 = cy;
 		var cx1 = dx;
 		var cy1 = dy;
-		var preCalculated = true;
-		if(preCalculated == null) {
-			preCalculated = true;
-		}
 		var adjustWinding = ax1 * by1 - bx1 * ay1 + (bx1 * cy1 - cx1 * by1) + (cx1 * ay1 - ax1 * cy1) > 0;
 		if(!adjustWinding) {
 			var bx_ = bx1;
@@ -30836,71 +30233,62 @@ pixelimage_triangleGML_gradient_PathElementThickGradient.prototype = $extend(pix
 		var v_by = by1;
 		var v_cx = cx1;
 		var v_cy = cy1;
-		var v_preCalculated = preCalculated;
-		if(preCalculated) {
-			v_s0 = v_ay * v_cx - v_ax * v_cy;
-			v_sx = v_cy - v_ay;
-			v_sy = v_ax - v_cx;
-			v_t0 = v_ax * v_by - v_ay * v_bx;
-			v_tx = v_ay - v_by;
-			v_ty = v_bx - v_ax;
-			v_A = -v_by * v_cx + v_ay * (-v_bx + v_cx) + v_ax * (v_by - v_cy) + v_bx * v_cy;
-			var a = v_ax;
-			var b = v_bx;
-			var c = v_cx;
-			if(a > b) {
-				if(a > c) {
-					var ii_min = b > c ? Math.floor(c) : Math.floor(b);
-					var ii_max = Math.ceil(a);
-					var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-					v_xIter3 = this1;
-				} else {
-					var ii_min = Math.floor(b);
-					var ii_max = Math.ceil(c);
-					var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-					v_xIter3 = this1;
-				}
-			} else if(b > c) {
-				var ii_min = a > c ? Math.floor(c) : Math.ceil(a);
-				var ii_max = Math.ceil(b);
+		var v_s0 = ay1 * cx1 - ax1 * cy1;
+		var v_sx = cy1 - ay1;
+		var v_sy = ax1 - cx1;
+		var v_t0 = ax1 * by1 - ay1 * bx1;
+		var v_tx = ay1 - by1;
+		var v_ty = bx1 - ax1;
+		var v_A = -by1 * cx1 + ay1 * (-bx1 + cx1) + ax1 * (by1 - cy1) + bx1 * cy1;
+		if(ax1 > bx1) {
+			if(ax1 > cx1) {
+				var ii_min = bx1 > cx1 ? Math.floor(cx1) : Math.floor(bx1);
+				var ii_max = Math.ceil(ax1);
 				var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
 				v_xIter3 = this1;
 			} else {
-				var ii_min = Math.floor(a);
-				var ii_max = Math.ceil(c);
+				var ii_min = Math.floor(bx1);
+				var ii_max = Math.ceil(cx1);
 				var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
 				v_xIter3 = this1;
 			}
-			var a = v_ay;
-			var b = v_by;
-			var c = v_cy;
-			if(a > b) {
-				if(a > c) {
-					var ii_min = b > c ? Math.floor(c) : Math.floor(b);
-					var ii_max = Math.ceil(a);
-					var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-					v_yIter3 = this1;
-				} else {
-					var ii_min = Math.floor(b);
-					var ii_max = Math.ceil(c);
-					var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-					v_yIter3 = this1;
-				}
-			} else if(b > c) {
-				var ii_min = a > c ? Math.floor(c) : Math.ceil(a);
-				var ii_max = Math.ceil(b);
+		} else if(bx1 > cx1) {
+			var ii_min = ax1 > cx1 ? Math.floor(cx1) : Math.ceil(ax1);
+			var ii_max = Math.ceil(bx1);
+			var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+			v_xIter3 = this1;
+		} else {
+			var ii_min = Math.floor(ax1);
+			var ii_max = Math.ceil(cx1);
+			var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+			v_xIter3 = this1;
+		}
+		if(ay1 > by1) {
+			if(ay1 > cy1) {
+				var ii_min = by1 > cy1 ? Math.floor(cy1) : Math.floor(by1);
+				var ii_max = Math.ceil(ay1);
 				var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
 				v_yIter3 = this1;
 			} else {
-				var ii_min = Math.floor(a);
-				var ii_max = Math.ceil(c);
+				var ii_min = Math.floor(by1);
+				var ii_max = Math.ceil(cy1);
 				var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
 				v_yIter3 = this1;
 			}
+		} else if(by1 > cy1) {
+			var ii_min = ay1 > cy1 ? Math.floor(cy1) : Math.ceil(ay1);
+			var ii_max = Math.ceil(by1);
+			var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+			v_yIter3 = this1;
+		} else {
+			var ii_min = Math.floor(ay1);
+			var ii_max = Math.ceil(cy1);
+			var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+			v_yIter3 = this1;
 		}
 		var tmp;
 		if(hasHit == true) {
-			var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy,true);
+			var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy);
 			tmp = v;
 		} else {
 			tmp = null;
@@ -31088,7 +30476,7 @@ pixelimage_triangleGML_gradient_PathElementThickGradient.prototype = $extend(pix
 				}
 			}
 			if(hasHit == false) {
-				var v = new pixelimage_algo_HitTri(ax,ay,bx,by,dx,dy,true);
+				var v = new pixelimage_algo_HitTri(ax,ay,bx,by,dx,dy);
 			}
 			var aA = colorC >> 24 & 255;
 			var rA = colorC >> 16 & 255;
@@ -31247,23 +30635,12 @@ pixelimage_triangleGML_gradient_PathElementThickGradient.prototype = $extend(pix
 			}
 			var v_yIter3;
 			var v_xIter3;
-			var v_ty;
-			var v_tx;
-			var v_t0;
-			var v_sy;
-			var v_sx;
-			var v_s0;
-			var v_A;
 			var ax1 = bx;
 			var ay1 = by;
 			var bx1 = cx;
 			var by1 = cy;
 			var cx1 = dx;
 			var cy1 = dy;
-			var preCalculated = true;
-			if(preCalculated == null) {
-				preCalculated = true;
-			}
 			var adjustWinding = ax1 * by1 - bx1 * ay1 + (bx1 * cy1 - cx1 * by1) + (cx1 * ay1 - ax1 * cy1) > 0;
 			if(!adjustWinding) {
 				var bx_ = bx1;
@@ -31279,70 +30656,61 @@ pixelimage_triangleGML_gradient_PathElementThickGradient.prototype = $extend(pix
 			var v_by = by1;
 			var v_cx = cx1;
 			var v_cy = cy1;
-			var v_preCalculated = preCalculated;
-			if(preCalculated) {
-				v_s0 = v_ay * v_cx - v_ax * v_cy;
-				v_sx = v_cy - v_ay;
-				v_sy = v_ax - v_cx;
-				v_t0 = v_ax * v_by - v_ay * v_bx;
-				v_tx = v_ay - v_by;
-				v_ty = v_bx - v_ax;
-				v_A = -v_by * v_cx + v_ay * (-v_bx + v_cx) + v_ax * (v_by - v_cy) + v_bx * v_cy;
-				var a = v_ax;
-				var b = v_bx;
-				var c = v_cx;
-				if(a > b) {
-					if(a > c) {
-						var ii_min = b > c ? Math.floor(c) : Math.floor(b);
-						var ii_max = Math.ceil(a);
-						var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-						v_xIter3 = this1;
-					} else {
-						var ii_min = Math.floor(b);
-						var ii_max = Math.ceil(c);
-						var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-						v_xIter3 = this1;
-					}
-				} else if(b > c) {
-					var ii_min = a > c ? Math.floor(c) : Math.ceil(a);
-					var ii_max = Math.ceil(b);
+			var v_s0 = ay1 * cx1 - ax1 * cy1;
+			var v_sx = cy1 - ay1;
+			var v_sy = ax1 - cx1;
+			var v_t0 = ax1 * by1 - ay1 * bx1;
+			var v_tx = ay1 - by1;
+			var v_ty = bx1 - ax1;
+			var v_A = -by1 * cx1 + ay1 * (-bx1 + cx1) + ax1 * (by1 - cy1) + bx1 * cy1;
+			if(ax1 > bx1) {
+				if(ax1 > cx1) {
+					var ii_min = bx1 > cx1 ? Math.floor(cx1) : Math.floor(bx1);
+					var ii_max = Math.ceil(ax1);
 					var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
 					v_xIter3 = this1;
 				} else {
-					var ii_min = Math.floor(a);
-					var ii_max = Math.ceil(c);
+					var ii_min = Math.floor(bx1);
+					var ii_max = Math.ceil(cx1);
 					var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
 					v_xIter3 = this1;
 				}
-				var a = v_ay;
-				var b = v_by;
-				var c = v_cy;
-				if(a > b) {
-					if(a > c) {
-						var ii_min = b > c ? Math.floor(c) : Math.floor(b);
-						var ii_max = Math.ceil(a);
-						var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-						v_yIter3 = this1;
-					} else {
-						var ii_min = Math.floor(b);
-						var ii_max = Math.ceil(c);
-						var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-						v_yIter3 = this1;
-					}
-				} else if(b > c) {
-					var ii_min = a > c ? Math.floor(c) : Math.ceil(a);
-					var ii_max = Math.ceil(b);
+			} else if(bx1 > cx1) {
+				var ii_min = ax1 > cx1 ? Math.floor(cx1) : Math.ceil(ax1);
+				var ii_max = Math.ceil(bx1);
+				var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+				v_xIter3 = this1;
+			} else {
+				var ii_min = Math.floor(ax1);
+				var ii_max = Math.ceil(cx1);
+				var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+				v_xIter3 = this1;
+			}
+			if(ay1 > by1) {
+				if(ay1 > cy1) {
+					var ii_min = by1 > cy1 ? Math.floor(cy1) : Math.floor(by1);
+					var ii_max = Math.ceil(ay1);
 					var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
 					v_yIter3 = this1;
 				} else {
-					var ii_min = Math.floor(a);
-					var ii_max = Math.ceil(c);
+					var ii_min = Math.floor(by1);
+					var ii_max = Math.ceil(cy1);
 					var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
 					v_yIter3 = this1;
 				}
+			} else if(by1 > cy1) {
+				var ii_min = ay1 > cy1 ? Math.floor(cy1) : Math.ceil(ay1);
+				var ii_max = Math.ceil(by1);
+				var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+				v_yIter3 = this1;
+			} else {
+				var ii_min = Math.floor(ay1);
+				var ii_max = Math.ceil(cy1);
+				var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+				v_yIter3 = this1;
 			}
 			if(hasHit1 == true) {
-				var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy,true);
+				var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy);
 			}
 		}
 		this.x0 = x2;
@@ -31355,9 +30723,9 @@ pixelimage_triangleGML_gradient_PathElementThickGradient.prototype = $extend(pix
 		this.info = null;
 		this.toggleDraw = true;
 	}
-	,__class__: pixelimage_triangleGML_gradient_PathElementThickGradient
+	,__class__: pixelimage_triGML_gradient_PathElementThickGradient
 });
-var pixelimage_triangleGML_gradient_QuadGradient = function(opacity,visibility,x1,y1,color1,x2,y2,color2,x3,y3,color3,x4,y4,color4) {
+var pixelimage_triGML_gradient_QuadGradient = function(opacity,visibility,x1,y1,color1,x2,y2,color2,x3,y3,color3,x4,y4,color4) {
 	if(color4 == null) {
 		color4 = -27392;
 	}
@@ -31400,7 +30768,7 @@ var pixelimage_triangleGML_gradient_QuadGradient = function(opacity,visibility,x
 	if(opacity == null) {
 		opacity = 1.;
 	}
-	pixelimage_triangleGML_coreShape_BasicGradient.call(this,opacity,visibility,[color1,color2,color3,color4]);
+	pixelimage_triGML_coreShape_BasicGradient.call(this,opacity,visibility,[color1,color2,color3,color4]);
 	this.x1 = x1;
 	this.y1 = y1;
 	this.x2 = x2;
@@ -31410,9 +30778,9 @@ var pixelimage_triangleGML_gradient_QuadGradient = function(opacity,visibility,x
 	this.x4 = x4;
 	this.y4 = y4;
 };
-pixelimage_triangleGML_gradient_QuadGradient.__name__ = "pixelimage.triangleGML.gradient.QuadGradient";
-pixelimage_triangleGML_gradient_QuadGradient.__super__ = pixelimage_triangleGML_coreShape_BasicGradient;
-pixelimage_triangleGML_gradient_QuadGradient.prototype = $extend(pixelimage_triangleGML_coreShape_BasicGradient.prototype,{
+pixelimage_triGML_gradient_QuadGradient.__name__ = "pixelimage.triGML.gradient.QuadGradient";
+pixelimage_triGML_gradient_QuadGradient.__super__ = pixelimage_triGML_coreShape_BasicGradient;
+pixelimage_triGML_gradient_QuadGradient.prototype = $extend(pixelimage_triGML_coreShape_BasicGradient.prototype,{
 	setParameter: function(name,value) {
 		switch(name) {
 		case "color1":
@@ -31452,10 +30820,10 @@ pixelimage_triangleGML_gradient_QuadGradient.prototype = $extend(pixelimage_tria
 			this.y4 = parseFloat(value);
 			break;
 		default:
-			pixelimage_triangleGML_coreShape_BasicGradient.prototype.setParameter.call(this,name,value);
+			pixelimage_triGML_coreShape_BasicGradient.prototype.setParameter.call(this,name,value);
 		}
 	}
-	,render: function(pixelShape) {
+	,render: function(pixelImage) {
 		var a = this.x1;
 		var b = this.x2;
 		var c = this.x3;
@@ -31514,8 +30882,7 @@ pixelimage_triangleGML_gradient_QuadGradient.prototype = $extend(pixelimage_tria
 		var h = Math.ceil(height);
 		var this1 = new Uint32Array(w * h | 0);
 		var this2 = new pixelimage_ImageStruct(w,h,this1);
-		var this1 = this2;
-		var temp = this1;
+		var temp = this2;
 		temp.transparent = false;
 		var ax = this.x1;
 		var ay = this.y1;
@@ -31693,7 +31060,7 @@ pixelimage_triangleGML_gradient_QuadGradient.prototype = $extend(pixelimage_tria
 			}
 		}
 		if(hasHit1 == false) {
-			var v = new pixelimage_algo_HitTri(ax,ay,bx,by,dx,dy,true);
+			var v = new pixelimage_algo_HitTri(ax,ay,bx,by,dx,dy);
 		}
 		var aA = colorC >> 24 & 255;
 		var rA = colorC >> 16 & 255;
@@ -31852,23 +31219,12 @@ pixelimage_triangleGML_gradient_QuadGradient.prototype = $extend(pixelimage_tria
 		}
 		var v_yIter3;
 		var v_xIter3;
-		var v_ty;
-		var v_tx;
-		var v_t0;
-		var v_sy;
-		var v_sx;
-		var v_s0;
-		var v_A;
 		var ax1 = bx;
 		var ay1 = by;
 		var bx1 = cx;
 		var by1 = cy;
 		var cx1 = dx;
 		var cy1 = dy;
-		var preCalculated = true;
-		if(preCalculated == null) {
-			preCalculated = true;
-		}
 		var adjustWinding = ax1 * by1 - bx1 * ay1 + (bx1 * cy1 - cx1 * by1) + (cx1 * ay1 - ax1 * cy1) > 0;
 		if(!adjustWinding) {
 			var bx_ = bx1;
@@ -31884,70 +31240,61 @@ pixelimage_triangleGML_gradient_QuadGradient.prototype = $extend(pixelimage_tria
 		var v_by = by1;
 		var v_cx = cx1;
 		var v_cy = cy1;
-		var v_preCalculated = preCalculated;
-		if(preCalculated) {
-			v_s0 = v_ay * v_cx - v_ax * v_cy;
-			v_sx = v_cy - v_ay;
-			v_sy = v_ax - v_cx;
-			v_t0 = v_ax * v_by - v_ay * v_bx;
-			v_tx = v_ay - v_by;
-			v_ty = v_bx - v_ax;
-			v_A = -v_by * v_cx + v_ay * (-v_bx + v_cx) + v_ax * (v_by - v_cy) + v_bx * v_cy;
-			var a = v_ax;
-			var b = v_bx;
-			var c = v_cx;
-			if(a > b) {
-				if(a > c) {
-					var ii_min = b > c ? Math.floor(c) : Math.floor(b);
-					var ii_max = Math.ceil(a);
-					var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-					v_xIter3 = this1;
-				} else {
-					var ii_min = Math.floor(b);
-					var ii_max = Math.ceil(c);
-					var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-					v_xIter3 = this1;
-				}
-			} else if(b > c) {
-				var ii_min = a > c ? Math.floor(c) : Math.ceil(a);
-				var ii_max = Math.ceil(b);
+		var v_s0 = ay1 * cx1 - ax1 * cy1;
+		var v_sx = cy1 - ay1;
+		var v_sy = ax1 - cx1;
+		var v_t0 = ax1 * by1 - ay1 * bx1;
+		var v_tx = ay1 - by1;
+		var v_ty = bx1 - ax1;
+		var v_A = -by1 * cx1 + ay1 * (-bx1 + cx1) + ax1 * (by1 - cy1) + bx1 * cy1;
+		if(ax1 > bx1) {
+			if(ax1 > cx1) {
+				var ii_min = bx1 > cx1 ? Math.floor(cx1) : Math.floor(bx1);
+				var ii_max = Math.ceil(ax1);
 				var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
 				v_xIter3 = this1;
 			} else {
-				var ii_min = Math.floor(a);
-				var ii_max = Math.ceil(c);
+				var ii_min = Math.floor(bx1);
+				var ii_max = Math.ceil(cx1);
 				var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
 				v_xIter3 = this1;
 			}
-			var a = v_ay;
-			var b = v_by;
-			var c = v_cy;
-			if(a > b) {
-				if(a > c) {
-					var ii_min = b > c ? Math.floor(c) : Math.floor(b);
-					var ii_max = Math.ceil(a);
-					var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-					v_yIter3 = this1;
-				} else {
-					var ii_min = Math.floor(b);
-					var ii_max = Math.ceil(c);
-					var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-					v_yIter3 = this1;
-				}
-			} else if(b > c) {
-				var ii_min = a > c ? Math.floor(c) : Math.ceil(a);
-				var ii_max = Math.ceil(b);
+		} else if(bx1 > cx1) {
+			var ii_min = ax1 > cx1 ? Math.floor(cx1) : Math.ceil(ax1);
+			var ii_max = Math.ceil(bx1);
+			var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+			v_xIter3 = this1;
+		} else {
+			var ii_min = Math.floor(ax1);
+			var ii_max = Math.ceil(cx1);
+			var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+			v_xIter3 = this1;
+		}
+		if(ay1 > by1) {
+			if(ay1 > cy1) {
+				var ii_min = by1 > cy1 ? Math.floor(cy1) : Math.floor(by1);
+				var ii_max = Math.ceil(ay1);
 				var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
 				v_yIter3 = this1;
 			} else {
-				var ii_min = Math.floor(a);
-				var ii_max = Math.ceil(c);
+				var ii_min = Math.floor(by1);
+				var ii_max = Math.ceil(cy1);
 				var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
 				v_yIter3 = this1;
 			}
+		} else if(by1 > cy1) {
+			var ii_min = ay1 > cy1 ? Math.floor(cy1) : Math.ceil(ay1);
+			var ii_max = Math.ceil(by1);
+			var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+			v_yIter3 = this1;
+		} else {
+			var ii_min = Math.floor(ay1);
+			var ii_max = Math.ceil(cy1);
+			var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+			v_yIter3 = this1;
 		}
 		if(hasHit == true) {
-			var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy,true);
+			var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy);
 		}
 		var _g = 0;
 		var _g1 = temp.height;
@@ -31990,9 +31337,9 @@ pixelimage_triangleGML_gradient_QuadGradient.prototype = $extend(pixelimage_tria
 					var y = top + dy;
 					var this10 = col;
 					var c2 = this10;
-					if((c2 >> 24 & 255) < 254 && pixelShape.transparent) {
-						var location = pixelShape.useVirtualPos ? (y - pixelShape.virtualY) * pixelShape.width + x - pixelShape.virtualX | 0 : y * pixelShape.width + x | 0;
-						var this11 = pixelShape.image[location];
+					if((c2 >> 24 & 255) < 254 && pixelImage.transparent) {
+						var location = pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0;
+						var this11 = pixelImage.image[location];
 						var this12 = this11;
 						var this13 = pixelimage_Endian_isLittleEndian ? (this12 >> 24 & 255) << 24 | (this12 & 255) << 16 | (this12 >> 8 & 255) << 8 | this12 >> 16 & 255 : this12;
 						var this14 = this13 >> 24 & 255;
@@ -32017,19 +31364,19 @@ pixelimage_triangleGML_gradient_QuadGradient.prototype = $extend(pixelimage_tria
 						var b = 255 * (b1 * a3 + b2 * a2) | 0;
 						var a = 255 * (a3 + a2) | 0;
 						var blended = a << 24 | r << 16 | g << 8 | b;
-						pixelShape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+						pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 					} else {
-						pixelShape.image[pixelShape.useVirtualPos ? (y - pixelShape.virtualY) * pixelShape.width + x - pixelShape.virtualX | 0 : y * pixelShape.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c2 >> 24 & 255) << 24 | (c2 & 255) << 16 | (c2 >> 8 & 255) << 8 | c2 >> 16 & 255 : c2;
+						pixelImage.image[pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c2 >> 24 & 255) << 24 | (c2 & 255) << 16 | (c2 >> 8 & 255) << 8 | c2 >> 16 & 255 : c2;
 					}
 				}
 			}
 		}
 		temp = null;
-		return pixelimage_triangleGML_coreShape_BasicGradient.prototype.render.call(this,pixelShape);
+		return pixelimage_triGML_coreShape_BasicGradient.prototype.render.call(this,pixelImage);
 	}
-	,__class__: pixelimage_triangleGML_gradient_QuadGradient
+	,__class__: pixelimage_triGML_gradient_QuadGradient
 });
-var pixelimage_triangleGML_gradient_TriangleGradient = function(opacity,visibility,aX,aY,bX,bY,cX,cY,colorA,colorB,colorC) {
+var pixelimage_triGML_gradient_TriangleGradient = function(opacity,visibility,aX,aY,bX,bY,cX,cY,colorA,colorB,colorC) {
 	if(colorC == null) {
 		colorC = -16776961;
 	}
@@ -32063,7 +31410,7 @@ var pixelimage_triangleGML_gradient_TriangleGradient = function(opacity,visibili
 	if(opacity == null) {
 		opacity = 1.;
 	}
-	pixelimage_triangleGML_coreShape_BasicGradient.call(this,opacity,visibility,[colorA,colorB,colorC]);
+	pixelimage_triGML_coreShape_BasicGradient.call(this,opacity,visibility,[colorA,colorB,colorC]);
 	this.aX = aX;
 	this.aY = aY;
 	this.bX = bX;
@@ -32071,9 +31418,9 @@ var pixelimage_triangleGML_gradient_TriangleGradient = function(opacity,visibili
 	this.cX = cX;
 	this.cY = cY;
 };
-pixelimage_triangleGML_gradient_TriangleGradient.__name__ = "pixelimage.triangleGML.gradient.TriangleGradient";
-pixelimage_triangleGML_gradient_TriangleGradient.__super__ = pixelimage_triangleGML_coreShape_BasicGradient;
-pixelimage_triangleGML_gradient_TriangleGradient.prototype = $extend(pixelimage_triangleGML_coreShape_BasicGradient.prototype,{
+pixelimage_triGML_gradient_TriangleGradient.__name__ = "pixelimage.triGML.gradient.TriangleGradient";
+pixelimage_triGML_gradient_TriangleGradient.__super__ = pixelimage_triGML_coreShape_BasicGradient;
+pixelimage_triGML_gradient_TriangleGradient.prototype = $extend(pixelimage_triGML_coreShape_BasicGradient.prototype,{
 	setParameter: function(name,value) {
 		switch(name) {
 		case "aX":
@@ -32104,10 +31451,10 @@ pixelimage_triangleGML_gradient_TriangleGradient.prototype = $extend(pixelimage_
 			this.cornerColors[2] = Std.parseInt(value);
 			break;
 		default:
-			pixelimage_triangleGML_coreShape_BasicGradient.prototype.setParameter.call(this,name,value);
+			pixelimage_triGML_coreShape_BasicGradient.prototype.setParameter.call(this,name,value);
 		}
 	}
-	,render: function(pixelShape) {
+	,render: function(pixelImage) {
 		var ax = this.aX;
 		var ay = this.aY;
 		var colA = this.cornerColors[0];
@@ -32237,9 +31584,9 @@ pixelimage_triangleGML_gradient_TriangleGradient.prototype = $extend(pixelimage_
 					}
 					var this9 = i3;
 					var b = this9;
-					var location = pixelShape.useVirtualPos ? (py - pixelShape.virtualY) * pixelShape.width + px - pixelShape.virtualX | 0 : py * pixelShape.width + px | 0;
-					if(pixelShape.transparent && a < 254) {
-						var this10 = pixelShape.image[location];
+					var location = pixelImage.useVirtualPos ? (py - pixelImage.virtualY) * pixelImage.width + px - pixelImage.virtualX | 0 : py * pixelImage.width + px | 0;
+					if(pixelImage.transparent && a < 254) {
+						var this10 = pixelImage.image[location];
 						var this11 = this10;
 						var old = pixelimage_Endian_isLittleEndian ? (this11 >> 24 & 255) << 24 | (this11 & 255) << 16 | (this11 >> 8 & 255) << 8 | this11 >> 16 & 255 : this11;
 						var rhs = a << 24 | r << 16 | g << 8 | b;
@@ -32265,32 +31612,21 @@ pixelimage_triangleGML_gradient_TriangleGradient.prototype = $extend(pixelimage_
 						var b3 = 255 * (b1 * a3 + b2 * a2) | 0;
 						var a4 = 255 * (a3 + a2) | 0;
 						var blended = a4 << 24 | r3 << 16 | g3 << 8 | b3;
-						pixelShape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+						pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 					} else {
-						pixelShape.image[location] = pixelShape.isLittle ? a << 24 | b << 16 | g << 8 | r : a << 24 | r << 16 | g << 8 | b;
+						pixelImage.image[location] = pixelImage.isLittle ? a << 24 | b << 16 | g << 8 | r : a << 24 | r << 16 | g << 8 | b;
 					}
 				}
 			}
 		}
 		var v_yIter3;
 		var v_xIter3;
-		var v_ty;
-		var v_tx;
-		var v_t0;
-		var v_sy;
-		var v_sx;
-		var v_s0;
-		var v_A;
 		var ax1 = ax;
 		var ay1 = ay;
 		var bx1 = bx;
 		var by1 = by;
 		var cx1 = cx;
 		var cy1 = cy;
-		var preCalculated = true;
-		if(preCalculated == null) {
-			preCalculated = true;
-		}
 		var adjustWinding = ax1 * by1 - bx1 * ay1 + (bx1 * cy1 - cx1 * by1) + (cx1 * ay1 - ax1 * cy1) > 0;
 		if(!adjustWinding) {
 			var bx_ = bx1;
@@ -32306,73 +31642,64 @@ pixelimage_triangleGML_gradient_TriangleGradient.prototype = $extend(pixelimage_
 		var v_by = by1;
 		var v_cx = cx1;
 		var v_cy = cy1;
-		var v_preCalculated = preCalculated;
-		if(preCalculated) {
-			v_s0 = v_ay * v_cx - v_ax * v_cy;
-			v_sx = v_cy - v_ay;
-			v_sy = v_ax - v_cx;
-			v_t0 = v_ax * v_by - v_ay * v_bx;
-			v_tx = v_ay - v_by;
-			v_ty = v_bx - v_ax;
-			v_A = -v_by * v_cx + v_ay * (-v_bx + v_cx) + v_ax * (v_by - v_cy) + v_bx * v_cy;
-			var a = v_ax;
-			var b = v_bx;
-			var c = v_cx;
-			if(a > b) {
-				if(a > c) {
-					var ii_min = b > c ? Math.floor(c) : Math.floor(b);
-					var ii_max = Math.ceil(a);
-					var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-					v_xIter3 = this1;
-				} else {
-					var ii_min = Math.floor(b);
-					var ii_max = Math.ceil(c);
-					var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-					v_xIter3 = this1;
-				}
-			} else if(b > c) {
-				var ii_min = a > c ? Math.floor(c) : Math.ceil(a);
-				var ii_max = Math.ceil(b);
+		var v_s0 = ay1 * cx1 - ax1 * cy1;
+		var v_sx = cy1 - ay1;
+		var v_sy = ax1 - cx1;
+		var v_t0 = ax1 * by1 - ay1 * bx1;
+		var v_tx = ay1 - by1;
+		var v_ty = bx1 - ax1;
+		var v_A = -by1 * cx1 + ay1 * (-bx1 + cx1) + ax1 * (by1 - cy1) + bx1 * cy1;
+		if(ax1 > bx1) {
+			if(ax1 > cx1) {
+				var ii_min = bx1 > cx1 ? Math.floor(cx1) : Math.floor(bx1);
+				var ii_max = Math.ceil(ax1);
 				var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
 				v_xIter3 = this1;
 			} else {
-				var ii_min = Math.floor(a);
-				var ii_max = Math.ceil(c);
+				var ii_min = Math.floor(bx1);
+				var ii_max = Math.ceil(cx1);
 				var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
 				v_xIter3 = this1;
 			}
-			var a = v_ay;
-			var b = v_by;
-			var c = v_cy;
-			if(a > b) {
-				if(a > c) {
-					var ii_min = b > c ? Math.floor(c) : Math.floor(b);
-					var ii_max = Math.ceil(a);
-					var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-					v_yIter3 = this1;
-				} else {
-					var ii_min = Math.floor(b);
-					var ii_max = Math.ceil(c);
-					var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-					v_yIter3 = this1;
-				}
-			} else if(b > c) {
-				var ii_min = a > c ? Math.floor(c) : Math.ceil(a);
-				var ii_max = Math.ceil(b);
-				var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-				v_yIter3 = this1;
-			} else {
-				var ii_min = Math.floor(a);
-				var ii_max = Math.ceil(c);
-				var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-				v_yIter3 = this1;
-			}
+		} else if(bx1 > cx1) {
+			var ii_min = ax1 > cx1 ? Math.floor(cx1) : Math.ceil(ax1);
+			var ii_max = Math.ceil(bx1);
+			var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+			v_xIter3 = this1;
+		} else {
+			var ii_min = Math.floor(ax1);
+			var ii_max = Math.ceil(cx1);
+			var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+			v_xIter3 = this1;
 		}
-		return pixelimage_triangleGML_coreShape_BasicGradient.prototype.render.call(this,pixelShape);
+		if(ay1 > by1) {
+			if(ay1 > cy1) {
+				var ii_min = by1 > cy1 ? Math.floor(cy1) : Math.floor(by1);
+				var ii_max = Math.ceil(ay1);
+				var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+				v_yIter3 = this1;
+			} else {
+				var ii_min = Math.floor(by1);
+				var ii_max = Math.ceil(cy1);
+				var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+				v_yIter3 = this1;
+			}
+		} else if(by1 > cy1) {
+			var ii_min = ay1 > cy1 ? Math.floor(cy1) : Math.ceil(ay1);
+			var ii_max = Math.ceil(by1);
+			var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+			v_yIter3 = this1;
+		} else {
+			var ii_min = Math.floor(ay1);
+			var ii_max = Math.ceil(cy1);
+			var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+			v_yIter3 = this1;
+		}
+		return pixelimage_triGML_coreShape_BasicGradient.prototype.render.call(this,pixelImage);
 	}
-	,__class__: pixelimage_triangleGML_gradient_TriangleGradient
+	,__class__: pixelimage_triGML_gradient_TriangleGradient
 });
-var pixelimage_triangleGML_gradientContour_LineGradient = function(opacity,visibility,x1,y1,x2,y2,colorA,colorB,colorC,colorD,strokeWidth) {
+var pixelimage_triGML_gradientContour_LineGradient = function(opacity,visibility,x1,y1,x2,y2,colorA,colorB,colorC,colorD,strokeWidth) {
 	if(strokeWidth == null) {
 		strokeWidth = 1.;
 	}
@@ -32406,16 +31733,16 @@ var pixelimage_triangleGML_gradientContour_LineGradient = function(opacity,visib
 	if(opacity == null) {
 		opacity = 1.;
 	}
-	pixelimage_triangleGML_coreShape_BasicGradient.call(this,opacity,visibility,[colorA,colorB,colorC,colorD]);
+	pixelimage_triGML_coreShape_BasicGradient.call(this,opacity,visibility,[colorA,colorB,colorC,colorD]);
 	this.x1 = x1;
 	this.y1 = y1;
 	this.x2 = x2;
 	this.y2 = y2;
 	this.strokeWidth = strokeWidth;
 };
-pixelimage_triangleGML_gradientContour_LineGradient.__name__ = "pixelimage.triangleGML.gradientContour.LineGradient";
-pixelimage_triangleGML_gradientContour_LineGradient.__super__ = pixelimage_triangleGML_coreShape_BasicGradient;
-pixelimage_triangleGML_gradientContour_LineGradient.prototype = $extend(pixelimage_triangleGML_coreShape_BasicGradient.prototype,{
+pixelimage_triGML_gradientContour_LineGradient.__name__ = "pixelimage.triGML.gradientContour.LineGradient";
+pixelimage_triGML_gradientContour_LineGradient.__super__ = pixelimage_triGML_coreShape_BasicGradient;
+pixelimage_triGML_gradientContour_LineGradient.prototype = $extend(pixelimage_triGML_coreShape_BasicGradient.prototype,{
 	setParameter: function(name,value) {
 		switch(name) {
 		case "colorA":
@@ -32462,10 +31789,10 @@ pixelimage_triangleGML_gradientContour_LineGradient.prototype = $extend(pixelima
 			this.y2 = parseFloat(value);
 			break;
 		default:
-			pixelimage_triangleGML_coreShape_BasicGradient.prototype.setParameter.call(this,name,value);
+			pixelimage_triGML_coreShape_BasicGradient.prototype.setParameter.call(this,name,value);
 		}
 	}
-	,render: function(pixelShape) {
+	,render: function(pixelImage) {
 		var px = this.x1;
 		var py = this.y1;
 		var colorA = this.cornerColors[0];
@@ -32520,9 +31847,9 @@ pixelimage_triangleGML_gradientContour_LineGradient.prototype = $extend(pixelima
 				var x = p++;
 				var this1 = colorA;
 				var c = this1;
-				if((c >> 24 & 255) < 254 && pixelShape.transparent) {
-					var location = pixelShape.useVirtualPos ? (q - pixelShape.virtualY) * pixelShape.width + x - pixelShape.virtualX | 0 : q * pixelShape.width + x | 0;
-					var this2 = pixelShape.image[location];
+				if((c >> 24 & 255) < 254 && pixelImage.transparent) {
+					var location = pixelImage.useVirtualPos ? (q - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : q * pixelImage.width + x | 0;
+					var this2 = pixelImage.image[location];
 					var this3 = this2;
 					var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
 					var this5 = this4 >> 24 & 255;
@@ -32547,9 +31874,9 @@ pixelimage_triangleGML_gradientContour_LineGradient.prototype = $extend(pixelima
 					var b = 255 * (b1 * a3 + b2 * a2) | 0;
 					var a = 255 * (a3 + a2) | 0;
 					var blended = a << 24 | r << 16 | g << 8 | b;
-					pixelShape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+					pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 				} else {
-					pixelShape.image[pixelShape.useVirtualPos ? (q - pixelShape.virtualY) * pixelShape.width + x - pixelShape.virtualX | 0 : q * pixelShape.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
+					pixelImage.image[pixelImage.useVirtualPos ? (q - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : q * pixelImage.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
 				}
 				if(p > maxX) {
 					p = xx;
@@ -32570,9 +31897,9 @@ pixelimage_triangleGML_gradientContour_LineGradient.prototype = $extend(pixelima
 				var x = p++;
 				var this1 = colorB;
 				var c = this1;
-				if((c >> 24 & 255) < 254 && pixelShape.transparent) {
-					var location = pixelShape.useVirtualPos ? (q - pixelShape.virtualY) * pixelShape.width + x - pixelShape.virtualX | 0 : q * pixelShape.width + x | 0;
-					var this2 = pixelShape.image[location];
+				if((c >> 24 & 255) < 254 && pixelImage.transparent) {
+					var location = pixelImage.useVirtualPos ? (q - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : q * pixelImage.width + x | 0;
+					var this2 = pixelImage.image[location];
 					var this3 = this2;
 					var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
 					var this5 = this4 >> 24 & 255;
@@ -32597,9 +31924,9 @@ pixelimage_triangleGML_gradientContour_LineGradient.prototype = $extend(pixelima
 					var b = 255 * (b1 * a3 + b2 * a2) | 0;
 					var a = 255 * (a3 + a2) | 0;
 					var blended = a << 24 | r << 16 | g << 8 | b;
-					pixelShape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+					pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 				} else {
-					pixelShape.image[pixelShape.useVirtualPos ? (q - pixelShape.virtualY) * pixelShape.width + x - pixelShape.virtualX | 0 : q * pixelShape.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
+					pixelImage.image[pixelImage.useVirtualPos ? (q - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : q * pixelImage.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
 				}
 				if(p > maxX) {
 					p = xx;
@@ -32620,9 +31947,9 @@ pixelimage_triangleGML_gradientContour_LineGradient.prototype = $extend(pixelima
 				var x = p++;
 				var this1 = colorC;
 				var c = this1;
-				if((c >> 24 & 255) < 254 && pixelShape.transparent) {
-					var location = pixelShape.useVirtualPos ? (q - pixelShape.virtualY) * pixelShape.width + x - pixelShape.virtualX | 0 : q * pixelShape.width + x | 0;
-					var this2 = pixelShape.image[location];
+				if((c >> 24 & 255) < 254 && pixelImage.transparent) {
+					var location = pixelImage.useVirtualPos ? (q - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : q * pixelImage.width + x | 0;
+					var this2 = pixelImage.image[location];
 					var this3 = this2;
 					var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
 					var this5 = this4 >> 24 & 255;
@@ -32647,9 +31974,9 @@ pixelimage_triangleGML_gradientContour_LineGradient.prototype = $extend(pixelima
 					var b = 255 * (b1 * a3 + b2 * a2) | 0;
 					var a = 255 * (a3 + a2) | 0;
 					var blended = a << 24 | r << 16 | g << 8 | b;
-					pixelShape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+					pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 				} else {
-					pixelShape.image[pixelShape.useVirtualPos ? (q - pixelShape.virtualY) * pixelShape.width + x - pixelShape.virtualX | 0 : q * pixelShape.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
+					pixelImage.image[pixelImage.useVirtualPos ? (q - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : q * pixelImage.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
 				}
 				if(p > maxX) {
 					p = xx;
@@ -32670,9 +31997,9 @@ pixelimage_triangleGML_gradientContour_LineGradient.prototype = $extend(pixelima
 				var x = p++;
 				var this1 = colorD;
 				var c = this1;
-				if((c >> 24 & 255) < 254 && pixelShape.transparent) {
-					var location = pixelShape.useVirtualPos ? (q - pixelShape.virtualY) * pixelShape.width + x - pixelShape.virtualX | 0 : q * pixelShape.width + x | 0;
-					var this2 = pixelShape.image[location];
+				if((c >> 24 & 255) < 254 && pixelImage.transparent) {
+					var location = pixelImage.useVirtualPos ? (q - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : q * pixelImage.width + x | 0;
+					var this2 = pixelImage.image[location];
 					var this3 = this2;
 					var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
 					var this5 = this4 >> 24 & 255;
@@ -32697,9 +32024,9 @@ pixelimage_triangleGML_gradientContour_LineGradient.prototype = $extend(pixelima
 					var b = 255 * (b1 * a3 + b2 * a2) | 0;
 					var a = 255 * (a3 + a2) | 0;
 					var blended = a << 24 | r << 16 | g << 8 | b;
-					pixelShape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+					pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 				} else {
-					pixelShape.image[pixelShape.useVirtualPos ? (q - pixelShape.virtualY) * pixelShape.width + x - pixelShape.virtualX | 0 : q * pixelShape.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
+					pixelImage.image[pixelImage.useVirtualPos ? (q - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : q * pixelImage.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
 				}
 				if(p > maxX) {
 					p = xx;
@@ -32838,9 +32165,9 @@ pixelimage_triangleGML_gradientContour_LineGradient.prototype = $extend(pixelima
 					}
 					var this9 = i3;
 					var b = this9;
-					var location = pixelShape.useVirtualPos ? (py - pixelShape.virtualY) * pixelShape.width + px - pixelShape.virtualX | 0 : py * pixelShape.width + px | 0;
-					if(pixelShape.transparent && a < 254) {
-						var this10 = pixelShape.image[location];
+					var location = pixelImage.useVirtualPos ? (py - pixelImage.virtualY) * pixelImage.width + px - pixelImage.virtualX | 0 : py * pixelImage.width + px | 0;
+					if(pixelImage.transparent && a < 254) {
+						var this10 = pixelImage.image[location];
 						var this11 = this10;
 						var old = pixelimage_Endian_isLittleEndian ? (this11 >> 24 & 255) << 24 | (this11 & 255) << 16 | (this11 >> 8 & 255) << 8 | this11 >> 16 & 255 : this11;
 						var rhs = a << 24 | r << 16 | g << 8 | b;
@@ -32866,15 +32193,15 @@ pixelimage_triangleGML_gradientContour_LineGradient.prototype = $extend(pixelima
 						var b3 = 255 * (b1 * a3 + b2 * a2) | 0;
 						var a4 = 255 * (a3 + a2) | 0;
 						var blended = a4 << 24 | r3 << 16 | g3 << 8 | b3;
-						pixelShape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+						pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 					} else {
-						pixelShape.image[location] = pixelShape.isLittle ? a << 24 | b << 16 | g << 8 | r : a << 24 | r << 16 | g << 8 | b;
+						pixelImage.image[location] = pixelImage.isLittle ? a << 24 | b << 16 | g << 8 | r : a << 24 | r << 16 | g << 8 | b;
 					}
 				}
 			}
 		}
 		if(hasHit == false) {
-			var v = new pixelimage_algo_HitTri(ax,ay,bx,by,dx,dy,true);
+			var v = new pixelimage_algo_HitTri(ax,ay,bx,by,dx,dy);
 		}
 		var aA = colorC >> 24 & 255;
 		var rA = colorC >> 16 & 255;
@@ -32996,9 +32323,9 @@ pixelimage_triangleGML_gradientContour_LineGradient.prototype = $extend(pixelima
 					}
 					var this9 = i3;
 					var b = this9;
-					var location = pixelShape.useVirtualPos ? (py - pixelShape.virtualY) * pixelShape.width + px - pixelShape.virtualX | 0 : py * pixelShape.width + px | 0;
-					if(pixelShape.transparent && a < 254) {
-						var this10 = pixelShape.image[location];
+					var location = pixelImage.useVirtualPos ? (py - pixelImage.virtualY) * pixelImage.width + px - pixelImage.virtualX | 0 : py * pixelImage.width + px | 0;
+					if(pixelImage.transparent && a < 254) {
+						var this10 = pixelImage.image[location];
 						var this11 = this10;
 						var old = pixelimage_Endian_isLittleEndian ? (this11 >> 24 & 255) << 24 | (this11 & 255) << 16 | (this11 >> 8 & 255) << 8 | this11 >> 16 & 255 : this11;
 						var rhs = a << 24 | r << 16 | g << 8 | b;
@@ -33024,32 +32351,21 @@ pixelimage_triangleGML_gradientContour_LineGradient.prototype = $extend(pixelima
 						var b3 = 255 * (b1 * a3 + b2 * a2) | 0;
 						var a4 = 255 * (a3 + a2) | 0;
 						var blended = a4 << 24 | r3 << 16 | g3 << 8 | b3;
-						pixelShape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+						pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 					} else {
-						pixelShape.image[location] = pixelShape.isLittle ? a << 24 | b << 16 | g << 8 | r : a << 24 | r << 16 | g << 8 | b;
+						pixelImage.image[location] = pixelImage.isLittle ? a << 24 | b << 16 | g << 8 | r : a << 24 | r << 16 | g << 8 | b;
 					}
 				}
 			}
 		}
 		var v_yIter3;
 		var v_xIter3;
-		var v_ty;
-		var v_tx;
-		var v_t0;
-		var v_sy;
-		var v_sx;
-		var v_s0;
-		var v_A;
 		var ax1 = bx;
 		var ay1 = by;
 		var bx1 = cx;
 		var by1 = cy;
 		var cx1 = dx;
 		var cy1 = dy;
-		var preCalculated = true;
-		if(preCalculated == null) {
-			preCalculated = true;
-		}
 		var adjustWinding = ax1 * by1 - bx1 * ay1 + (bx1 * cy1 - cx1 * by1) + (cx1 * ay1 - ax1 * cy1) > 0;
 		if(!adjustWinding) {
 			var bx_ = bx1;
@@ -33065,76 +32381,67 @@ pixelimage_triangleGML_gradientContour_LineGradient.prototype = $extend(pixelima
 		var v_by = by1;
 		var v_cx = cx1;
 		var v_cy = cy1;
-		var v_preCalculated = preCalculated;
-		if(preCalculated) {
-			v_s0 = v_ay * v_cx - v_ax * v_cy;
-			v_sx = v_cy - v_ay;
-			v_sy = v_ax - v_cx;
-			v_t0 = v_ax * v_by - v_ay * v_bx;
-			v_tx = v_ay - v_by;
-			v_ty = v_bx - v_ax;
-			v_A = -v_by * v_cx + v_ay * (-v_bx + v_cx) + v_ax * (v_by - v_cy) + v_bx * v_cy;
-			var a = v_ax;
-			var b = v_bx;
-			var c = v_cx;
-			if(a > b) {
-				if(a > c) {
-					var ii_min = b > c ? Math.floor(c) : Math.floor(b);
-					var ii_max = Math.ceil(a);
-					var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-					v_xIter3 = this1;
-				} else {
-					var ii_min = Math.floor(b);
-					var ii_max = Math.ceil(c);
-					var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-					v_xIter3 = this1;
-				}
-			} else if(b > c) {
-				var ii_min = a > c ? Math.floor(c) : Math.ceil(a);
-				var ii_max = Math.ceil(b);
+		var v_s0 = ay1 * cx1 - ax1 * cy1;
+		var v_sx = cy1 - ay1;
+		var v_sy = ax1 - cx1;
+		var v_t0 = ax1 * by1 - ay1 * bx1;
+		var v_tx = ay1 - by1;
+		var v_ty = bx1 - ax1;
+		var v_A = -by1 * cx1 + ay1 * (-bx1 + cx1) + ax1 * (by1 - cy1) + bx1 * cy1;
+		if(ax1 > bx1) {
+			if(ax1 > cx1) {
+				var ii_min = bx1 > cx1 ? Math.floor(cx1) : Math.floor(bx1);
+				var ii_max = Math.ceil(ax1);
 				var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
 				v_xIter3 = this1;
 			} else {
-				var ii_min = Math.floor(a);
-				var ii_max = Math.ceil(c);
+				var ii_min = Math.floor(bx1);
+				var ii_max = Math.ceil(cx1);
 				var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
 				v_xIter3 = this1;
 			}
-			var a = v_ay;
-			var b = v_by;
-			var c = v_cy;
-			if(a > b) {
-				if(a > c) {
-					var ii_min = b > c ? Math.floor(c) : Math.floor(b);
-					var ii_max = Math.ceil(a);
-					var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-					v_yIter3 = this1;
-				} else {
-					var ii_min = Math.floor(b);
-					var ii_max = Math.ceil(c);
-					var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
-					v_yIter3 = this1;
-				}
-			} else if(b > c) {
-				var ii_min = a > c ? Math.floor(c) : Math.ceil(a);
-				var ii_max = Math.ceil(b);
+		} else if(bx1 > cx1) {
+			var ii_min = ax1 > cx1 ? Math.floor(cx1) : Math.ceil(ax1);
+			var ii_max = Math.ceil(bx1);
+			var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+			v_xIter3 = this1;
+		} else {
+			var ii_min = Math.floor(ax1);
+			var ii_max = Math.ceil(cx1);
+			var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+			v_xIter3 = this1;
+		}
+		if(ay1 > by1) {
+			if(ay1 > cy1) {
+				var ii_min = by1 > cy1 ? Math.floor(cy1) : Math.floor(by1);
+				var ii_max = Math.ceil(ay1);
 				var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
 				v_yIter3 = this1;
 			} else {
-				var ii_min = Math.floor(a);
-				var ii_max = Math.ceil(c);
+				var ii_min = Math.floor(by1);
+				var ii_max = Math.ceil(cy1);
 				var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
 				v_yIter3 = this1;
 			}
+		} else if(by1 > cy1) {
+			var ii_min = ay1 > cy1 ? Math.floor(cy1) : Math.ceil(ay1);
+			var ii_max = Math.ceil(by1);
+			var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+			v_yIter3 = this1;
+		} else {
+			var ii_min = Math.floor(ay1);
+			var ii_max = Math.ceil(cy1);
+			var this1 = new pixelimage_iter_IntIterStart(ii_min,ii_max);
+			v_yIter3 = this1;
 		}
 		if(hasHit1 == true) {
-			var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy,true);
+			var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy);
 		}
-		return pixelimage_triangleGML_coreShape_BasicGradient.prototype.render.call(this,pixelShape);
+		return pixelimage_triGML_coreShape_BasicGradient.prototype.render.call(this,pixelImage);
 	}
-	,__class__: pixelimage_triangleGML_gradientContour_LineGradient
+	,__class__: pixelimage_triGML_gradientContour_LineGradient
 });
-var pixelimage_triangleGML_gradientContour_PolyLineGradient = function(opacity,visibility,strokeWidth,points,colorDirection,colors) {
+var pixelimage_triGML_gradientContour_PolyLineGradient = function(opacity,visibility,strokeWidth,points,colorDirection,colors) {
 	if(colorDirection == null) {
 		colorDirection = "longways";
 	}
@@ -33147,14 +32454,14 @@ var pixelimage_triangleGML_gradientContour_PolyLineGradient = function(opacity,v
 	if(opacity == null) {
 		opacity = 1.;
 	}
-	pixelimage_triangleGML_coreShape_BasicGradient.call(this,opacity,visibility,colors);
+	pixelimage_triGML_coreShape_BasicGradient.call(this,opacity,visibility,colors);
 	this.strokeWidth = strokeWidth;
 	this.colorDirection = colorDirection;
 	this.points = points;
 };
-pixelimage_triangleGML_gradientContour_PolyLineGradient.__name__ = "pixelimage.triangleGML.gradientContour.PolyLineGradient";
-pixelimage_triangleGML_gradientContour_PolyLineGradient.__super__ = pixelimage_triangleGML_coreShape_BasicGradient;
-pixelimage_triangleGML_gradientContour_PolyLineGradient.prototype = $extend(pixelimage_triangleGML_coreShape_BasicGradient.prototype,{
+pixelimage_triGML_gradientContour_PolyLineGradient.__name__ = "pixelimage.triGML.gradientContour.PolyLineGradient";
+pixelimage_triGML_gradientContour_PolyLineGradient.__super__ = pixelimage_triGML_coreShape_BasicGradient;
+pixelimage_triGML_gradientContour_PolyLineGradient.prototype = $extend(pixelimage_triGML_coreShape_BasicGradient.prototype,{
 	setParameter: function(name,value) {
 		switch(name) {
 		case "colorDirection":
@@ -33188,16 +32495,16 @@ pixelimage_triangleGML_gradientContour_PolyLineGradient.prototype = $extend(pixe
 			this.strokeWidth = parseFloat(value);
 			break;
 		default:
-			pixelimage_triangleGML_coreShape_BasicGradient.prototype.setParameter.call(this,name,value);
+			pixelimage_triGML_coreShape_BasicGradient.prototype.setParameter.call(this,name,value);
 		}
 	}
-	,render: function(pixelShape) {
+	,render: function(pixelImage) {
 		var l = this.points.length;
 		if(l < 4) {
-			return pixelShape;
+			return pixelImage;
 		}
 		if(l % 2 != 0) {
-			return pixelShape;
+			return pixelImage;
 		}
 		var i = 0;
 		var x = 0.;
@@ -33298,9 +32605,9 @@ pixelimage_triangleGML_gradientContour_PolyLineGradient.prototype = $extend(pixe
 					var x2 = p++;
 					var this1 = colorA;
 					var c = this1;
-					if((c >> 24 & 255) < 254 && pixelShape.transparent) {
-						var location = pixelShape.useVirtualPos ? (q - pixelShape.virtualY) * pixelShape.width + x2 - pixelShape.virtualX | 0 : q * pixelShape.width + x2 | 0;
-						var this2 = pixelShape.image[location];
+					if((c >> 24 & 255) < 254 && pixelImage.transparent) {
+						var location = pixelImage.useVirtualPos ? (q - pixelImage.virtualY) * pixelImage.width + x2 - pixelImage.virtualX | 0 : q * pixelImage.width + x2 | 0;
+						var this2 = pixelImage.image[location];
 						var this3 = this2;
 						var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
 						var this5 = this4 >> 24 & 255;
@@ -33325,9 +32632,9 @@ pixelimage_triangleGML_gradientContour_PolyLineGradient.prototype = $extend(pixe
 						var b = 255 * (b1 * a3 + b2 * a2) | 0;
 						var a4 = 255 * (a3 + a2) | 0;
 						var blended = a4 << 24 | r << 16 | g << 8 | b;
-						pixelShape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+						pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 					} else {
-						pixelShape.image[pixelShape.useVirtualPos ? (q - pixelShape.virtualY) * pixelShape.width + x2 - pixelShape.virtualX | 0 : q * pixelShape.width + x2 | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
+						pixelImage.image[pixelImage.useVirtualPos ? (q - pixelImage.virtualY) * pixelImage.width + x2 - pixelImage.virtualX | 0 : q * pixelImage.width + x2 | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
 					}
 					if(p > maxX) {
 						p = xx;
@@ -33348,9 +32655,9 @@ pixelimage_triangleGML_gradientContour_PolyLineGradient.prototype = $extend(pixe
 					var x4 = p1++;
 					var this13 = colorB;
 					var c1 = this13;
-					if((c1 >> 24 & 255) < 254 && pixelShape.transparent) {
-						var location1 = pixelShape.useVirtualPos ? (q1 - pixelShape.virtualY) * pixelShape.width + x4 - pixelShape.virtualX | 0 : q1 * pixelShape.width + x4 | 0;
-						var this14 = pixelShape.image[location1];
+					if((c1 >> 24 & 255) < 254 && pixelImage.transparent) {
+						var location1 = pixelImage.useVirtualPos ? (q1 - pixelImage.virtualY) * pixelImage.width + x4 - pixelImage.virtualX | 0 : q1 * pixelImage.width + x4 | 0;
+						var this14 = pixelImage.image[location1];
 						var this15 = this14;
 						var this16 = pixelimage_Endian_isLittleEndian ? (this15 >> 24 & 255) << 24 | (this15 & 255) << 16 | (this15 >> 8 & 255) << 8 | this15 >> 16 & 255 : this15;
 						var this17 = this16 >> 24 & 255;
@@ -33375,9 +32682,9 @@ pixelimage_triangleGML_gradientContour_PolyLineGradient.prototype = $extend(pixe
 						var b3 = 255 * (b11 * a31 + b21 * a21) | 0;
 						var a5 = 255 * (a31 + a21) | 0;
 						var blended1 = a5 << 24 | r3 << 16 | g3 << 8 | b3;
-						pixelShape.image[location1] = pixelimage_Endian_isLittleEndian ? (blended1 >> 24 & 255) << 24 | (blended1 & 255) << 16 | (blended1 >> 8 & 255) << 8 | blended1 >> 16 & 255 : blended1;
+						pixelImage.image[location1] = pixelimage_Endian_isLittleEndian ? (blended1 >> 24 & 255) << 24 | (blended1 & 255) << 16 | (blended1 >> 8 & 255) << 8 | blended1 >> 16 & 255 : blended1;
 					} else {
-						pixelShape.image[pixelShape.useVirtualPos ? (q1 - pixelShape.virtualY) * pixelShape.width + x4 - pixelShape.virtualX | 0 : q1 * pixelShape.width + x4 | 0] = pixelimage_Endian_isLittleEndian ? (c1 >> 24 & 255) << 24 | (c1 & 255) << 16 | (c1 >> 8 & 255) << 8 | c1 >> 16 & 255 : c1;
+						pixelImage.image[pixelImage.useVirtualPos ? (q1 - pixelImage.virtualY) * pixelImage.width + x4 - pixelImage.virtualX | 0 : q1 * pixelImage.width + x4 | 0] = pixelimage_Endian_isLittleEndian ? (c1 >> 24 & 255) << 24 | (c1 & 255) << 16 | (c1 >> 8 & 255) << 8 | c1 >> 16 & 255 : c1;
 					}
 					if(p1 > maxX1) {
 						p1 = xx1;
@@ -33398,9 +32705,9 @@ pixelimage_triangleGML_gradientContour_PolyLineGradient.prototype = $extend(pixe
 					var x6 = p2++;
 					var this25 = colorC;
 					var c2 = this25;
-					if((c2 >> 24 & 255) < 254 && pixelShape.transparent) {
-						var location2 = pixelShape.useVirtualPos ? (q2 - pixelShape.virtualY) * pixelShape.width + x6 - pixelShape.virtualX | 0 : q2 * pixelShape.width + x6 | 0;
-						var this26 = pixelShape.image[location2];
+					if((c2 >> 24 & 255) < 254 && pixelImage.transparent) {
+						var location2 = pixelImage.useVirtualPos ? (q2 - pixelImage.virtualY) * pixelImage.width + x6 - pixelImage.virtualX | 0 : q2 * pixelImage.width + x6 | 0;
+						var this26 = pixelImage.image[location2];
 						var this27 = this26;
 						var this28 = pixelimage_Endian_isLittleEndian ? (this27 >> 24 & 255) << 24 | (this27 & 255) << 16 | (this27 >> 8 & 255) << 8 | this27 >> 16 & 255 : this27;
 						var this29 = this28 >> 24 & 255;
@@ -33425,9 +32732,9 @@ pixelimage_triangleGML_gradientContour_PolyLineGradient.prototype = $extend(pixe
 						var b4 = 255 * (b12 * a32 + b22 * a22) | 0;
 						var a6 = 255 * (a32 + a22) | 0;
 						var blended2 = a6 << 24 | r4 << 16 | g4 << 8 | b4;
-						pixelShape.image[location2] = pixelimage_Endian_isLittleEndian ? (blended2 >> 24 & 255) << 24 | (blended2 & 255) << 16 | (blended2 >> 8 & 255) << 8 | blended2 >> 16 & 255 : blended2;
+						pixelImage.image[location2] = pixelimage_Endian_isLittleEndian ? (blended2 >> 24 & 255) << 24 | (blended2 & 255) << 16 | (blended2 >> 8 & 255) << 8 | blended2 >> 16 & 255 : blended2;
 					} else {
-						pixelShape.image[pixelShape.useVirtualPos ? (q2 - pixelShape.virtualY) * pixelShape.width + x6 - pixelShape.virtualX | 0 : q2 * pixelShape.width + x6 | 0] = pixelimage_Endian_isLittleEndian ? (c2 >> 24 & 255) << 24 | (c2 & 255) << 16 | (c2 >> 8 & 255) << 8 | c2 >> 16 & 255 : c2;
+						pixelImage.image[pixelImage.useVirtualPos ? (q2 - pixelImage.virtualY) * pixelImage.width + x6 - pixelImage.virtualX | 0 : q2 * pixelImage.width + x6 | 0] = pixelimage_Endian_isLittleEndian ? (c2 >> 24 & 255) << 24 | (c2 & 255) << 16 | (c2 >> 8 & 255) << 8 | c2 >> 16 & 255 : c2;
 					}
 					if(p2 > maxX2) {
 						p2 = xx2;
@@ -33448,9 +32755,9 @@ pixelimage_triangleGML_gradientContour_PolyLineGradient.prototype = $extend(pixe
 					var x8 = p3++;
 					var this37 = colorD;
 					var c3 = this37;
-					if((c3 >> 24 & 255) < 254 && pixelShape.transparent) {
-						var location3 = pixelShape.useVirtualPos ? (q3 - pixelShape.virtualY) * pixelShape.width + x8 - pixelShape.virtualX | 0 : q3 * pixelShape.width + x8 | 0;
-						var this38 = pixelShape.image[location3];
+					if((c3 >> 24 & 255) < 254 && pixelImage.transparent) {
+						var location3 = pixelImage.useVirtualPos ? (q3 - pixelImage.virtualY) * pixelImage.width + x8 - pixelImage.virtualX | 0 : q3 * pixelImage.width + x8 | 0;
+						var this38 = pixelImage.image[location3];
 						var this39 = this38;
 						var this40 = pixelimage_Endian_isLittleEndian ? (this39 >> 24 & 255) << 24 | (this39 & 255) << 16 | (this39 >> 8 & 255) << 8 | this39 >> 16 & 255 : this39;
 						var this41 = this40 >> 24 & 255;
@@ -33475,9 +32782,9 @@ pixelimage_triangleGML_gradientContour_PolyLineGradient.prototype = $extend(pixe
 						var b5 = 255 * (b13 * a33 + b23 * a23) | 0;
 						var a7 = 255 * (a33 + a23) | 0;
 						var blended3 = a7 << 24 | r5 << 16 | g5 << 8 | b5;
-						pixelShape.image[location3] = pixelimage_Endian_isLittleEndian ? (blended3 >> 24 & 255) << 24 | (blended3 & 255) << 16 | (blended3 >> 8 & 255) << 8 | blended3 >> 16 & 255 : blended3;
+						pixelImage.image[location3] = pixelimage_Endian_isLittleEndian ? (blended3 >> 24 & 255) << 24 | (blended3 & 255) << 16 | (blended3 >> 8 & 255) << 8 | blended3 >> 16 & 255 : blended3;
 					} else {
-						pixelShape.image[pixelShape.useVirtualPos ? (q3 - pixelShape.virtualY) * pixelShape.width + x8 - pixelShape.virtualX | 0 : q3 * pixelShape.width + x8 | 0] = pixelimage_Endian_isLittleEndian ? (c3 >> 24 & 255) << 24 | (c3 & 255) << 16 | (c3 >> 8 & 255) << 8 | c3 >> 16 & 255 : c3;
+						pixelImage.image[pixelImage.useVirtualPos ? (q3 - pixelImage.virtualY) * pixelImage.width + x8 - pixelImage.virtualX | 0 : q3 * pixelImage.width + x8 | 0] = pixelimage_Endian_isLittleEndian ? (c3 >> 24 & 255) << 24 | (c3 & 255) << 16 | (c3 >> 8 & 255) << 8 | c3 >> 16 & 255 : c3;
 					}
 					if(p3 > maxX3) {
 						p3 = xx3;
@@ -33616,9 +32923,9 @@ pixelimage_triangleGML_gradientContour_PolyLineGradient.prototype = $extend(pixe
 						}
 						var this62 = i4;
 						var b6 = this62;
-						var location4 = pixelShape.useVirtualPos ? (py - pixelShape.virtualY) * pixelShape.width + px - pixelShape.virtualX | 0 : py * pixelShape.width + px | 0;
-						if(pixelShape.transparent && a8 < 254) {
-							var this63 = pixelShape.image[location4];
+						var location4 = pixelImage.useVirtualPos ? (py - pixelImage.virtualY) * pixelImage.width + px - pixelImage.virtualX | 0 : py * pixelImage.width + px | 0;
+						if(pixelImage.transparent && a8 < 254) {
+							var this63 = pixelImage.image[location4];
 							var this64 = this63;
 							var old = pixelimage_Endian_isLittleEndian ? (this64 >> 24 & 255) << 24 | (this64 & 255) << 16 | (this64 >> 8 & 255) << 8 | this64 >> 16 & 255 : this64;
 							var rhs = a8 << 24 | r6 << 16 | g6 << 8 | b6;
@@ -33644,15 +32951,15 @@ pixelimage_triangleGML_gradientContour_PolyLineGradient.prototype = $extend(pixe
 							var b7 = 255 * (b14 * a34 + b24 * a24) | 0;
 							var a9 = 255 * (a34 + a24) | 0;
 							var blended4 = a9 << 24 | r7 << 16 | g7 << 8 | b7;
-							pixelShape.image[location4] = pixelimage_Endian_isLittleEndian ? (blended4 >> 24 & 255) << 24 | (blended4 & 255) << 16 | (blended4 >> 8 & 255) << 8 | blended4 >> 16 & 255 : blended4;
+							pixelImage.image[location4] = pixelimage_Endian_isLittleEndian ? (blended4 >> 24 & 255) << 24 | (blended4 & 255) << 16 | (blended4 >> 8 & 255) << 8 | blended4 >> 16 & 255 : blended4;
 						} else {
-							pixelShape.image[location4] = pixelShape.isLittle ? a8 << 24 | b6 << 16 | g6 << 8 | r6 : a8 << 24 | r6 << 16 | g6 << 8 | b6;
+							pixelImage.image[location4] = pixelImage.isLittle ? a8 << 24 | b6 << 16 | g6 << 8 | r6 : a8 << 24 | r6 << 16 | g6 << 8 | b6;
 						}
 					}
 				}
 			}
 			if(hasHit2 == false) {
-				var v = new pixelimage_algo_HitTri(ax,ay,bx,by,dx,dy,true);
+				var v = new pixelimage_algo_HitTri(ax,ay,bx,by,dx,dy);
 			}
 			var aA1 = colorC >> 24 & 255;
 			var rA1 = colorC >> 16 & 255;
@@ -33774,9 +33081,9 @@ pixelimage_triangleGML_gradientContour_PolyLineGradient.prototype = $extend(pixe
 						}
 						var this86 = i8;
 						var b8 = this86;
-						var location5 = pixelShape.useVirtualPos ? (py1 - pixelShape.virtualY) * pixelShape.width + px1 - pixelShape.virtualX | 0 : py1 * pixelShape.width + px1 | 0;
-						if(pixelShape.transparent && a10 < 254) {
-							var this87 = pixelShape.image[location5];
+						var location5 = pixelImage.useVirtualPos ? (py1 - pixelImage.virtualY) * pixelImage.width + px1 - pixelImage.virtualX | 0 : py1 * pixelImage.width + px1 | 0;
+						if(pixelImage.transparent && a10 < 254) {
+							var this87 = pixelImage.image[location5];
 							var this88 = this87;
 							var old1 = pixelimage_Endian_isLittleEndian ? (this88 >> 24 & 255) << 24 | (this88 & 255) << 16 | (this88 >> 8 & 255) << 8 | this88 >> 16 & 255 : this88;
 							var rhs1 = a10 << 24 | r8 << 16 | g8 << 8 | b8;
@@ -33802,32 +33109,21 @@ pixelimage_triangleGML_gradientContour_PolyLineGradient.prototype = $extend(pixe
 							var b9 = 255 * (b15 * a35 + b25 * a25) | 0;
 							var a16 = 255 * (a35 + a25) | 0;
 							var blended5 = a16 << 24 | r9 << 16 | g9 << 8 | b9;
-							pixelShape.image[location5] = pixelimage_Endian_isLittleEndian ? (blended5 >> 24 & 255) << 24 | (blended5 & 255) << 16 | (blended5 >> 8 & 255) << 8 | blended5 >> 16 & 255 : blended5;
+							pixelImage.image[location5] = pixelimage_Endian_isLittleEndian ? (blended5 >> 24 & 255) << 24 | (blended5 & 255) << 16 | (blended5 >> 8 & 255) << 8 | blended5 >> 16 & 255 : blended5;
 						} else {
-							pixelShape.image[location5] = pixelShape.isLittle ? a10 << 24 | b8 << 16 | g8 << 8 | r8 : a10 << 24 | r8 << 16 | g8 << 8 | b8;
+							pixelImage.image[location5] = pixelImage.isLittle ? a10 << 24 | b8 << 16 | g8 << 8 | r8 : a10 << 24 | r8 << 16 | g8 << 8 | b8;
 						}
 					}
 				}
 			}
 			var v_yIter3;
 			var v_xIter3;
-			var v_ty;
-			var v_tx;
-			var v_t0;
-			var v_sy;
-			var v_sx;
-			var v_s0;
-			var v_A;
 			var ax1 = bx;
 			var ay1 = by;
 			var bx1 = cx;
 			var by1 = cy;
 			var cx1 = dx;
 			var cy1 = dy;
-			var preCalculated = true;
-			if(preCalculated == null) {
-				preCalculated = true;
-			}
 			var adjustWinding = ax1 * by1 - bx1 * ay1 + (bx1 * cy1 - cx1 * by1) + (cx1 * ay1 - ax1 * cy1) > 0;
 			if(!adjustWinding) {
 				var bx_ = bx1;
@@ -33843,77 +33139,68 @@ pixelimage_triangleGML_gradientContour_PolyLineGradient.prototype = $extend(pixe
 			var v_by = by1;
 			var v_cx = cx1;
 			var v_cy = cy1;
-			var v_preCalculated = preCalculated;
-			if(preCalculated) {
-				v_s0 = v_ay * v_cx - v_ax * v_cy;
-				v_sx = v_cy - v_ay;
-				v_sy = v_ax - v_cx;
-				v_t0 = v_ax * v_by - v_ay * v_bx;
-				v_tx = v_ay - v_by;
-				v_ty = v_bx - v_ax;
-				v_A = -v_by * v_cx + v_ay * (-v_bx + v_cx) + v_ax * (v_by - v_cy) + v_bx * v_cy;
-				var a17 = v_ax;
-				var b10 = v_bx;
-				var c4 = v_cx;
-				if(a17 > b10) {
-					if(a17 > c4) {
-						var ii_min16 = b10 > c4 ? Math.floor(c4) : Math.floor(b10);
-						var ii_max16 = Math.ceil(a17);
-						var this97 = new pixelimage_iter_IntIterStart(ii_min16,ii_max16);
-						v_xIter3 = this97;
-					} else {
-						var ii_min17 = Math.floor(b10);
-						var ii_max17 = Math.ceil(c4);
-						var this98 = new pixelimage_iter_IntIterStart(ii_min17,ii_max17);
-						v_xIter3 = this98;
-					}
-				} else if(b10 > c4) {
-					var ii_min18 = a17 > c4 ? Math.floor(c4) : Math.ceil(a17);
-					var ii_max18 = Math.ceil(b10);
-					var this99 = new pixelimage_iter_IntIterStart(ii_min18,ii_max18);
-					v_xIter3 = this99;
+			var v_s0 = ay1 * cx1 - ax1 * cy1;
+			var v_sx = cy1 - ay1;
+			var v_sy = ax1 - cx1;
+			var v_t0 = ax1 * by1 - ay1 * bx1;
+			var v_tx = ay1 - by1;
+			var v_ty = bx1 - ax1;
+			var v_A = -by1 * cx1 + ay1 * (-bx1 + cx1) + ax1 * (by1 - cy1) + bx1 * cy1;
+			if(ax1 > bx1) {
+				if(ax1 > cx1) {
+					var ii_min16 = bx1 > cx1 ? Math.floor(cx1) : Math.floor(bx1);
+					var ii_max16 = Math.ceil(ax1);
+					var this97 = new pixelimage_iter_IntIterStart(ii_min16,ii_max16);
+					v_xIter3 = this97;
 				} else {
-					var ii_min19 = Math.floor(a17);
-					var ii_max19 = Math.ceil(c4);
-					var this100 = new pixelimage_iter_IntIterStart(ii_min19,ii_max19);
-					v_xIter3 = this100;
+					var ii_min17 = Math.floor(bx1);
+					var ii_max17 = Math.ceil(cx1);
+					var this98 = new pixelimage_iter_IntIterStart(ii_min17,ii_max17);
+					v_xIter3 = this98;
 				}
-				var a18 = v_ay;
-				var b16 = v_by;
-				var c5 = v_cy;
-				if(a18 > b16) {
-					if(a18 > c5) {
-						var ii_min20 = b16 > c5 ? Math.floor(c5) : Math.floor(b16);
-						var ii_max20 = Math.ceil(a18);
-						var this101 = new pixelimage_iter_IntIterStart(ii_min20,ii_max20);
-						v_yIter3 = this101;
-					} else {
-						var ii_min21 = Math.floor(b16);
-						var ii_max21 = Math.ceil(c5);
-						var this102 = new pixelimage_iter_IntIterStart(ii_min21,ii_max21);
-						v_yIter3 = this102;
-					}
-				} else if(b16 > c5) {
-					var ii_min22 = a18 > c5 ? Math.floor(c5) : Math.ceil(a18);
-					var ii_max22 = Math.ceil(b16);
-					var this103 = new pixelimage_iter_IntIterStart(ii_min22,ii_max22);
-					v_yIter3 = this103;
+			} else if(bx1 > cx1) {
+				var ii_min18 = ax1 > cx1 ? Math.floor(cx1) : Math.ceil(ax1);
+				var ii_max18 = Math.ceil(bx1);
+				var this99 = new pixelimage_iter_IntIterStart(ii_min18,ii_max18);
+				v_xIter3 = this99;
+			} else {
+				var ii_min19 = Math.floor(ax1);
+				var ii_max19 = Math.ceil(cx1);
+				var this100 = new pixelimage_iter_IntIterStart(ii_min19,ii_max19);
+				v_xIter3 = this100;
+			}
+			if(ay1 > by1) {
+				if(ay1 > cy1) {
+					var ii_min20 = by1 > cy1 ? Math.floor(cy1) : Math.floor(by1);
+					var ii_max20 = Math.ceil(ay1);
+					var this101 = new pixelimage_iter_IntIterStart(ii_min20,ii_max20);
+					v_yIter3 = this101;
 				} else {
-					var ii_min23 = Math.floor(a18);
-					var ii_max23 = Math.ceil(c5);
-					var this104 = new pixelimage_iter_IntIterStart(ii_min23,ii_max23);
-					v_yIter3 = this104;
+					var ii_min21 = Math.floor(by1);
+					var ii_max21 = Math.ceil(cy1);
+					var this102 = new pixelimage_iter_IntIterStart(ii_min21,ii_max21);
+					v_yIter3 = this102;
 				}
+			} else if(by1 > cy1) {
+				var ii_min22 = ay1 > cy1 ? Math.floor(cy1) : Math.ceil(ay1);
+				var ii_max22 = Math.ceil(by1);
+				var this103 = new pixelimage_iter_IntIterStart(ii_min22,ii_max22);
+				v_yIter3 = this103;
+			} else {
+				var ii_min23 = Math.floor(ay1);
+				var ii_max23 = Math.ceil(cy1);
+				var this104 = new pixelimage_iter_IntIterStart(ii_min23,ii_max23);
+				v_yIter3 = this104;
 			}
 			if(hasHit1 == true) {
-				var v1 = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy,true);
+				var v1 = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy);
 			}
 		}
-		return pixelimage_triangleGML_coreShape_BasicGradient.prototype.render.call(this,pixelShape);
+		return pixelimage_triGML_coreShape_BasicGradient.prototype.render.call(this,pixelImage);
 	}
-	,__class__: pixelimage_triangleGML_gradientContour_PolyLineGradient
+	,__class__: pixelimage_triGML_gradientContour_PolyLineGradient
 });
-var pixelimage_triangleGML_patternContour_CubicCurvePattern = function(opacity,visibility,strokeWidth,strokeDashGapArray,strokeColor0,strokeColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale,fill,thru,x1,y1,x2,y2,x3,y3,x4,y4,translateX,translateY,scaleX,scaleY) {
+var pixelimage_triGML_patternContour_CubicCurvePattern = function(opacity,visibility,strokeWidth,strokeDashGapArray,strokeColor0,strokeColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale,fill,thru,x1,y1,x2,y2,x3,y3,x4,y4,translateX,translateY,scaleX,scaleY) {
 	if(scaleY == null) {
 		scaleY = 1.;
 	}
@@ -33977,7 +33264,7 @@ var pixelimage_triangleGML_patternContour_CubicCurvePattern = function(opacity,v
 	if(opacity == null) {
 		opacity = 1.;
 	}
-	pixelimage_triangleGML_coreShape_PatternStroke.call(this,opacity,visibility,-65536,strokeWidth,strokeDashGapArray,strokeColor0,strokeColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale);
+	pixelimage_triGML_coreShape_PatternStroke.call(this,opacity,visibility,-65536,strokeWidth,strokeDashGapArray,strokeColor0,strokeColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale);
 	this.x1 = x1;
 	this.y1 = y1;
 	this.x2 = x2;
@@ -33991,9 +33278,9 @@ var pixelimage_triangleGML_patternContour_CubicCurvePattern = function(opacity,v
 	this.scaleX = scaleX;
 	this.scaleY = scaleY;
 };
-pixelimage_triangleGML_patternContour_CubicCurvePattern.__name__ = "pixelimage.triangleGML.patternContour.CubicCurvePattern";
-pixelimage_triangleGML_patternContour_CubicCurvePattern.__super__ = pixelimage_triangleGML_coreShape_PatternStroke;
-pixelimage_triangleGML_patternContour_CubicCurvePattern.prototype = $extend(pixelimage_triangleGML_coreShape_PatternStroke.prototype,{
+pixelimage_triGML_patternContour_CubicCurvePattern.__name__ = "pixelimage.triGML.patternContour.CubicCurvePattern";
+pixelimage_triGML_patternContour_CubicCurvePattern.__super__ = pixelimage_triGML_coreShape_PatternStroke;
+pixelimage_triGML_patternContour_CubicCurvePattern.prototype = $extend(pixelimage_triGML_coreShape_PatternStroke.prototype,{
 	setParameter: function(name,value) {
 		switch(name) {
 		case "x1":
@@ -34021,19 +33308,19 @@ pixelimage_triangleGML_patternContour_CubicCurvePattern.prototype = $extend(pixe
 			this.y4 = parseFloat(value);
 			break;
 		default:
-			pixelimage_triangleGML_coreShape_PatternStroke.prototype.setParameter.call(this,name,value);
+			pixelimage_triGML_coreShape_PatternStroke.prototype.setParameter.call(this,name,value);
 		}
 	}
-	,render: function(pixelShape) {
+	,render: function(pixelImage) {
 		this.buildPatternTemplates();
-		var drawing = new pixelimage_draw_DrawTileHelper(pixelShape,this.strokeWidth,this.tileImageStroke,this.translateX,this.translateY,this.scaleX,this.scaleY);
+		var drawing = new pixelimage_triGML_coreShape_DrawTileHelper(pixelImage,this.strokeWidth,this.tileImageStroke,this.translateX,this.translateY,this.scaleX,this.scaleY);
 		drawing.moveTo(this.x1,this.y1);
 		drawing.curveTo(this.x2,this.y2,this.x3,this.y3,this.x4,this.y4);
-		return pixelimage_triangleGML_coreShape_PatternStroke.prototype.render.call(this,pixelShape);
+		return pixelimage_triGML_coreShape_PatternStroke.prototype.render.call(this,pixelImage);
 	}
-	,__class__: pixelimage_triangleGML_patternContour_CubicCurvePattern
+	,__class__: pixelimage_triGML_patternContour_CubicCurvePattern
 });
-var pixelimage_triangleGML_patternContour_LinePattern = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,strokeColor0,strokeColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale,x1,y1,x2,y2) {
+var pixelimage_triGML_patternContour_LinePattern = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,strokeColor0,strokeColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale,x1,y1,x2,y2) {
 	if(y2 == null) {
 		y2 = 0.;
 	}
@@ -34070,15 +33357,15 @@ var pixelimage_triangleGML_patternContour_LinePattern = function(opacity,visibil
 	if(opacity == null) {
 		opacity = 1.;
 	}
-	pixelimage_triangleGML_coreShape_PatternStroke.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,strokeColor0,strokeColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale);
+	pixelimage_triGML_coreShape_PatternStroke.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,strokeColor0,strokeColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale);
 	this.x1 = x1;
 	this.y1 = y1;
 	this.x2 = x2;
 	this.y2 = y2;
 };
-pixelimage_triangleGML_patternContour_LinePattern.__name__ = "pixelimage.triangleGML.patternContour.LinePattern";
-pixelimage_triangleGML_patternContour_LinePattern.__super__ = pixelimage_triangleGML_coreShape_PatternStroke;
-pixelimage_triangleGML_patternContour_LinePattern.prototype = $extend(pixelimage_triangleGML_coreShape_PatternStroke.prototype,{
+pixelimage_triGML_patternContour_LinePattern.__name__ = "pixelimage.triGML.patternContour.LinePattern";
+pixelimage_triGML_patternContour_LinePattern.__super__ = pixelimage_triGML_coreShape_PatternStroke;
+pixelimage_triGML_patternContour_LinePattern.prototype = $extend(pixelimage_triGML_coreShape_PatternStroke.prototype,{
 	setParameter: function(name,value) {
 		switch(name) {
 		case "x1":
@@ -34094,10 +33381,10 @@ pixelimage_triangleGML_patternContour_LinePattern.prototype = $extend(pixelimage
 			this.y2 = parseFloat(value);
 			break;
 		default:
-			pixelimage_triangleGML_coreShape_PatternStroke.prototype.setParameter.call(this,name,value);
+			pixelimage_triGML_coreShape_PatternStroke.prototype.setParameter.call(this,name,value);
 		}
 	}
-	,render: function(pixelShape) {
+	,render: function(pixelImage) {
 		this.buildPatternTemplates();
 		var px = this.x1;
 		var py = this.y1;
@@ -34150,9 +33437,9 @@ pixelimage_triangleGML_patternContour_LinePattern.prototype = $extend(pixelimage
 				var x = p++;
 				var this1 = -65536;
 				var c = this1;
-				if((c >> 24 & 255) < 254 && pixelShape.transparent) {
-					var location = pixelShape.useVirtualPos ? (q - pixelShape.virtualY) * pixelShape.width + x - pixelShape.virtualX | 0 : q * pixelShape.width + x | 0;
-					var this2 = pixelShape.image[location];
+				if((c >> 24 & 255) < 254 && pixelImage.transparent) {
+					var location = pixelImage.useVirtualPos ? (q - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : q * pixelImage.width + x | 0;
+					var this2 = pixelImage.image[location];
 					var this3 = this2;
 					var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
 					var this5 = this4 >> 24 & 255;
@@ -34177,9 +33464,9 @@ pixelimage_triangleGML_patternContour_LinePattern.prototype = $extend(pixelimage
 					var b = 255 * (b1 * a3 + b2 * a2) | 0;
 					var a = 255 * (a3 + a2) | 0;
 					var blended = a << 24 | r << 16 | g << 8 | b;
-					pixelShape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+					pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 				} else {
-					pixelShape.image[pixelShape.useVirtualPos ? (q - pixelShape.virtualY) * pixelShape.width + x - pixelShape.virtualX | 0 : q * pixelShape.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
+					pixelImage.image[pixelImage.useVirtualPos ? (q - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : q * pixelImage.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
 				}
 				if(p > maxX) {
 					p = xx;
@@ -34200,9 +33487,9 @@ pixelimage_triangleGML_patternContour_LinePattern.prototype = $extend(pixelimage
 				var x = p++;
 				var this1 = -16711936;
 				var c = this1;
-				if((c >> 24 & 255) < 254 && pixelShape.transparent) {
-					var location = pixelShape.useVirtualPos ? (q - pixelShape.virtualY) * pixelShape.width + x - pixelShape.virtualX | 0 : q * pixelShape.width + x | 0;
-					var this2 = pixelShape.image[location];
+				if((c >> 24 & 255) < 254 && pixelImage.transparent) {
+					var location = pixelImage.useVirtualPos ? (q - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : q * pixelImage.width + x | 0;
+					var this2 = pixelImage.image[location];
 					var this3 = this2;
 					var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
 					var this5 = this4 >> 24 & 255;
@@ -34227,9 +33514,9 @@ pixelimage_triangleGML_patternContour_LinePattern.prototype = $extend(pixelimage
 					var b = 255 * (b1 * a3 + b2 * a2) | 0;
 					var a = 255 * (a3 + a2) | 0;
 					var blended = a << 24 | r << 16 | g << 8 | b;
-					pixelShape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+					pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 				} else {
-					pixelShape.image[pixelShape.useVirtualPos ? (q - pixelShape.virtualY) * pixelShape.width + x - pixelShape.virtualX | 0 : q * pixelShape.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
+					pixelImage.image[pixelImage.useVirtualPos ? (q - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : q * pixelImage.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
 				}
 				if(p > maxX) {
 					p = xx;
@@ -34250,9 +33537,9 @@ pixelimage_triangleGML_patternContour_LinePattern.prototype = $extend(pixelimage
 				var x = p++;
 				var this1 = -16776961;
 				var c = this1;
-				if((c >> 24 & 255) < 254 && pixelShape.transparent) {
-					var location = pixelShape.useVirtualPos ? (q - pixelShape.virtualY) * pixelShape.width + x - pixelShape.virtualX | 0 : q * pixelShape.width + x | 0;
-					var this2 = pixelShape.image[location];
+				if((c >> 24 & 255) < 254 && pixelImage.transparent) {
+					var location = pixelImage.useVirtualPos ? (q - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : q * pixelImage.width + x | 0;
+					var this2 = pixelImage.image[location];
 					var this3 = this2;
 					var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
 					var this5 = this4 >> 24 & 255;
@@ -34277,9 +33564,9 @@ pixelimage_triangleGML_patternContour_LinePattern.prototype = $extend(pixelimage
 					var b = 255 * (b1 * a3 + b2 * a2) | 0;
 					var a = 255 * (a3 + a2) | 0;
 					var blended = a << 24 | r << 16 | g << 8 | b;
-					pixelShape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+					pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 				} else {
-					pixelShape.image[pixelShape.useVirtualPos ? (q - pixelShape.virtualY) * pixelShape.width + x - pixelShape.virtualX | 0 : q * pixelShape.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
+					pixelImage.image[pixelImage.useVirtualPos ? (q - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : q * pixelImage.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
 				}
 				if(p > maxX) {
 					p = xx;
@@ -34300,9 +33587,9 @@ pixelimage_triangleGML_patternContour_LinePattern.prototype = $extend(pixelimage
 				var x = p++;
 				var this1 = -1048336;
 				var c = this1;
-				if((c >> 24 & 255) < 254 && pixelShape.transparent) {
-					var location = pixelShape.useVirtualPos ? (q - pixelShape.virtualY) * pixelShape.width + x - pixelShape.virtualX | 0 : q * pixelShape.width + x | 0;
-					var this2 = pixelShape.image[location];
+				if((c >> 24 & 255) < 254 && pixelImage.transparent) {
+					var location = pixelImage.useVirtualPos ? (q - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : q * pixelImage.width + x | 0;
+					var this2 = pixelImage.image[location];
 					var this3 = this2;
 					var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
 					var this5 = this4 >> 24 & 255;
@@ -34327,9 +33614,9 @@ pixelimage_triangleGML_patternContour_LinePattern.prototype = $extend(pixelimage
 					var b = 255 * (b1 * a3 + b2 * a2) | 0;
 					var a = 255 * (a3 + a2) | 0;
 					var blended = a << 24 | r << 16 | g << 8 | b;
-					pixelShape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+					pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 				} else {
-					pixelShape.image[pixelShape.useVirtualPos ? (q - pixelShape.virtualY) * pixelShape.width + x - pixelShape.virtualX | 0 : q * pixelShape.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
+					pixelImage.image[pixelImage.useVirtualPos ? (q - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : q * pixelImage.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
 				}
 				if(p > maxX) {
 					p = xx;
@@ -34449,9 +33736,9 @@ pixelimage_triangleGML_patternContour_LinePattern.prototype = $extend(pixelimage
 					var color = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
 					var this1 = color;
 					var c1 = this1;
-					if((c1 >> 24 & 255) < 254 && pixelShape.transparent) {
-						var location = pixelShape.useVirtualPos ? (y - pixelShape.virtualY) * pixelShape.width + x - pixelShape.virtualX | 0 : y * pixelShape.width + x | 0;
-						var this2 = pixelShape.image[location];
+					if((c1 >> 24 & 255) < 254 && pixelImage.transparent) {
+						var location = pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0;
+						var this2 = pixelImage.image[location];
 						var this3 = this2;
 						var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
 						var this5 = this4 >> 24 & 255;
@@ -34476,9 +33763,9 @@ pixelimage_triangleGML_patternContour_LinePattern.prototype = $extend(pixelimage
 						var b = 255 * (b1 * a3 + b2 * a2) | 0;
 						var a = 255 * (a3 + a2) | 0;
 						var blended = a << 24 | r << 16 | g << 8 | b;
-						pixelShape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+						pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 					} else {
-						pixelShape.image[pixelShape.useVirtualPos ? (y - pixelShape.virtualY) * pixelShape.width + x - pixelShape.virtualX | 0 : y * pixelShape.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c1 >> 24 & 255) << 24 | (c1 & 255) << 16 | (c1 >> 8 & 255) << 8 | c1 >> 16 & 255 : c1;
+						pixelImage.image[pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c1 >> 24 & 255) << 24 | (c1 & 255) << 16 | (c1 >> 8 & 255) << 8 | c1 >> 16 & 255 : c1;
 					}
 					foundY = true;
 				} else if(foundY) {
@@ -34487,7 +33774,7 @@ pixelimage_triangleGML_patternContour_LinePattern.prototype = $extend(pixelimage
 			}
 		}
 		if(hasHit2 == false) {
-			var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1,true);
+			var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1);
 		}
 		var bx1 = cx;
 		var by1 = cy;
@@ -34594,9 +33881,9 @@ pixelimage_triangleGML_patternContour_LinePattern.prototype = $extend(pixelimage
 					var color = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
 					var this1 = color;
 					var c1 = this1;
-					if((c1 >> 24 & 255) < 254 && pixelShape.transparent) {
-						var location = pixelShape.useVirtualPos ? (y - pixelShape.virtualY) * pixelShape.width + x - pixelShape.virtualX | 0 : y * pixelShape.width + x | 0;
-						var this2 = pixelShape.image[location];
+					if((c1 >> 24 & 255) < 254 && pixelImage.transparent) {
+						var location = pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0;
+						var this2 = pixelImage.image[location];
 						var this3 = this2;
 						var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
 						var this5 = this4 >> 24 & 255;
@@ -34621,9 +33908,9 @@ pixelimage_triangleGML_patternContour_LinePattern.prototype = $extend(pixelimage
 						var b = 255 * (b1 * a3 + b2 * a2) | 0;
 						var a = 255 * (a3 + a2) | 0;
 						var blended = a << 24 | r << 16 | g << 8 | b;
-						pixelShape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+						pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 					} else {
-						pixelShape.image[pixelShape.useVirtualPos ? (y - pixelShape.virtualY) * pixelShape.width + x - pixelShape.virtualX | 0 : y * pixelShape.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c1 >> 24 & 255) << 24 | (c1 & 255) << 16 | (c1 >> 8 & 255) << 8 | c1 >> 16 & 255 : c1;
+						pixelImage.image[pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c1 >> 24 & 255) << 24 | (c1 & 255) << 16 | (c1 >> 8 & 255) << 8 | c1 >> 16 & 255 : c1;
 					}
 					foundY = true;
 				} else if(foundY) {
@@ -34632,16 +33919,16 @@ pixelimage_triangleGML_patternContour_LinePattern.prototype = $extend(pixelimage
 			}
 		}
 		if(hasHit2 == false) {
-			var v = new pixelimage_algo_HitTri(bx,by,bx1,by1,cx1,cy1,true);
+			var v = new pixelimage_algo_HitTri(bx,by,bx1,by1,cx1,cy1);
 		}
 		if(hasHit1 == true) {
-			var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy,true);
+			var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy);
 		}
-		return pixelimage_triangleGML_coreShape_PatternStroke.prototype.render.call(this,pixelShape);
+		return pixelimage_triGML_coreShape_PatternStroke.prototype.render.call(this,pixelImage);
 	}
-	,__class__: pixelimage_triangleGML_patternContour_LinePattern
+	,__class__: pixelimage_triGML_patternContour_LinePattern
 });
-var pixelimage_triangleGML_patternContour_QuadPattern = function(opacity,visibility,strokeColor0,strokeColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale,aX,aY,bX,bY,cX,cY,dX,dY) {
+var pixelimage_triGML_patternContour_QuadPattern = function(opacity,visibility,strokeColor0,strokeColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale,aX,aY,bX,bY,cX,cY,dX,dY) {
 	if(dY == null) {
 		dY = 1.;
 	}
@@ -34684,7 +33971,7 @@ var pixelimage_triangleGML_patternContour_QuadPattern = function(opacity,visibil
 	if(opacity == null) {
 		opacity = 1.;
 	}
-	pixelimage_triangleGML_coreShape_PatternStroke.call(this,opacity,visibility,0,0,null,strokeColor0,strokeColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale);
+	pixelimage_triGML_coreShape_PatternStroke.call(this,opacity,visibility,0,0,null,strokeColor0,strokeColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale);
 	this.aX = aX;
 	this.aY = aY;
 	this.bX = bX;
@@ -34694,9 +33981,9 @@ var pixelimage_triangleGML_patternContour_QuadPattern = function(opacity,visibil
 	this.dX = dX;
 	this.dY = dY;
 };
-pixelimage_triangleGML_patternContour_QuadPattern.__name__ = "pixelimage.triangleGML.patternContour.QuadPattern";
-pixelimage_triangleGML_patternContour_QuadPattern.__super__ = pixelimage_triangleGML_coreShape_PatternStroke;
-pixelimage_triangleGML_patternContour_QuadPattern.prototype = $extend(pixelimage_triangleGML_coreShape_PatternStroke.prototype,{
+pixelimage_triGML_patternContour_QuadPattern.__name__ = "pixelimage.triGML.patternContour.QuadPattern";
+pixelimage_triGML_patternContour_QuadPattern.__super__ = pixelimage_triGML_coreShape_PatternStroke;
+pixelimage_triGML_patternContour_QuadPattern.prototype = $extend(pixelimage_triGML_coreShape_PatternStroke.prototype,{
 	setParameter: function(name,value) {
 		switch(name) {
 		case "aX":
@@ -34724,10 +34011,10 @@ pixelimage_triangleGML_patternContour_QuadPattern.prototype = $extend(pixelimage
 			this.dY = parseFloat(value);
 			break;
 		default:
-			pixelimage_triangleGML_coreShape_PatternStroke.prototype.setParameter.call(this,name,value);
+			pixelimage_triGML_coreShape_PatternStroke.prototype.setParameter.call(this,name,value);
 		}
 	}
-	,render: function(pixelShape) {
+	,render: function(pixelImage) {
 		this.buildPatternTemplates();
 		var ax = this.aX;
 		var ay = this.aY;
@@ -34847,9 +34134,9 @@ pixelimage_triangleGML_patternContour_QuadPattern.prototype = $extend(pixelimage
 					var color = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
 					var this1 = color;
 					var c1 = this1;
-					if((c1 >> 24 & 255) < 254 && pixelShape.transparent) {
-						var location = pixelShape.useVirtualPos ? (y - pixelShape.virtualY) * pixelShape.width + x - pixelShape.virtualX | 0 : y * pixelShape.width + x | 0;
-						var this2 = pixelShape.image[location];
+					if((c1 >> 24 & 255) < 254 && pixelImage.transparent) {
+						var location = pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0;
+						var this2 = pixelImage.image[location];
 						var this3 = this2;
 						var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
 						var this5 = this4 >> 24 & 255;
@@ -34874,9 +34161,9 @@ pixelimage_triangleGML_patternContour_QuadPattern.prototype = $extend(pixelimage
 						var b = 255 * (b1 * a3 + b2 * a2) | 0;
 						var a = 255 * (a3 + a2) | 0;
 						var blended = a << 24 | r << 16 | g << 8 | b;
-						pixelShape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+						pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 					} else {
-						pixelShape.image[pixelShape.useVirtualPos ? (y - pixelShape.virtualY) * pixelShape.width + x - pixelShape.virtualX | 0 : y * pixelShape.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c1 >> 24 & 255) << 24 | (c1 & 255) << 16 | (c1 >> 8 & 255) << 8 | c1 >> 16 & 255 : c1;
+						pixelImage.image[pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c1 >> 24 & 255) << 24 | (c1 & 255) << 16 | (c1 >> 8 & 255) << 8 | c1 >> 16 & 255 : c1;
 					}
 					foundY = true;
 				} else if(foundY) {
@@ -34885,7 +34172,7 @@ pixelimage_triangleGML_patternContour_QuadPattern.prototype = $extend(pixelimage
 			}
 		}
 		if(hasHit2 == false) {
-			var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1,true);
+			var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1);
 		}
 		var bx1 = cx;
 		var by1 = cy;
@@ -34992,9 +34279,9 @@ pixelimage_triangleGML_patternContour_QuadPattern.prototype = $extend(pixelimage
 					var color = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
 					var this1 = color;
 					var c1 = this1;
-					if((c1 >> 24 & 255) < 254 && pixelShape.transparent) {
-						var location = pixelShape.useVirtualPos ? (y - pixelShape.virtualY) * pixelShape.width + x - pixelShape.virtualX | 0 : y * pixelShape.width + x | 0;
-						var this2 = pixelShape.image[location];
+					if((c1 >> 24 & 255) < 254 && pixelImage.transparent) {
+						var location = pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0;
+						var this2 = pixelImage.image[location];
 						var this3 = this2;
 						var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
 						var this5 = this4 >> 24 & 255;
@@ -35019,9 +34306,9 @@ pixelimage_triangleGML_patternContour_QuadPattern.prototype = $extend(pixelimage
 						var b = 255 * (b1 * a3 + b2 * a2) | 0;
 						var a = 255 * (a3 + a2) | 0;
 						var blended = a << 24 | r << 16 | g << 8 | b;
-						pixelShape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+						pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 					} else {
-						pixelShape.image[pixelShape.useVirtualPos ? (y - pixelShape.virtualY) * pixelShape.width + x - pixelShape.virtualX | 0 : y * pixelShape.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c1 >> 24 & 255) << 24 | (c1 & 255) << 16 | (c1 >> 8 & 255) << 8 | c1 >> 16 & 255 : c1;
+						pixelImage.image[pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c1 >> 24 & 255) << 24 | (c1 & 255) << 16 | (c1 >> 8 & 255) << 8 | c1 >> 16 & 255 : c1;
 					}
 					foundY = true;
 				} else if(foundY) {
@@ -35030,16 +34317,16 @@ pixelimage_triangleGML_patternContour_QuadPattern.prototype = $extend(pixelimage
 			}
 		}
 		if(hasHit2 == false) {
-			var v = new pixelimage_algo_HitTri(bx,by,bx1,by1,cx1,cy1,true);
+			var v = new pixelimage_algo_HitTri(bx,by,bx1,by1,cx1,cy1);
 		}
 		if(hasHit == true) {
-			var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy,true);
+			var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy);
 		}
-		return pixelimage_triangleGML_coreShape_PatternStroke.prototype.render.call(this,pixelShape);
+		return pixelimage_triGML_coreShape_PatternStroke.prototype.render.call(this,pixelImage);
 	}
-	,__class__: pixelimage_triangleGML_patternContour_QuadPattern
+	,__class__: pixelimage_triGML_patternContour_QuadPattern
 });
-var pixelimage_triangleGML_patternContour_TrianglePattern = function(opacity,visibility,strokeColor0,strokeColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale,aX,aY,bX,bY,cX,cY) {
+var pixelimage_triGML_patternContour_TrianglePattern = function(opacity,visibility,strokeColor0,strokeColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale,aX,aY,bX,bY,cX,cY) {
 	if(cY == null) {
 		cY = 1.;
 	}
@@ -35076,7 +34363,7 @@ var pixelimage_triangleGML_patternContour_TrianglePattern = function(opacity,vis
 	if(opacity == null) {
 		opacity = 1.;
 	}
-	pixelimage_triangleGML_coreShape_PatternStroke.call(this,opacity,visibility,0,0,null,strokeColor0,strokeColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale);
+	pixelimage_triGML_coreShape_PatternStroke.call(this,opacity,visibility,0,0,null,strokeColor0,strokeColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale);
 	this.aX = aX;
 	this.aY = aY;
 	this.bX = bX;
@@ -35084,9 +34371,9 @@ var pixelimage_triangleGML_patternContour_TrianglePattern = function(opacity,vis
 	this.cX = cX;
 	this.cY = cY;
 };
-pixelimage_triangleGML_patternContour_TrianglePattern.__name__ = "pixelimage.triangleGML.patternContour.TrianglePattern";
-pixelimage_triangleGML_patternContour_TrianglePattern.__super__ = pixelimage_triangleGML_coreShape_PatternStroke;
-pixelimage_triangleGML_patternContour_TrianglePattern.prototype = $extend(pixelimage_triangleGML_coreShape_PatternStroke.prototype,{
+pixelimage_triGML_patternContour_TrianglePattern.__name__ = "pixelimage.triGML.patternContour.TrianglePattern";
+pixelimage_triGML_patternContour_TrianglePattern.__super__ = pixelimage_triGML_coreShape_PatternStroke;
+pixelimage_triGML_patternContour_TrianglePattern.prototype = $extend(pixelimage_triGML_coreShape_PatternStroke.prototype,{
 	setParameter: function(name,value) {
 		switch(name) {
 		case "aX":
@@ -35108,10 +34395,10 @@ pixelimage_triangleGML_patternContour_TrianglePattern.prototype = $extend(pixeli
 			this.cY = parseFloat(value);
 			break;
 		default:
-			pixelimage_triangleGML_coreShape_PatternStroke.prototype.setParameter.call(this,name,value);
+			pixelimage_triGML_coreShape_PatternStroke.prototype.setParameter.call(this,name,value);
 		}
 	}
-	,render: function(pixelShape) {
+	,render: function(pixelImage) {
 		this.buildPatternTemplates();
 		var ax = this.aX;
 		var ay = this.aY;
@@ -35221,9 +34508,9 @@ pixelimage_triangleGML_patternContour_TrianglePattern.prototype = $extend(pixeli
 					var color = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
 					var this1 = color;
 					var c1 = this1;
-					if((c1 >> 24 & 255) < 254 && pixelShape.transparent) {
-						var location = pixelShape.useVirtualPos ? (y - pixelShape.virtualY) * pixelShape.width + x - pixelShape.virtualX | 0 : y * pixelShape.width + x | 0;
-						var this2 = pixelShape.image[location];
+					if((c1 >> 24 & 255) < 254 && pixelImage.transparent) {
+						var location = pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0;
+						var this2 = pixelImage.image[location];
 						var this3 = this2;
 						var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
 						var this5 = this4 >> 24 & 255;
@@ -35248,9 +34535,9 @@ pixelimage_triangleGML_patternContour_TrianglePattern.prototype = $extend(pixeli
 						var b = 255 * (b1 * a3 + b2 * a2) | 0;
 						var a = 255 * (a3 + a2) | 0;
 						var blended = a << 24 | r << 16 | g << 8 | b;
-						pixelShape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+						pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 					} else {
-						pixelShape.image[pixelShape.useVirtualPos ? (y - pixelShape.virtualY) * pixelShape.width + x - pixelShape.virtualX | 0 : y * pixelShape.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c1 >> 24 & 255) << 24 | (c1 & 255) << 16 | (c1 >> 8 & 255) << 8 | c1 >> 16 & 255 : c1;
+						pixelImage.image[pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c1 >> 24 & 255) << 24 | (c1 & 255) << 16 | (c1 >> 8 & 255) << 8 | c1 >> 16 & 255 : c1;
 					}
 					foundY = true;
 				} else if(foundY) {
@@ -35259,13 +34546,13 @@ pixelimage_triangleGML_patternContour_TrianglePattern.prototype = $extend(pixeli
 			}
 		}
 		if(hasHit1 == false) {
-			var v = new pixelimage_algo_HitTri(ax,ay,bx,by,cx,cy,true);
+			var v = new pixelimage_algo_HitTri(ax,ay,bx,by,cx,cy);
 		}
-		return pixelimage_triangleGML_coreShape_PatternStroke.prototype.render.call(this,pixelShape);
+		return pixelimage_triGML_coreShape_PatternStroke.prototype.render.call(this,pixelImage);
 	}
-	,__class__: pixelimage_triangleGML_patternContour_TrianglePattern
+	,__class__: pixelimage_triGML_patternContour_TrianglePattern
 });
-var pixelimage_triangleGML_patternShape_ArcPattern = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,strokeColor0,strokeColor1,fillColor0,fillColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale,fillPatternFill,fillPatternWidth,fillPatternHeight,fillPatternAcross,fillPatternScale,left,top,width,height,startAngle,sweepAngle,arcType) {
+var pixelimage_triGML_patternShape_ArcPattern = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,strokeColor0,strokeColor1,fillColor0,fillColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale,fillPatternFill,fillPatternWidth,fillPatternHeight,fillPatternAcross,fillPatternScale,left,top,width,height,startAngle,sweepAngle,arcType) {
 	if(arcType == null) {
 		arcType = "pie";
 	}
@@ -35329,7 +34616,7 @@ var pixelimage_triangleGML_patternShape_ArcPattern = function(opacity,visibility
 	if(opacity == null) {
 		opacity = 1.;
 	}
-	pixelimage_triangleGML_coreShape_PatternShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,strokeColor0,strokeColor1,fillColor0,fillColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale,fillPatternFill,fillPatternWidth,fillPatternHeight,fillPatternAcross,fillPatternScale);
+	pixelimage_triGML_coreShape_PatternShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,strokeColor0,strokeColor1,fillColor0,fillColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale,fillPatternFill,fillPatternWidth,fillPatternHeight,fillPatternAcross,fillPatternScale);
 	this.left = left;
 	this.top = top;
 	this.width = width;
@@ -35340,9 +34627,9 @@ var pixelimage_triangleGML_patternShape_ArcPattern = function(opacity,visibility
 	this.rx = width / 2;
 	this.ry = height / 2;
 };
-pixelimage_triangleGML_patternShape_ArcPattern.__name__ = "pixelimage.triangleGML.patternShape.ArcPattern";
-pixelimage_triangleGML_patternShape_ArcPattern.__super__ = pixelimage_triangleGML_coreShape_PatternShape;
-pixelimage_triangleGML_patternShape_ArcPattern.prototype = $extend(pixelimage_triangleGML_coreShape_PatternShape.prototype,{
+pixelimage_triGML_patternShape_ArcPattern.__name__ = "pixelimage.triGML.patternShape.ArcPattern";
+pixelimage_triGML_patternShape_ArcPattern.__super__ = pixelimage_triGML_coreShape_PatternShape;
+pixelimage_triGML_patternShape_ArcPattern.prototype = $extend(pixelimage_triGML_coreShape_PatternShape.prototype,{
 	setParameter: function(name,value) {
 		switch(name) {
 		case "arcType":
@@ -35369,18 +34656,17 @@ pixelimage_triangleGML_patternShape_ArcPattern.prototype = $extend(pixelimage_tr
 			this.width = parseFloat(value);
 			break;
 		default:
-			pixelimage_triangleGML_coreShape_PatternShape.prototype.setParameter.call(this,name,value);
+			pixelimage_triGML_coreShape_PatternShape.prototype.setParameter.call(this,name,value);
 		}
 		this.rx = this.width / 2;
 		this.ry = this.height / 2;
 	}
-	,render: function(pixelShape) {
+	,render: function(pixelImage) {
 		var w = Math.ceil(this.width);
 		var h = Math.ceil(this.height);
 		var this1 = new Uint32Array(w * h | 0);
 		var this2 = new pixelimage_ImageStruct(w,h,this1);
-		var this1 = this2;
-		var temp = this1;
+		var temp = this2;
 		temp.transparent = false;
 		this.buildPatternTemplates();
 		switch(this.arcType) {
@@ -35437,9 +34723,9 @@ pixelimage_triangleGML_patternShape_ArcPattern.prototype = $extend(pixelimage_tr
 					var y1 = y + dy;
 					var this10 = col;
 					var c2 = this10;
-					if((c2 >> 24 & 255) < 254 && pixelShape.transparent) {
-						var location = pixelShape.useVirtualPos ? (y1 - pixelShape.virtualY) * pixelShape.width + x1 - pixelShape.virtualX | 0 : y1 * pixelShape.width + x1 | 0;
-						var this11 = pixelShape.image[location];
+					if((c2 >> 24 & 255) < 254 && pixelImage.transparent) {
+						var location = pixelImage.useVirtualPos ? (y1 - pixelImage.virtualY) * pixelImage.width + x1 - pixelImage.virtualX | 0 : y1 * pixelImage.width + x1 | 0;
+						var this11 = pixelImage.image[location];
 						var this12 = this11;
 						var this13 = pixelimage_Endian_isLittleEndian ? (this12 >> 24 & 255) << 24 | (this12 & 255) << 16 | (this12 >> 8 & 255) << 8 | this12 >> 16 & 255 : this12;
 						var this14 = this13 >> 24 & 255;
@@ -35464,15 +34750,15 @@ pixelimage_triangleGML_patternShape_ArcPattern.prototype = $extend(pixelimage_tr
 						var b = 255 * (b1 * a3 + b2 * a2) | 0;
 						var a = 255 * (a3 + a2) | 0;
 						var blended = a << 24 | r << 16 | g << 8 | b;
-						pixelShape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+						pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 					} else {
-						pixelShape.image[pixelShape.useVirtualPos ? (y1 - pixelShape.virtualY) * pixelShape.width + x1 - pixelShape.virtualX | 0 : y1 * pixelShape.width + x1 | 0] = pixelimage_Endian_isLittleEndian ? (c2 >> 24 & 255) << 24 | (c2 & 255) << 16 | (c2 >> 8 & 255) << 8 | c2 >> 16 & 255 : c2;
+						pixelImage.image[pixelImage.useVirtualPos ? (y1 - pixelImage.virtualY) * pixelImage.width + x1 - pixelImage.virtualX | 0 : y1 * pixelImage.width + x1 | 0] = pixelimage_Endian_isLittleEndian ? (c2 >> 24 & 255) << 24 | (c2 & 255) << 16 | (c2 >> 8 & 255) << 8 | c2 >> 16 & 255 : c2;
 					}
 				}
 			}
 		}
 		temp = null;
-		return pixelimage_triangleGML_coreShape_PatternShape.prototype.render.call(this,pixelShape);
+		return pixelimage_triGML_coreShape_PatternShape.prototype.render.call(this,pixelImage);
 	}
 	,chord: function(temp) {
 		this.ellipse(temp);
@@ -35683,7 +34969,7 @@ pixelimage_triangleGML_patternShape_ArcPattern.prototype = $extend(pixelimage_tr
 				}
 			}
 			if(hasHit1 == false) {
-				var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1,true);
+				var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1);
 			}
 			var ax = this.rx;
 			var ay = this.ry;
@@ -35826,7 +35112,7 @@ pixelimage_triangleGML_patternShape_ArcPattern.prototype = $extend(pixelimage_tr
 				}
 			}
 			if(hasHit1 == true) {
-				var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1,true);
+				var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1);
 			}
 		} else {
 			var ax = this.rx;
@@ -35987,7 +35273,7 @@ pixelimage_triangleGML_patternShape_ArcPattern.prototype = $extend(pixelimage_tr
 				}
 			}
 			if(hasHit == false) {
-				var v = new pixelimage_algo_HitTri(ax,ay,bx2,by2,cx2,cy2,true);
+				var v = new pixelimage_algo_HitTri(ax,ay,bx2,by2,cx2,cy2);
 			}
 			var ax = this.rx;
 			var ay = this.ry;
@@ -36147,7 +35433,7 @@ pixelimage_triangleGML_patternShape_ArcPattern.prototype = $extend(pixelimage_tr
 				}
 			}
 			if(hasHit == false) {
-				var v = new pixelimage_algo_HitTri(ax,ay,bx2,by2,cx2,cy2,true);
+				var v = new pixelimage_algo_HitTri(ax,ay,bx2,by2,cx2,cy2);
 			}
 			var tileImage = this.tileImageStroke;
 			var o = by - cy;
@@ -36535,7 +35821,7 @@ pixelimage_triangleGML_patternShape_ArcPattern.prototype = $extend(pixelimage_tr
 				}
 			}
 			if(hasHit2 == false) {
-				var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx,cy,true);
+				var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx,cy);
 			}
 			var bx1 = cx1;
 			var by1 = cy1;
@@ -36680,10 +35966,10 @@ pixelimage_triangleGML_patternShape_ArcPattern.prototype = $extend(pixelimage_tr
 				}
 			}
 			if(hasHit2 == false) {
-				var v = new pixelimage_algo_HitTri(bx,by,bx1,by1,cx,cy,true);
+				var v = new pixelimage_algo_HitTri(bx,by,bx1,by1,cx,cy);
 			}
 			if(hasHit1 == true) {
-				var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx1,cy1,dx,dy,true);
+				var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx1,cy1,dx,dy);
 			}
 		}
 	}
@@ -36867,7 +36153,7 @@ pixelimage_triangleGML_patternShape_ArcPattern.prototype = $extend(pixelimage_tr
 			}
 			var triHit;
 			if(hasHit2 == false) {
-				var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1,true);
+				var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1);
 				triHit = v;
 			} else {
 				triHit = null;
@@ -37026,7 +36312,7 @@ pixelimage_triangleGML_patternShape_ArcPattern.prototype = $extend(pixelimage_tr
 		}
 		var triHit;
 		if(hasHit == false) {
-			var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1,true);
+			var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1);
 			triHit = v;
 		} else {
 			triHit = null;
@@ -37211,7 +36497,7 @@ pixelimage_triangleGML_patternShape_ArcPattern.prototype = $extend(pixelimage_tr
 			}
 			var triHit;
 			if(hasHit2 == false) {
-				var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1,true);
+				var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1);
 				triHit = v;
 			} else {
 				triHit = null;
@@ -37370,7 +36656,7 @@ pixelimage_triangleGML_patternShape_ArcPattern.prototype = $extend(pixelimage_tr
 		}
 		var triHit;
 		if(hasHit == false) {
-			var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1,true);
+			var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1);
 			triHit = v;
 		} else {
 			triHit = null;
@@ -37775,7 +37061,7 @@ pixelimage_triangleGML_patternShape_ArcPattern.prototype = $extend(pixelimage_tr
 			}
 		}
 		if(hasHit2 == false) {
-			var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx2,cy2,true);
+			var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx2,cy2);
 		}
 		var bx1 = cx1;
 		var by1 = cy1;
@@ -37920,10 +37206,10 @@ pixelimage_triangleGML_patternShape_ArcPattern.prototype = $extend(pixelimage_tr
 			}
 		}
 		if(hasHit2 == false) {
-			var v = new pixelimage_algo_HitTri(bx,by,bx1,by1,cx2,cy2,true);
+			var v = new pixelimage_algo_HitTri(bx,by,bx1,by1,cx2,cy2);
 		}
 		if(hasHit1 == true) {
-			var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx1,cy1,dx,dy,true);
+			var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx1,cy1,dx,dy);
 		}
 		var px = this.rx;
 		var py = this.ry;
@@ -38313,7 +37599,7 @@ pixelimage_triangleGML_patternShape_ArcPattern.prototype = $extend(pixelimage_tr
 			}
 		}
 		if(hasHit2 == false) {
-			var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1,true);
+			var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1);
 		}
 		var bx1 = cx;
 		var by1 = cy;
@@ -38458,15 +37744,15 @@ pixelimage_triangleGML_patternShape_ArcPattern.prototype = $extend(pixelimage_tr
 			}
 		}
 		if(hasHit2 == false) {
-			var v = new pixelimage_algo_HitTri(bx,by,bx1,by1,cx1,cy1,true);
+			var v = new pixelimage_algo_HitTri(bx,by,bx1,by1,cx1,cy1);
 		}
 		if(hasHit1 == true) {
-			var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy,true);
+			var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy);
 		}
 	}
-	,__class__: pixelimage_triangleGML_patternShape_ArcPattern
+	,__class__: pixelimage_triGML_patternShape_ArcPattern
 });
-var pixelimage_triangleGML_patternShape_CirclePattern = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,strokeColor0,strokeColor1,fillColor0,fillColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale,fillPatternFill,fillPatternWidth,fillPatternHeight,fillPatternAcross,fillPatternScale,left,top,diameter) {
+var pixelimage_triGML_patternShape_CirclePattern = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,strokeColor0,strokeColor1,fillColor0,fillColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale,fillPatternFill,fillPatternWidth,fillPatternHeight,fillPatternAcross,fillPatternScale,left,top,diameter) {
 	if(diameter == null) {
 		diameter = 1.;
 	}
@@ -38518,14 +37804,14 @@ var pixelimage_triangleGML_patternShape_CirclePattern = function(opacity,visibil
 	if(opacity == null) {
 		opacity = 1.;
 	}
-	pixelimage_triangleGML_coreShape_PatternShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,strokeColor0,strokeColor1,fillColor0,fillColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale,fillPatternFill,fillPatternWidth,fillPatternHeight,fillPatternAcross,fillPatternScale);
+	pixelimage_triGML_coreShape_PatternShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,strokeColor0,strokeColor1,fillColor0,fillColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale,fillPatternFill,fillPatternWidth,fillPatternHeight,fillPatternAcross,fillPatternScale);
 	this.left = left;
 	this.top = top;
 	this.diameter = diameter;
 };
-pixelimage_triangleGML_patternShape_CirclePattern.__name__ = "pixelimage.triangleGML.patternShape.CirclePattern";
-pixelimage_triangleGML_patternShape_CirclePattern.__super__ = pixelimage_triangleGML_coreShape_PatternShape;
-pixelimage_triangleGML_patternShape_CirclePattern.prototype = $extend(pixelimage_triangleGML_coreShape_PatternShape.prototype,{
+pixelimage_triGML_patternShape_CirclePattern.__name__ = "pixelimage.triGML.patternShape.CirclePattern";
+pixelimage_triGML_patternShape_CirclePattern.__super__ = pixelimage_triGML_coreShape_PatternShape;
+pixelimage_triGML_patternShape_CirclePattern.prototype = $extend(pixelimage_triGML_coreShape_PatternShape.prototype,{
 	setParameter: function(name,value) {
 		switch(name) {
 		case "diameter":
@@ -38538,16 +37824,15 @@ pixelimage_triangleGML_patternShape_CirclePattern.prototype = $extend(pixelimage
 			this.top = parseFloat(value);
 			break;
 		default:
-			pixelimage_triangleGML_coreShape_PatternShape.prototype.setParameter.call(this,name,value);
+			pixelimage_triGML_coreShape_PatternShape.prototype.setParameter.call(this,name,value);
 		}
 	}
-	,render: function(pixelShape) {
+	,render: function(pixelImage) {
 		var w = Math.ceil(this.diameter);
 		var h = Math.ceil(this.diameter);
 		var this1 = new Uint32Array(w * h | 0);
 		var this2 = new pixelimage_ImageStruct(w,h,this1);
-		var this1 = this2;
-		var temp = this1;
+		var temp = this2;
 		temp.transparent = false;
 		this.buildPatternTemplates();
 		this.buildCircle(temp);
@@ -38594,9 +37879,9 @@ pixelimage_triangleGML_patternShape_CirclePattern.prototype = $extend(pixelimage
 					var y1 = y + dy;
 					var this10 = col;
 					var c2 = this10;
-					if((c2 >> 24 & 255) < 254 && pixelShape.transparent) {
-						var location = pixelShape.useVirtualPos ? (y1 - pixelShape.virtualY) * pixelShape.width + x1 - pixelShape.virtualX | 0 : y1 * pixelShape.width + x1 | 0;
-						var this11 = pixelShape.image[location];
+					if((c2 >> 24 & 255) < 254 && pixelImage.transparent) {
+						var location = pixelImage.useVirtualPos ? (y1 - pixelImage.virtualY) * pixelImage.width + x1 - pixelImage.virtualX | 0 : y1 * pixelImage.width + x1 | 0;
+						var this11 = pixelImage.image[location];
 						var this12 = this11;
 						var this13 = pixelimage_Endian_isLittleEndian ? (this12 >> 24 & 255) << 24 | (this12 & 255) << 16 | (this12 >> 8 & 255) << 8 | this12 >> 16 & 255 : this12;
 						var this14 = this13 >> 24 & 255;
@@ -38621,15 +37906,15 @@ pixelimage_triangleGML_patternShape_CirclePattern.prototype = $extend(pixelimage
 						var b = 255 * (b1 * a3 + b2 * a2) | 0;
 						var a = 255 * (a3 + a2) | 0;
 						var blended = a << 24 | r << 16 | g << 8 | b;
-						pixelShape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+						pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 					} else {
-						pixelShape.image[pixelShape.useVirtualPos ? (y1 - pixelShape.virtualY) * pixelShape.width + x1 - pixelShape.virtualX | 0 : y1 * pixelShape.width + x1 | 0] = pixelimage_Endian_isLittleEndian ? (c2 >> 24 & 255) << 24 | (c2 & 255) << 16 | (c2 >> 8 & 255) << 8 | c2 >> 16 & 255 : c2;
+						pixelImage.image[pixelImage.useVirtualPos ? (y1 - pixelImage.virtualY) * pixelImage.width + x1 - pixelImage.virtualX | 0 : y1 * pixelImage.width + x1 | 0] = pixelimage_Endian_isLittleEndian ? (c2 >> 24 & 255) << 24 | (c2 & 255) << 16 | (c2 >> 8 & 255) << 8 | c2 >> 16 & 255 : c2;
 					}
 				}
 			}
 		}
 		temp = null;
-		return pixelimage_triangleGML_coreShape_PatternShape.prototype.render.call(this,pixelShape);
+		return pixelimage_triGML_coreShape_PatternShape.prototype.render.call(this,pixelImage);
 	}
 	,buildCircle: function(temp) {
 		var w = Math.round(this.strokeWidth / 2);
@@ -38846,7 +38131,7 @@ pixelimage_triangleGML_patternShape_CirclePattern.prototype = $extend(pixelimage
 						}
 					}
 					if(hasHit1 == false) {
-						var v = new pixelimage_algo_HitTri(cx,cy,bx,by,cx1,cy1,true);
+						var v = new pixelimage_algo_HitTri(cx,cy,bx,by,cx1,cy1);
 					}
 					lastX = nextX;
 					lastY = nextY;
@@ -39001,7 +38286,7 @@ pixelimage_triangleGML_patternShape_CirclePattern.prototype = $extend(pixelimage
 						}
 					}
 					if(hasHit1 == false) {
-						var v = new pixelimage_algo_HitTri(cx,cy,bx,by,cx1,cy1,true);
+						var v = new pixelimage_algo_HitTri(cx,cy,bx,by,cx1,cy1);
 					}
 					lastX = nextX;
 					lastY = nextY;
@@ -39209,7 +38494,7 @@ pixelimage_triangleGML_patternShape_CirclePattern.prototype = $extend(pixelimage
 						}
 					}
 					if(hasHit1 == true) {
-						var v = new pixelimage_algo_HitTri(cx,cy,bx,by,cx1,cy1,true);
+						var v = new pixelimage_algo_HitTri(cx,cy,bx,by,cx1,cy1);
 					}
 					lastX = nextX;
 					lastY = nextY;
@@ -39360,7 +38645,7 @@ pixelimage_triangleGML_patternShape_CirclePattern.prototype = $extend(pixelimage
 						}
 					}
 					if(hasHit1 == true) {
-						var v = new pixelimage_algo_HitTri(cx,cy,bx,by,cx1,cy1,true);
+						var v = new pixelimage_algo_HitTri(cx,cy,bx,by,cx1,cy1);
 					}
 					lastX = nextX;
 					lastY = nextY;
@@ -39572,7 +38857,7 @@ pixelimage_triangleGML_patternShape_CirclePattern.prototype = $extend(pixelimage
 					}
 				}
 				if(hasHit1 == false) {
-					var v = new pixelimage_algo_HitTri(innerCx,innerCy,bx,by,cx,cy,true);
+					var v = new pixelimage_algo_HitTri(innerCx,innerCy,bx,by,cx,cy);
 				}
 				lastX = nextX;
 				lastY = nextY;
@@ -39727,16 +39012,16 @@ pixelimage_triangleGML_patternShape_CirclePattern.prototype = $extend(pixelimage
 					}
 				}
 				if(hasHit1 == false) {
-					var v = new pixelimage_algo_HitTri(innerCx,innerCy,bx,by,cx,cy,true);
+					var v = new pixelimage_algo_HitTri(innerCx,innerCy,bx,by,cx,cy);
 				}
 				lastX = nextX;
 				lastY = nextY;
 			}
 		}
 	}
-	,__class__: pixelimage_triangleGML_patternShape_CirclePattern
+	,__class__: pixelimage_triGML_patternShape_CirclePattern
 });
-var pixelimage_triangleGML_patternShape_EllipsePattern = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,strokeColor0,strokeColor1,fillColor0,fillColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale,fillPatternFill,fillPatternWidth,fillPatternHeight,fillPatternAcross,fillPatternScale,left,top,width,height) {
+var pixelimage_triGML_patternShape_EllipsePattern = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,strokeColor0,strokeColor1,fillColor0,fillColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale,fillPatternFill,fillPatternWidth,fillPatternHeight,fillPatternAcross,fillPatternScale,left,top,width,height) {
 	if(height == null) {
 		height = 1.;
 	}
@@ -39791,15 +39076,15 @@ var pixelimage_triangleGML_patternShape_EllipsePattern = function(opacity,visibi
 	if(opacity == null) {
 		opacity = 1.;
 	}
-	pixelimage_triangleGML_coreShape_PatternShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,strokeColor0,strokeColor1,fillColor0,fillColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale,fillPatternFill,fillPatternWidth,fillPatternHeight,fillPatternAcross,fillPatternScale);
+	pixelimage_triGML_coreShape_PatternShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,strokeColor0,strokeColor1,fillColor0,fillColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale,fillPatternFill,fillPatternWidth,fillPatternHeight,fillPatternAcross,fillPatternScale);
 	this.left = left;
 	this.top = top;
 	this.width = width;
 	this.height = height;
 };
-pixelimage_triangleGML_patternShape_EllipsePattern.__name__ = "pixelimage.triangleGML.patternShape.EllipsePattern";
-pixelimage_triangleGML_patternShape_EllipsePattern.__super__ = pixelimage_triangleGML_coreShape_PatternShape;
-pixelimage_triangleGML_patternShape_EllipsePattern.prototype = $extend(pixelimage_triangleGML_coreShape_PatternShape.prototype,{
+pixelimage_triGML_patternShape_EllipsePattern.__name__ = "pixelimage.triGML.patternShape.EllipsePattern";
+pixelimage_triGML_patternShape_EllipsePattern.__super__ = pixelimage_triGML_coreShape_PatternShape;
+pixelimage_triGML_patternShape_EllipsePattern.prototype = $extend(pixelimage_triGML_coreShape_PatternShape.prototype,{
 	setParameter: function(name,value) {
 		switch(name) {
 		case "height":
@@ -39815,16 +39100,15 @@ pixelimage_triangleGML_patternShape_EllipsePattern.prototype = $extend(pixelimag
 			this.width = parseFloat(value);
 			break;
 		default:
-			pixelimage_triangleGML_coreShape_PatternShape.prototype.setParameter.call(this,name,value);
+			pixelimage_triGML_coreShape_PatternShape.prototype.setParameter.call(this,name,value);
 		}
 	}
-	,render: function(pixelShape) {
+	,render: function(pixelImage) {
 		var w = Math.ceil(this.width);
 		var h = Math.ceil(this.height);
 		var this1 = new Uint32Array(w * h | 0);
 		var this2 = new pixelimage_ImageStruct(w,h,this1);
-		var this1 = this2;
-		var temp = this1;
+		var temp = this2;
 		temp.transparent = false;
 		this.buildPatternTemplates();
 		var rW = this.width / 2;
@@ -40041,7 +39325,7 @@ pixelimage_triangleGML_patternShape_EllipsePattern.prototype = $extend(pixelimag
 					}
 				}
 				if(hasHit1 == false) {
-					var v = new pixelimage_algo_HitTri(cx,cy,bx,by,cx1,cy1,true);
+					var v = new pixelimage_algo_HitTri(cx,cy,bx,by,cx1,cy1);
 				}
 				lastX = nextX;
 				lastY = nextY;
@@ -40196,7 +39480,7 @@ pixelimage_triangleGML_patternShape_EllipsePattern.prototype = $extend(pixelimag
 					}
 				}
 				if(hasHit1 == false) {
-					var v = new pixelimage_algo_HitTri(cx,cy,bx,by,cx1,cy1,true);
+					var v = new pixelimage_algo_HitTri(cx,cy,bx,by,cx1,cy1);
 				}
 				lastX = nextX;
 				lastY = nextY;
@@ -40407,7 +39691,7 @@ pixelimage_triangleGML_patternShape_EllipsePattern.prototype = $extend(pixelimag
 					}
 				}
 				if(hasHit1 == false) {
-					var v = new pixelimage_algo_HitTri(innerCx,innerCy,bx,by,cx,cy,true);
+					var v = new pixelimage_algo_HitTri(innerCx,innerCy,bx,by,cx,cy);
 				}
 				lastX = nextX;
 				lastY = nextY;
@@ -40562,7 +39846,7 @@ pixelimage_triangleGML_patternShape_EllipsePattern.prototype = $extend(pixelimag
 					}
 				}
 				if(hasHit1 == false) {
-					var v = new pixelimage_algo_HitTri(innerCx,innerCy,bx,by,cx,cy,true);
+					var v = new pixelimage_algo_HitTri(innerCx,innerCy,bx,by,cx,cy);
 				}
 				lastX = nextX;
 				lastY = nextY;
@@ -40611,9 +39895,9 @@ pixelimage_triangleGML_patternShape_EllipsePattern.prototype = $extend(pixelimag
 					var y1 = y + dy;
 					var this10 = col;
 					var c2 = this10;
-					if((c2 >> 24 & 255) < 254 && pixelShape.transparent) {
-						var location = pixelShape.useVirtualPos ? (y1 - pixelShape.virtualY) * pixelShape.width + x1 - pixelShape.virtualX | 0 : y1 * pixelShape.width + x1 | 0;
-						var this11 = pixelShape.image[location];
+					if((c2 >> 24 & 255) < 254 && pixelImage.transparent) {
+						var location = pixelImage.useVirtualPos ? (y1 - pixelImage.virtualY) * pixelImage.width + x1 - pixelImage.virtualX | 0 : y1 * pixelImage.width + x1 | 0;
+						var this11 = pixelImage.image[location];
 						var this12 = this11;
 						var this13 = pixelimage_Endian_isLittleEndian ? (this12 >> 24 & 255) << 24 | (this12 & 255) << 16 | (this12 >> 8 & 255) << 8 | this12 >> 16 & 255 : this12;
 						var this14 = this13 >> 24 & 255;
@@ -40638,19 +39922,19 @@ pixelimage_triangleGML_patternShape_EllipsePattern.prototype = $extend(pixelimag
 						var b = 255 * (b1 * a3 + b2 * a2) | 0;
 						var a = 255 * (a3 + a2) | 0;
 						var blended = a << 24 | r << 16 | g << 8 | b;
-						pixelShape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+						pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 					} else {
-						pixelShape.image[pixelShape.useVirtualPos ? (y1 - pixelShape.virtualY) * pixelShape.width + x1 - pixelShape.virtualX | 0 : y1 * pixelShape.width + x1 | 0] = pixelimage_Endian_isLittleEndian ? (c2 >> 24 & 255) << 24 | (c2 & 255) << 16 | (c2 >> 8 & 255) << 8 | c2 >> 16 & 255 : c2;
+						pixelImage.image[pixelImage.useVirtualPos ? (y1 - pixelImage.virtualY) * pixelImage.width + x1 - pixelImage.virtualX | 0 : y1 * pixelImage.width + x1 | 0] = pixelimage_Endian_isLittleEndian ? (c2 >> 24 & 255) << 24 | (c2 & 255) << 16 | (c2 >> 8 & 255) << 8 | c2 >> 16 & 255 : c2;
 					}
 				}
 			}
 		}
 		temp = null;
-		return pixelimage_triangleGML_coreShape_PatternShape.prototype.render.call(this,pixelShape);
+		return pixelimage_triGML_coreShape_PatternShape.prototype.render.call(this,pixelImage);
 	}
-	,__class__: pixelimage_triangleGML_patternShape_EllipsePattern
+	,__class__: pixelimage_triGML_patternShape_EllipsePattern
 });
-var pixelimage_triangleGML_patternShape_PathElementPattern = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,strokeColor0,strokeColor1,fillColor0,fillColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale,fillPatternFill,fillPatternWidth,fillPatternHeight,fillPatternAcross,fillPatternScale,pathData,translateX,translateY,scaleX,scaleY) {
+var pixelimage_triGML_patternShape_PathElementPattern = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,strokeColor0,strokeColor1,fillColor0,fillColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale,fillPatternFill,fillPatternWidth,fillPatternHeight,fillPatternAcross,fillPatternScale,pathData,translateX,translateY,scaleX,scaleY) {
 	if(scaleY == null) {
 		scaleY = 1.;
 	}
@@ -40711,17 +39995,17 @@ var pixelimage_triangleGML_patternShape_PathElementPattern = function(opacity,vi
 	this.toggleDraw = true;
 	this.y0 = 0.;
 	this.x0 = 0.;
-	pixelimage_triangleGML_coreShape_PatternShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,strokeColor0,strokeColor1,fillColor0,fillColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale,fillPatternFill,fillPatternWidth,fillPatternHeight,fillPatternAcross,fillPatternScale);
+	pixelimage_triGML_coreShape_PatternShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,strokeColor0,strokeColor1,fillColor0,fillColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale,fillPatternFill,fillPatternWidth,fillPatternHeight,fillPatternAcross,fillPatternScale);
 	this.pathData = pathData;
 	this.translateX = translateX;
 	this.translateY = translateY;
 	this.scaleX = scaleX;
 	this.scaleY = scaleY;
 };
-pixelimage_triangleGML_patternShape_PathElementPattern.__name__ = "pixelimage.triangleGML.patternShape.PathElementPattern";
-pixelimage_triangleGML_patternShape_PathElementPattern.__interfaces__ = [justPath_ILinePathContext];
-pixelimage_triangleGML_patternShape_PathElementPattern.__super__ = pixelimage_triangleGML_coreShape_PatternShape;
-pixelimage_triangleGML_patternShape_PathElementPattern.prototype = $extend(pixelimage_triangleGML_coreShape_PatternShape.prototype,{
+pixelimage_triGML_patternShape_PathElementPattern.__name__ = "pixelimage.triGML.patternShape.PathElementPattern";
+pixelimage_triGML_patternShape_PathElementPattern.__interfaces__ = [justPath_ILinePathContext];
+pixelimage_triGML_patternShape_PathElementPattern.__super__ = pixelimage_triGML_coreShape_PatternShape;
+pixelimage_triGML_patternShape_PathElementPattern.prototype = $extend(pixelimage_triGML_coreShape_PatternShape.prototype,{
 	setParameter: function(name,value) {
 		switch(name) {
 		case "pathData":
@@ -40740,33 +40024,32 @@ pixelimage_triangleGML_patternShape_PathElementPattern.prototype = $extend(pixel
 			this.translateY = parseFloat(value);
 			break;
 		default:
-			pixelimage_triangleGML_coreShape_PatternShape.prototype.setParameter.call(this,name,value);
+			pixelimage_triGML_coreShape_PatternShape.prototype.setParameter.call(this,name,value);
 		}
 	}
-	,render: function(pixelShape) {
-		var w = Math.ceil(pixelShape.width);
-		var h = Math.ceil(pixelShape.height);
+	,render: function(pixelImage) {
+		var w = Math.ceil(pixelImage.width);
+		var h = Math.ceil(pixelImage.height);
 		var this1 = new Uint32Array(w * h | 0);
 		var this2 = new pixelimage_ImageStruct(w,h,this1);
-		var this1 = this2;
-		this.temp = this1;
+		this.temp = this2;
 		this.temp.transparent = true;
 		this.buildPatternTemplates();
 		var sp = new justPath_SvgLinePath(this);
 		sp.parse(this.pathData);
-		var pixelImage = this.temp;
+		var pixelImage1 = this.temp;
 		var _g = 0;
-		var _g1 = pixelImage.height;
+		var _g1 = pixelImage1.height;
 		while(_g < _g1) {
 			var dy = _g++;
 			var _g2 = 0;
-			var _g3 = pixelImage.width;
+			var _g3 = pixelImage1.width;
 			while(_g2 < _g3) {
 				var dx = _g2++;
-				var c = pixelImage.image[pixelImage.useVirtualPos ? (dy - pixelImage.virtualY) * pixelImage.width + dx - pixelImage.virtualX | 0 : dy * pixelImage.width + dx | 0];
+				var c = pixelImage1.image[pixelImage1.useVirtualPos ? (dy - pixelImage1.virtualY) * pixelImage1.width + dx - pixelImage1.virtualX | 0 : dy * pixelImage1.width + dx | 0];
 				var col = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
-				if(pixelImage.useMask && pixelImage.mask != null) {
-					var this1 = pixelImage.mask;
+				if(pixelImage1.useMask && pixelImage1.mask != null) {
+					var this1 = pixelImage1.mask;
 					var c1 = this1.image[this1.useVirtualPos ? (dy - this1.virtualY) * this1.width + dx - this1.virtualX | 0 : dy * this1.width + dx | 0];
 					var this2 = pixelimage_Endian_isLittleEndian ? (c1 >> 24 & 255) << 24 | (c1 & 255) << 16 | (c1 >> 8 & 255) << 8 | c1 >> 16 & 255 : c1;
 					var maskPixel = this2;
@@ -40796,9 +40079,9 @@ pixelimage_triangleGML_patternShape_PathElementPattern.prototype = $extend(pixel
 					var y = dy;
 					var this10 = col;
 					var c2 = this10;
-					if((c2 >> 24 & 255) < 254 && pixelShape.transparent) {
-						var location = pixelShape.useVirtualPos ? (y - pixelShape.virtualY) * pixelShape.width + x - pixelShape.virtualX | 0 : y * pixelShape.width + x | 0;
-						var this11 = pixelShape.image[location];
+					if((c2 >> 24 & 255) < 254 && pixelImage.transparent) {
+						var location = pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0;
+						var this11 = pixelImage.image[location];
 						var this12 = this11;
 						var this13 = pixelimage_Endian_isLittleEndian ? (this12 >> 24 & 255) << 24 | (this12 & 255) << 16 | (this12 >> 8 & 255) << 8 | this12 >> 16 & 255 : this12;
 						var this14 = this13 >> 24 & 255;
@@ -40823,19 +40106,19 @@ pixelimage_triangleGML_patternShape_PathElementPattern.prototype = $extend(pixel
 						var b = 255 * (b1 * a3 + b2 * a2) | 0;
 						var a = 255 * (a3 + a2) | 0;
 						var blended = a << 24 | r << 16 | g << 8 | b;
-						pixelShape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+						pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 					} else {
-						pixelShape.image[pixelShape.useVirtualPos ? (y - pixelShape.virtualY) * pixelShape.width + x - pixelShape.virtualX | 0 : y * pixelShape.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c2 >> 24 & 255) << 24 | (c2 & 255) << 16 | (c2 >> 8 & 255) << 8 | c2 >> 16 & 255 : c2;
+						pixelImage.image[pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c2 >> 24 & 255) << 24 | (c2 & 255) << 16 | (c2 >> 8 & 255) << 8 | c2 >> 16 & 255 : c2;
 					}
 				}
 			}
 		}
 		this.temp = null;
-		return pixelimage_triangleGML_coreShape_PatternShape.prototype.render.call(this,pixelShape);
+		return pixelimage_triGML_coreShape_PatternShape.prototype.render.call(this,pixelImage);
 	}
 	,lineSegmentTo: function(x2,y2) {
 		if(this.toggleDraw) {
-			this.oldInfo = this.info;
+			var oldInfo = this.info;
 			var this1 = this.temp;
 			var px = this.x0 * this.scaleX + this.translateX;
 			var py = this.y0 * this.scaleY + this.translateY;
@@ -41229,7 +40512,7 @@ pixelimage_triangleGML_patternShape_PathElementPattern.prototype = $extend(pixel
 				}
 			}
 			if(hasHit2 == false) {
-				var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1,true);
+				var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1);
 			}
 			var bx1 = cx;
 			var by1 = cy;
@@ -41374,26 +40657,26 @@ pixelimage_triangleGML_patternShape_PathElementPattern.prototype = $extend(pixel
 				}
 			}
 			if(hasHit2 == false) {
-				var v = new pixelimage_algo_HitTri(bx,by,bx1,by1,cx1,cy1,true);
+				var v = new pixelimage_algo_HitTri(bx,by,bx1,by1,cx1,cy1);
 			}
 			var tmp;
 			if(hasHit == true) {
-				var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy,true);
+				var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy);
 				tmp = v;
 			} else {
 				tmp = null;
 			}
 			this.info = tmp;
-			if(this.info != null && this.oldInfo != null) {
+			if(this.info != null && oldInfo != null) {
 				var this1 = this.temp;
-				var ax = this.oldInfo.bx * this.scaleX + this.translateX;
-				var ay = this.oldInfo.by * this.scaleY + this.translateY;
+				var ax = oldInfo.bx * this.scaleX + this.translateX;
+				var ay = oldInfo.by * this.scaleY + this.translateY;
 				var bx = this.info.ax * this.scaleX + this.translateX;
 				var by = this.info.ay * this.scaleY + this.translateY;
 				var cx = this.info.dx * this.scaleX + this.translateX;
 				var cy = this.info.dy * this.scaleY + this.translateY;
-				var dx = this.oldInfo.cx * this.scaleX + this.translateX;
-				var dy = this.oldInfo.cy * this.scaleY + this.translateY;
+				var dx = oldInfo.cx * this.scaleX + this.translateX;
+				var dy = oldInfo.cy * this.scaleY + this.translateY;
 				var tileImage = this.tileImageStroke;
 				var hasHit = true;
 				if(hasHit == null) {
@@ -41546,7 +40829,7 @@ pixelimage_triangleGML_patternShape_PathElementPattern.prototype = $extend(pixel
 					}
 				}
 				if(hasHit2 == false) {
-					var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1,true);
+					var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1);
 				}
 				var bx1 = cx;
 				var by1 = cy;
@@ -41691,10 +40974,10 @@ pixelimage_triangleGML_patternShape_PathElementPattern.prototype = $extend(pixel
 					}
 				}
 				if(hasHit2 == false) {
-					var v = new pixelimage_algo_HitTri(bx,by,bx1,by1,cx1,cy1,true);
+					var v = new pixelimage_algo_HitTri(bx,by,bx1,by1,cx1,cy1);
 				}
 				if(hasHit1 == true) {
-					var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy,true);
+					var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy);
 				}
 			}
 		}
@@ -41703,7 +40986,7 @@ pixelimage_triangleGML_patternShape_PathElementPattern.prototype = $extend(pixel
 		this.y0 = y2;
 	}
 	,lineTo: function(x2,y2) {
-		this.oldInfo = this.info;
+		var oldInfo = this.info;
 		var this1 = this.temp;
 		var px = this.x0 * this.scaleX + this.translateX;
 		var py = this.y0 * this.scaleY + this.translateY;
@@ -42097,7 +41380,7 @@ pixelimage_triangleGML_patternShape_PathElementPattern.prototype = $extend(pixel
 			}
 		}
 		if(hasHit2 == false) {
-			var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1,true);
+			var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1);
 		}
 		var bx1 = cx;
 		var by1 = cy;
@@ -42242,26 +41525,26 @@ pixelimage_triangleGML_patternShape_PathElementPattern.prototype = $extend(pixel
 			}
 		}
 		if(hasHit2 == false) {
-			var v = new pixelimage_algo_HitTri(bx,by,bx1,by1,cx1,cy1,true);
+			var v = new pixelimage_algo_HitTri(bx,by,bx1,by1,cx1,cy1);
 		}
 		var tmp;
 		if(hasHit == true) {
-			var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy,true);
+			var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy);
 			tmp = v;
 		} else {
 			tmp = null;
 		}
 		this.info = tmp;
-		if(this.info != null && this.oldInfo != null) {
+		if(this.info != null && oldInfo != null) {
 			var this1 = this.temp;
-			var ax = this.oldInfo.bx * this.scaleX + this.translateX;
-			var ay = this.oldInfo.by * this.scaleY + this.translateY;
+			var ax = oldInfo.bx * this.scaleX + this.translateX;
+			var ay = oldInfo.by * this.scaleY + this.translateY;
 			var bx = this.info.ax * this.scaleX + this.translateX;
 			var by = this.info.ay * this.scaleY + this.translateY;
 			var cx = this.info.dx * this.scaleX + this.translateX;
 			var cy = this.info.dy * this.scaleY + this.translateY;
-			var dx = this.oldInfo.cx * this.scaleX + this.translateX;
-			var dy = this.oldInfo.cy * this.scaleY + this.translateY;
+			var dx = oldInfo.cx * this.scaleX + this.translateX;
+			var dy = oldInfo.cy * this.scaleY + this.translateY;
 			var tileImage = this.tileImageStroke;
 			var hasHit = true;
 			if(hasHit == null) {
@@ -42414,7 +41697,7 @@ pixelimage_triangleGML_patternShape_PathElementPattern.prototype = $extend(pixel
 				}
 			}
 			if(hasHit2 == false) {
-				var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1,true);
+				var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1);
 			}
 			var bx1 = cx;
 			var by1 = cy;
@@ -42559,10 +41842,10 @@ pixelimage_triangleGML_patternShape_PathElementPattern.prototype = $extend(pixel
 				}
 			}
 			if(hasHit2 == false) {
-				var v = new pixelimage_algo_HitTri(bx,by,bx1,by1,cx1,cy1,true);
+				var v = new pixelimage_algo_HitTri(bx,by,bx1,by1,cx1,cy1);
 			}
 			if(hasHit1 == true) {
-				var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy,true);
+				var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy);
 			}
 		}
 		this.x0 = x2;
@@ -42575,9 +41858,9 @@ pixelimage_triangleGML_patternShape_PathElementPattern.prototype = $extend(pixel
 		this.info = null;
 		this.toggleDraw = true;
 	}
-	,__class__: pixelimage_triangleGML_patternShape_PathElementPattern
+	,__class__: pixelimage_triGML_patternShape_PathElementPattern
 });
-var pixelimage_triangleGML_patternShape_QuadrilateralPattern = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,strokeColor0,strokeColor1,fillColor0,fillColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale,fillPatternFill,fillPatternWidth,fillPatternHeight,fillPatternAcross,fillPatternScale,x1,y1,x2,y2,x3,y3,x4,y4) {
+var pixelimage_triGML_patternShape_QuadrilateralPattern = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,strokeColor0,strokeColor1,fillColor0,fillColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale,fillPatternFill,fillPatternWidth,fillPatternHeight,fillPatternAcross,fillPatternScale,x1,y1,x2,y2,x3,y3,x4,y4) {
 	if(y4 == null) {
 		y4 = 0.;
 	}
@@ -42644,7 +41927,7 @@ var pixelimage_triangleGML_patternShape_QuadrilateralPattern = function(opacity,
 	if(opacity == null) {
 		opacity = 1.;
 	}
-	pixelimage_triangleGML_coreShape_PatternShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,strokeColor0,strokeColor1,fillColor0,fillColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale,fillPatternFill,fillPatternWidth,fillPatternHeight,fillPatternAcross,fillPatternScale);
+	pixelimage_triGML_coreShape_PatternShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,strokeColor0,strokeColor1,fillColor0,fillColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale,fillPatternFill,fillPatternWidth,fillPatternHeight,fillPatternAcross,fillPatternScale);
 	this.x1 = x1;
 	this.y1 = y1;
 	this.x2 = x2;
@@ -42654,9 +41937,9 @@ var pixelimage_triangleGML_patternShape_QuadrilateralPattern = function(opacity,
 	this.x4 = x4;
 	this.y4 = y4;
 };
-pixelimage_triangleGML_patternShape_QuadrilateralPattern.__name__ = "pixelimage.triangleGML.patternShape.QuadrilateralPattern";
-pixelimage_triangleGML_patternShape_QuadrilateralPattern.__super__ = pixelimage_triangleGML_coreShape_PatternShape;
-pixelimage_triangleGML_patternShape_QuadrilateralPattern.prototype = $extend(pixelimage_triangleGML_coreShape_PatternShape.prototype,{
+pixelimage_triGML_patternShape_QuadrilateralPattern.__name__ = "pixelimage.triGML.patternShape.QuadrilateralPattern";
+pixelimage_triGML_patternShape_QuadrilateralPattern.__super__ = pixelimage_triGML_coreShape_PatternShape;
+pixelimage_triGML_patternShape_QuadrilateralPattern.prototype = $extend(pixelimage_triGML_coreShape_PatternShape.prototype,{
 	setParameter: function(name,value) {
 		switch(name) {
 		case "x1":
@@ -42684,10 +41967,10 @@ pixelimage_triangleGML_patternShape_QuadrilateralPattern.prototype = $extend(pix
 			this.y4 = parseFloat(value);
 			break;
 		default:
-			pixelimage_triangleGML_coreShape_PatternShape.prototype.setParameter.call(this,name,value);
+			pixelimage_triGML_coreShape_PatternShape.prototype.setParameter.call(this,name,value);
 		}
 	}
-	,render: function(pixelShape) {
+	,render: function(pixelImage) {
 		var a = this.x1;
 		var b = this.x2;
 		var c = this.x3;
@@ -42746,8 +42029,7 @@ pixelimage_triangleGML_patternShape_QuadrilateralPattern.prototype = $extend(pix
 		var h = Math.ceil(height);
 		var this1 = new Uint32Array(w * h | 0);
 		var this2 = new pixelimage_ImageStruct(w,h,this1);
-		var this1 = this2;
-		var temp = this1;
+		var temp = this2;
 		temp.transparent = false;
 		this.buildPatternTemplates();
 		var rx = width / 2;
@@ -42908,7 +42190,7 @@ pixelimage_triangleGML_patternShape_QuadrilateralPattern.prototype = $extend(pix
 			}
 		}
 		if(hasHit2 == false) {
-			var v = new pixelimage_algo_HitTri(x1_,y1_,bx,by,cx,cy,true);
+			var v = new pixelimage_algo_HitTri(x1_,y1_,bx,by,cx,cy);
 		}
 		var bx = x3_;
 		var by = y3_;
@@ -43053,10 +42335,10 @@ pixelimage_triangleGML_patternShape_QuadrilateralPattern.prototype = $extend(pix
 			}
 		}
 		if(hasHit2 == false) {
-			var v = new pixelimage_algo_HitTri(x2_,y2_,bx,by,cx,cy,true);
+			var v = new pixelimage_algo_HitTri(x2_,y2_,bx,by,cx,cy);
 		}
 		if(hasHit == true) {
-			var v = new pixelimage_algo_HitQuad(x1_,y1_,x2_,y2_,x3_,y3_,x4_,y4_,true);
+			var v = new pixelimage_algo_HitQuad(x1_,y1_,x2_,y2_,x3_,y3_,x4_,y4_);
 		}
 		x1_ += this.strokeWidth;
 		x2_ += this.strokeWidth;
@@ -43214,7 +42496,7 @@ pixelimage_triangleGML_patternShape_QuadrilateralPattern.prototype = $extend(pix
 			}
 		}
 		if(hasHit2 == false) {
-			var v = new pixelimage_algo_HitTri(x1_,y1_,bx,by,cx,cy,true);
+			var v = new pixelimage_algo_HitTri(x1_,y1_,bx,by,cx,cy);
 		}
 		var bx = x3_;
 		var by = y3_;
@@ -43359,10 +42641,10 @@ pixelimage_triangleGML_patternShape_QuadrilateralPattern.prototype = $extend(pix
 			}
 		}
 		if(hasHit2 == false) {
-			var v = new pixelimage_algo_HitTri(x2_,y2_,bx,by,cx,cy,true);
+			var v = new pixelimage_algo_HitTri(x2_,y2_,bx,by,cx,cy);
 		}
 		if(hasHit == true) {
-			var v = new pixelimage_algo_HitQuad(x1_,y1_,x2_,y2_,x3_,y3_,x4_,y4_,true);
+			var v = new pixelimage_algo_HitQuad(x1_,y1_,x2_,y2_,x3_,y3_,x4_,y4_);
 		}
 		var _g = 0;
 		var _g1 = temp.height;
@@ -43405,9 +42687,9 @@ pixelimage_triangleGML_patternShape_QuadrilateralPattern.prototype = $extend(pix
 					var y = top + dy;
 					var this10 = col;
 					var c2 = this10;
-					if((c2 >> 24 & 255) < 254 && pixelShape.transparent) {
-						var location = pixelShape.useVirtualPos ? (y - pixelShape.virtualY) * pixelShape.width + x - pixelShape.virtualX | 0 : y * pixelShape.width + x | 0;
-						var this11 = pixelShape.image[location];
+					if((c2 >> 24 & 255) < 254 && pixelImage.transparent) {
+						var location = pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0;
+						var this11 = pixelImage.image[location];
 						var this12 = this11;
 						var this13 = pixelimage_Endian_isLittleEndian ? (this12 >> 24 & 255) << 24 | (this12 & 255) << 16 | (this12 >> 8 & 255) << 8 | this12 >> 16 & 255 : this12;
 						var this14 = this13 >> 24 & 255;
@@ -43432,19 +42714,19 @@ pixelimage_triangleGML_patternShape_QuadrilateralPattern.prototype = $extend(pix
 						var b = 255 * (b1 * a3 + b2 * a2) | 0;
 						var a = 255 * (a3 + a2) | 0;
 						var blended = a << 24 | r << 16 | g << 8 | b;
-						pixelShape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+						pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 					} else {
-						pixelShape.image[pixelShape.useVirtualPos ? (y - pixelShape.virtualY) * pixelShape.width + x - pixelShape.virtualX | 0 : y * pixelShape.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c2 >> 24 & 255) << 24 | (c2 & 255) << 16 | (c2 >> 8 & 255) << 8 | c2 >> 16 & 255 : c2;
+						pixelImage.image[pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c2 >> 24 & 255) << 24 | (c2 & 255) << 16 | (c2 >> 8 & 255) << 8 | c2 >> 16 & 255 : c2;
 					}
 				}
 			}
 		}
 		temp = null;
-		return pixelimage_triangleGML_coreShape_PatternShape.prototype.render.call(this,pixelShape);
+		return pixelimage_triGML_coreShape_PatternShape.prototype.render.call(this,pixelImage);
 	}
-	,__class__: pixelimage_triangleGML_patternShape_QuadrilateralPattern
+	,__class__: pixelimage_triGML_patternShape_QuadrilateralPattern
 });
-var pixelimage_triangleGML_patternShape_RectanglePattern = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,strokeColor0,strokeColor1,fillColor0,fillColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale,fillPatternFill,fillPatternWidth,fillPatternHeight,fillPatternAcross,fillPatternScale,left,top,width,height,rounded) {
+var pixelimage_triGML_patternShape_RectanglePattern = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,strokeColor0,strokeColor1,fillColor0,fillColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale,fillPatternFill,fillPatternWidth,fillPatternHeight,fillPatternAcross,fillPatternScale,left,top,width,height,rounded) {
 	if(rounded == null) {
 		rounded = false;
 	}
@@ -43502,16 +42784,16 @@ var pixelimage_triangleGML_patternShape_RectanglePattern = function(opacity,visi
 	if(opacity == null) {
 		opacity = 1.;
 	}
-	pixelimage_triangleGML_coreShape_PatternShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,strokeColor0,strokeColor1,fillColor0,fillColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale,fillPatternFill,fillPatternWidth,fillPatternHeight,fillPatternAcross,fillPatternScale);
+	pixelimage_triGML_coreShape_PatternShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,strokeColor0,strokeColor1,fillColor0,fillColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale,fillPatternFill,fillPatternWidth,fillPatternHeight,fillPatternAcross,fillPatternScale);
 	this.left = left;
 	this.top = top;
 	this.width = width;
 	this.height = height;
 	this.rounded = rounded;
 };
-pixelimage_triangleGML_patternShape_RectanglePattern.__name__ = "pixelimage.triangleGML.patternShape.RectanglePattern";
-pixelimage_triangleGML_patternShape_RectanglePattern.__super__ = pixelimage_triangleGML_coreShape_PatternShape;
-pixelimage_triangleGML_patternShape_RectanglePattern.prototype = $extend(pixelimage_triangleGML_coreShape_PatternShape.prototype,{
+pixelimage_triGML_patternShape_RectanglePattern.__name__ = "pixelimage.triGML.patternShape.RectanglePattern";
+pixelimage_triGML_patternShape_RectanglePattern.__super__ = pixelimage_triGML_coreShape_PatternShape;
+pixelimage_triGML_patternShape_RectanglePattern.prototype = $extend(pixelimage_triGML_coreShape_PatternShape.prototype,{
 	setParameter: function(name,value) {
 		switch(name) {
 		case "height":
@@ -43530,16 +42812,15 @@ pixelimage_triangleGML_patternShape_RectanglePattern.prototype = $extend(pixelim
 			this.width = parseFloat(value);
 			break;
 		default:
-			pixelimage_triangleGML_coreShape_PatternShape.prototype.setParameter.call(this,name,value);
+			pixelimage_triGML_coreShape_PatternShape.prototype.setParameter.call(this,name,value);
 		}
 	}
-	,render: function(pixelShape) {
+	,render: function(pixelImage) {
 		var w = Math.ceil(this.width);
 		var h = Math.ceil(this.height);
 		var this1 = new Uint32Array(w * h | 0);
 		var this2 = new pixelimage_ImageStruct(w,h,this1);
-		var this1 = this2;
-		var temp = this1;
+		var temp = this2;
 		temp.transparent = false;
 		this.buildPatternTemplates();
 		this.buildRectangles(temp);
@@ -43586,9 +42867,9 @@ pixelimage_triangleGML_patternShape_RectanglePattern.prototype = $extend(pixelim
 					var y1 = y + dy;
 					var this10 = col;
 					var c2 = this10;
-					if((c2 >> 24 & 255) < 254 && pixelShape.transparent) {
-						var location = pixelShape.useVirtualPos ? (y1 - pixelShape.virtualY) * pixelShape.width + x1 - pixelShape.virtualX | 0 : y1 * pixelShape.width + x1 | 0;
-						var this11 = pixelShape.image[location];
+					if((c2 >> 24 & 255) < 254 && pixelImage.transparent) {
+						var location = pixelImage.useVirtualPos ? (y1 - pixelImage.virtualY) * pixelImage.width + x1 - pixelImage.virtualX | 0 : y1 * pixelImage.width + x1 | 0;
+						var this11 = pixelImage.image[location];
 						var this12 = this11;
 						var this13 = pixelimage_Endian_isLittleEndian ? (this12 >> 24 & 255) << 24 | (this12 & 255) << 16 | (this12 >> 8 & 255) << 8 | this12 >> 16 & 255 : this12;
 						var this14 = this13 >> 24 & 255;
@@ -43613,15 +42894,15 @@ pixelimage_triangleGML_patternShape_RectanglePattern.prototype = $extend(pixelim
 						var b = 255 * (b1 * a3 + b2 * a2) | 0;
 						var a = 255 * (a3 + a2) | 0;
 						var blended = a << 24 | r << 16 | g << 8 | b;
-						pixelShape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+						pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 					} else {
-						pixelShape.image[pixelShape.useVirtualPos ? (y1 - pixelShape.virtualY) * pixelShape.width + x1 - pixelShape.virtualX | 0 : y1 * pixelShape.width + x1 | 0] = pixelimage_Endian_isLittleEndian ? (c2 >> 24 & 255) << 24 | (c2 & 255) << 16 | (c2 >> 8 & 255) << 8 | c2 >> 16 & 255 : c2;
+						pixelImage.image[pixelImage.useVirtualPos ? (y1 - pixelImage.virtualY) * pixelImage.width + x1 - pixelImage.virtualX | 0 : y1 * pixelImage.width + x1 | 0] = pixelimage_Endian_isLittleEndian ? (c2 >> 24 & 255) << 24 | (c2 & 255) << 16 | (c2 >> 8 & 255) << 8 | c2 >> 16 & 255 : c2;
 					}
 				}
 			}
 		}
 		temp = null;
-		return pixelimage_triangleGML_coreShape_PatternShape.prototype.render.call(this,pixelShape);
+		return pixelimage_triGML_coreShape_PatternShape.prototype.render.call(this,pixelImage);
 	}
 	,buildRectangles: function(temp) {
 		if(this.rounded == false) {
@@ -43780,7 +43061,7 @@ pixelimage_triangleGML_patternShape_RectanglePattern.prototype = $extend(pixelim
 					}
 				}
 				if(hasHit2 == false) {
-					var v = new pixelimage_algo_HitTri(0,0,bx1,by,cx,cy1,true);
+					var v = new pixelimage_algo_HitTri(0,0,bx1,by,cx,cy1);
 				}
 				var bx1 = bx;
 				var by = cy;
@@ -43925,10 +43206,10 @@ pixelimage_triangleGML_patternShape_RectanglePattern.prototype = $extend(pixelim
 					}
 				}
 				if(hasHit2 == false) {
-					var v = new pixelimage_algo_HitTri(bx,0,bx1,by,cx,cy1,true);
+					var v = new pixelimage_algo_HitTri(bx,0,bx1,by,cx,cy1);
 				}
 				if(hasHit1 == true) {
-					var v = new pixelimage_algo_HitQuad(0,0,bx,0,bx,cy,0,cy,true);
+					var v = new pixelimage_algo_HitQuad(0,0,bx,0,bx,cy,0,cy);
 				}
 			} else {
 				var color = this.strokeColor;
@@ -44137,7 +43418,7 @@ pixelimage_triangleGML_patternShape_RectanglePattern.prototype = $extend(pixelim
 				}
 			}
 			if(hasHit2 == false) {
-				var v = new pixelimage_algo_HitTri(x,y,bx1,by,cx,cy1,true);
+				var v = new pixelimage_algo_HitTri(x,y,bx1,by,cx,cy1);
 			}
 			var bx1 = bx;
 			var by = cy;
@@ -44282,13 +43563,14 @@ pixelimage_triangleGML_patternShape_RectanglePattern.prototype = $extend(pixelim
 				}
 			}
 			if(hasHit2 == false) {
-				var v = new pixelimage_algo_HitTri(bx,y,bx1,by,cx,cy1,true);
+				var v = new pixelimage_algo_HitTri(bx,y,bx1,by,cx,cy1);
 			}
 			if(hasHit1 == true) {
-				var v = new pixelimage_algo_HitQuad(x,y,bx,y,bx,cy,x,cy,true);
+				var v = new pixelimage_algo_HitQuad(x,y,bx,y,bx,cy,x,cy);
 			}
 		} else {
 			if(this.tiledBorder) {
+				var pixelshape = temp;
 				var wid = this.width;
 				var hi = this.height;
 				var tileImage = this.tileImageStroke;
@@ -44450,9 +43732,9 @@ pixelimage_triangleGML_patternShape_RectanglePattern.prototype = $extend(pixelim
 								var color = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
 								var this10 = color;
 								var c1 = this10;
-								if((c1 >> 24 & 255) < 254 && temp.transparent) {
-									var location = temp.useVirtualPos ? (y - temp.virtualY) * temp.width + x - temp.virtualX | 0 : y * temp.width + x | 0;
-									var this11 = temp.image[location];
+								if((c1 >> 24 & 255) < 254 && pixelshape.transparent) {
+									var location = pixelshape.useVirtualPos ? (y - pixelshape.virtualY) * pixelshape.width + x - pixelshape.virtualX | 0 : y * pixelshape.width + x | 0;
+									var this11 = pixelshape.image[location];
 									var this12 = this11;
 									var this13 = pixelimage_Endian_isLittleEndian ? (this12 >> 24 & 255) << 24 | (this12 & 255) << 16 | (this12 >> 8 & 255) << 8 | this12 >> 16 & 255 : this12;
 									var this14 = this13 >> 24 & 255;
@@ -44477,9 +43759,9 @@ pixelimage_triangleGML_patternShape_RectanglePattern.prototype = $extend(pixelim
 									var b = 255 * (b1 * a3 + b2 * a2) | 0;
 									var a = 255 * (a3 + a2) | 0;
 									var blended = a << 24 | r << 16 | g << 8 | b;
-									temp.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+									pixelshape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 								} else {
-									temp.image[temp.useVirtualPos ? (y - temp.virtualY) * temp.width + x - temp.virtualX | 0 : y * temp.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c1 >> 24 & 255) << 24 | (c1 & 255) << 16 | (c1 >> 8 & 255) << 8 | c1 >> 16 & 255 : c1;
+									pixelshape.image[pixelshape.useVirtualPos ? (y - pixelshape.virtualY) * pixelshape.width + x - pixelshape.virtualX | 0 : y * pixelshape.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c1 >> 24 & 255) << 24 | (c1 & 255) << 16 | (c1 >> 8 & 255) << 8 | c1 >> 16 & 255 : c1;
 								}
 								foundY = true;
 							} else if(foundY) {
@@ -44488,7 +43770,7 @@ pixelimage_triangleGML_patternShape_RectanglePattern.prototype = $extend(pixelim
 						}
 					}
 					if(hasHit1 == false) {
-						var v = new pixelimage_algo_HitTri(cx,cy,bx,by,cx1,cy1,true);
+						var v = new pixelimage_algo_HitTri(cx,cy,bx,by,cx1,cy1);
 					}
 					lastX = nextX;
 					lastY = nextY;
@@ -44609,9 +43891,9 @@ pixelimage_triangleGML_patternShape_RectanglePattern.prototype = $extend(pixelim
 							var color = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
 							var this1 = color;
 							var c1 = this1;
-							if((c1 >> 24 & 255) < 254 && temp.transparent) {
-								var location = temp.useVirtualPos ? (y - temp.virtualY) * temp.width + x1 - temp.virtualX | 0 : y * temp.width + x1 | 0;
-								var this2 = temp.image[location];
+							if((c1 >> 24 & 255) < 254 && pixelshape.transparent) {
+								var location = pixelshape.useVirtualPos ? (y - pixelshape.virtualY) * pixelshape.width + x1 - pixelshape.virtualX | 0 : y * pixelshape.width + x1 | 0;
+								var this2 = pixelshape.image[location];
 								var this3 = this2;
 								var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
 								var this5 = this4 >> 24 & 255;
@@ -44636,9 +43918,9 @@ pixelimage_triangleGML_patternShape_RectanglePattern.prototype = $extend(pixelim
 								var b = 255 * (b1 * a3 + b2 * a2) | 0;
 								var a = 255 * (a3 + a2) | 0;
 								var blended = a << 24 | r << 16 | g << 8 | b;
-								temp.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+								pixelshape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 							} else {
-								temp.image[temp.useVirtualPos ? (y - temp.virtualY) * temp.width + x1 - temp.virtualX | 0 : y * temp.width + x1 | 0] = pixelimage_Endian_isLittleEndian ? (c1 >> 24 & 255) << 24 | (c1 & 255) << 16 | (c1 >> 8 & 255) << 8 | c1 >> 16 & 255 : c1;
+								pixelshape.image[pixelshape.useVirtualPos ? (y - pixelshape.virtualY) * pixelshape.width + x1 - pixelshape.virtualX | 0 : y * pixelshape.width + x1 | 0] = pixelimage_Endian_isLittleEndian ? (c1 >> 24 & 255) << 24 | (c1 & 255) << 16 | (c1 >> 8 & 255) << 8 | c1 >> 16 & 255 : c1;
 							}
 							foundY = true;
 						} else if(foundY) {
@@ -44647,7 +43929,7 @@ pixelimage_triangleGML_patternShape_RectanglePattern.prototype = $extend(pixelim
 					}
 				}
 				if(hasHit2 == false) {
-					var v = new pixelimage_algo_HitTri(x,0,bx1,by,cx,cy1,true);
+					var v = new pixelimage_algo_HitTri(x,0,bx1,by,cx,cy1);
 				}
 				var bx1 = bx;
 				var by = cy;
@@ -44754,9 +44036,9 @@ pixelimage_triangleGML_patternShape_RectanglePattern.prototype = $extend(pixelim
 							var color = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
 							var this1 = color;
 							var c1 = this1;
-							if((c1 >> 24 & 255) < 254 && temp.transparent) {
-								var location = temp.useVirtualPos ? (y - temp.virtualY) * temp.width + x1 - temp.virtualX | 0 : y * temp.width + x1 | 0;
-								var this2 = temp.image[location];
+							if((c1 >> 24 & 255) < 254 && pixelshape.transparent) {
+								var location = pixelshape.useVirtualPos ? (y - pixelshape.virtualY) * pixelshape.width + x1 - pixelshape.virtualX | 0 : y * pixelshape.width + x1 | 0;
+								var this2 = pixelshape.image[location];
 								var this3 = this2;
 								var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
 								var this5 = this4 >> 24 & 255;
@@ -44781,9 +44063,9 @@ pixelimage_triangleGML_patternShape_RectanglePattern.prototype = $extend(pixelim
 								var b = 255 * (b1 * a3 + b2 * a2) | 0;
 								var a = 255 * (a3 + a2) | 0;
 								var blended = a << 24 | r << 16 | g << 8 | b;
-								temp.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+								pixelshape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 							} else {
-								temp.image[temp.useVirtualPos ? (y - temp.virtualY) * temp.width + x1 - temp.virtualX | 0 : y * temp.width + x1 | 0] = pixelimage_Endian_isLittleEndian ? (c1 >> 24 & 255) << 24 | (c1 & 255) << 16 | (c1 >> 8 & 255) << 8 | c1 >> 16 & 255 : c1;
+								pixelshape.image[pixelshape.useVirtualPos ? (y - pixelshape.virtualY) * pixelshape.width + x1 - pixelshape.virtualX | 0 : y * pixelshape.width + x1 | 0] = pixelimage_Endian_isLittleEndian ? (c1 >> 24 & 255) << 24 | (c1 & 255) << 16 | (c1 >> 8 & 255) << 8 | c1 >> 16 & 255 : c1;
 							}
 							foundY = true;
 						} else if(foundY) {
@@ -44792,10 +44074,10 @@ pixelimage_triangleGML_patternShape_RectanglePattern.prototype = $extend(pixelim
 					}
 				}
 				if(hasHit2 == false) {
-					var v = new pixelimage_algo_HitTri(bx,0,bx1,by,cx,cy1,true);
+					var v = new pixelimage_algo_HitTri(bx,0,bx1,by,cx,cy1);
 				}
 				if(hasHit1 == true) {
-					var v = new pixelimage_algo_HitQuad(x,0,bx,0,bx,cy,x,cy,true);
+					var v = new pixelimage_algo_HitQuad(x,0,bx,0,bx,cy,x,cy);
 				}
 				var cy = dy;
 				var targetError = 1.05;
@@ -44932,9 +44214,9 @@ pixelimage_triangleGML_patternShape_RectanglePattern.prototype = $extend(pixelim
 								var color = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
 								var this10 = color;
 								var c1 = this10;
-								if((c1 >> 24 & 255) < 254 && temp.transparent) {
-									var location = temp.useVirtualPos ? (y - temp.virtualY) * temp.width + x - temp.virtualX | 0 : y * temp.width + x | 0;
-									var this11 = temp.image[location];
+								if((c1 >> 24 & 255) < 254 && pixelshape.transparent) {
+									var location = pixelshape.useVirtualPos ? (y - pixelshape.virtualY) * pixelshape.width + x - pixelshape.virtualX | 0 : y * pixelshape.width + x | 0;
+									var this11 = pixelshape.image[location];
 									var this12 = this11;
 									var this13 = pixelimage_Endian_isLittleEndian ? (this12 >> 24 & 255) << 24 | (this12 & 255) << 16 | (this12 >> 8 & 255) << 8 | this12 >> 16 & 255 : this12;
 									var this14 = this13 >> 24 & 255;
@@ -44959,9 +44241,9 @@ pixelimage_triangleGML_patternShape_RectanglePattern.prototype = $extend(pixelim
 									var b = 255 * (b1 * a3 + b2 * a2) | 0;
 									var a = 255 * (a3 + a2) | 0;
 									var blended = a << 24 | r << 16 | g << 8 | b;
-									temp.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+									pixelshape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 								} else {
-									temp.image[temp.useVirtualPos ? (y - temp.virtualY) * temp.width + x - temp.virtualX | 0 : y * temp.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c1 >> 24 & 255) << 24 | (c1 & 255) << 16 | (c1 >> 8 & 255) << 8 | c1 >> 16 & 255 : c1;
+									pixelshape.image[pixelshape.useVirtualPos ? (y - pixelshape.virtualY) * pixelshape.width + x - pixelshape.virtualX | 0 : y * pixelshape.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c1 >> 24 & 255) << 24 | (c1 & 255) << 16 | (c1 >> 8 & 255) << 8 | c1 >> 16 & 255 : c1;
 								}
 								foundY = true;
 							} else if(foundY) {
@@ -44970,7 +44252,7 @@ pixelimage_triangleGML_patternShape_RectanglePattern.prototype = $extend(pixelim
 						}
 					}
 					if(hasHit1 == false) {
-						var v = new pixelimage_algo_HitTri(farX,cy,bx,by,cx,cy1,true);
+						var v = new pixelimage_algo_HitTri(farX,cy,bx,by,cx,cy1);
 					}
 					lastX = nextX;
 					lastY = nextY;
@@ -45091,9 +44373,9 @@ pixelimage_triangleGML_patternShape_RectanglePattern.prototype = $extend(pixelim
 							var color = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
 							var this1 = color;
 							var c1 = this1;
-							if((c1 >> 24 & 255) < 254 && temp.transparent) {
-								var location = temp.useVirtualPos ? (y1 - temp.virtualY) * temp.width + x - temp.virtualX | 0 : y1 * temp.width + x | 0;
-								var this2 = temp.image[location];
+							if((c1 >> 24 & 255) < 254 && pixelshape.transparent) {
+								var location = pixelshape.useVirtualPos ? (y1 - pixelshape.virtualY) * pixelshape.width + x - pixelshape.virtualX | 0 : y1 * pixelshape.width + x | 0;
+								var this2 = pixelshape.image[location];
 								var this3 = this2;
 								var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
 								var this5 = this4 >> 24 & 255;
@@ -45118,9 +44400,9 @@ pixelimage_triangleGML_patternShape_RectanglePattern.prototype = $extend(pixelim
 								var b = 255 * (b1 * a3 + b2 * a2) | 0;
 								var a = 255 * (a3 + a2) | 0;
 								var blended = a << 24 | r << 16 | g << 8 | b;
-								temp.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+								pixelshape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 							} else {
-								temp.image[temp.useVirtualPos ? (y1 - temp.virtualY) * temp.width + x - temp.virtualX | 0 : y1 * temp.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c1 >> 24 & 255) << 24 | (c1 & 255) << 16 | (c1 >> 8 & 255) << 8 | c1 >> 16 & 255 : c1;
+								pixelshape.image[pixelshape.useVirtualPos ? (y1 - pixelshape.virtualY) * pixelshape.width + x - pixelshape.virtualX | 0 : y1 * pixelshape.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c1 >> 24 & 255) << 24 | (c1 & 255) << 16 | (c1 >> 8 & 255) << 8 | c1 >> 16 & 255 : c1;
 							}
 							foundY = true;
 						} else if(foundY) {
@@ -45129,7 +44411,7 @@ pixelimage_triangleGML_patternShape_RectanglePattern.prototype = $extend(pixelim
 					}
 				}
 				if(hasHit2 == false) {
-					var v = new pixelimage_algo_HitTri(0,y,bx1,by,cx,cy1,true);
+					var v = new pixelimage_algo_HitTri(0,y,bx1,by,cx,cy1);
 				}
 				var bx1 = bx;
 				var by = cy;
@@ -45236,9 +44518,9 @@ pixelimage_triangleGML_patternShape_RectanglePattern.prototype = $extend(pixelim
 							var color = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
 							var this1 = color;
 							var c1 = this1;
-							if((c1 >> 24 & 255) < 254 && temp.transparent) {
-								var location = temp.useVirtualPos ? (y1 - temp.virtualY) * temp.width + x - temp.virtualX | 0 : y1 * temp.width + x | 0;
-								var this2 = temp.image[location];
+							if((c1 >> 24 & 255) < 254 && pixelshape.transparent) {
+								var location = pixelshape.useVirtualPos ? (y1 - pixelshape.virtualY) * pixelshape.width + x - pixelshape.virtualX | 0 : y1 * pixelshape.width + x | 0;
+								var this2 = pixelshape.image[location];
 								var this3 = this2;
 								var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
 								var this5 = this4 >> 24 & 255;
@@ -45263,9 +44545,9 @@ pixelimage_triangleGML_patternShape_RectanglePattern.prototype = $extend(pixelim
 								var b = 255 * (b1 * a3 + b2 * a2) | 0;
 								var a = 255 * (a3 + a2) | 0;
 								var blended = a << 24 | r << 16 | g << 8 | b;
-								temp.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+								pixelshape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 							} else {
-								temp.image[temp.useVirtualPos ? (y1 - temp.virtualY) * temp.width + x - temp.virtualX | 0 : y1 * temp.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c1 >> 24 & 255) << 24 | (c1 & 255) << 16 | (c1 >> 8 & 255) << 8 | c1 >> 16 & 255 : c1;
+								pixelshape.image[pixelshape.useVirtualPos ? (y1 - pixelshape.virtualY) * pixelshape.width + x - pixelshape.virtualX | 0 : y1 * pixelshape.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c1 >> 24 & 255) << 24 | (c1 & 255) << 16 | (c1 >> 8 & 255) << 8 | c1 >> 16 & 255 : c1;
 							}
 							foundY = true;
 						} else if(foundY) {
@@ -45274,10 +44556,10 @@ pixelimage_triangleGML_patternShape_RectanglePattern.prototype = $extend(pixelim
 					}
 				}
 				if(hasHit2 == false) {
-					var v = new pixelimage_algo_HitTri(bx,y,bx1,by,cx,cy1,true);
+					var v = new pixelimage_algo_HitTri(bx,y,bx1,by,cx,cy1);
 				}
 				if(hasHit1 == true) {
-					var v = new pixelimage_algo_HitQuad(0,y,bx,y,bx,cy,0,cy,true);
+					var v = new pixelimage_algo_HitQuad(0,y,bx,y,bx,cy,0,cy);
 				}
 				var cx = dx;
 				var targetError = 1.05;
@@ -45414,9 +44696,9 @@ pixelimage_triangleGML_patternShape_RectanglePattern.prototype = $extend(pixelim
 								var color = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
 								var this10 = color;
 								var c1 = this10;
-								if((c1 >> 24 & 255) < 254 && temp.transparent) {
-									var location = temp.useVirtualPos ? (y - temp.virtualY) * temp.width + x - temp.virtualX | 0 : y * temp.width + x | 0;
-									var this11 = temp.image[location];
+								if((c1 >> 24 & 255) < 254 && pixelshape.transparent) {
+									var location = pixelshape.useVirtualPos ? (y - pixelshape.virtualY) * pixelshape.width + x - pixelshape.virtualX | 0 : y * pixelshape.width + x | 0;
+									var this11 = pixelshape.image[location];
 									var this12 = this11;
 									var this13 = pixelimage_Endian_isLittleEndian ? (this12 >> 24 & 255) << 24 | (this12 & 255) << 16 | (this12 >> 8 & 255) << 8 | this12 >> 16 & 255 : this12;
 									var this14 = this13 >> 24 & 255;
@@ -45441,9 +44723,9 @@ pixelimage_triangleGML_patternShape_RectanglePattern.prototype = $extend(pixelim
 									var b = 255 * (b1 * a3 + b2 * a2) | 0;
 									var a = 255 * (a3 + a2) | 0;
 									var blended = a << 24 | r << 16 | g << 8 | b;
-									temp.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+									pixelshape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 								} else {
-									temp.image[temp.useVirtualPos ? (y - temp.virtualY) * temp.width + x - temp.virtualX | 0 : y * temp.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c1 >> 24 & 255) << 24 | (c1 & 255) << 16 | (c1 >> 8 & 255) << 8 | c1 >> 16 & 255 : c1;
+									pixelshape.image[pixelshape.useVirtualPos ? (y - pixelshape.virtualY) * pixelshape.width + x - pixelshape.virtualX | 0 : y * pixelshape.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c1 >> 24 & 255) << 24 | (c1 & 255) << 16 | (c1 >> 8 & 255) << 8 | c1 >> 16 & 255 : c1;
 								}
 								foundY = true;
 							} else if(foundY) {
@@ -45452,7 +44734,7 @@ pixelimage_triangleGML_patternShape_RectanglePattern.prototype = $extend(pixelim
 						}
 					}
 					if(hasHit1 == false) {
-						var v = new pixelimage_algo_HitTri(cx,lowerY,bx,by,cx1,cy,true);
+						var v = new pixelimage_algo_HitTri(cx,lowerY,bx,by,cx1,cy);
 					}
 					lastX = nextX;
 					lastY = nextY;
@@ -45573,9 +44855,9 @@ pixelimage_triangleGML_patternShape_RectanglePattern.prototype = $extend(pixelim
 							var color = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
 							var this1 = color;
 							var c1 = this1;
-							if((c1 >> 24 & 255) < 254 && temp.transparent) {
-								var location = temp.useVirtualPos ? (y - temp.virtualY) * temp.width + x1 - temp.virtualX | 0 : y * temp.width + x1 | 0;
-								var this2 = temp.image[location];
+							if((c1 >> 24 & 255) < 254 && pixelshape.transparent) {
+								var location = pixelshape.useVirtualPos ? (y - pixelshape.virtualY) * pixelshape.width + x1 - pixelshape.virtualX | 0 : y * pixelshape.width + x1 | 0;
+								var this2 = pixelshape.image[location];
 								var this3 = this2;
 								var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
 								var this5 = this4 >> 24 & 255;
@@ -45600,9 +44882,9 @@ pixelimage_triangleGML_patternShape_RectanglePattern.prototype = $extend(pixelim
 								var b = 255 * (b1 * a3 + b2 * a2) | 0;
 								var a = 255 * (a3 + a2) | 0;
 								var blended = a << 24 | r << 16 | g << 8 | b;
-								temp.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+								pixelshape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 							} else {
-								temp.image[temp.useVirtualPos ? (y - temp.virtualY) * temp.width + x1 - temp.virtualX | 0 : y * temp.width + x1 | 0] = pixelimage_Endian_isLittleEndian ? (c1 >> 24 & 255) << 24 | (c1 & 255) << 16 | (c1 >> 8 & 255) << 8 | c1 >> 16 & 255 : c1;
+								pixelshape.image[pixelshape.useVirtualPos ? (y - pixelshape.virtualY) * pixelshape.width + x1 - pixelshape.virtualX | 0 : y * pixelshape.width + x1 | 0] = pixelimage_Endian_isLittleEndian ? (c1 >> 24 & 255) << 24 | (c1 & 255) << 16 | (c1 >> 8 & 255) << 8 | c1 >> 16 & 255 : c1;
 							}
 							foundY = true;
 						} else if(foundY) {
@@ -45611,7 +44893,7 @@ pixelimage_triangleGML_patternShape_RectanglePattern.prototype = $extend(pixelim
 					}
 				}
 				if(hasHit2 == false) {
-					var v = new pixelimage_algo_HitTri(x,lowerY,bx1,by,cx,cy1,true);
+					var v = new pixelimage_algo_HitTri(x,lowerY,bx1,by,cx,cy1);
 				}
 				var bx1 = bx;
 				var by = cy;
@@ -45718,9 +45000,9 @@ pixelimage_triangleGML_patternShape_RectanglePattern.prototype = $extend(pixelim
 							var color = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
 							var this1 = color;
 							var c1 = this1;
-							if((c1 >> 24 & 255) < 254 && temp.transparent) {
-								var location = temp.useVirtualPos ? (y - temp.virtualY) * temp.width + x1 - temp.virtualX | 0 : y * temp.width + x1 | 0;
-								var this2 = temp.image[location];
+							if((c1 >> 24 & 255) < 254 && pixelshape.transparent) {
+								var location = pixelshape.useVirtualPos ? (y - pixelshape.virtualY) * pixelshape.width + x1 - pixelshape.virtualX | 0 : y * pixelshape.width + x1 | 0;
+								var this2 = pixelshape.image[location];
 								var this3 = this2;
 								var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
 								var this5 = this4 >> 24 & 255;
@@ -45745,9 +45027,9 @@ pixelimage_triangleGML_patternShape_RectanglePattern.prototype = $extend(pixelim
 								var b = 255 * (b1 * a3 + b2 * a2) | 0;
 								var a = 255 * (a3 + a2) | 0;
 								var blended = a << 24 | r << 16 | g << 8 | b;
-								temp.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+								pixelshape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 							} else {
-								temp.image[temp.useVirtualPos ? (y - temp.virtualY) * temp.width + x1 - temp.virtualX | 0 : y * temp.width + x1 | 0] = pixelimage_Endian_isLittleEndian ? (c1 >> 24 & 255) << 24 | (c1 & 255) << 16 | (c1 >> 8 & 255) << 8 | c1 >> 16 & 255 : c1;
+								pixelshape.image[pixelshape.useVirtualPos ? (y - pixelshape.virtualY) * pixelshape.width + x1 - pixelshape.virtualX | 0 : y * pixelshape.width + x1 | 0] = pixelimage_Endian_isLittleEndian ? (c1 >> 24 & 255) << 24 | (c1 & 255) << 16 | (c1 >> 8 & 255) << 8 | c1 >> 16 & 255 : c1;
 							}
 							foundY = true;
 						} else if(foundY) {
@@ -45756,10 +45038,10 @@ pixelimage_triangleGML_patternShape_RectanglePattern.prototype = $extend(pixelim
 					}
 				}
 				if(hasHit2 == false) {
-					var v = new pixelimage_algo_HitTri(bx,lowerY,bx1,by,cx,cy1,true);
+					var v = new pixelimage_algo_HitTri(bx,lowerY,bx1,by,cx,cy1);
 				}
 				if(hasHit1 == true) {
-					var v = new pixelimage_algo_HitQuad(x,lowerY,bx,lowerY,bx,cy,x,cy,true);
+					var v = new pixelimage_algo_HitQuad(x,lowerY,bx,lowerY,bx,cy,x,cy);
 				}
 				var targetError = 1.05;
 				if(targetError == null) {
@@ -45895,9 +45177,9 @@ pixelimage_triangleGML_patternShape_RectanglePattern.prototype = $extend(pixelim
 								var color = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
 								var this10 = color;
 								var c1 = this10;
-								if((c1 >> 24 & 255) < 254 && temp.transparent) {
-									var location = temp.useVirtualPos ? (y - temp.virtualY) * temp.width + x - temp.virtualX | 0 : y * temp.width + x | 0;
-									var this11 = temp.image[location];
+								if((c1 >> 24 & 255) < 254 && pixelshape.transparent) {
+									var location = pixelshape.useVirtualPos ? (y - pixelshape.virtualY) * pixelshape.width + x - pixelshape.virtualX | 0 : y * pixelshape.width + x | 0;
+									var this11 = pixelshape.image[location];
 									var this12 = this11;
 									var this13 = pixelimage_Endian_isLittleEndian ? (this12 >> 24 & 255) << 24 | (this12 & 255) << 16 | (this12 >> 8 & 255) << 8 | this12 >> 16 & 255 : this12;
 									var this14 = this13 >> 24 & 255;
@@ -45922,9 +45204,9 @@ pixelimage_triangleGML_patternShape_RectanglePattern.prototype = $extend(pixelim
 									var b = 255 * (b1 * a3 + b2 * a2) | 0;
 									var a = 255 * (a3 + a2) | 0;
 									var blended = a << 24 | r << 16 | g << 8 | b;
-									temp.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+									pixelshape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 								} else {
-									temp.image[temp.useVirtualPos ? (y - temp.virtualY) * temp.width + x - temp.virtualX | 0 : y * temp.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c1 >> 24 & 255) << 24 | (c1 & 255) << 16 | (c1 >> 8 & 255) << 8 | c1 >> 16 & 255 : c1;
+									pixelshape.image[pixelshape.useVirtualPos ? (y - pixelshape.virtualY) * pixelshape.width + x - pixelshape.virtualX | 0 : y * pixelshape.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c1 >> 24 & 255) << 24 | (c1 & 255) << 16 | (c1 >> 8 & 255) << 8 | c1 >> 16 & 255 : c1;
 								}
 								foundY = true;
 							} else if(foundY) {
@@ -45933,12 +45215,13 @@ pixelimage_triangleGML_patternShape_RectanglePattern.prototype = $extend(pixelim
 						}
 					}
 					if(hasHit1 == false) {
-						var v = new pixelimage_algo_HitTri(farX,lowerY,bx,by,cx,cy,true);
+						var v = new pixelimage_algo_HitTri(farX,lowerY,bx,by,cx,cy);
 					}
 					lastX = nextX;
 					lastY = nextY;
 				}
 			} else {
+				var pixelshape = temp;
 				var wid = this.width;
 				var hi = this.height;
 				var color = this.strokeColor;
@@ -46096,9 +45379,9 @@ pixelimage_triangleGML_patternShape_RectanglePattern.prototype = $extend(pixelim
 							} else if(s + t < A) {
 								var this10 = color;
 								var c = this10;
-								if((c >> 24 & 255) < 254 && temp.transparent) {
-									var location = temp.useVirtualPos ? (y - temp.virtualY) * temp.width + x - temp.virtualX | 0 : y * temp.width + x | 0;
-									var this11 = temp.image[location];
+								if((c >> 24 & 255) < 254 && pixelshape.transparent) {
+									var location = pixelshape.useVirtualPos ? (y - pixelshape.virtualY) * pixelshape.width + x - pixelshape.virtualX | 0 : y * pixelshape.width + x | 0;
+									var this11 = pixelshape.image[location];
 									var this12 = this11;
 									var this13 = pixelimage_Endian_isLittleEndian ? (this12 >> 24 & 255) << 24 | (this12 & 255) << 16 | (this12 >> 8 & 255) << 8 | this12 >> 16 & 255 : this12;
 									var this14 = this13 >> 24 & 255;
@@ -46123,9 +45406,9 @@ pixelimage_triangleGML_patternShape_RectanglePattern.prototype = $extend(pixelim
 									var b = 255 * (b1 * a3 + b2 * a2) | 0;
 									var a = 255 * (a3 + a2) | 0;
 									var blended = a << 24 | r << 16 | g << 8 | b;
-									temp.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+									pixelshape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 								} else {
-									temp.image[temp.useVirtualPos ? (y - temp.virtualY) * temp.width + x - temp.virtualX | 0 : y * temp.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
+									pixelshape.image[pixelshape.useVirtualPos ? (y - pixelshape.virtualY) * pixelshape.width + x - pixelshape.virtualX | 0 : y * pixelshape.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
 								}
 								foundY = true;
 							} else if(foundY) {
@@ -46134,7 +45417,7 @@ pixelimage_triangleGML_patternShape_RectanglePattern.prototype = $extend(pixelim
 						}
 					}
 					if(hasHit1 == true) {
-						var v = new pixelimage_algo_HitTri(cx,cy,bx,by,cx1,cy1,true);
+						var v = new pixelimage_algo_HitTri(cx,cy,bx,by,cx1,cy1);
 					}
 					lastX = nextX;
 					lastY = nextY;
@@ -46149,9 +45432,9 @@ pixelimage_triangleGML_patternShape_RectanglePattern.prototype = $extend(pixelim
 					var x = p++;
 					var this1 = color;
 					var c = this1;
-					if((c >> 24 & 255) < 254 && temp.transparent) {
-						var location = temp.useVirtualPos ? (q - temp.virtualY) * temp.width + x - temp.virtualX | 0 : q * temp.width + x | 0;
-						var this2 = temp.image[location];
+					if((c >> 24 & 255) < 254 && pixelshape.transparent) {
+						var location = pixelshape.useVirtualPos ? (q - pixelshape.virtualY) * pixelshape.width + x - pixelshape.virtualX | 0 : q * pixelshape.width + x | 0;
+						var this2 = pixelshape.image[location];
 						var this3 = this2;
 						var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
 						var this5 = this4 >> 24 & 255;
@@ -46176,9 +45459,9 @@ pixelimage_triangleGML_patternShape_RectanglePattern.prototype = $extend(pixelim
 						var b = 255 * (b1 * a3 + b2 * a2) | 0;
 						var a = 255 * (a3 + a2) | 0;
 						var blended = a << 24 | r << 16 | g << 8 | b;
-						temp.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+						pixelshape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 					} else {
-						temp.image[temp.useVirtualPos ? (q - temp.virtualY) * temp.width + x - temp.virtualX | 0 : q * temp.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
+						pixelshape.image[pixelshape.useVirtualPos ? (q - pixelshape.virtualY) * pixelshape.width + x - pixelshape.virtualX | 0 : q * pixelshape.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
 					}
 					if(p > maxX) {
 						p = xx;
@@ -46319,9 +45602,9 @@ pixelimage_triangleGML_patternShape_RectanglePattern.prototype = $extend(pixelim
 							} else if(s + t < A) {
 								var this10 = color;
 								var c = this10;
-								if((c >> 24 & 255) < 254 && temp.transparent) {
-									var location = temp.useVirtualPos ? (y - temp.virtualY) * temp.width + x - temp.virtualX | 0 : y * temp.width + x | 0;
-									var this11 = temp.image[location];
+								if((c >> 24 & 255) < 254 && pixelshape.transparent) {
+									var location = pixelshape.useVirtualPos ? (y - pixelshape.virtualY) * pixelshape.width + x - pixelshape.virtualX | 0 : y * pixelshape.width + x | 0;
+									var this11 = pixelshape.image[location];
 									var this12 = this11;
 									var this13 = pixelimage_Endian_isLittleEndian ? (this12 >> 24 & 255) << 24 | (this12 & 255) << 16 | (this12 >> 8 & 255) << 8 | this12 >> 16 & 255 : this12;
 									var this14 = this13 >> 24 & 255;
@@ -46346,9 +45629,9 @@ pixelimage_triangleGML_patternShape_RectanglePattern.prototype = $extend(pixelim
 									var b = 255 * (b1 * a3 + b2 * a2) | 0;
 									var a = 255 * (a3 + a2) | 0;
 									var blended = a << 24 | r << 16 | g << 8 | b;
-									temp.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+									pixelshape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 								} else {
-									temp.image[temp.useVirtualPos ? (y - temp.virtualY) * temp.width + x - temp.virtualX | 0 : y * temp.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
+									pixelshape.image[pixelshape.useVirtualPos ? (y - pixelshape.virtualY) * pixelshape.width + x - pixelshape.virtualX | 0 : y * pixelshape.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
 								}
 								foundY = true;
 							} else if(foundY) {
@@ -46357,7 +45640,7 @@ pixelimage_triangleGML_patternShape_RectanglePattern.prototype = $extend(pixelim
 						}
 					}
 					if(hasHit1 == true) {
-						var v = new pixelimage_algo_HitTri(farX,cy,bx,by,cx,cy1,true);
+						var v = new pixelimage_algo_HitTri(farX,cy,bx,by,cx,cy1);
 					}
 					lastX = nextX;
 					lastY = nextY;
@@ -46372,9 +45655,9 @@ pixelimage_triangleGML_patternShape_RectanglePattern.prototype = $extend(pixelim
 					var x = p++;
 					var this1 = color;
 					var c = this1;
-					if((c >> 24 & 255) < 254 && temp.transparent) {
-						var location = temp.useVirtualPos ? (q - temp.virtualY) * temp.width + x - temp.virtualX | 0 : q * temp.width + x | 0;
-						var this2 = temp.image[location];
+					if((c >> 24 & 255) < 254 && pixelshape.transparent) {
+						var location = pixelshape.useVirtualPos ? (q - pixelshape.virtualY) * pixelshape.width + x - pixelshape.virtualX | 0 : q * pixelshape.width + x | 0;
+						var this2 = pixelshape.image[location];
 						var this3 = this2;
 						var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
 						var this5 = this4 >> 24 & 255;
@@ -46399,9 +45682,9 @@ pixelimage_triangleGML_patternShape_RectanglePattern.prototype = $extend(pixelim
 						var b = 255 * (b1 * a3 + b2 * a2) | 0;
 						var a = 255 * (a3 + a2) | 0;
 						var blended = a << 24 | r << 16 | g << 8 | b;
-						temp.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+						pixelshape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 					} else {
-						temp.image[temp.useVirtualPos ? (q - temp.virtualY) * temp.width + x - temp.virtualX | 0 : q * temp.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
+						pixelshape.image[pixelshape.useVirtualPos ? (q - pixelshape.virtualY) * pixelshape.width + x - pixelshape.virtualX | 0 : q * pixelshape.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
 					}
 					if(p > maxX) {
 						p = xx;
@@ -46542,9 +45825,9 @@ pixelimage_triangleGML_patternShape_RectanglePattern.prototype = $extend(pixelim
 							} else if(s + t < A) {
 								var this10 = color;
 								var c = this10;
-								if((c >> 24 & 255) < 254 && temp.transparent) {
-									var location = temp.useVirtualPos ? (y - temp.virtualY) * temp.width + x - temp.virtualX | 0 : y * temp.width + x | 0;
-									var this11 = temp.image[location];
+								if((c >> 24 & 255) < 254 && pixelshape.transparent) {
+									var location = pixelshape.useVirtualPos ? (y - pixelshape.virtualY) * pixelshape.width + x - pixelshape.virtualX | 0 : y * pixelshape.width + x | 0;
+									var this11 = pixelshape.image[location];
 									var this12 = this11;
 									var this13 = pixelimage_Endian_isLittleEndian ? (this12 >> 24 & 255) << 24 | (this12 & 255) << 16 | (this12 >> 8 & 255) << 8 | this12 >> 16 & 255 : this12;
 									var this14 = this13 >> 24 & 255;
@@ -46569,9 +45852,9 @@ pixelimage_triangleGML_patternShape_RectanglePattern.prototype = $extend(pixelim
 									var b = 255 * (b1 * a3 + b2 * a2) | 0;
 									var a = 255 * (a3 + a2) | 0;
 									var blended = a << 24 | r << 16 | g << 8 | b;
-									temp.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+									pixelshape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 								} else {
-									temp.image[temp.useVirtualPos ? (y - temp.virtualY) * temp.width + x - temp.virtualX | 0 : y * temp.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
+									pixelshape.image[pixelshape.useVirtualPos ? (y - pixelshape.virtualY) * pixelshape.width + x - pixelshape.virtualX | 0 : y * pixelshape.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
 								}
 								foundY = true;
 							} else if(foundY) {
@@ -46580,7 +45863,7 @@ pixelimage_triangleGML_patternShape_RectanglePattern.prototype = $extend(pixelim
 						}
 					}
 					if(hasHit1 == true) {
-						var v = new pixelimage_algo_HitTri(cx,lowerY,bx,by,cx1,cy,true);
+						var v = new pixelimage_algo_HitTri(cx,lowerY,bx,by,cx1,cy);
 					}
 					lastX = nextX;
 					lastY = nextY;
@@ -46595,9 +45878,9 @@ pixelimage_triangleGML_patternShape_RectanglePattern.prototype = $extend(pixelim
 					var x = p++;
 					var this1 = color;
 					var c = this1;
-					if((c >> 24 & 255) < 254 && temp.transparent) {
-						var location = temp.useVirtualPos ? (q - temp.virtualY) * temp.width + x - temp.virtualX | 0 : q * temp.width + x | 0;
-						var this2 = temp.image[location];
+					if((c >> 24 & 255) < 254 && pixelshape.transparent) {
+						var location = pixelshape.useVirtualPos ? (q - pixelshape.virtualY) * pixelshape.width + x - pixelshape.virtualX | 0 : q * pixelshape.width + x | 0;
+						var this2 = pixelshape.image[location];
 						var this3 = this2;
 						var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
 						var this5 = this4 >> 24 & 255;
@@ -46622,9 +45905,9 @@ pixelimage_triangleGML_patternShape_RectanglePattern.prototype = $extend(pixelim
 						var b = 255 * (b1 * a3 + b2 * a2) | 0;
 						var a = 255 * (a3 + a2) | 0;
 						var blended = a << 24 | r << 16 | g << 8 | b;
-						temp.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+						pixelshape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 					} else {
-						temp.image[temp.useVirtualPos ? (q - temp.virtualY) * temp.width + x - temp.virtualX | 0 : q * temp.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
+						pixelshape.image[pixelshape.useVirtualPos ? (q - pixelshape.virtualY) * pixelshape.width + x - pixelshape.virtualX | 0 : q * pixelshape.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
 					}
 					if(p > maxX) {
 						p = xx;
@@ -46764,9 +46047,9 @@ pixelimage_triangleGML_patternShape_RectanglePattern.prototype = $extend(pixelim
 							} else if(s + t < A) {
 								var this10 = color;
 								var c = this10;
-								if((c >> 24 & 255) < 254 && temp.transparent) {
-									var location = temp.useVirtualPos ? (y - temp.virtualY) * temp.width + x - temp.virtualX | 0 : y * temp.width + x | 0;
-									var this11 = temp.image[location];
+								if((c >> 24 & 255) < 254 && pixelshape.transparent) {
+									var location = pixelshape.useVirtualPos ? (y - pixelshape.virtualY) * pixelshape.width + x - pixelshape.virtualX | 0 : y * pixelshape.width + x | 0;
+									var this11 = pixelshape.image[location];
 									var this12 = this11;
 									var this13 = pixelimage_Endian_isLittleEndian ? (this12 >> 24 & 255) << 24 | (this12 & 255) << 16 | (this12 >> 8 & 255) << 8 | this12 >> 16 & 255 : this12;
 									var this14 = this13 >> 24 & 255;
@@ -46791,9 +46074,9 @@ pixelimage_triangleGML_patternShape_RectanglePattern.prototype = $extend(pixelim
 									var b = 255 * (b1 * a3 + b2 * a2) | 0;
 									var a = 255 * (a3 + a2) | 0;
 									var blended = a << 24 | r << 16 | g << 8 | b;
-									temp.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+									pixelshape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 								} else {
-									temp.image[temp.useVirtualPos ? (y - temp.virtualY) * temp.width + x - temp.virtualX | 0 : y * temp.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
+									pixelshape.image[pixelshape.useVirtualPos ? (y - pixelshape.virtualY) * pixelshape.width + x - pixelshape.virtualX | 0 : y * pixelshape.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
 								}
 								foundY = true;
 							} else if(foundY) {
@@ -46802,12 +46085,13 @@ pixelimage_triangleGML_patternShape_RectanglePattern.prototype = $extend(pixelim
 						}
 					}
 					if(hasHit1 == true) {
-						var v = new pixelimage_algo_HitTri(farX,lowerY,bx,by,cx,cy,true);
+						var v = new pixelimage_algo_HitTri(farX,lowerY,bx,by,cx,cy);
 					}
 					lastX = nextX;
 					lastY = nextY;
 				}
 			}
+			var pixelshape = temp;
 			var x = this.strokeWidth;
 			var y = this.strokeWidth;
 			var wid = this.width - 2 * this.strokeWidth;
@@ -46971,9 +46255,9 @@ pixelimage_triangleGML_patternShape_RectanglePattern.prototype = $extend(pixelim
 							var color = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
 							var this10 = color;
 							var c1 = this10;
-							if((c1 >> 24 & 255) < 254 && temp.transparent) {
-								var location = temp.useVirtualPos ? (y1 - temp.virtualY) * temp.width + x1 - temp.virtualX | 0 : y1 * temp.width + x1 | 0;
-								var this11 = temp.image[location];
+							if((c1 >> 24 & 255) < 254 && pixelshape.transparent) {
+								var location = pixelshape.useVirtualPos ? (y1 - pixelshape.virtualY) * pixelshape.width + x1 - pixelshape.virtualX | 0 : y1 * pixelshape.width + x1 | 0;
+								var this11 = pixelshape.image[location];
 								var this12 = this11;
 								var this13 = pixelimage_Endian_isLittleEndian ? (this12 >> 24 & 255) << 24 | (this12 & 255) << 16 | (this12 >> 8 & 255) << 8 | this12 >> 16 & 255 : this12;
 								var this14 = this13 >> 24 & 255;
@@ -46998,9 +46282,9 @@ pixelimage_triangleGML_patternShape_RectanglePattern.prototype = $extend(pixelim
 								var b = 255 * (b1 * a3 + b2 * a2) | 0;
 								var a = 255 * (a3 + a2) | 0;
 								var blended = a << 24 | r << 16 | g << 8 | b;
-								temp.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+								pixelshape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 							} else {
-								temp.image[temp.useVirtualPos ? (y1 - temp.virtualY) * temp.width + x1 - temp.virtualX | 0 : y1 * temp.width + x1 | 0] = pixelimage_Endian_isLittleEndian ? (c1 >> 24 & 255) << 24 | (c1 & 255) << 16 | (c1 >> 8 & 255) << 8 | c1 >> 16 & 255 : c1;
+								pixelshape.image[pixelshape.useVirtualPos ? (y1 - pixelshape.virtualY) * pixelshape.width + x1 - pixelshape.virtualX | 0 : y1 * pixelshape.width + x1 | 0] = pixelimage_Endian_isLittleEndian ? (c1 >> 24 & 255) << 24 | (c1 & 255) << 16 | (c1 >> 8 & 255) << 8 | c1 >> 16 & 255 : c1;
 							}
 							foundY = true;
 						} else if(foundY) {
@@ -47009,7 +46293,7 @@ pixelimage_triangleGML_patternShape_RectanglePattern.prototype = $extend(pixelim
 					}
 				}
 				if(hasHit1 == false) {
-					var v = new pixelimage_algo_HitTri(cx,cy,bx,by,cx1,cy1,true);
+					var v = new pixelimage_algo_HitTri(cx,cy,bx,by,cx1,cy1);
 				}
 				lastX = nextX;
 				lastY = nextY;
@@ -47130,9 +46414,9 @@ pixelimage_triangleGML_patternShape_RectanglePattern.prototype = $extend(pixelim
 						var color = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
 						var this1 = color;
 						var c1 = this1;
-						if((c1 >> 24 & 255) < 254 && temp.transparent) {
-							var location = temp.useVirtualPos ? (y1 - temp.virtualY) * temp.width + x2 - temp.virtualX | 0 : y1 * temp.width + x2 | 0;
-							var this2 = temp.image[location];
+						if((c1 >> 24 & 255) < 254 && pixelshape.transparent) {
+							var location = pixelshape.useVirtualPos ? (y1 - pixelshape.virtualY) * pixelshape.width + x2 - pixelshape.virtualX | 0 : y1 * pixelshape.width + x2 | 0;
+							var this2 = pixelshape.image[location];
 							var this3 = this2;
 							var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
 							var this5 = this4 >> 24 & 255;
@@ -47157,9 +46441,9 @@ pixelimage_triangleGML_patternShape_RectanglePattern.prototype = $extend(pixelim
 							var b = 255 * (b1 * a3 + b2 * a2) | 0;
 							var a = 255 * (a3 + a2) | 0;
 							var blended = a << 24 | r << 16 | g << 8 | b;
-							temp.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+							pixelshape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 						} else {
-							temp.image[temp.useVirtualPos ? (y1 - temp.virtualY) * temp.width + x2 - temp.virtualX | 0 : y1 * temp.width + x2 | 0] = pixelimage_Endian_isLittleEndian ? (c1 >> 24 & 255) << 24 | (c1 & 255) << 16 | (c1 >> 8 & 255) << 8 | c1 >> 16 & 255 : c1;
+							pixelshape.image[pixelshape.useVirtualPos ? (y1 - pixelshape.virtualY) * pixelshape.width + x2 - pixelshape.virtualX | 0 : y1 * pixelshape.width + x2 | 0] = pixelimage_Endian_isLittleEndian ? (c1 >> 24 & 255) << 24 | (c1 & 255) << 16 | (c1 >> 8 & 255) << 8 | c1 >> 16 & 255 : c1;
 						}
 						foundY = true;
 					} else if(foundY) {
@@ -47168,7 +46452,7 @@ pixelimage_triangleGML_patternShape_RectanglePattern.prototype = $extend(pixelim
 				}
 			}
 			if(hasHit2 == false) {
-				var v = new pixelimage_algo_HitTri(x1,y,bx1,by,cx,cy1,true);
+				var v = new pixelimage_algo_HitTri(x1,y,bx1,by,cx,cy1);
 			}
 			var bx1 = bx;
 			var by = cy;
@@ -47275,9 +46559,9 @@ pixelimage_triangleGML_patternShape_RectanglePattern.prototype = $extend(pixelim
 						var color = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
 						var this1 = color;
 						var c1 = this1;
-						if((c1 >> 24 & 255) < 254 && temp.transparent) {
-							var location = temp.useVirtualPos ? (y1 - temp.virtualY) * temp.width + x2 - temp.virtualX | 0 : y1 * temp.width + x2 | 0;
-							var this2 = temp.image[location];
+						if((c1 >> 24 & 255) < 254 && pixelshape.transparent) {
+							var location = pixelshape.useVirtualPos ? (y1 - pixelshape.virtualY) * pixelshape.width + x2 - pixelshape.virtualX | 0 : y1 * pixelshape.width + x2 | 0;
+							var this2 = pixelshape.image[location];
 							var this3 = this2;
 							var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
 							var this5 = this4 >> 24 & 255;
@@ -47302,9 +46586,9 @@ pixelimage_triangleGML_patternShape_RectanglePattern.prototype = $extend(pixelim
 							var b = 255 * (b1 * a3 + b2 * a2) | 0;
 							var a = 255 * (a3 + a2) | 0;
 							var blended = a << 24 | r << 16 | g << 8 | b;
-							temp.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+							pixelshape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 						} else {
-							temp.image[temp.useVirtualPos ? (y1 - temp.virtualY) * temp.width + x2 - temp.virtualX | 0 : y1 * temp.width + x2 | 0] = pixelimage_Endian_isLittleEndian ? (c1 >> 24 & 255) << 24 | (c1 & 255) << 16 | (c1 >> 8 & 255) << 8 | c1 >> 16 & 255 : c1;
+							pixelshape.image[pixelshape.useVirtualPos ? (y1 - pixelshape.virtualY) * pixelshape.width + x2 - pixelshape.virtualX | 0 : y1 * pixelshape.width + x2 | 0] = pixelimage_Endian_isLittleEndian ? (c1 >> 24 & 255) << 24 | (c1 & 255) << 16 | (c1 >> 8 & 255) << 8 | c1 >> 16 & 255 : c1;
 						}
 						foundY = true;
 					} else if(foundY) {
@@ -47313,10 +46597,10 @@ pixelimage_triangleGML_patternShape_RectanglePattern.prototype = $extend(pixelim
 				}
 			}
 			if(hasHit2 == false) {
-				var v = new pixelimage_algo_HitTri(bx,y,bx1,by,cx,cy1,true);
+				var v = new pixelimage_algo_HitTri(bx,y,bx1,by,cx,cy1);
 			}
 			if(hasHit1 == true) {
-				var v = new pixelimage_algo_HitQuad(x1,y,bx,y,bx,cy,x1,cy,true);
+				var v = new pixelimage_algo_HitQuad(x1,y,bx,y,bx,cy,x1,cy);
 			}
 			var cy = y + dy;
 			var targetError = 1.05;
@@ -47453,9 +46737,9 @@ pixelimage_triangleGML_patternShape_RectanglePattern.prototype = $extend(pixelim
 							var color = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
 							var this10 = color;
 							var c1 = this10;
-							if((c1 >> 24 & 255) < 254 && temp.transparent) {
-								var location = temp.useVirtualPos ? (y1 - temp.virtualY) * temp.width + x1 - temp.virtualX | 0 : y1 * temp.width + x1 | 0;
-								var this11 = temp.image[location];
+							if((c1 >> 24 & 255) < 254 && pixelshape.transparent) {
+								var location = pixelshape.useVirtualPos ? (y1 - pixelshape.virtualY) * pixelshape.width + x1 - pixelshape.virtualX | 0 : y1 * pixelshape.width + x1 | 0;
+								var this11 = pixelshape.image[location];
 								var this12 = this11;
 								var this13 = pixelimage_Endian_isLittleEndian ? (this12 >> 24 & 255) << 24 | (this12 & 255) << 16 | (this12 >> 8 & 255) << 8 | this12 >> 16 & 255 : this12;
 								var this14 = this13 >> 24 & 255;
@@ -47480,9 +46764,9 @@ pixelimage_triangleGML_patternShape_RectanglePattern.prototype = $extend(pixelim
 								var b = 255 * (b1 * a3 + b2 * a2) | 0;
 								var a = 255 * (a3 + a2) | 0;
 								var blended = a << 24 | r << 16 | g << 8 | b;
-								temp.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+								pixelshape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 							} else {
-								temp.image[temp.useVirtualPos ? (y1 - temp.virtualY) * temp.width + x1 - temp.virtualX | 0 : y1 * temp.width + x1 | 0] = pixelimage_Endian_isLittleEndian ? (c1 >> 24 & 255) << 24 | (c1 & 255) << 16 | (c1 >> 8 & 255) << 8 | c1 >> 16 & 255 : c1;
+								pixelshape.image[pixelshape.useVirtualPos ? (y1 - pixelshape.virtualY) * pixelshape.width + x1 - pixelshape.virtualX | 0 : y1 * pixelshape.width + x1 | 0] = pixelimage_Endian_isLittleEndian ? (c1 >> 24 & 255) << 24 | (c1 & 255) << 16 | (c1 >> 8 & 255) << 8 | c1 >> 16 & 255 : c1;
 							}
 							foundY = true;
 						} else if(foundY) {
@@ -47491,7 +46775,7 @@ pixelimage_triangleGML_patternShape_RectanglePattern.prototype = $extend(pixelim
 					}
 				}
 				if(hasHit1 == false) {
-					var v = new pixelimage_algo_HitTri(farX,cy,bx,by,cx,cy1,true);
+					var v = new pixelimage_algo_HitTri(farX,cy,bx,by,cx,cy1);
 				}
 				lastX = nextX;
 				lastY = nextY;
@@ -47612,9 +46896,9 @@ pixelimage_triangleGML_patternShape_RectanglePattern.prototype = $extend(pixelim
 						var color = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
 						var this1 = color;
 						var c1 = this1;
-						if((c1 >> 24 & 255) < 254 && temp.transparent) {
-							var location = temp.useVirtualPos ? (y - temp.virtualY) * temp.width + x1 - temp.virtualX | 0 : y * temp.width + x1 | 0;
-							var this2 = temp.image[location];
+						if((c1 >> 24 & 255) < 254 && pixelshape.transparent) {
+							var location = pixelshape.useVirtualPos ? (y - pixelshape.virtualY) * pixelshape.width + x1 - pixelshape.virtualX | 0 : y * pixelshape.width + x1 | 0;
+							var this2 = pixelshape.image[location];
 							var this3 = this2;
 							var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
 							var this5 = this4 >> 24 & 255;
@@ -47639,9 +46923,9 @@ pixelimage_triangleGML_patternShape_RectanglePattern.prototype = $extend(pixelim
 							var b = 255 * (b1 * a3 + b2 * a2) | 0;
 							var a = 255 * (a3 + a2) | 0;
 							var blended = a << 24 | r << 16 | g << 8 | b;
-							temp.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+							pixelshape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 						} else {
-							temp.image[temp.useVirtualPos ? (y - temp.virtualY) * temp.width + x1 - temp.virtualX | 0 : y * temp.width + x1 | 0] = pixelimage_Endian_isLittleEndian ? (c1 >> 24 & 255) << 24 | (c1 & 255) << 16 | (c1 >> 8 & 255) << 8 | c1 >> 16 & 255 : c1;
+							pixelshape.image[pixelshape.useVirtualPos ? (y - pixelshape.virtualY) * pixelshape.width + x1 - pixelshape.virtualX | 0 : y * pixelshape.width + x1 | 0] = pixelimage_Endian_isLittleEndian ? (c1 >> 24 & 255) << 24 | (c1 & 255) << 16 | (c1 >> 8 & 255) << 8 | c1 >> 16 & 255 : c1;
 						}
 						foundY = true;
 					} else if(foundY) {
@@ -47650,7 +46934,7 @@ pixelimage_triangleGML_patternShape_RectanglePattern.prototype = $extend(pixelim
 				}
 			}
 			if(hasHit2 == false) {
-				var v = new pixelimage_algo_HitTri(x,y1,bx1,by,cx,cy1,true);
+				var v = new pixelimage_algo_HitTri(x,y1,bx1,by,cx,cy1);
 			}
 			var bx1 = bx;
 			var by = cy;
@@ -47757,9 +47041,9 @@ pixelimage_triangleGML_patternShape_RectanglePattern.prototype = $extend(pixelim
 						var color = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
 						var this1 = color;
 						var c1 = this1;
-						if((c1 >> 24 & 255) < 254 && temp.transparent) {
-							var location = temp.useVirtualPos ? (y - temp.virtualY) * temp.width + x1 - temp.virtualX | 0 : y * temp.width + x1 | 0;
-							var this2 = temp.image[location];
+						if((c1 >> 24 & 255) < 254 && pixelshape.transparent) {
+							var location = pixelshape.useVirtualPos ? (y - pixelshape.virtualY) * pixelshape.width + x1 - pixelshape.virtualX | 0 : y * pixelshape.width + x1 | 0;
+							var this2 = pixelshape.image[location];
 							var this3 = this2;
 							var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
 							var this5 = this4 >> 24 & 255;
@@ -47784,9 +47068,9 @@ pixelimage_triangleGML_patternShape_RectanglePattern.prototype = $extend(pixelim
 							var b = 255 * (b1 * a3 + b2 * a2) | 0;
 							var a = 255 * (a3 + a2) | 0;
 							var blended = a << 24 | r << 16 | g << 8 | b;
-							temp.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+							pixelshape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 						} else {
-							temp.image[temp.useVirtualPos ? (y - temp.virtualY) * temp.width + x1 - temp.virtualX | 0 : y * temp.width + x1 | 0] = pixelimage_Endian_isLittleEndian ? (c1 >> 24 & 255) << 24 | (c1 & 255) << 16 | (c1 >> 8 & 255) << 8 | c1 >> 16 & 255 : c1;
+							pixelshape.image[pixelshape.useVirtualPos ? (y - pixelshape.virtualY) * pixelshape.width + x1 - pixelshape.virtualX | 0 : y * pixelshape.width + x1 | 0] = pixelimage_Endian_isLittleEndian ? (c1 >> 24 & 255) << 24 | (c1 & 255) << 16 | (c1 >> 8 & 255) << 8 | c1 >> 16 & 255 : c1;
 						}
 						foundY = true;
 					} else if(foundY) {
@@ -47795,10 +47079,10 @@ pixelimage_triangleGML_patternShape_RectanglePattern.prototype = $extend(pixelim
 				}
 			}
 			if(hasHit2 == false) {
-				var v = new pixelimage_algo_HitTri(bx,y1,bx1,by,cx,cy1,true);
+				var v = new pixelimage_algo_HitTri(bx,y1,bx1,by,cx,cy1);
 			}
 			if(hasHit1 == true) {
-				var v = new pixelimage_algo_HitQuad(x,y1,bx,y1,bx,cy,x,cy,true);
+				var v = new pixelimage_algo_HitQuad(x,y1,bx,y1,bx,cy,x,cy);
 			}
 			var cx = x + dx;
 			var targetError = 1.05;
@@ -47935,9 +47219,9 @@ pixelimage_triangleGML_patternShape_RectanglePattern.prototype = $extend(pixelim
 							var color = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
 							var this10 = color;
 							var c1 = this10;
-							if((c1 >> 24 & 255) < 254 && temp.transparent) {
-								var location = temp.useVirtualPos ? (y - temp.virtualY) * temp.width + x1 - temp.virtualX | 0 : y * temp.width + x1 | 0;
-								var this11 = temp.image[location];
+							if((c1 >> 24 & 255) < 254 && pixelshape.transparent) {
+								var location = pixelshape.useVirtualPos ? (y - pixelshape.virtualY) * pixelshape.width + x1 - pixelshape.virtualX | 0 : y * pixelshape.width + x1 | 0;
+								var this11 = pixelshape.image[location];
 								var this12 = this11;
 								var this13 = pixelimage_Endian_isLittleEndian ? (this12 >> 24 & 255) << 24 | (this12 & 255) << 16 | (this12 >> 8 & 255) << 8 | this12 >> 16 & 255 : this12;
 								var this14 = this13 >> 24 & 255;
@@ -47962,9 +47246,9 @@ pixelimage_triangleGML_patternShape_RectanglePattern.prototype = $extend(pixelim
 								var b = 255 * (b1 * a3 + b2 * a2) | 0;
 								var a = 255 * (a3 + a2) | 0;
 								var blended = a << 24 | r << 16 | g << 8 | b;
-								temp.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+								pixelshape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 							} else {
-								temp.image[temp.useVirtualPos ? (y - temp.virtualY) * temp.width + x1 - temp.virtualX | 0 : y * temp.width + x1 | 0] = pixelimage_Endian_isLittleEndian ? (c1 >> 24 & 255) << 24 | (c1 & 255) << 16 | (c1 >> 8 & 255) << 8 | c1 >> 16 & 255 : c1;
+								pixelshape.image[pixelshape.useVirtualPos ? (y - pixelshape.virtualY) * pixelshape.width + x1 - pixelshape.virtualX | 0 : y * pixelshape.width + x1 | 0] = pixelimage_Endian_isLittleEndian ? (c1 >> 24 & 255) << 24 | (c1 & 255) << 16 | (c1 >> 8 & 255) << 8 | c1 >> 16 & 255 : c1;
 							}
 							foundY = true;
 						} else if(foundY) {
@@ -47973,7 +47257,7 @@ pixelimage_triangleGML_patternShape_RectanglePattern.prototype = $extend(pixelim
 					}
 				}
 				if(hasHit1 == false) {
-					var v = new pixelimage_algo_HitTri(cx,lowerY,bx,by,cx1,cy,true);
+					var v = new pixelimage_algo_HitTri(cx,lowerY,bx,by,cx1,cy);
 				}
 				lastX = nextX;
 				lastY = nextY;
@@ -48094,9 +47378,9 @@ pixelimage_triangleGML_patternShape_RectanglePattern.prototype = $extend(pixelim
 						var color = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
 						var this1 = color;
 						var c1 = this1;
-						if((c1 >> 24 & 255) < 254 && temp.transparent) {
-							var location = temp.useVirtualPos ? (y - temp.virtualY) * temp.width + x - temp.virtualX | 0 : y * temp.width + x | 0;
-							var this2 = temp.image[location];
+						if((c1 >> 24 & 255) < 254 && pixelshape.transparent) {
+							var location = pixelshape.useVirtualPos ? (y - pixelshape.virtualY) * pixelshape.width + x - pixelshape.virtualX | 0 : y * pixelshape.width + x | 0;
+							var this2 = pixelshape.image[location];
 							var this3 = this2;
 							var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
 							var this5 = this4 >> 24 & 255;
@@ -48121,9 +47405,9 @@ pixelimage_triangleGML_patternShape_RectanglePattern.prototype = $extend(pixelim
 							var b = 255 * (b1 * a3 + b2 * a2) | 0;
 							var a = 255 * (a3 + a2) | 0;
 							var blended = a << 24 | r << 16 | g << 8 | b;
-							temp.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+							pixelshape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 						} else {
-							temp.image[temp.useVirtualPos ? (y - temp.virtualY) * temp.width + x - temp.virtualX | 0 : y * temp.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c1 >> 24 & 255) << 24 | (c1 & 255) << 16 | (c1 >> 8 & 255) << 8 | c1 >> 16 & 255 : c1;
+							pixelshape.image[pixelshape.useVirtualPos ? (y - pixelshape.virtualY) * pixelshape.width + x - pixelshape.virtualX | 0 : y * pixelshape.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c1 >> 24 & 255) << 24 | (c1 & 255) << 16 | (c1 >> 8 & 255) << 8 | c1 >> 16 & 255 : c1;
 						}
 						foundY = true;
 					} else if(foundY) {
@@ -48132,7 +47416,7 @@ pixelimage_triangleGML_patternShape_RectanglePattern.prototype = $extend(pixelim
 				}
 			}
 			if(hasHit2 == false) {
-				var v = new pixelimage_algo_HitTri(x1,lowerY,bx1,by,cx,cy1,true);
+				var v = new pixelimage_algo_HitTri(x1,lowerY,bx1,by,cx,cy1);
 			}
 			var bx1 = bx;
 			var by = cy;
@@ -48239,9 +47523,9 @@ pixelimage_triangleGML_patternShape_RectanglePattern.prototype = $extend(pixelim
 						var color = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
 						var this1 = color;
 						var c1 = this1;
-						if((c1 >> 24 & 255) < 254 && temp.transparent) {
-							var location = temp.useVirtualPos ? (y - temp.virtualY) * temp.width + x - temp.virtualX | 0 : y * temp.width + x | 0;
-							var this2 = temp.image[location];
+						if((c1 >> 24 & 255) < 254 && pixelshape.transparent) {
+							var location = pixelshape.useVirtualPos ? (y - pixelshape.virtualY) * pixelshape.width + x - pixelshape.virtualX | 0 : y * pixelshape.width + x | 0;
+							var this2 = pixelshape.image[location];
 							var this3 = this2;
 							var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
 							var this5 = this4 >> 24 & 255;
@@ -48266,9 +47550,9 @@ pixelimage_triangleGML_patternShape_RectanglePattern.prototype = $extend(pixelim
 							var b = 255 * (b1 * a3 + b2 * a2) | 0;
 							var a = 255 * (a3 + a2) | 0;
 							var blended = a << 24 | r << 16 | g << 8 | b;
-							temp.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+							pixelshape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 						} else {
-							temp.image[temp.useVirtualPos ? (y - temp.virtualY) * temp.width + x - temp.virtualX | 0 : y * temp.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c1 >> 24 & 255) << 24 | (c1 & 255) << 16 | (c1 >> 8 & 255) << 8 | c1 >> 16 & 255 : c1;
+							pixelshape.image[pixelshape.useVirtualPos ? (y - pixelshape.virtualY) * pixelshape.width + x - pixelshape.virtualX | 0 : y * pixelshape.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c1 >> 24 & 255) << 24 | (c1 & 255) << 16 | (c1 >> 8 & 255) << 8 | c1 >> 16 & 255 : c1;
 						}
 						foundY = true;
 					} else if(foundY) {
@@ -48277,10 +47561,10 @@ pixelimage_triangleGML_patternShape_RectanglePattern.prototype = $extend(pixelim
 				}
 			}
 			if(hasHit2 == false) {
-				var v = new pixelimage_algo_HitTri(bx,lowerY,bx1,by,cx,cy1,true);
+				var v = new pixelimage_algo_HitTri(bx,lowerY,bx1,by,cx,cy1);
 			}
 			if(hasHit1 == true) {
-				var v = new pixelimage_algo_HitQuad(x1,lowerY,bx,lowerY,bx,cy,x1,cy,true);
+				var v = new pixelimage_algo_HitQuad(x1,lowerY,bx,lowerY,bx,cy,x1,cy);
 			}
 			var targetError = 1.05;
 			if(targetError == null) {
@@ -48416,9 +47700,9 @@ pixelimage_triangleGML_patternShape_RectanglePattern.prototype = $extend(pixelim
 							var color = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
 							var this10 = color;
 							var c1 = this10;
-							if((c1 >> 24 & 255) < 254 && temp.transparent) {
-								var location = temp.useVirtualPos ? (y - temp.virtualY) * temp.width + x - temp.virtualX | 0 : y * temp.width + x | 0;
-								var this11 = temp.image[location];
+							if((c1 >> 24 & 255) < 254 && pixelshape.transparent) {
+								var location = pixelshape.useVirtualPos ? (y - pixelshape.virtualY) * pixelshape.width + x - pixelshape.virtualX | 0 : y * pixelshape.width + x | 0;
+								var this11 = pixelshape.image[location];
 								var this12 = this11;
 								var this13 = pixelimage_Endian_isLittleEndian ? (this12 >> 24 & 255) << 24 | (this12 & 255) << 16 | (this12 >> 8 & 255) << 8 | this12 >> 16 & 255 : this12;
 								var this14 = this13 >> 24 & 255;
@@ -48443,9 +47727,9 @@ pixelimage_triangleGML_patternShape_RectanglePattern.prototype = $extend(pixelim
 								var b = 255 * (b1 * a3 + b2 * a2) | 0;
 								var a = 255 * (a3 + a2) | 0;
 								var blended = a << 24 | r << 16 | g << 8 | b;
-								temp.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+								pixelshape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 							} else {
-								temp.image[temp.useVirtualPos ? (y - temp.virtualY) * temp.width + x - temp.virtualX | 0 : y * temp.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c1 >> 24 & 255) << 24 | (c1 & 255) << 16 | (c1 >> 8 & 255) << 8 | c1 >> 16 & 255 : c1;
+								pixelshape.image[pixelshape.useVirtualPos ? (y - pixelshape.virtualY) * pixelshape.width + x - pixelshape.virtualX | 0 : y * pixelshape.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c1 >> 24 & 255) << 24 | (c1 & 255) << 16 | (c1 >> 8 & 255) << 8 | c1 >> 16 & 255 : c1;
 							}
 							foundY = true;
 						} else if(foundY) {
@@ -48454,16 +47738,16 @@ pixelimage_triangleGML_patternShape_RectanglePattern.prototype = $extend(pixelim
 					}
 				}
 				if(hasHit1 == false) {
-					var v = new pixelimage_algo_HitTri(farX,lowerY,bx,by,cx,cy,true);
+					var v = new pixelimage_algo_HitTri(farX,lowerY,bx,by,cx,cy);
 				}
 				lastX = nextX;
 				lastY = nextY;
 			}
 		}
 	}
-	,__class__: pixelimage_triangleGML_patternShape_RectanglePattern
+	,__class__: pixelimage_triGML_patternShape_RectanglePattern
 });
-var pixelimage_triangleGML_patternShape_SquarePattern = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,strokeColor0,strokeColor1,fillColor0,fillColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale,fillPatternFill,fillPatternWidth,fillPatternHeight,fillPatternAcross,fillPatternScale,left,top,diameter) {
+var pixelimage_triGML_patternShape_SquarePattern = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,strokeColor0,strokeColor1,fillColor0,fillColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale,fillPatternFill,fillPatternWidth,fillPatternHeight,fillPatternAcross,fillPatternScale,left,top,diameter) {
 	if(diameter == null) {
 		diameter = 1.;
 	}
@@ -48515,14 +47799,14 @@ var pixelimage_triangleGML_patternShape_SquarePattern = function(opacity,visibil
 	if(opacity == null) {
 		opacity = 1.;
 	}
-	pixelimage_triangleGML_coreShape_PatternShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,strokeColor0,strokeColor1,fillColor0,fillColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale,fillPatternFill,fillPatternWidth,fillPatternHeight,fillPatternAcross,fillPatternScale);
+	pixelimage_triGML_coreShape_PatternShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,strokeColor0,strokeColor1,fillColor0,fillColor1,strokePatternFill,strokePatternWidth,strokePatternHeight,strokePatternAcross,strokePatternScale,fillPatternFill,fillPatternWidth,fillPatternHeight,fillPatternAcross,fillPatternScale);
 	this.left = left;
 	this.top = top;
 	this.diameter = diameter;
 };
-pixelimage_triangleGML_patternShape_SquarePattern.__name__ = "pixelimage.triangleGML.patternShape.SquarePattern";
-pixelimage_triangleGML_patternShape_SquarePattern.__super__ = pixelimage_triangleGML_coreShape_PatternShape;
-pixelimage_triangleGML_patternShape_SquarePattern.prototype = $extend(pixelimage_triangleGML_coreShape_PatternShape.prototype,{
+pixelimage_triGML_patternShape_SquarePattern.__name__ = "pixelimage.triGML.patternShape.SquarePattern";
+pixelimage_triGML_patternShape_SquarePattern.__super__ = pixelimage_triGML_coreShape_PatternShape;
+pixelimage_triGML_patternShape_SquarePattern.prototype = $extend(pixelimage_triGML_coreShape_PatternShape.prototype,{
 	setParameter: function(name,value) {
 		switch(name) {
 		case "diameter":
@@ -48535,16 +47819,15 @@ pixelimage_triangleGML_patternShape_SquarePattern.prototype = $extend(pixelimage
 			this.top = parseFloat(value);
 			break;
 		default:
-			pixelimage_triangleGML_coreShape_PatternShape.prototype.setParameter.call(this,name,value);
+			pixelimage_triGML_coreShape_PatternShape.prototype.setParameter.call(this,name,value);
 		}
 	}
-	,render: function(pixelShape) {
+	,render: function(pixelImage) {
 		var w = Math.ceil(this.diameter);
 		var h = Math.ceil(this.diameter);
 		var this1 = new Uint32Array(w * h | 0);
 		var this2 = new pixelimage_ImageStruct(w,h,this1);
-		var this1 = this2;
-		var temp = this1;
+		var temp = this2;
 		temp.transparent = false;
 		this.buildPatternTemplates();
 		this.buildSquare(temp);
@@ -48591,9 +47874,9 @@ pixelimage_triangleGML_patternShape_SquarePattern.prototype = $extend(pixelimage
 					var y1 = y + dy;
 					var this10 = col;
 					var c2 = this10;
-					if((c2 >> 24 & 255) < 254 && pixelShape.transparent) {
-						var location = pixelShape.useVirtualPos ? (y1 - pixelShape.virtualY) * pixelShape.width + x1 - pixelShape.virtualX | 0 : y1 * pixelShape.width + x1 | 0;
-						var this11 = pixelShape.image[location];
+					if((c2 >> 24 & 255) < 254 && pixelImage.transparent) {
+						var location = pixelImage.useVirtualPos ? (y1 - pixelImage.virtualY) * pixelImage.width + x1 - pixelImage.virtualX | 0 : y1 * pixelImage.width + x1 | 0;
+						var this11 = pixelImage.image[location];
 						var this12 = this11;
 						var this13 = pixelimage_Endian_isLittleEndian ? (this12 >> 24 & 255) << 24 | (this12 & 255) << 16 | (this12 >> 8 & 255) << 8 | this12 >> 16 & 255 : this12;
 						var this14 = this13 >> 24 & 255;
@@ -48618,15 +47901,15 @@ pixelimage_triangleGML_patternShape_SquarePattern.prototype = $extend(pixelimage
 						var b = 255 * (b1 * a3 + b2 * a2) | 0;
 						var a = 255 * (a3 + a2) | 0;
 						var blended = a << 24 | r << 16 | g << 8 | b;
-						pixelShape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+						pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 					} else {
-						pixelShape.image[pixelShape.useVirtualPos ? (y1 - pixelShape.virtualY) * pixelShape.width + x1 - pixelShape.virtualX | 0 : y1 * pixelShape.width + x1 | 0] = pixelimage_Endian_isLittleEndian ? (c2 >> 24 & 255) << 24 | (c2 & 255) << 16 | (c2 >> 8 & 255) << 8 | c2 >> 16 & 255 : c2;
+						pixelImage.image[pixelImage.useVirtualPos ? (y1 - pixelImage.virtualY) * pixelImage.width + x1 - pixelImage.virtualX | 0 : y1 * pixelImage.width + x1 | 0] = pixelimage_Endian_isLittleEndian ? (c2 >> 24 & 255) << 24 | (c2 & 255) << 16 | (c2 >> 8 & 255) << 8 | c2 >> 16 & 255 : c2;
 					}
 				}
 			}
 		}
 		temp = null;
-		return pixelimage_triangleGML_coreShape_PatternShape.prototype.render.call(this,pixelShape);
+		return pixelimage_triGML_coreShape_PatternShape.prototype.render.call(this,pixelImage);
 	}
 	,buildSquare: function(temp) {
 		var tileImage = this.tileImageStroke;
@@ -48783,7 +48066,7 @@ pixelimage_triangleGML_patternShape_SquarePattern.prototype = $extend(pixelimage
 			}
 		}
 		if(hasHit2 == false) {
-			var v = new pixelimage_algo_HitTri(0.,0.,bx1,by,cx,cy1,true);
+			var v = new pixelimage_algo_HitTri(0.,0.,bx1,by,cx,cy1);
 		}
 		var bx1 = bx;
 		var by = cy;
@@ -48928,10 +48211,10 @@ pixelimage_triangleGML_patternShape_SquarePattern.prototype = $extend(pixelimage
 			}
 		}
 		if(hasHit2 == false) {
-			var v = new pixelimage_algo_HitTri(bx,0.,bx1,by,cx,cy1,true);
+			var v = new pixelimage_algo_HitTri(bx,0.,bx1,by,cx,cy1);
 		}
 		if(hasHit1 == true) {
-			var v = new pixelimage_algo_HitQuad(0.,0.,bx,0.,bx,cy,0.,cy,true);
+			var v = new pixelimage_algo_HitQuad(0.,0.,bx,0.,bx,cy,0.,cy);
 		}
 		var x = this.strokeWidth;
 		var y = this.strokeWidth;
@@ -49089,7 +48372,7 @@ pixelimage_triangleGML_patternShape_SquarePattern.prototype = $extend(pixelimage
 			}
 		}
 		if(hasHit2 == false) {
-			var v = new pixelimage_algo_HitTri(x,y,bx1,by,cx,cy1,true);
+			var v = new pixelimage_algo_HitTri(x,y,bx1,by,cx,cy1);
 		}
 		var bx1 = bx;
 		var by = cy;
@@ -49234,15 +48517,15 @@ pixelimage_triangleGML_patternShape_SquarePattern.prototype = $extend(pixelimage
 			}
 		}
 		if(hasHit2 == false) {
-			var v = new pixelimage_algo_HitTri(bx,y,bx1,by,cx,cy1,true);
+			var v = new pixelimage_algo_HitTri(bx,y,bx1,by,cx,cy1);
 		}
 		if(hasHit1 == true) {
-			var v = new pixelimage_algo_HitQuad(x,y,bx,y,bx,cy,x,cy,true);
+			var v = new pixelimage_algo_HitQuad(x,y,bx,y,bx,cy,x,cy);
 		}
 	}
-	,__class__: pixelimage_triangleGML_patternShape_SquarePattern
+	,__class__: pixelimage_triGML_patternShape_SquarePattern
 });
-var pixelimage_triangleGML_shape_ArcShape = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill,left,top,width,height,startAngle,sweepAngle,arcType) {
+var pixelimage_triGML_shape_ArcShape = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill,left,top,width,height,startAngle,sweepAngle,arcType) {
 	if(arcType == null) {
 		arcType = "pie";
 	}
@@ -49279,7 +48562,7 @@ var pixelimage_triangleGML_shape_ArcShape = function(opacity,visibility,strokeCo
 	if(opacity == null) {
 		opacity = 1.;
 	}
-	pixelimage_triangleGML_coreShape_FillShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill);
+	pixelimage_triGML_coreShape_FillShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill);
 	this.left = left;
 	this.top = top;
 	this.width = width;
@@ -49290,9 +48573,9 @@ var pixelimage_triangleGML_shape_ArcShape = function(opacity,visibility,strokeCo
 	this.rx = width / 2;
 	this.ry = height / 2;
 };
-pixelimage_triangleGML_shape_ArcShape.__name__ = "pixelimage.triangleGML.shape.ArcShape";
-pixelimage_triangleGML_shape_ArcShape.__super__ = pixelimage_triangleGML_coreShape_FillShape;
-pixelimage_triangleGML_shape_ArcShape.prototype = $extend(pixelimage_triangleGML_coreShape_FillShape.prototype,{
+pixelimage_triGML_shape_ArcShape.__name__ = "pixelimage.triGML.shape.ArcShape";
+pixelimage_triGML_shape_ArcShape.__super__ = pixelimage_triGML_coreShape_FillShape;
+pixelimage_triGML_shape_ArcShape.prototype = $extend(pixelimage_triGML_coreShape_FillShape.prototype,{
 	setParameter: function(name,value) {
 		switch(name) {
 		case "arcType":
@@ -49319,18 +48602,17 @@ pixelimage_triangleGML_shape_ArcShape.prototype = $extend(pixelimage_triangleGML
 			this.width = parseFloat(value);
 			break;
 		default:
-			pixelimage_triangleGML_coreShape_FillShape.prototype.setParameter.call(this,name,value);
+			pixelimage_triGML_coreShape_FillShape.prototype.setParameter.call(this,name,value);
 		}
 		this.rx = this.width / 2;
 		this.ry = this.height / 2;
 	}
-	,render: function(pixelShape) {
+	,render: function(pixelImage) {
 		var w = Math.ceil(this.width);
 		var h = Math.ceil(this.height);
 		var this1 = new Uint32Array(w * h | 0);
 		var this2 = new pixelimage_ImageStruct(w,h,this1);
-		var this1 = this2;
-		var temp = this1;
+		var temp = this2;
 		temp.transparent = false;
 		switch(this.arcType) {
 		case "chord":
@@ -49386,9 +48668,9 @@ pixelimage_triangleGML_shape_ArcShape.prototype = $extend(pixelimage_triangleGML
 					var y1 = y + dy;
 					var this10 = col;
 					var c2 = this10;
-					if((c2 >> 24 & 255) < 254 && pixelShape.transparent) {
-						var location = pixelShape.useVirtualPos ? (y1 - pixelShape.virtualY) * pixelShape.width + x1 - pixelShape.virtualX | 0 : y1 * pixelShape.width + x1 | 0;
-						var this11 = pixelShape.image[location];
+					if((c2 >> 24 & 255) < 254 && pixelImage.transparent) {
+						var location = pixelImage.useVirtualPos ? (y1 - pixelImage.virtualY) * pixelImage.width + x1 - pixelImage.virtualX | 0 : y1 * pixelImage.width + x1 | 0;
+						var this11 = pixelImage.image[location];
 						var this12 = this11;
 						var this13 = pixelimage_Endian_isLittleEndian ? (this12 >> 24 & 255) << 24 | (this12 & 255) << 16 | (this12 >> 8 & 255) << 8 | this12 >> 16 & 255 : this12;
 						var this14 = this13 >> 24 & 255;
@@ -49413,15 +48695,15 @@ pixelimage_triangleGML_shape_ArcShape.prototype = $extend(pixelimage_triangleGML
 						var b = 255 * (b1 * a3 + b2 * a2) | 0;
 						var a = 255 * (a3 + a2) | 0;
 						var blended = a << 24 | r << 16 | g << 8 | b;
-						pixelShape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+						pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 					} else {
-						pixelShape.image[pixelShape.useVirtualPos ? (y1 - pixelShape.virtualY) * pixelShape.width + x1 - pixelShape.virtualX | 0 : y1 * pixelShape.width + x1 | 0] = pixelimage_Endian_isLittleEndian ? (c2 >> 24 & 255) << 24 | (c2 & 255) << 16 | (c2 >> 8 & 255) << 8 | c2 >> 16 & 255 : c2;
+						pixelImage.image[pixelImage.useVirtualPos ? (y1 - pixelImage.virtualY) * pixelImage.width + x1 - pixelImage.virtualX | 0 : y1 * pixelImage.width + x1 | 0] = pixelimage_Endian_isLittleEndian ? (c2 >> 24 & 255) << 24 | (c2 & 255) << 16 | (c2 >> 8 & 255) << 8 | c2 >> 16 & 255 : c2;
 					}
 				}
 			}
 		}
 		temp = null;
-		return pixelimage_triangleGML_coreShape_FillShape.prototype.render.call(this,pixelShape);
+		return pixelimage_triGML_coreShape_FillShape.prototype.render.call(this,pixelImage);
 	}
 	,chord: function(temp) {
 		this.ellipse(temp);
@@ -49628,7 +48910,7 @@ pixelimage_triangleGML_shape_ArcShape.prototype = $extend(pixelimage_triangleGML
 				}
 			}
 			if(hasHit1 == true) {
-				var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1,true);
+				var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1);
 			}
 			var ax = this.rx;
 			var ay = this.ry;
@@ -49771,7 +49053,7 @@ pixelimage_triangleGML_shape_ArcShape.prototype = $extend(pixelimage_triangleGML
 				}
 			}
 			if(hasHit1 == true) {
-				var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1,true);
+				var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1);
 			}
 		} else {
 			var ax = this.rx;
@@ -49928,7 +49210,7 @@ pixelimage_triangleGML_shape_ArcShape.prototype = $extend(pixelimage_triangleGML
 				}
 			}
 			if(hasHit == true) {
-				var v = new pixelimage_algo_HitTri(ax,ay,bx2,by2,cx2,cy2,true);
+				var v = new pixelimage_algo_HitTri(ax,ay,bx2,by2,cx2,cy2);
 			}
 			var ax = this.rx;
 			var ay = this.ry;
@@ -50084,7 +49366,7 @@ pixelimage_triangleGML_shape_ArcShape.prototype = $extend(pixelimage_triangleGML
 				}
 			}
 			if(hasHit == true) {
-				var v = new pixelimage_algo_HitTri(ax,ay,bx2,by2,cx2,cy2,true);
+				var v = new pixelimage_algo_HitTri(ax,ay,bx2,by2,cx2,cy2);
 			}
 			var color = this.strokeColor;
 			var o = by - cy;
@@ -50262,7 +49544,7 @@ pixelimage_triangleGML_shape_ArcShape.prototype = $extend(pixelimage_triangleGML
 				}
 			}
 			if(hasHit2 == true) {
-				var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx,cy,true);
+				var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx,cy);
 			}
 			var bx1 = cx1;
 			var by1 = cy1;
@@ -50403,10 +49685,10 @@ pixelimage_triangleGML_shape_ArcShape.prototype = $extend(pixelimage_triangleGML
 				}
 			}
 			if(hasHit2 == true) {
-				var v = new pixelimage_algo_HitTri(bx,by,bx1,by1,cx,cy,true);
+				var v = new pixelimage_algo_HitTri(bx,by,bx1,by1,cx,cy);
 			}
 			if(hasHit1 == true) {
-				var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx1,cy1,dx,dy,true);
+				var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx1,cy1,dx,dy);
 			}
 		}
 	}
@@ -50586,7 +49868,7 @@ pixelimage_triangleGML_shape_ArcShape.prototype = $extend(pixelimage_triangleGML
 			}
 			var triHit;
 			if(hasHit2 == true) {
-				var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1,true);
+				var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1);
 				triHit = v;
 			} else {
 				triHit = null;
@@ -50741,7 +50023,7 @@ pixelimage_triangleGML_shape_ArcShape.prototype = $extend(pixelimage_triangleGML
 		}
 		var triHit;
 		if(hasHit == true) {
-			var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1,true);
+			var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1);
 			triHit = v;
 		} else {
 			triHit = null;
@@ -50922,7 +50204,7 @@ pixelimage_triangleGML_shape_ArcShape.prototype = $extend(pixelimage_triangleGML
 			}
 			var triHit;
 			if(hasHit2 == true) {
-				var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1,true);
+				var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1);
 				triHit = v;
 			} else {
 				triHit = null;
@@ -51077,7 +50359,7 @@ pixelimage_triangleGML_shape_ArcShape.prototype = $extend(pixelimage_triangleGML
 		}
 		var triHit;
 		if(hasHit == true) {
-			var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1,true);
+			var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1);
 			triHit = v;
 		} else {
 			triHit = null;
@@ -51272,7 +50554,7 @@ pixelimage_triangleGML_shape_ArcShape.prototype = $extend(pixelimage_triangleGML
 			}
 		}
 		if(hasHit2 == true) {
-			var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx2,cy2,true);
+			var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx2,cy2);
 		}
 		var bx1 = cx1;
 		var by1 = cy1;
@@ -51413,10 +50695,10 @@ pixelimage_triangleGML_shape_ArcShape.prototype = $extend(pixelimage_triangleGML
 			}
 		}
 		if(hasHit2 == true) {
-			var v = new pixelimage_algo_HitTri(bx,by,bx1,by1,cx2,cy2,true);
+			var v = new pixelimage_algo_HitTri(bx,by,bx1,by1,cx2,cy2);
 		}
 		if(hasHit1 == true) {
-			var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx1,cy1,dx,dy,true);
+			var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx1,cy1,dx,dy);
 		}
 		var px = this.rx;
 		var py = this.ry;
@@ -51596,7 +50878,7 @@ pixelimage_triangleGML_shape_ArcShape.prototype = $extend(pixelimage_triangleGML
 			}
 		}
 		if(hasHit2 == true) {
-			var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1,true);
+			var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1);
 		}
 		var bx1 = cx;
 		var by1 = cy;
@@ -51737,15 +51019,15 @@ pixelimage_triangleGML_shape_ArcShape.prototype = $extend(pixelimage_triangleGML
 			}
 		}
 		if(hasHit2 == true) {
-			var v = new pixelimage_algo_HitTri(bx,by,bx1,by1,cx1,cy1,true);
+			var v = new pixelimage_algo_HitTri(bx,by,bx1,by1,cx1,cy1);
 		}
 		if(hasHit1 == true) {
-			var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy,true);
+			var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy);
 		}
 	}
-	,__class__: pixelimage_triangleGML_shape_ArcShape
+	,__class__: pixelimage_triGML_shape_ArcShape
 });
-var pixelimage_triangleGML_shape_CircleShape = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill,left,top,diameter) {
+var pixelimage_triGML_shape_CircleShape = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill,left,top,diameter) {
 	if(diameter == null) {
 		diameter = 1.;
 	}
@@ -51770,14 +51052,14 @@ var pixelimage_triangleGML_shape_CircleShape = function(opacity,visibility,strok
 	if(opacity == null) {
 		opacity = 1.;
 	}
-	pixelimage_triangleGML_coreShape_FillShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill);
+	pixelimage_triGML_coreShape_FillShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill);
 	this.left = left;
 	this.top = top;
 	this.diameter = diameter;
 };
-pixelimage_triangleGML_shape_CircleShape.__name__ = "pixelimage.triangleGML.shape.CircleShape";
-pixelimage_triangleGML_shape_CircleShape.__super__ = pixelimage_triangleGML_coreShape_FillShape;
-pixelimage_triangleGML_shape_CircleShape.prototype = $extend(pixelimage_triangleGML_coreShape_FillShape.prototype,{
+pixelimage_triGML_shape_CircleShape.__name__ = "pixelimage.triGML.shape.CircleShape";
+pixelimage_triGML_shape_CircleShape.__super__ = pixelimage_triGML_coreShape_FillShape;
+pixelimage_triGML_shape_CircleShape.prototype = $extend(pixelimage_triGML_coreShape_FillShape.prototype,{
 	setParameter: function(name,value) {
 		switch(name) {
 		case "diameter":
@@ -51790,16 +51072,15 @@ pixelimage_triangleGML_shape_CircleShape.prototype = $extend(pixelimage_triangle
 			this.top = parseFloat(value);
 			break;
 		default:
-			pixelimage_triangleGML_coreShape_FillShape.prototype.setParameter.call(this,name,value);
+			pixelimage_triGML_coreShape_FillShape.prototype.setParameter.call(this,name,value);
 		}
 	}
-	,render: function(pixelShape) {
+	,render: function(pixelImage) {
 		var w = Math.ceil(this.diameter);
 		var h = Math.ceil(this.diameter);
 		var this1 = new Uint32Array(w * h | 0);
 		var this2 = new pixelimage_ImageStruct(w,h,this1);
-		var this1 = this2;
-		var temp = this1;
+		var temp = this2;
 		temp.transparent = false;
 		this.buildCircle(temp);
 		var x = this.left | 0;
@@ -51845,9 +51126,9 @@ pixelimage_triangleGML_shape_CircleShape.prototype = $extend(pixelimage_triangle
 					var y1 = y + dy;
 					var this10 = col;
 					var c2 = this10;
-					if((c2 >> 24 & 255) < 254 && pixelShape.transparent) {
-						var location = pixelShape.useVirtualPos ? (y1 - pixelShape.virtualY) * pixelShape.width + x1 - pixelShape.virtualX | 0 : y1 * pixelShape.width + x1 | 0;
-						var this11 = pixelShape.image[location];
+					if((c2 >> 24 & 255) < 254 && pixelImage.transparent) {
+						var location = pixelImage.useVirtualPos ? (y1 - pixelImage.virtualY) * pixelImage.width + x1 - pixelImage.virtualX | 0 : y1 * pixelImage.width + x1 | 0;
+						var this11 = pixelImage.image[location];
 						var this12 = this11;
 						var this13 = pixelimage_Endian_isLittleEndian ? (this12 >> 24 & 255) << 24 | (this12 & 255) << 16 | (this12 >> 8 & 255) << 8 | this12 >> 16 & 255 : this12;
 						var this14 = this13 >> 24 & 255;
@@ -51872,15 +51153,15 @@ pixelimage_triangleGML_shape_CircleShape.prototype = $extend(pixelimage_triangle
 						var b = 255 * (b1 * a3 + b2 * a2) | 0;
 						var a = 255 * (a3 + a2) | 0;
 						var blended = a << 24 | r << 16 | g << 8 | b;
-						pixelShape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+						pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 					} else {
-						pixelShape.image[pixelShape.useVirtualPos ? (y1 - pixelShape.virtualY) * pixelShape.width + x1 - pixelShape.virtualX | 0 : y1 * pixelShape.width + x1 | 0] = pixelimage_Endian_isLittleEndian ? (c2 >> 24 & 255) << 24 | (c2 & 255) << 16 | (c2 >> 8 & 255) << 8 | c2 >> 16 & 255 : c2;
+						pixelImage.image[pixelImage.useVirtualPos ? (y1 - pixelImage.virtualY) * pixelImage.width + x1 - pixelImage.virtualX | 0 : y1 * pixelImage.width + x1 | 0] = pixelimage_Endian_isLittleEndian ? (c2 >> 24 & 255) << 24 | (c2 & 255) << 16 | (c2 >> 8 & 255) << 8 | c2 >> 16 & 255 : c2;
 					}
 				}
 			}
 		}
 		temp = null;
-		return pixelimage_triangleGML_coreShape_FillShape.prototype.render.call(this,pixelShape);
+		return pixelimage_triGML_coreShape_FillShape.prototype.render.call(this,pixelImage);
 	}
 	,buildCircle: function(temp) {
 		var w = Math.round(this.strokeWidth / 2);
@@ -52092,7 +51373,7 @@ pixelimage_triangleGML_shape_CircleShape.prototype = $extend(pixelimage_triangle
 					}
 				}
 				if(hasHit1 == true) {
-					var v = new pixelimage_algo_HitTri(cx,cy,bx,by,cx1,cy1,true);
+					var v = new pixelimage_algo_HitTri(cx,cy,bx,by,cx1,cy1);
 				}
 				lastX = nextX;
 				lastY = nextY;
@@ -52243,7 +51524,7 @@ pixelimage_triangleGML_shape_CircleShape.prototype = $extend(pixelimage_triangle
 					}
 				}
 				if(hasHit1 == true) {
-					var v = new pixelimage_algo_HitTri(cx,cy,bx,by,cx1,cy1,true);
+					var v = new pixelimage_algo_HitTri(cx,cy,bx,by,cx1,cy1);
 				}
 				lastX = nextX;
 				lastY = nextY;
@@ -52450,7 +51731,7 @@ pixelimage_triangleGML_shape_CircleShape.prototype = $extend(pixelimage_triangle
 					}
 				}
 				if(hasHit1 == true) {
-					var v = new pixelimage_algo_HitTri(innerCx,innerCy,bx,by,cx,cy,true);
+					var v = new pixelimage_algo_HitTri(innerCx,innerCy,bx,by,cx,cy);
 				}
 				lastX = nextX;
 				lastY = nextY;
@@ -52601,16 +51882,16 @@ pixelimage_triangleGML_shape_CircleShape.prototype = $extend(pixelimage_triangle
 					}
 				}
 				if(hasHit1 == true) {
-					var v = new pixelimage_algo_HitTri(innerCx,innerCy,bx,by,cx,cy,true);
+					var v = new pixelimage_algo_HitTri(innerCx,innerCy,bx,by,cx,cy);
 				}
 				lastX = nextX;
 				lastY = nextY;
 			}
 		}
 	}
-	,__class__: pixelimage_triangleGML_shape_CircleShape
+	,__class__: pixelimage_triGML_shape_CircleShape
 });
-var pixelimage_triangleGML_shape_EllipseShape = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill,left,top,width,height) {
+var pixelimage_triGML_shape_EllipseShape = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill,left,top,width,height) {
 	if(height == null) {
 		height = 1.;
 	}
@@ -52638,15 +51919,15 @@ var pixelimage_triangleGML_shape_EllipseShape = function(opacity,visibility,stro
 	if(opacity == null) {
 		opacity = 1.;
 	}
-	pixelimage_triangleGML_coreShape_FillShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill);
+	pixelimage_triGML_coreShape_FillShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill);
 	this.left = left;
 	this.top = top;
 	this.width = width;
 	this.height = height;
 };
-pixelimage_triangleGML_shape_EllipseShape.__name__ = "pixelimage.triangleGML.shape.EllipseShape";
-pixelimage_triangleGML_shape_EllipseShape.__super__ = pixelimage_triangleGML_coreShape_FillShape;
-pixelimage_triangleGML_shape_EllipseShape.prototype = $extend(pixelimage_triangleGML_coreShape_FillShape.prototype,{
+pixelimage_triGML_shape_EllipseShape.__name__ = "pixelimage.triGML.shape.EllipseShape";
+pixelimage_triGML_shape_EllipseShape.__super__ = pixelimage_triGML_coreShape_FillShape;
+pixelimage_triGML_shape_EllipseShape.prototype = $extend(pixelimage_triGML_coreShape_FillShape.prototype,{
 	setParameter: function(name,value) {
 		switch(name) {
 		case "height":
@@ -52662,16 +51943,15 @@ pixelimage_triangleGML_shape_EllipseShape.prototype = $extend(pixelimage_triangl
 			this.width = parseFloat(value);
 			break;
 		default:
-			pixelimage_triangleGML_coreShape_FillShape.prototype.setParameter.call(this,name,value);
+			pixelimage_triGML_coreShape_FillShape.prototype.setParameter.call(this,name,value);
 		}
 	}
-	,render: function(pixelShape) {
+	,render: function(pixelImage) {
 		var w = Math.ceil(this.width);
 		var h = Math.ceil(this.height);
 		var this1 = new Uint32Array(w * h | 0);
 		var this2 = new pixelimage_ImageStruct(w,h,this1);
-		var this1 = this2;
-		var temp = this1;
+		var temp = this2;
 		temp.transparent = false;
 		var rW = this.width / 2;
 		var rH = this.height / 2;
@@ -52883,7 +52163,7 @@ pixelimage_triangleGML_shape_EllipseShape.prototype = $extend(pixelimage_triangl
 					}
 				}
 				if(hasHit1 == true) {
-					var v = new pixelimage_algo_HitTri(cx,cy,bx,by,cx1,cy1,true);
+					var v = new pixelimage_algo_HitTri(cx,cy,bx,by,cx1,cy1);
 				}
 				lastX = nextX;
 				lastY = nextY;
@@ -53034,7 +52314,7 @@ pixelimage_triangleGML_shape_EllipseShape.prototype = $extend(pixelimage_triangl
 					}
 				}
 				if(hasHit1 == true) {
-					var v = new pixelimage_algo_HitTri(cx,cy,bx,by,cx1,cy1,true);
+					var v = new pixelimage_algo_HitTri(cx,cy,bx,by,cx1,cy1);
 				}
 				lastX = nextX;
 				lastY = nextY;
@@ -53241,7 +52521,7 @@ pixelimage_triangleGML_shape_EllipseShape.prototype = $extend(pixelimage_triangl
 					}
 				}
 				if(hasHit1 == true) {
-					var v = new pixelimage_algo_HitTri(innerCx,innerCy,bx,by,cx,cy,true);
+					var v = new pixelimage_algo_HitTri(innerCx,innerCy,bx,by,cx,cy);
 				}
 				lastX = nextX;
 				lastY = nextY;
@@ -53392,7 +52672,7 @@ pixelimage_triangleGML_shape_EllipseShape.prototype = $extend(pixelimage_triangl
 					}
 				}
 				if(hasHit1 == true) {
-					var v = new pixelimage_algo_HitTri(innerCx,innerCy,bx,by,cx,cy,true);
+					var v = new pixelimage_algo_HitTri(innerCx,innerCy,bx,by,cx,cy);
 				}
 				lastX = nextX;
 				lastY = nextY;
@@ -53441,9 +52721,9 @@ pixelimage_triangleGML_shape_EllipseShape.prototype = $extend(pixelimage_triangl
 					var y1 = y + dy;
 					var this10 = col;
 					var c2 = this10;
-					if((c2 >> 24 & 255) < 254 && pixelShape.transparent) {
-						var location = pixelShape.useVirtualPos ? (y1 - pixelShape.virtualY) * pixelShape.width + x1 - pixelShape.virtualX | 0 : y1 * pixelShape.width + x1 | 0;
-						var this11 = pixelShape.image[location];
+					if((c2 >> 24 & 255) < 254 && pixelImage.transparent) {
+						var location = pixelImage.useVirtualPos ? (y1 - pixelImage.virtualY) * pixelImage.width + x1 - pixelImage.virtualX | 0 : y1 * pixelImage.width + x1 | 0;
+						var this11 = pixelImage.image[location];
 						var this12 = this11;
 						var this13 = pixelimage_Endian_isLittleEndian ? (this12 >> 24 & 255) << 24 | (this12 & 255) << 16 | (this12 >> 8 & 255) << 8 | this12 >> 16 & 255 : this12;
 						var this14 = this13 >> 24 & 255;
@@ -53468,19 +52748,19 @@ pixelimage_triangleGML_shape_EllipseShape.prototype = $extend(pixelimage_triangl
 						var b = 255 * (b1 * a3 + b2 * a2) | 0;
 						var a = 255 * (a3 + a2) | 0;
 						var blended = a << 24 | r << 16 | g << 8 | b;
-						pixelShape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+						pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 					} else {
-						pixelShape.image[pixelShape.useVirtualPos ? (y1 - pixelShape.virtualY) * pixelShape.width + x1 - pixelShape.virtualX | 0 : y1 * pixelShape.width + x1 | 0] = pixelimage_Endian_isLittleEndian ? (c2 >> 24 & 255) << 24 | (c2 & 255) << 16 | (c2 >> 8 & 255) << 8 | c2 >> 16 & 255 : c2;
+						pixelImage.image[pixelImage.useVirtualPos ? (y1 - pixelImage.virtualY) * pixelImage.width + x1 - pixelImage.virtualX | 0 : y1 * pixelImage.width + x1 | 0] = pixelimage_Endian_isLittleEndian ? (c2 >> 24 & 255) << 24 | (c2 & 255) << 16 | (c2 >> 8 & 255) << 8 | c2 >> 16 & 255 : c2;
 					}
 				}
 			}
 		}
 		temp = null;
-		return pixelimage_triangleGML_coreShape_FillShape.prototype.render.call(this,pixelShape);
+		return pixelimage_triGML_coreShape_FillShape.prototype.render.call(this,pixelImage);
 	}
-	,__class__: pixelimage_triangleGML_shape_EllipseShape
+	,__class__: pixelimage_triGML_shape_EllipseShape
 });
-var pixelimage_triangleGML_shape_PathElementShape = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill,pathData,translateX,translateY,scaleX,scaleY) {
+var pixelimage_triGML_shape_PathElementShape = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill,pathData,translateX,translateY,scaleX,scaleY) {
 	if(scaleY == null) {
 		scaleY = 1.;
 	}
@@ -53515,17 +52795,17 @@ var pixelimage_triangleGML_shape_PathElementShape = function(opacity,visibility,
 	this.y0 = 0.;
 	this.x0 = 0.;
 	this.pathData = "";
-	pixelimage_triangleGML_coreShape_FillShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill);
+	pixelimage_triGML_coreShape_FillShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill);
 	this.pathData = pathData;
 	this.translateX = translateX;
 	this.translateY = translateY;
 	this.scaleX = scaleX;
 	this.scaleY = scaleY;
 };
-pixelimage_triangleGML_shape_PathElementShape.__name__ = "pixelimage.triangleGML.shape.PathElementShape";
-pixelimage_triangleGML_shape_PathElementShape.__interfaces__ = [justPath_ILinePathContext];
-pixelimage_triangleGML_shape_PathElementShape.__super__ = pixelimage_triangleGML_coreShape_FillShape;
-pixelimage_triangleGML_shape_PathElementShape.prototype = $extend(pixelimage_triangleGML_coreShape_FillShape.prototype,{
+pixelimage_triGML_shape_PathElementShape.__name__ = "pixelimage.triGML.shape.PathElementShape";
+pixelimage_triGML_shape_PathElementShape.__interfaces__ = [justPath_ILinePathContext];
+pixelimage_triGML_shape_PathElementShape.__super__ = pixelimage_triGML_coreShape_FillShape;
+pixelimage_triGML_shape_PathElementShape.prototype = $extend(pixelimage_triGML_coreShape_FillShape.prototype,{
 	setParameter: function(name,value) {
 		switch(name) {
 		case "pathData":
@@ -53544,31 +52824,30 @@ pixelimage_triangleGML_shape_PathElementShape.prototype = $extend(pixelimage_tri
 			this.translateY = parseFloat(value);
 			break;
 		default:
-			pixelimage_triangleGML_coreShape_FillShape.prototype.setParameter.call(this,name,value);
+			pixelimage_triGML_coreShape_FillShape.prototype.setParameter.call(this,name,value);
 		}
 	}
-	,render: function(pixelShape) {
-		var w = Math.ceil(pixelShape.width);
-		var h = Math.ceil(pixelShape.height);
+	,render: function(pixelImage) {
+		var w = Math.ceil(pixelImage.width);
+		var h = Math.ceil(pixelImage.height);
 		var this1 = new Uint32Array(w * h | 0);
 		var this2 = new pixelimage_ImageStruct(w,h,this1);
-		var this1 = this2;
-		this.temp = this1;
+		this.temp = this2;
 		this.temp.transparent = true;
 		this.drawing();
-		var pixelImage = this.temp;
+		var pixelImage1 = this.temp;
 		var _g = 0;
-		var _g1 = pixelImage.height;
+		var _g1 = pixelImage1.height;
 		while(_g < _g1) {
 			var dy = _g++;
 			var _g2 = 0;
-			var _g3 = pixelImage.width;
+			var _g3 = pixelImage1.width;
 			while(_g2 < _g3) {
 				var dx = _g2++;
-				var c = pixelImage.image[pixelImage.useVirtualPos ? (dy - pixelImage.virtualY) * pixelImage.width + dx - pixelImage.virtualX | 0 : dy * pixelImage.width + dx | 0];
+				var c = pixelImage1.image[pixelImage1.useVirtualPos ? (dy - pixelImage1.virtualY) * pixelImage1.width + dx - pixelImage1.virtualX | 0 : dy * pixelImage1.width + dx | 0];
 				var col = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
-				if(pixelImage.useMask && pixelImage.mask != null) {
-					var this1 = pixelImage.mask;
+				if(pixelImage1.useMask && pixelImage1.mask != null) {
+					var this1 = pixelImage1.mask;
 					var c1 = this1.image[this1.useVirtualPos ? (dy - this1.virtualY) * this1.width + dx - this1.virtualX | 0 : dy * this1.width + dx | 0];
 					var this2 = pixelimage_Endian_isLittleEndian ? (c1 >> 24 & 255) << 24 | (c1 & 255) << 16 | (c1 >> 8 & 255) << 8 | c1 >> 16 & 255 : c1;
 					var maskPixel = this2;
@@ -53598,9 +52877,9 @@ pixelimage_triangleGML_shape_PathElementShape.prototype = $extend(pixelimage_tri
 					var y = dy;
 					var this10 = col;
 					var c2 = this10;
-					if((c2 >> 24 & 255) < 254 && pixelShape.transparent) {
-						var location = pixelShape.useVirtualPos ? (y - pixelShape.virtualY) * pixelShape.width + x - pixelShape.virtualX | 0 : y * pixelShape.width + x | 0;
-						var this11 = pixelShape.image[location];
+					if((c2 >> 24 & 255) < 254 && pixelImage.transparent) {
+						var location = pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0;
+						var this11 = pixelImage.image[location];
 						var this12 = this11;
 						var this13 = pixelimage_Endian_isLittleEndian ? (this12 >> 24 & 255) << 24 | (this12 & 255) << 16 | (this12 >> 8 & 255) << 8 | this12 >> 16 & 255 : this12;
 						var this14 = this13 >> 24 & 255;
@@ -53625,15 +52904,15 @@ pixelimage_triangleGML_shape_PathElementShape.prototype = $extend(pixelimage_tri
 						var b = 255 * (b1 * a3 + b2 * a2) | 0;
 						var a = 255 * (a3 + a2) | 0;
 						var blended = a << 24 | r << 16 | g << 8 | b;
-						pixelShape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+						pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 					} else {
-						pixelShape.image[pixelShape.useVirtualPos ? (y - pixelShape.virtualY) * pixelShape.width + x - pixelShape.virtualX | 0 : y * pixelShape.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c2 >> 24 & 255) << 24 | (c2 & 255) << 16 | (c2 >> 8 & 255) << 8 | c2 >> 16 & 255 : c2;
+						pixelImage.image[pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c2 >> 24 & 255) << 24 | (c2 & 255) << 16 | (c2 >> 8 & 255) << 8 | c2 >> 16 & 255 : c2;
 					}
 				}
 			}
 		}
 		this.temp = null;
-		return pixelimage_triangleGML_coreShape_FillShape.prototype.render.call(this,pixelShape);
+		return pixelimage_triGML_coreShape_FillShape.prototype.render.call(this,pixelImage);
 	}
 	,drawing: function() {
 		var sp = new justPath_SvgLinePath(this);
@@ -53823,7 +53102,7 @@ pixelimage_triangleGML_shape_PathElementShape.prototype = $extend(pixelimage_tri
 				}
 			}
 			if(hasHit2 == true) {
-				var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1,true);
+				var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1);
 			}
 			var bx1 = cx;
 			var by1 = cy;
@@ -53964,11 +53243,11 @@ pixelimage_triangleGML_shape_PathElementShape.prototype = $extend(pixelimage_tri
 				}
 			}
 			if(hasHit2 == true) {
-				var v = new pixelimage_algo_HitTri(bx,by,bx1,by1,cx1,cy1,true);
+				var v = new pixelimage_algo_HitTri(bx,by,bx1,by1,cx1,cy1);
 			}
 			var tmp;
 			if(hasHit1 == true) {
-				var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy,true);
+				var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy);
 				tmp = v;
 			} else {
 				tmp = null;
@@ -54132,7 +53411,7 @@ pixelimage_triangleGML_shape_PathElementShape.prototype = $extend(pixelimage_tri
 					}
 				}
 				if(hasHit2 == true) {
-					var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1,true);
+					var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1);
 				}
 				var bx1 = cx;
 				var by1 = cy;
@@ -54273,10 +53552,10 @@ pixelimage_triangleGML_shape_PathElementShape.prototype = $extend(pixelimage_tri
 					}
 				}
 				if(hasHit2 == true) {
-					var v = new pixelimage_algo_HitTri(bx,by,bx1,by1,cx1,cy1,true);
+					var v = new pixelimage_algo_HitTri(bx,by,bx1,by1,cx1,cy1);
 				}
 				if(hasHit1 == true) {
-					var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy,true);
+					var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy);
 				}
 			}
 		}
@@ -54465,7 +53744,7 @@ pixelimage_triangleGML_shape_PathElementShape.prototype = $extend(pixelimage_tri
 			}
 		}
 		if(hasHit2 == true) {
-			var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1,true);
+			var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1);
 		}
 		var bx1 = cx;
 		var by1 = cy;
@@ -54606,11 +53885,11 @@ pixelimage_triangleGML_shape_PathElementShape.prototype = $extend(pixelimage_tri
 			}
 		}
 		if(hasHit2 == true) {
-			var v = new pixelimage_algo_HitTri(bx,by,bx1,by1,cx1,cy1,true);
+			var v = new pixelimage_algo_HitTri(bx,by,bx1,by1,cx1,cy1);
 		}
 		var tmp;
 		if(hasHit1 == true) {
-			var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy,true);
+			var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy);
 			tmp = v;
 		} else {
 			tmp = null;
@@ -54774,7 +54053,7 @@ pixelimage_triangleGML_shape_PathElementShape.prototype = $extend(pixelimage_tri
 				}
 			}
 			if(hasHit2 == true) {
-				var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1,true);
+				var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1);
 			}
 			var bx1 = cx;
 			var by1 = cy;
@@ -54915,10 +54194,10 @@ pixelimage_triangleGML_shape_PathElementShape.prototype = $extend(pixelimage_tri
 				}
 			}
 			if(hasHit2 == true) {
-				var v = new pixelimage_algo_HitTri(bx,by,bx1,by1,cx1,cy1,true);
+				var v = new pixelimage_algo_HitTri(bx,by,bx1,by1,cx1,cy1);
 			}
 			if(hasHit1 == true) {
-				var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy,true);
+				var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy);
 			}
 		}
 		this.x0 = x2;
@@ -54931,9 +54210,9 @@ pixelimage_triangleGML_shape_PathElementShape.prototype = $extend(pixelimage_tri
 		this.info = null;
 		this.toggleDraw = true;
 	}
-	,__class__: pixelimage_triangleGML_shape_PathElementShape
+	,__class__: pixelimage_triGML_shape_PathElementShape
 });
-var pixelimage_triangleGML_shape_QuadrilateralShape = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill,x1,y1,x2,y2,x3,y3,x4,y4) {
+var pixelimage_triGML_shape_QuadrilateralShape = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill,x1,y1,x2,y2,x3,y3,x4,y4) {
 	if(y4 == null) {
 		y4 = 0.;
 	}
@@ -54973,7 +54252,7 @@ var pixelimage_triangleGML_shape_QuadrilateralShape = function(opacity,visibilit
 	if(opacity == null) {
 		opacity = 1.;
 	}
-	pixelimage_triangleGML_coreShape_FillShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill);
+	pixelimage_triGML_coreShape_FillShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill);
 	this.x1 = x1;
 	this.y1 = y1;
 	this.x2 = x2;
@@ -54983,9 +54262,9 @@ var pixelimage_triangleGML_shape_QuadrilateralShape = function(opacity,visibilit
 	this.x4 = x4;
 	this.y4 = y4;
 };
-pixelimage_triangleGML_shape_QuadrilateralShape.__name__ = "pixelimage.triangleGML.shape.QuadrilateralShape";
-pixelimage_triangleGML_shape_QuadrilateralShape.__super__ = pixelimage_triangleGML_coreShape_FillShape;
-pixelimage_triangleGML_shape_QuadrilateralShape.prototype = $extend(pixelimage_triangleGML_coreShape_FillShape.prototype,{
+pixelimage_triGML_shape_QuadrilateralShape.__name__ = "pixelimage.triGML.shape.QuadrilateralShape";
+pixelimage_triGML_shape_QuadrilateralShape.__super__ = pixelimage_triGML_coreShape_FillShape;
+pixelimage_triGML_shape_QuadrilateralShape.prototype = $extend(pixelimage_triGML_coreShape_FillShape.prototype,{
 	setParameter: function(name,value) {
 		switch(name) {
 		case "x1":
@@ -55013,10 +54292,10 @@ pixelimage_triangleGML_shape_QuadrilateralShape.prototype = $extend(pixelimage_t
 			this.y4 = parseFloat(value);
 			break;
 		default:
-			pixelimage_triangleGML_coreShape_FillShape.prototype.setParameter.call(this,name,value);
+			pixelimage_triGML_coreShape_FillShape.prototype.setParameter.call(this,name,value);
 		}
 	}
-	,render: function(pixelShape) {
+	,render: function(pixelImage) {
 		var a = this.x1;
 		var b = this.x2;
 		var c = this.x3;
@@ -55075,8 +54354,7 @@ pixelimage_triangleGML_shape_QuadrilateralShape.prototype = $extend(pixelimage_t
 		var h = Math.ceil(height);
 		var this1 = new Uint32Array(w * h | 0);
 		var this2 = new pixelimage_ImageStruct(w,h,this1);
-		var this1 = this2;
-		var temp = this1;
+		var temp = this2;
 		temp.transparent = false;
 		var rx = width / 2;
 		var ry = height / 2;
@@ -55232,7 +54510,7 @@ pixelimage_triangleGML_shape_QuadrilateralShape.prototype = $extend(pixelimage_t
 			}
 		}
 		if(hasHit2 == true) {
-			var v = new pixelimage_algo_HitTri(x1_,y1_,bx,by,cx,cy,true);
+			var v = new pixelimage_algo_HitTri(x1_,y1_,bx,by,cx,cy);
 		}
 		var bx = x3_;
 		var by = y3_;
@@ -55373,10 +54651,10 @@ pixelimage_triangleGML_shape_QuadrilateralShape.prototype = $extend(pixelimage_t
 			}
 		}
 		if(hasHit2 == true) {
-			var v = new pixelimage_algo_HitTri(x2_,y2_,bx,by,cx,cy,true);
+			var v = new pixelimage_algo_HitTri(x2_,y2_,bx,by,cx,cy);
 		}
 		if(hasHit == true) {
-			var v = new pixelimage_algo_HitQuad(x1_,y1_,x2_,y2_,x3_,y3_,x4_,y4_,true);
+			var v = new pixelimage_algo_HitQuad(x1_,y1_,x2_,y2_,x3_,y3_,x4_,y4_);
 		}
 		x1_ += this.strokeWidth;
 		x2_ += this.strokeWidth;
@@ -55530,7 +54808,7 @@ pixelimage_triangleGML_shape_QuadrilateralShape.prototype = $extend(pixelimage_t
 			}
 		}
 		if(hasHit2 == true) {
-			var v = new pixelimage_algo_HitTri(x1_,y1_,bx,by,cx,cy,true);
+			var v = new pixelimage_algo_HitTri(x1_,y1_,bx,by,cx,cy);
 		}
 		var bx = x3_;
 		var by = y3_;
@@ -55671,10 +54949,10 @@ pixelimage_triangleGML_shape_QuadrilateralShape.prototype = $extend(pixelimage_t
 			}
 		}
 		if(hasHit2 == true) {
-			var v = new pixelimage_algo_HitTri(x2_,y2_,bx,by,cx,cy,true);
+			var v = new pixelimage_algo_HitTri(x2_,y2_,bx,by,cx,cy);
 		}
 		if(hasHit == true) {
-			var v = new pixelimage_algo_HitQuad(x1_,y1_,x2_,y2_,x3_,y3_,x4_,y4_,true);
+			var v = new pixelimage_algo_HitQuad(x1_,y1_,x2_,y2_,x3_,y3_,x4_,y4_);
 		}
 		var _g = 0;
 		var _g1 = temp.height;
@@ -55717,9 +54995,9 @@ pixelimage_triangleGML_shape_QuadrilateralShape.prototype = $extend(pixelimage_t
 					var y = top + dy;
 					var this10 = col;
 					var c2 = this10;
-					if((c2 >> 24 & 255) < 254 && pixelShape.transparent) {
-						var location = pixelShape.useVirtualPos ? (y - pixelShape.virtualY) * pixelShape.width + x - pixelShape.virtualX | 0 : y * pixelShape.width + x | 0;
-						var this11 = pixelShape.image[location];
+					if((c2 >> 24 & 255) < 254 && pixelImage.transparent) {
+						var location = pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0;
+						var this11 = pixelImage.image[location];
 						var this12 = this11;
 						var this13 = pixelimage_Endian_isLittleEndian ? (this12 >> 24 & 255) << 24 | (this12 & 255) << 16 | (this12 >> 8 & 255) << 8 | this12 >> 16 & 255 : this12;
 						var this14 = this13 >> 24 & 255;
@@ -55744,19 +55022,19 @@ pixelimage_triangleGML_shape_QuadrilateralShape.prototype = $extend(pixelimage_t
 						var b = 255 * (b1 * a3 + b2 * a2) | 0;
 						var a = 255 * (a3 + a2) | 0;
 						var blended = a << 24 | r << 16 | g << 8 | b;
-						pixelShape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+						pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 					} else {
-						pixelShape.image[pixelShape.useVirtualPos ? (y - pixelShape.virtualY) * pixelShape.width + x - pixelShape.virtualX | 0 : y * pixelShape.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c2 >> 24 & 255) << 24 | (c2 & 255) << 16 | (c2 >> 8 & 255) << 8 | c2 >> 16 & 255 : c2;
+						pixelImage.image[pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c2 >> 24 & 255) << 24 | (c2 & 255) << 16 | (c2 >> 8 & 255) << 8 | c2 >> 16 & 255 : c2;
 					}
 				}
 			}
 		}
 		temp = null;
-		return pixelimage_triangleGML_coreShape_FillShape.prototype.render.call(this,pixelShape);
+		return pixelimage_triGML_coreShape_FillShape.prototype.render.call(this,pixelImage);
 	}
-	,__class__: pixelimage_triangleGML_shape_QuadrilateralShape
+	,__class__: pixelimage_triGML_shape_QuadrilateralShape
 });
-var pixelimage_triangleGML_shape_RectangleShape = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill,left,top,width,height,rounded) {
+var pixelimage_triGML_shape_RectangleShape = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill,left,top,width,height,rounded) {
 	if(rounded == null) {
 		rounded = false;
 	}
@@ -55787,16 +55065,16 @@ var pixelimage_triangleGML_shape_RectangleShape = function(opacity,visibility,st
 	if(opacity == null) {
 		opacity = 1.;
 	}
-	pixelimage_triangleGML_coreShape_FillShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill);
+	pixelimage_triGML_coreShape_FillShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill);
 	this.left = left;
 	this.top = top;
 	this.width = width;
 	this.height = height;
 	this.rounded = rounded;
 };
-pixelimage_triangleGML_shape_RectangleShape.__name__ = "pixelimage.triangleGML.shape.RectangleShape";
-pixelimage_triangleGML_shape_RectangleShape.__super__ = pixelimage_triangleGML_coreShape_FillShape;
-pixelimage_triangleGML_shape_RectangleShape.prototype = $extend(pixelimage_triangleGML_coreShape_FillShape.prototype,{
+pixelimage_triGML_shape_RectangleShape.__name__ = "pixelimage.triGML.shape.RectangleShape";
+pixelimage_triGML_shape_RectangleShape.__super__ = pixelimage_triGML_coreShape_FillShape;
+pixelimage_triGML_shape_RectangleShape.prototype = $extend(pixelimage_triGML_coreShape_FillShape.prototype,{
 	setParameter: function(name,value) {
 		switch(name) {
 		case "height":
@@ -55815,17 +55093,16 @@ pixelimage_triangleGML_shape_RectangleShape.prototype = $extend(pixelimage_trian
 			this.width = parseFloat(value);
 			break;
 		default:
-			pixelimage_triangleGML_coreShape_FillShape.prototype.setParameter.call(this,name,value);
+			pixelimage_triGML_coreShape_FillShape.prototype.setParameter.call(this,name,value);
 		}
 	}
-	,render: function(pixelShape) {
+	,render: function(pixelImage) {
 		if(this.rounded == false) {
 			var w = Math.ceil(this.width);
 			var h = Math.ceil(this.height);
 			var this1 = new Uint32Array(w * h | 0);
 			var this2 = new pixelimage_ImageStruct(w,h,this1);
-			var this1 = this2;
-			var temp = this1;
+			var temp = this2;
 			temp.transparent = false;
 			var color = this.strokeColor;
 			var p = 0;
@@ -55970,9 +55247,9 @@ pixelimage_triangleGML_shape_RectangleShape.prototype = $extend(pixelimage_trian
 						var y1 = y + dy;
 						var this10 = col;
 						var c2 = this10;
-						if((c2 >> 24 & 255) < 254 && pixelShape.transparent) {
-							var location = pixelShape.useVirtualPos ? (y1 - pixelShape.virtualY) * pixelShape.width + x1 - pixelShape.virtualX | 0 : y1 * pixelShape.width + x1 | 0;
-							var this11 = pixelShape.image[location];
+						if((c2 >> 24 & 255) < 254 && pixelImage.transparent) {
+							var location = pixelImage.useVirtualPos ? (y1 - pixelImage.virtualY) * pixelImage.width + x1 - pixelImage.virtualX | 0 : y1 * pixelImage.width + x1 | 0;
+							var this11 = pixelImage.image[location];
 							var this12 = this11;
 							var this13 = pixelimage_Endian_isLittleEndian ? (this12 >> 24 & 255) << 24 | (this12 & 255) << 16 | (this12 >> 8 & 255) << 8 | this12 >> 16 & 255 : this12;
 							var this14 = this13 >> 24 & 255;
@@ -55997,9 +55274,9 @@ pixelimage_triangleGML_shape_RectangleShape.prototype = $extend(pixelimage_trian
 							var b = 255 * (b1 * a3 + b2 * a2) | 0;
 							var a = 255 * (a3 + a2) | 0;
 							var blended = a << 24 | r << 16 | g << 8 | b;
-							pixelShape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+							pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 						} else {
-							pixelShape.image[pixelShape.useVirtualPos ? (y1 - pixelShape.virtualY) * pixelShape.width + x1 - pixelShape.virtualX | 0 : y1 * pixelShape.width + x1 | 0] = pixelimage_Endian_isLittleEndian ? (c2 >> 24 & 255) << 24 | (c2 & 255) << 16 | (c2 >> 8 & 255) << 8 | c2 >> 16 & 255 : c2;
+							pixelImage.image[pixelImage.useVirtualPos ? (y1 - pixelImage.virtualY) * pixelImage.width + x1 - pixelImage.virtualX | 0 : y1 * pixelImage.width + x1 | 0] = pixelimage_Endian_isLittleEndian ? (c2 >> 24 & 255) << 24 | (c2 & 255) << 16 | (c2 >> 8 & 255) << 8 | c2 >> 16 & 255 : c2;
 						}
 					}
 				}
@@ -56010,9 +55287,9 @@ pixelimage_triangleGML_shape_RectangleShape.prototype = $extend(pixelimage_trian
 			var h = Math.ceil(this.height);
 			var this1 = new Uint32Array(w * h | 0);
 			var this2 = new pixelimage_ImageStruct(w,h,this1);
-			var this1 = this2;
-			var temp = this1;
+			var temp = this2;
 			temp.transparent = false;
+			var pixelshape = temp;
 			var wid = this.width;
 			var hi = this.height;
 			var color = this.strokeColor;
@@ -56170,9 +55447,9 @@ pixelimage_triangleGML_shape_RectangleShape.prototype = $extend(pixelimage_trian
 						} else if(s + t < A) {
 							var this10 = color;
 							var c = this10;
-							if((c >> 24 & 255) < 254 && temp.transparent) {
-								var location = temp.useVirtualPos ? (y - temp.virtualY) * temp.width + x - temp.virtualX | 0 : y * temp.width + x | 0;
-								var this11 = temp.image[location];
+							if((c >> 24 & 255) < 254 && pixelshape.transparent) {
+								var location = pixelshape.useVirtualPos ? (y - pixelshape.virtualY) * pixelshape.width + x - pixelshape.virtualX | 0 : y * pixelshape.width + x | 0;
+								var this11 = pixelshape.image[location];
 								var this12 = this11;
 								var this13 = pixelimage_Endian_isLittleEndian ? (this12 >> 24 & 255) << 24 | (this12 & 255) << 16 | (this12 >> 8 & 255) << 8 | this12 >> 16 & 255 : this12;
 								var this14 = this13 >> 24 & 255;
@@ -56197,9 +55474,9 @@ pixelimage_triangleGML_shape_RectangleShape.prototype = $extend(pixelimage_trian
 								var b = 255 * (b1 * a3 + b2 * a2) | 0;
 								var a = 255 * (a3 + a2) | 0;
 								var blended = a << 24 | r << 16 | g << 8 | b;
-								temp.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+								pixelshape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 							} else {
-								temp.image[temp.useVirtualPos ? (y - temp.virtualY) * temp.width + x - temp.virtualX | 0 : y * temp.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
+								pixelshape.image[pixelshape.useVirtualPos ? (y - pixelshape.virtualY) * pixelshape.width + x - pixelshape.virtualX | 0 : y * pixelshape.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
 							}
 							foundY = true;
 						} else if(foundY) {
@@ -56208,7 +55485,7 @@ pixelimage_triangleGML_shape_RectangleShape.prototype = $extend(pixelimage_trian
 					}
 				}
 				if(hasHit1 == true) {
-					var v = new pixelimage_algo_HitTri(cx,cy,bx,by,cx1,cy1,true);
+					var v = new pixelimage_algo_HitTri(cx,cy,bx,by,cx1,cy1);
 				}
 				lastX = nextX;
 				lastY = nextY;
@@ -56223,9 +55500,9 @@ pixelimage_triangleGML_shape_RectangleShape.prototype = $extend(pixelimage_trian
 				var x = p++;
 				var this1 = color;
 				var c = this1;
-				if((c >> 24 & 255) < 254 && temp.transparent) {
-					var location = temp.useVirtualPos ? (q - temp.virtualY) * temp.width + x - temp.virtualX | 0 : q * temp.width + x | 0;
-					var this2 = temp.image[location];
+				if((c >> 24 & 255) < 254 && pixelshape.transparent) {
+					var location = pixelshape.useVirtualPos ? (q - pixelshape.virtualY) * pixelshape.width + x - pixelshape.virtualX | 0 : q * pixelshape.width + x | 0;
+					var this2 = pixelshape.image[location];
 					var this3 = this2;
 					var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
 					var this5 = this4 >> 24 & 255;
@@ -56250,9 +55527,9 @@ pixelimage_triangleGML_shape_RectangleShape.prototype = $extend(pixelimage_trian
 					var b = 255 * (b1 * a3 + b2 * a2) | 0;
 					var a = 255 * (a3 + a2) | 0;
 					var blended = a << 24 | r << 16 | g << 8 | b;
-					temp.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+					pixelshape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 				} else {
-					temp.image[temp.useVirtualPos ? (q - temp.virtualY) * temp.width + x - temp.virtualX | 0 : q * temp.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
+					pixelshape.image[pixelshape.useVirtualPos ? (q - pixelshape.virtualY) * pixelshape.width + x - pixelshape.virtualX | 0 : q * pixelshape.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
 				}
 				if(p > maxX) {
 					p = xx;
@@ -56393,9 +55670,9 @@ pixelimage_triangleGML_shape_RectangleShape.prototype = $extend(pixelimage_trian
 						} else if(s + t < A) {
 							var this10 = color;
 							var c = this10;
-							if((c >> 24 & 255) < 254 && temp.transparent) {
-								var location = temp.useVirtualPos ? (y - temp.virtualY) * temp.width + x - temp.virtualX | 0 : y * temp.width + x | 0;
-								var this11 = temp.image[location];
+							if((c >> 24 & 255) < 254 && pixelshape.transparent) {
+								var location = pixelshape.useVirtualPos ? (y - pixelshape.virtualY) * pixelshape.width + x - pixelshape.virtualX | 0 : y * pixelshape.width + x | 0;
+								var this11 = pixelshape.image[location];
 								var this12 = this11;
 								var this13 = pixelimage_Endian_isLittleEndian ? (this12 >> 24 & 255) << 24 | (this12 & 255) << 16 | (this12 >> 8 & 255) << 8 | this12 >> 16 & 255 : this12;
 								var this14 = this13 >> 24 & 255;
@@ -56420,9 +55697,9 @@ pixelimage_triangleGML_shape_RectangleShape.prototype = $extend(pixelimage_trian
 								var b = 255 * (b1 * a3 + b2 * a2) | 0;
 								var a = 255 * (a3 + a2) | 0;
 								var blended = a << 24 | r << 16 | g << 8 | b;
-								temp.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+								pixelshape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 							} else {
-								temp.image[temp.useVirtualPos ? (y - temp.virtualY) * temp.width + x - temp.virtualX | 0 : y * temp.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
+								pixelshape.image[pixelshape.useVirtualPos ? (y - pixelshape.virtualY) * pixelshape.width + x - pixelshape.virtualX | 0 : y * pixelshape.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
 							}
 							foundY = true;
 						} else if(foundY) {
@@ -56431,7 +55708,7 @@ pixelimage_triangleGML_shape_RectangleShape.prototype = $extend(pixelimage_trian
 					}
 				}
 				if(hasHit1 == true) {
-					var v = new pixelimage_algo_HitTri(farX,cy,bx,by,cx,cy1,true);
+					var v = new pixelimage_algo_HitTri(farX,cy,bx,by,cx,cy1);
 				}
 				lastX = nextX;
 				lastY = nextY;
@@ -56446,9 +55723,9 @@ pixelimage_triangleGML_shape_RectangleShape.prototype = $extend(pixelimage_trian
 				var x = p++;
 				var this1 = color;
 				var c = this1;
-				if((c >> 24 & 255) < 254 && temp.transparent) {
-					var location = temp.useVirtualPos ? (q - temp.virtualY) * temp.width + x - temp.virtualX | 0 : q * temp.width + x | 0;
-					var this2 = temp.image[location];
+				if((c >> 24 & 255) < 254 && pixelshape.transparent) {
+					var location = pixelshape.useVirtualPos ? (q - pixelshape.virtualY) * pixelshape.width + x - pixelshape.virtualX | 0 : q * pixelshape.width + x | 0;
+					var this2 = pixelshape.image[location];
 					var this3 = this2;
 					var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
 					var this5 = this4 >> 24 & 255;
@@ -56473,9 +55750,9 @@ pixelimage_triangleGML_shape_RectangleShape.prototype = $extend(pixelimage_trian
 					var b = 255 * (b1 * a3 + b2 * a2) | 0;
 					var a = 255 * (a3 + a2) | 0;
 					var blended = a << 24 | r << 16 | g << 8 | b;
-					temp.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+					pixelshape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 				} else {
-					temp.image[temp.useVirtualPos ? (q - temp.virtualY) * temp.width + x - temp.virtualX | 0 : q * temp.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
+					pixelshape.image[pixelshape.useVirtualPos ? (q - pixelshape.virtualY) * pixelshape.width + x - pixelshape.virtualX | 0 : q * pixelshape.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
 				}
 				if(p > maxX) {
 					p = xx;
@@ -56616,9 +55893,9 @@ pixelimage_triangleGML_shape_RectangleShape.prototype = $extend(pixelimage_trian
 						} else if(s + t < A) {
 							var this10 = color;
 							var c = this10;
-							if((c >> 24 & 255) < 254 && temp.transparent) {
-								var location = temp.useVirtualPos ? (y - temp.virtualY) * temp.width + x - temp.virtualX | 0 : y * temp.width + x | 0;
-								var this11 = temp.image[location];
+							if((c >> 24 & 255) < 254 && pixelshape.transparent) {
+								var location = pixelshape.useVirtualPos ? (y - pixelshape.virtualY) * pixelshape.width + x - pixelshape.virtualX | 0 : y * pixelshape.width + x | 0;
+								var this11 = pixelshape.image[location];
 								var this12 = this11;
 								var this13 = pixelimage_Endian_isLittleEndian ? (this12 >> 24 & 255) << 24 | (this12 & 255) << 16 | (this12 >> 8 & 255) << 8 | this12 >> 16 & 255 : this12;
 								var this14 = this13 >> 24 & 255;
@@ -56643,9 +55920,9 @@ pixelimage_triangleGML_shape_RectangleShape.prototype = $extend(pixelimage_trian
 								var b = 255 * (b1 * a3 + b2 * a2) | 0;
 								var a = 255 * (a3 + a2) | 0;
 								var blended = a << 24 | r << 16 | g << 8 | b;
-								temp.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+								pixelshape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 							} else {
-								temp.image[temp.useVirtualPos ? (y - temp.virtualY) * temp.width + x - temp.virtualX | 0 : y * temp.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
+								pixelshape.image[pixelshape.useVirtualPos ? (y - pixelshape.virtualY) * pixelshape.width + x - pixelshape.virtualX | 0 : y * pixelshape.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
 							}
 							foundY = true;
 						} else if(foundY) {
@@ -56654,7 +55931,7 @@ pixelimage_triangleGML_shape_RectangleShape.prototype = $extend(pixelimage_trian
 					}
 				}
 				if(hasHit1 == true) {
-					var v = new pixelimage_algo_HitTri(cx,lowerY,bx,by,cx1,cy,true);
+					var v = new pixelimage_algo_HitTri(cx,lowerY,bx,by,cx1,cy);
 				}
 				lastX = nextX;
 				lastY = nextY;
@@ -56669,9 +55946,9 @@ pixelimage_triangleGML_shape_RectangleShape.prototype = $extend(pixelimage_trian
 				var x = p++;
 				var this1 = color;
 				var c = this1;
-				if((c >> 24 & 255) < 254 && temp.transparent) {
-					var location = temp.useVirtualPos ? (q - temp.virtualY) * temp.width + x - temp.virtualX | 0 : q * temp.width + x | 0;
-					var this2 = temp.image[location];
+				if((c >> 24 & 255) < 254 && pixelshape.transparent) {
+					var location = pixelshape.useVirtualPos ? (q - pixelshape.virtualY) * pixelshape.width + x - pixelshape.virtualX | 0 : q * pixelshape.width + x | 0;
+					var this2 = pixelshape.image[location];
 					var this3 = this2;
 					var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
 					var this5 = this4 >> 24 & 255;
@@ -56696,9 +55973,9 @@ pixelimage_triangleGML_shape_RectangleShape.prototype = $extend(pixelimage_trian
 					var b = 255 * (b1 * a3 + b2 * a2) | 0;
 					var a = 255 * (a3 + a2) | 0;
 					var blended = a << 24 | r << 16 | g << 8 | b;
-					temp.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+					pixelshape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 				} else {
-					temp.image[temp.useVirtualPos ? (q - temp.virtualY) * temp.width + x - temp.virtualX | 0 : q * temp.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
+					pixelshape.image[pixelshape.useVirtualPos ? (q - pixelshape.virtualY) * pixelshape.width + x - pixelshape.virtualX | 0 : q * pixelshape.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
 				}
 				if(p > maxX) {
 					p = xx;
@@ -56838,9 +56115,9 @@ pixelimage_triangleGML_shape_RectangleShape.prototype = $extend(pixelimage_trian
 						} else if(s + t < A) {
 							var this10 = color;
 							var c = this10;
-							if((c >> 24 & 255) < 254 && temp.transparent) {
-								var location = temp.useVirtualPos ? (y - temp.virtualY) * temp.width + x - temp.virtualX | 0 : y * temp.width + x | 0;
-								var this11 = temp.image[location];
+							if((c >> 24 & 255) < 254 && pixelshape.transparent) {
+								var location = pixelshape.useVirtualPos ? (y - pixelshape.virtualY) * pixelshape.width + x - pixelshape.virtualX | 0 : y * pixelshape.width + x | 0;
+								var this11 = pixelshape.image[location];
 								var this12 = this11;
 								var this13 = pixelimage_Endian_isLittleEndian ? (this12 >> 24 & 255) << 24 | (this12 & 255) << 16 | (this12 >> 8 & 255) << 8 | this12 >> 16 & 255 : this12;
 								var this14 = this13 >> 24 & 255;
@@ -56865,9 +56142,9 @@ pixelimage_triangleGML_shape_RectangleShape.prototype = $extend(pixelimage_trian
 								var b = 255 * (b1 * a3 + b2 * a2) | 0;
 								var a = 255 * (a3 + a2) | 0;
 								var blended = a << 24 | r << 16 | g << 8 | b;
-								temp.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+								pixelshape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 							} else {
-								temp.image[temp.useVirtualPos ? (y - temp.virtualY) * temp.width + x - temp.virtualX | 0 : y * temp.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
+								pixelshape.image[pixelshape.useVirtualPos ? (y - pixelshape.virtualY) * pixelshape.width + x - pixelshape.virtualX | 0 : y * pixelshape.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
 							}
 							foundY = true;
 						} else if(foundY) {
@@ -56876,11 +56153,12 @@ pixelimage_triangleGML_shape_RectangleShape.prototype = $extend(pixelimage_trian
 					}
 				}
 				if(hasHit1 == true) {
-					var v = new pixelimage_algo_HitTri(farX,lowerY,bx,by,cx,cy,true);
+					var v = new pixelimage_algo_HitTri(farX,lowerY,bx,by,cx,cy);
 				}
 				lastX = nextX;
 				lastY = nextY;
 			}
+			var pixelshape = temp;
 			var x = this.strokeWidth;
 			var y = this.strokeWidth;
 			var wid = this.width - 2 * this.strokeWidth;
@@ -57040,9 +56318,9 @@ pixelimage_triangleGML_shape_RectangleShape.prototype = $extend(pixelimage_trian
 						} else if(s + t < A) {
 							var this10 = color;
 							var c = this10;
-							if((c >> 24 & 255) < 254 && temp.transparent) {
-								var location = temp.useVirtualPos ? (y1 - temp.virtualY) * temp.width + x1 - temp.virtualX | 0 : y1 * temp.width + x1 | 0;
-								var this11 = temp.image[location];
+							if((c >> 24 & 255) < 254 && pixelshape.transparent) {
+								var location = pixelshape.useVirtualPos ? (y1 - pixelshape.virtualY) * pixelshape.width + x1 - pixelshape.virtualX | 0 : y1 * pixelshape.width + x1 | 0;
+								var this11 = pixelshape.image[location];
 								var this12 = this11;
 								var this13 = pixelimage_Endian_isLittleEndian ? (this12 >> 24 & 255) << 24 | (this12 & 255) << 16 | (this12 >> 8 & 255) << 8 | this12 >> 16 & 255 : this12;
 								var this14 = this13 >> 24 & 255;
@@ -57067,9 +56345,9 @@ pixelimage_triangleGML_shape_RectangleShape.prototype = $extend(pixelimage_trian
 								var b = 255 * (b1 * a3 + b2 * a2) | 0;
 								var a = 255 * (a3 + a2) | 0;
 								var blended = a << 24 | r << 16 | g << 8 | b;
-								temp.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+								pixelshape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 							} else {
-								temp.image[temp.useVirtualPos ? (y1 - temp.virtualY) * temp.width + x1 - temp.virtualX | 0 : y1 * temp.width + x1 | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
+								pixelshape.image[pixelshape.useVirtualPos ? (y1 - pixelshape.virtualY) * pixelshape.width + x1 - pixelshape.virtualX | 0 : y1 * pixelshape.width + x1 | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
 							}
 							foundY = true;
 						} else if(foundY) {
@@ -57078,7 +56356,7 @@ pixelimage_triangleGML_shape_RectangleShape.prototype = $extend(pixelimage_trian
 					}
 				}
 				if(hasHit1 == true) {
-					var v = new pixelimage_algo_HitTri(cx,cy,bx,by,cx1,cy1,true);
+					var v = new pixelimage_algo_HitTri(cx,cy,bx,by,cx1,cy1);
 				}
 				lastX = nextX;
 				lastY = nextY;
@@ -57093,9 +56371,9 @@ pixelimage_triangleGML_shape_RectangleShape.prototype = $extend(pixelimage_trian
 				var x1 = p++;
 				var this1 = color;
 				var c = this1;
-				if((c >> 24 & 255) < 254 && temp.transparent) {
-					var location = temp.useVirtualPos ? (q - temp.virtualY) * temp.width + x1 - temp.virtualX | 0 : q * temp.width + x1 | 0;
-					var this2 = temp.image[location];
+				if((c >> 24 & 255) < 254 && pixelshape.transparent) {
+					var location = pixelshape.useVirtualPos ? (q - pixelshape.virtualY) * pixelshape.width + x1 - pixelshape.virtualX | 0 : q * pixelshape.width + x1 | 0;
+					var this2 = pixelshape.image[location];
 					var this3 = this2;
 					var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
 					var this5 = this4 >> 24 & 255;
@@ -57120,9 +56398,9 @@ pixelimage_triangleGML_shape_RectangleShape.prototype = $extend(pixelimage_trian
 					var b = 255 * (b1 * a3 + b2 * a2) | 0;
 					var a = 255 * (a3 + a2) | 0;
 					var blended = a << 24 | r << 16 | g << 8 | b;
-					temp.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+					pixelshape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 				} else {
-					temp.image[temp.useVirtualPos ? (q - temp.virtualY) * temp.width + x1 - temp.virtualX | 0 : q * temp.width + x1 | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
+					pixelshape.image[pixelshape.useVirtualPos ? (q - pixelshape.virtualY) * pixelshape.width + x1 - pixelshape.virtualX | 0 : q * pixelshape.width + x1 | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
 				}
 				if(p > maxX) {
 					p = xx;
@@ -57263,9 +56541,9 @@ pixelimage_triangleGML_shape_RectangleShape.prototype = $extend(pixelimage_trian
 						} else if(s + t < A) {
 							var this10 = color;
 							var c = this10;
-							if((c >> 24 & 255) < 254 && temp.transparent) {
-								var location = temp.useVirtualPos ? (y1 - temp.virtualY) * temp.width + x1 - temp.virtualX | 0 : y1 * temp.width + x1 | 0;
-								var this11 = temp.image[location];
+							if((c >> 24 & 255) < 254 && pixelshape.transparent) {
+								var location = pixelshape.useVirtualPos ? (y1 - pixelshape.virtualY) * pixelshape.width + x1 - pixelshape.virtualX | 0 : y1 * pixelshape.width + x1 | 0;
+								var this11 = pixelshape.image[location];
 								var this12 = this11;
 								var this13 = pixelimage_Endian_isLittleEndian ? (this12 >> 24 & 255) << 24 | (this12 & 255) << 16 | (this12 >> 8 & 255) << 8 | this12 >> 16 & 255 : this12;
 								var this14 = this13 >> 24 & 255;
@@ -57290,9 +56568,9 @@ pixelimage_triangleGML_shape_RectangleShape.prototype = $extend(pixelimage_trian
 								var b = 255 * (b1 * a3 + b2 * a2) | 0;
 								var a = 255 * (a3 + a2) | 0;
 								var blended = a << 24 | r << 16 | g << 8 | b;
-								temp.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+								pixelshape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 							} else {
-								temp.image[temp.useVirtualPos ? (y1 - temp.virtualY) * temp.width + x1 - temp.virtualX | 0 : y1 * temp.width + x1 | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
+								pixelshape.image[pixelshape.useVirtualPos ? (y1 - pixelshape.virtualY) * pixelshape.width + x1 - pixelshape.virtualX | 0 : y1 * pixelshape.width + x1 | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
 							}
 							foundY = true;
 						} else if(foundY) {
@@ -57301,7 +56579,7 @@ pixelimage_triangleGML_shape_RectangleShape.prototype = $extend(pixelimage_trian
 					}
 				}
 				if(hasHit1 == true) {
-					var v = new pixelimage_algo_HitTri(farX,cy,bx,by,cx,cy1,true);
+					var v = new pixelimage_algo_HitTri(farX,cy,bx,by,cx,cy1);
 				}
 				lastX = nextX;
 				lastY = nextY;
@@ -57316,9 +56594,9 @@ pixelimage_triangleGML_shape_RectangleShape.prototype = $extend(pixelimage_trian
 				var x1 = p++;
 				var this1 = color;
 				var c = this1;
-				if((c >> 24 & 255) < 254 && temp.transparent) {
-					var location = temp.useVirtualPos ? (q - temp.virtualY) * temp.width + x1 - temp.virtualX | 0 : q * temp.width + x1 | 0;
-					var this2 = temp.image[location];
+				if((c >> 24 & 255) < 254 && pixelshape.transparent) {
+					var location = pixelshape.useVirtualPos ? (q - pixelshape.virtualY) * pixelshape.width + x1 - pixelshape.virtualX | 0 : q * pixelshape.width + x1 | 0;
+					var this2 = pixelshape.image[location];
 					var this3 = this2;
 					var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
 					var this5 = this4 >> 24 & 255;
@@ -57343,9 +56621,9 @@ pixelimage_triangleGML_shape_RectangleShape.prototype = $extend(pixelimage_trian
 					var b = 255 * (b1 * a3 + b2 * a2) | 0;
 					var a = 255 * (a3 + a2) | 0;
 					var blended = a << 24 | r << 16 | g << 8 | b;
-					temp.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+					pixelshape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 				} else {
-					temp.image[temp.useVirtualPos ? (q - temp.virtualY) * temp.width + x1 - temp.virtualX | 0 : q * temp.width + x1 | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
+					pixelshape.image[pixelshape.useVirtualPos ? (q - pixelshape.virtualY) * pixelshape.width + x1 - pixelshape.virtualX | 0 : q * pixelshape.width + x1 | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
 				}
 				if(p > maxX) {
 					p = xx;
@@ -57486,9 +56764,9 @@ pixelimage_triangleGML_shape_RectangleShape.prototype = $extend(pixelimage_trian
 						} else if(s + t < A) {
 							var this10 = color;
 							var c = this10;
-							if((c >> 24 & 255) < 254 && temp.transparent) {
-								var location = temp.useVirtualPos ? (y - temp.virtualY) * temp.width + x1 - temp.virtualX | 0 : y * temp.width + x1 | 0;
-								var this11 = temp.image[location];
+							if((c >> 24 & 255) < 254 && pixelshape.transparent) {
+								var location = pixelshape.useVirtualPos ? (y - pixelshape.virtualY) * pixelshape.width + x1 - pixelshape.virtualX | 0 : y * pixelshape.width + x1 | 0;
+								var this11 = pixelshape.image[location];
 								var this12 = this11;
 								var this13 = pixelimage_Endian_isLittleEndian ? (this12 >> 24 & 255) << 24 | (this12 & 255) << 16 | (this12 >> 8 & 255) << 8 | this12 >> 16 & 255 : this12;
 								var this14 = this13 >> 24 & 255;
@@ -57513,9 +56791,9 @@ pixelimage_triangleGML_shape_RectangleShape.prototype = $extend(pixelimage_trian
 								var b = 255 * (b1 * a3 + b2 * a2) | 0;
 								var a = 255 * (a3 + a2) | 0;
 								var blended = a << 24 | r << 16 | g << 8 | b;
-								temp.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+								pixelshape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 							} else {
-								temp.image[temp.useVirtualPos ? (y - temp.virtualY) * temp.width + x1 - temp.virtualX | 0 : y * temp.width + x1 | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
+								pixelshape.image[pixelshape.useVirtualPos ? (y - pixelshape.virtualY) * pixelshape.width + x1 - pixelshape.virtualX | 0 : y * pixelshape.width + x1 | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
 							}
 							foundY = true;
 						} else if(foundY) {
@@ -57524,7 +56802,7 @@ pixelimage_triangleGML_shape_RectangleShape.prototype = $extend(pixelimage_trian
 					}
 				}
 				if(hasHit1 == true) {
-					var v = new pixelimage_algo_HitTri(cx,lowerY,bx,by,cx1,cy,true);
+					var v = new pixelimage_algo_HitTri(cx,lowerY,bx,by,cx1,cy);
 				}
 				lastX = nextX;
 				lastY = nextY;
@@ -57539,9 +56817,9 @@ pixelimage_triangleGML_shape_RectangleShape.prototype = $extend(pixelimage_trian
 				var x = p++;
 				var this1 = color;
 				var c = this1;
-				if((c >> 24 & 255) < 254 && temp.transparent) {
-					var location = temp.useVirtualPos ? (q - temp.virtualY) * temp.width + x - temp.virtualX | 0 : q * temp.width + x | 0;
-					var this2 = temp.image[location];
+				if((c >> 24 & 255) < 254 && pixelshape.transparent) {
+					var location = pixelshape.useVirtualPos ? (q - pixelshape.virtualY) * pixelshape.width + x - pixelshape.virtualX | 0 : q * pixelshape.width + x | 0;
+					var this2 = pixelshape.image[location];
 					var this3 = this2;
 					var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
 					var this5 = this4 >> 24 & 255;
@@ -57566,9 +56844,9 @@ pixelimage_triangleGML_shape_RectangleShape.prototype = $extend(pixelimage_trian
 					var b = 255 * (b1 * a3 + b2 * a2) | 0;
 					var a = 255 * (a3 + a2) | 0;
 					var blended = a << 24 | r << 16 | g << 8 | b;
-					temp.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+					pixelshape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 				} else {
-					temp.image[temp.useVirtualPos ? (q - temp.virtualY) * temp.width + x - temp.virtualX | 0 : q * temp.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
+					pixelshape.image[pixelshape.useVirtualPos ? (q - pixelshape.virtualY) * pixelshape.width + x - pixelshape.virtualX | 0 : q * pixelshape.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
 				}
 				if(p > maxX) {
 					p = xx;
@@ -57708,9 +56986,9 @@ pixelimage_triangleGML_shape_RectangleShape.prototype = $extend(pixelimage_trian
 						} else if(s + t < A) {
 							var this10 = color;
 							var c = this10;
-							if((c >> 24 & 255) < 254 && temp.transparent) {
-								var location = temp.useVirtualPos ? (y - temp.virtualY) * temp.width + x - temp.virtualX | 0 : y * temp.width + x | 0;
-								var this11 = temp.image[location];
+							if((c >> 24 & 255) < 254 && pixelshape.transparent) {
+								var location = pixelshape.useVirtualPos ? (y - pixelshape.virtualY) * pixelshape.width + x - pixelshape.virtualX | 0 : y * pixelshape.width + x | 0;
+								var this11 = pixelshape.image[location];
 								var this12 = this11;
 								var this13 = pixelimage_Endian_isLittleEndian ? (this12 >> 24 & 255) << 24 | (this12 & 255) << 16 | (this12 >> 8 & 255) << 8 | this12 >> 16 & 255 : this12;
 								var this14 = this13 >> 24 & 255;
@@ -57735,9 +57013,9 @@ pixelimage_triangleGML_shape_RectangleShape.prototype = $extend(pixelimage_trian
 								var b = 255 * (b1 * a3 + b2 * a2) | 0;
 								var a = 255 * (a3 + a2) | 0;
 								var blended = a << 24 | r << 16 | g << 8 | b;
-								temp.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+								pixelshape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 							} else {
-								temp.image[temp.useVirtualPos ? (y - temp.virtualY) * temp.width + x - temp.virtualX | 0 : y * temp.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
+								pixelshape.image[pixelshape.useVirtualPos ? (y - pixelshape.virtualY) * pixelshape.width + x - pixelshape.virtualX | 0 : y * pixelshape.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
 							}
 							foundY = true;
 						} else if(foundY) {
@@ -57746,7 +57024,7 @@ pixelimage_triangleGML_shape_RectangleShape.prototype = $extend(pixelimage_trian
 					}
 				}
 				if(hasHit1 == true) {
-					var v = new pixelimage_algo_HitTri(farX,lowerY,bx,by,cx,cy,true);
+					var v = new pixelimage_algo_HitTri(farX,lowerY,bx,by,cx,cy);
 				}
 				lastX = nextX;
 				lastY = nextY;
@@ -57794,9 +57072,9 @@ pixelimage_triangleGML_shape_RectangleShape.prototype = $extend(pixelimage_trian
 						var y1 = y + dy;
 						var this10 = col;
 						var c2 = this10;
-						if((c2 >> 24 & 255) < 254 && pixelShape.transparent) {
-							var location = pixelShape.useVirtualPos ? (y1 - pixelShape.virtualY) * pixelShape.width + x1 - pixelShape.virtualX | 0 : y1 * pixelShape.width + x1 | 0;
-							var this11 = pixelShape.image[location];
+						if((c2 >> 24 & 255) < 254 && pixelImage.transparent) {
+							var location = pixelImage.useVirtualPos ? (y1 - pixelImage.virtualY) * pixelImage.width + x1 - pixelImage.virtualX | 0 : y1 * pixelImage.width + x1 | 0;
+							var this11 = pixelImage.image[location];
 							var this12 = this11;
 							var this13 = pixelimage_Endian_isLittleEndian ? (this12 >> 24 & 255) << 24 | (this12 & 255) << 16 | (this12 >> 8 & 255) << 8 | this12 >> 16 & 255 : this12;
 							var this14 = this13 >> 24 & 255;
@@ -57821,20 +57099,20 @@ pixelimage_triangleGML_shape_RectangleShape.prototype = $extend(pixelimage_trian
 							var b = 255 * (b1 * a3 + b2 * a2) | 0;
 							var a = 255 * (a3 + a2) | 0;
 							var blended = a << 24 | r << 16 | g << 8 | b;
-							pixelShape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+							pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 						} else {
-							pixelShape.image[pixelShape.useVirtualPos ? (y1 - pixelShape.virtualY) * pixelShape.width + x1 - pixelShape.virtualX | 0 : y1 * pixelShape.width + x1 | 0] = pixelimage_Endian_isLittleEndian ? (c2 >> 24 & 255) << 24 | (c2 & 255) << 16 | (c2 >> 8 & 255) << 8 | c2 >> 16 & 255 : c2;
+							pixelImage.image[pixelImage.useVirtualPos ? (y1 - pixelImage.virtualY) * pixelImage.width + x1 - pixelImage.virtualX | 0 : y1 * pixelImage.width + x1 | 0] = pixelimage_Endian_isLittleEndian ? (c2 >> 24 & 255) << 24 | (c2 & 255) << 16 | (c2 >> 8 & 255) << 8 | c2 >> 16 & 255 : c2;
 						}
 					}
 				}
 			}
 			temp = null;
 		}
-		return pixelimage_triangleGML_coreShape_FillShape.prototype.render.call(this,pixelShape);
+		return pixelimage_triGML_coreShape_FillShape.prototype.render.call(this,pixelImage);
 	}
-	,__class__: pixelimage_triangleGML_shape_RectangleShape
+	,__class__: pixelimage_triGML_shape_RectangleShape
 });
-var pixelimage_triangleGML_shape_SquareShape = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill,left,top,diameter) {
+var pixelimage_triGML_shape_SquareShape = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill,left,top,diameter) {
 	if(diameter == null) {
 		diameter = 1.;
 	}
@@ -57859,14 +57137,14 @@ var pixelimage_triangleGML_shape_SquareShape = function(opacity,visibility,strok
 	if(opacity == null) {
 		opacity = 1.;
 	}
-	pixelimage_triangleGML_coreShape_FillShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill);
+	pixelimage_triGML_coreShape_FillShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill);
 	this.left = left;
 	this.top = top;
 	this.diameter = diameter;
 };
-pixelimage_triangleGML_shape_SquareShape.__name__ = "pixelimage.triangleGML.shape.SquareShape";
-pixelimage_triangleGML_shape_SquareShape.__super__ = pixelimage_triangleGML_coreShape_FillShape;
-pixelimage_triangleGML_shape_SquareShape.prototype = $extend(pixelimage_triangleGML_coreShape_FillShape.prototype,{
+pixelimage_triGML_shape_SquareShape.__name__ = "pixelimage.triGML.shape.SquareShape";
+pixelimage_triGML_shape_SquareShape.__super__ = pixelimage_triGML_coreShape_FillShape;
+pixelimage_triGML_shape_SquareShape.prototype = $extend(pixelimage_triGML_coreShape_FillShape.prototype,{
 	setParameter: function(name,value) {
 		switch(name) {
 		case "diameter":
@@ -57879,16 +57157,15 @@ pixelimage_triangleGML_shape_SquareShape.prototype = $extend(pixelimage_triangle
 			this.top = parseFloat(value);
 			break;
 		default:
-			pixelimage_triangleGML_coreShape_FillShape.prototype.setParameter.call(this,name,value);
+			pixelimage_triGML_coreShape_FillShape.prototype.setParameter.call(this,name,value);
 		}
 	}
-	,render: function(pixelShape) {
+	,render: function(pixelImage) {
 		var w = Math.ceil(this.diameter);
 		var h = Math.ceil(this.diameter);
 		var this1 = new Uint32Array(w * h | 0);
 		var this2 = new pixelimage_ImageStruct(w,h,this1);
-		var this1 = this2;
-		var temp = this1;
+		var temp = this2;
 		temp.transparent = false;
 		this.buildSquare(temp);
 		var x = this.left | 0;
@@ -57934,9 +57211,9 @@ pixelimage_triangleGML_shape_SquareShape.prototype = $extend(pixelimage_triangle
 					var y1 = y + dy;
 					var this10 = col;
 					var c2 = this10;
-					if((c2 >> 24 & 255) < 254 && pixelShape.transparent) {
-						var location = pixelShape.useVirtualPos ? (y1 - pixelShape.virtualY) * pixelShape.width + x1 - pixelShape.virtualX | 0 : y1 * pixelShape.width + x1 | 0;
-						var this11 = pixelShape.image[location];
+					if((c2 >> 24 & 255) < 254 && pixelImage.transparent) {
+						var location = pixelImage.useVirtualPos ? (y1 - pixelImage.virtualY) * pixelImage.width + x1 - pixelImage.virtualX | 0 : y1 * pixelImage.width + x1 | 0;
+						var this11 = pixelImage.image[location];
 						var this12 = this11;
 						var this13 = pixelimage_Endian_isLittleEndian ? (this12 >> 24 & 255) << 24 | (this12 & 255) << 16 | (this12 >> 8 & 255) << 8 | this12 >> 16 & 255 : this12;
 						var this14 = this13 >> 24 & 255;
@@ -57961,15 +57238,15 @@ pixelimage_triangleGML_shape_SquareShape.prototype = $extend(pixelimage_triangle
 						var b = 255 * (b1 * a3 + b2 * a2) | 0;
 						var a = 255 * (a3 + a2) | 0;
 						var blended = a << 24 | r << 16 | g << 8 | b;
-						pixelShape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+						pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 					} else {
-						pixelShape.image[pixelShape.useVirtualPos ? (y1 - pixelShape.virtualY) * pixelShape.width + x1 - pixelShape.virtualX | 0 : y1 * pixelShape.width + x1 | 0] = pixelimage_Endian_isLittleEndian ? (c2 >> 24 & 255) << 24 | (c2 & 255) << 16 | (c2 >> 8 & 255) << 8 | c2 >> 16 & 255 : c2;
+						pixelImage.image[pixelImage.useVirtualPos ? (y1 - pixelImage.virtualY) * pixelImage.width + x1 - pixelImage.virtualX | 0 : y1 * pixelImage.width + x1 | 0] = pixelimage_Endian_isLittleEndian ? (c2 >> 24 & 255) << 24 | (c2 & 255) << 16 | (c2 >> 8 & 255) << 8 | c2 >> 16 & 255 : c2;
 					}
 				}
 			}
 		}
 		temp = null;
-		return pixelimage_triangleGML_coreShape_FillShape.prototype.render.call(this,pixelShape);
+		return pixelimage_triGML_coreShape_FillShape.prototype.render.call(this,pixelImage);
 	}
 	,buildSquare: function(temp) {
 		var color = this.strokeColor;
@@ -58073,9 +57350,9 @@ pixelimage_triangleGML_shape_SquareShape.prototype = $extend(pixelimage_triangle
 			}
 		}
 	}
-	,__class__: pixelimage_triangleGML_shape_SquareShape
+	,__class__: pixelimage_triGML_shape_SquareShape
 });
-var pixelimage_triangleGML_shape_Star6Shape = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill,left,top,diameter,rotation) {
+var pixelimage_triGML_shape_Star6Shape = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill,left,top,diameter,rotation) {
 	if(rotation == null) {
 		rotation = 0.;
 	}
@@ -58103,15 +57380,15 @@ var pixelimage_triangleGML_shape_Star6Shape = function(opacity,visibility,stroke
 	if(opacity == null) {
 		opacity = 1.;
 	}
-	pixelimage_triangleGML_coreShape_FillShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill);
+	pixelimage_triGML_coreShape_FillShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill);
 	this.left = left;
 	this.top = top;
 	this.diameter = diameter;
 	this.rotation = rotation;
 };
-pixelimage_triangleGML_shape_Star6Shape.__name__ = "pixelimage.triangleGML.shape.Star6Shape";
-pixelimage_triangleGML_shape_Star6Shape.__super__ = pixelimage_triangleGML_coreShape_FillShape;
-pixelimage_triangleGML_shape_Star6Shape.prototype = $extend(pixelimage_triangleGML_coreShape_FillShape.prototype,{
+pixelimage_triGML_shape_Star6Shape.__name__ = "pixelimage.triGML.shape.Star6Shape";
+pixelimage_triGML_shape_Star6Shape.__super__ = pixelimage_triGML_coreShape_FillShape;
+pixelimage_triGML_shape_Star6Shape.prototype = $extend(pixelimage_triGML_coreShape_FillShape.prototype,{
 	setParameter: function(name,value) {
 		switch(name) {
 		case "diameter":
@@ -58128,16 +57405,15 @@ pixelimage_triangleGML_shape_Star6Shape.prototype = $extend(pixelimage_triangleG
 			this.top = parseFloat(value);
 			break;
 		default:
-			pixelimage_triangleGML_coreShape_FillShape.prototype.setParameter.call(this,name,value);
+			pixelimage_triGML_coreShape_FillShape.prototype.setParameter.call(this,name,value);
 		}
 	}
-	,render: function(pixelShape) {
+	,render: function(pixelImage) {
 		var w = Math.ceil(this.width);
 		var h = Math.ceil(this.height);
 		var this1 = new Uint32Array(w * h | 0);
 		var this2 = new pixelimage_ImageStruct(w,h,this1);
-		var this1 = this2;
-		var temp = this1;
+		var temp = this2;
 		temp.transparent = false;
 		var r_ = this.diameter / 2;
 		var _r = r_ - this.strokeWidth;
@@ -58326,7 +57602,7 @@ pixelimage_triangleGML_shape_Star6Shape.prototype = $extend(pixelimage_triangleG
 			}
 		}
 		if(hasHit1 == true) {
-			var v = new pixelimage_algo_HitTri(a0x_,a0y_,bx,by,cx,cy,true);
+			var v = new pixelimage_algo_HitTri(a0x_,a0y_,bx,by,cx,cy);
 		}
 		var color = this.strokeColor;
 		var bx = b1x_;
@@ -58468,7 +57744,7 @@ pixelimage_triangleGML_shape_Star6Shape.prototype = $extend(pixelimage_triangleG
 			}
 		}
 		if(hasHit1 == true) {
-			var v = new pixelimage_algo_HitTri(a1x_,a1y_,bx,by,cx,cy,true);
+			var v = new pixelimage_algo_HitTri(a1x_,a1y_,bx,by,cx,cy);
 		}
 		var color = this.fill;
 		var bx = _b0x;
@@ -58610,7 +57886,7 @@ pixelimage_triangleGML_shape_Star6Shape.prototype = $extend(pixelimage_triangleG
 			}
 		}
 		if(hasHit1 == true) {
-			var v = new pixelimage_algo_HitTri(_a0x,_a0y,bx,by,cx,cy,true);
+			var v = new pixelimage_algo_HitTri(_a0x,_a0y,bx,by,cx,cy);
 		}
 		var color = this.fill;
 		var bx = _b1x;
@@ -58752,7 +58028,7 @@ pixelimage_triangleGML_shape_Star6Shape.prototype = $extend(pixelimage_triangleG
 			}
 		}
 		if(hasHit1 == true) {
-			var v = new pixelimage_algo_HitTri(_a1x,_a1y,bx,by,cx,cy,true);
+			var v = new pixelimage_algo_HitTri(_a1x,_a1y,bx,by,cx,cy);
 		}
 		var x = this.left | 0;
 		var y = this.top | 0;
@@ -58797,9 +58073,9 @@ pixelimage_triangleGML_shape_Star6Shape.prototype = $extend(pixelimage_triangleG
 					var y1 = y + dy;
 					var this10 = col;
 					var c2 = this10;
-					if((c2 >> 24 & 255) < 254 && pixelShape.transparent) {
-						var location = pixelShape.useVirtualPos ? (y1 - pixelShape.virtualY) * pixelShape.width + x1 - pixelShape.virtualX | 0 : y1 * pixelShape.width + x1 | 0;
-						var this11 = pixelShape.image[location];
+					if((c2 >> 24 & 255) < 254 && pixelImage.transparent) {
+						var location = pixelImage.useVirtualPos ? (y1 - pixelImage.virtualY) * pixelImage.width + x1 - pixelImage.virtualX | 0 : y1 * pixelImage.width + x1 | 0;
+						var this11 = pixelImage.image[location];
 						var this12 = this11;
 						var this13 = pixelimage_Endian_isLittleEndian ? (this12 >> 24 & 255) << 24 | (this12 & 255) << 16 | (this12 >> 8 & 255) << 8 | this12 >> 16 & 255 : this12;
 						var this14 = this13 >> 24 & 255;
@@ -58824,19 +58100,19 @@ pixelimage_triangleGML_shape_Star6Shape.prototype = $extend(pixelimage_triangleG
 						var b = 255 * (b1 * a3 + b2 * a2) | 0;
 						var a = 255 * (a3 + a2) | 0;
 						var blended = a << 24 | r << 16 | g << 8 | b;
-						pixelShape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+						pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 					} else {
-						pixelShape.image[pixelShape.useVirtualPos ? (y1 - pixelShape.virtualY) * pixelShape.width + x1 - pixelShape.virtualX | 0 : y1 * pixelShape.width + x1 | 0] = pixelimage_Endian_isLittleEndian ? (c2 >> 24 & 255) << 24 | (c2 & 255) << 16 | (c2 >> 8 & 255) << 8 | c2 >> 16 & 255 : c2;
+						pixelImage.image[pixelImage.useVirtualPos ? (y1 - pixelImage.virtualY) * pixelImage.width + x1 - pixelImage.virtualX | 0 : y1 * pixelImage.width + x1 | 0] = pixelimage_Endian_isLittleEndian ? (c2 >> 24 & 255) << 24 | (c2 & 255) << 16 | (c2 >> 8 & 255) << 8 | c2 >> 16 & 255 : c2;
 					}
 				}
 			}
 		}
 		temp = null;
-		return pixelimage_triangleGML_coreShape_FillShape.prototype.render.call(this,pixelShape);
+		return pixelimage_triGML_coreShape_FillShape.prototype.render.call(this,pixelImage);
 	}
-	,__class__: pixelimage_triangleGML_shape_Star6Shape
+	,__class__: pixelimage_triGML_shape_Star6Shape
 });
-var pixelimage_triangleGML_shape_TriangleShape = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill,x1,y1,x2,y2,x3,y3) {
+var pixelimage_triGML_shape_TriangleShape = function(opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill,x1,y1,x2,y2,x3,y3) {
 	if(y3 == null) {
 		y3 = 0.;
 	}
@@ -58870,7 +58146,7 @@ var pixelimage_triangleGML_shape_TriangleShape = function(opacity,visibility,str
 	if(opacity == null) {
 		opacity = 1.;
 	}
-	pixelimage_triangleGML_coreShape_FillShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill);
+	pixelimage_triGML_coreShape_FillShape.call(this,opacity,visibility,strokeColor,strokeWidth,strokeDashGapArray,fill);
 	this.x1 = x1;
 	this.y1 = y1;
 	this.x2 = x2;
@@ -58878,9 +58154,9 @@ var pixelimage_triangleGML_shape_TriangleShape = function(opacity,visibility,str
 	this.x3 = x3;
 	this.y3 = y3;
 };
-pixelimage_triangleGML_shape_TriangleShape.__name__ = "pixelimage.triangleGML.shape.TriangleShape";
-pixelimage_triangleGML_shape_TriangleShape.__super__ = pixelimage_triangleGML_coreShape_FillShape;
-pixelimage_triangleGML_shape_TriangleShape.prototype = $extend(pixelimage_triangleGML_coreShape_FillShape.prototype,{
+pixelimage_triGML_shape_TriangleShape.__name__ = "pixelimage.triGML.shape.TriangleShape";
+pixelimage_triGML_shape_TriangleShape.__super__ = pixelimage_triGML_coreShape_FillShape;
+pixelimage_triGML_shape_TriangleShape.prototype = $extend(pixelimage_triGML_coreShape_FillShape.prototype,{
 	setParameter: function(name,value) {
 		switch(name) {
 		case "x1":
@@ -58902,10 +58178,10 @@ pixelimage_triangleGML_shape_TriangleShape.prototype = $extend(pixelimage_triang
 			this.y3 = parseFloat(value);
 			break;
 		default:
-			pixelimage_triangleGML_coreShape_FillShape.prototype.setParameter.call(this,name,value);
+			pixelimage_triGML_coreShape_FillShape.prototype.setParameter.call(this,name,value);
 		}
 	}
-	,render: function(pixelShape) {
+	,render: function(pixelImage) {
 		var ax = this.x1;
 		var ay = this.y1;
 		var color = this.fill;
@@ -59010,9 +58286,9 @@ pixelimage_triangleGML_shape_TriangleShape.prototype = $extend(pixelimage_triang
 				} else if(s + t < A) {
 					var this1 = color;
 					var c = this1;
-					if((c >> 24 & 255) < 254 && pixelShape.transparent) {
-						var location = pixelShape.useVirtualPos ? (y - pixelShape.virtualY) * pixelShape.width + x - pixelShape.virtualX | 0 : y * pixelShape.width + x | 0;
-						var this2 = pixelShape.image[location];
+					if((c >> 24 & 255) < 254 && pixelImage.transparent) {
+						var location = pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0;
+						var this2 = pixelImage.image[location];
 						var this3 = this2;
 						var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
 						var this5 = this4 >> 24 & 255;
@@ -59037,9 +58313,9 @@ pixelimage_triangleGML_shape_TriangleShape.prototype = $extend(pixelimage_triang
 						var b = 255 * (b1 * a3 + b2 * a2) | 0;
 						var a = 255 * (a3 + a2) | 0;
 						var blended = a << 24 | r << 16 | g << 8 | b;
-						pixelShape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+						pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 					} else {
-						pixelShape.image[pixelShape.useVirtualPos ? (y - pixelShape.virtualY) * pixelShape.width + x - pixelShape.virtualX | 0 : y * pixelShape.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
+						pixelImage.image[pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
 					}
 					foundY = true;
 				} else if(foundY) {
@@ -59048,7 +58324,7 @@ pixelimage_triangleGML_shape_TriangleShape.prototype = $extend(pixelimage_triang
 			}
 		}
 		if(hasHit1 == true) {
-			var v = new pixelimage_algo_HitTri(ax,ay,bx,by,cx,cy,true);
+			var v = new pixelimage_algo_HitTri(ax,ay,bx,by,cx,cy);
 		}
 		var px = this.x1;
 		var py = this.y1;
@@ -59190,9 +58466,9 @@ pixelimage_triangleGML_shape_TriangleShape.prototype = $extend(pixelimage_triang
 				} else if(s + t < A) {
 					var this1 = color;
 					var c = this1;
-					if((c >> 24 & 255) < 254 && pixelShape.transparent) {
-						var location = pixelShape.useVirtualPos ? (y - pixelShape.virtualY) * pixelShape.width + x - pixelShape.virtualX | 0 : y * pixelShape.width + x | 0;
-						var this2 = pixelShape.image[location];
+					if((c >> 24 & 255) < 254 && pixelImage.transparent) {
+						var location = pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0;
+						var this2 = pixelImage.image[location];
 						var this3 = this2;
 						var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
 						var this5 = this4 >> 24 & 255;
@@ -59217,9 +58493,9 @@ pixelimage_triangleGML_shape_TriangleShape.prototype = $extend(pixelimage_triang
 						var b = 255 * (b1 * a3 + b2 * a2) | 0;
 						var a = 255 * (a3 + a2) | 0;
 						var blended = a << 24 | r << 16 | g << 8 | b;
-						pixelShape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+						pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 					} else {
-						pixelShape.image[pixelShape.useVirtualPos ? (y - pixelShape.virtualY) * pixelShape.width + x - pixelShape.virtualX | 0 : y * pixelShape.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
+						pixelImage.image[pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
 					}
 					foundY = true;
 				} else if(foundY) {
@@ -59228,7 +58504,7 @@ pixelimage_triangleGML_shape_TriangleShape.prototype = $extend(pixelimage_triang
 			}
 		}
 		if(hasHit2 == true) {
-			var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1,true);
+			var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1);
 		}
 		var bx1 = cx;
 		var by1 = cy;
@@ -59331,9 +58607,9 @@ pixelimage_triangleGML_shape_TriangleShape.prototype = $extend(pixelimage_triang
 				} else if(s + t < A) {
 					var this1 = color;
 					var c = this1;
-					if((c >> 24 & 255) < 254 && pixelShape.transparent) {
-						var location = pixelShape.useVirtualPos ? (y - pixelShape.virtualY) * pixelShape.width + x - pixelShape.virtualX | 0 : y * pixelShape.width + x | 0;
-						var this2 = pixelShape.image[location];
+					if((c >> 24 & 255) < 254 && pixelImage.transparent) {
+						var location = pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0;
+						var this2 = pixelImage.image[location];
 						var this3 = this2;
 						var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
 						var this5 = this4 >> 24 & 255;
@@ -59358,9 +58634,9 @@ pixelimage_triangleGML_shape_TriangleShape.prototype = $extend(pixelimage_triang
 						var b = 255 * (b1 * a3 + b2 * a2) | 0;
 						var a = 255 * (a3 + a2) | 0;
 						var blended = a << 24 | r << 16 | g << 8 | b;
-						pixelShape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+						pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 					} else {
-						pixelShape.image[pixelShape.useVirtualPos ? (y - pixelShape.virtualY) * pixelShape.width + x - pixelShape.virtualX | 0 : y * pixelShape.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
+						pixelImage.image[pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
 					}
 					foundY = true;
 				} else if(foundY) {
@@ -59369,10 +58645,10 @@ pixelimage_triangleGML_shape_TriangleShape.prototype = $extend(pixelimage_triang
 			}
 		}
 		if(hasHit2 == true) {
-			var v = new pixelimage_algo_HitTri(bx,by,bx1,by1,cx1,cy1,true);
+			var v = new pixelimage_algo_HitTri(bx,by,bx1,by1,cx1,cy1);
 		}
 		if(hasHit1 == true) {
-			var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy,true);
+			var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy);
 		}
 		var px = this.x2;
 		var py = this.y2;
@@ -59514,9 +58790,9 @@ pixelimage_triangleGML_shape_TriangleShape.prototype = $extend(pixelimage_triang
 				} else if(s + t < A) {
 					var this1 = color;
 					var c = this1;
-					if((c >> 24 & 255) < 254 && pixelShape.transparent) {
-						var location = pixelShape.useVirtualPos ? (y - pixelShape.virtualY) * pixelShape.width + x - pixelShape.virtualX | 0 : y * pixelShape.width + x | 0;
-						var this2 = pixelShape.image[location];
+					if((c >> 24 & 255) < 254 && pixelImage.transparent) {
+						var location = pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0;
+						var this2 = pixelImage.image[location];
 						var this3 = this2;
 						var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
 						var this5 = this4 >> 24 & 255;
@@ -59541,9 +58817,9 @@ pixelimage_triangleGML_shape_TriangleShape.prototype = $extend(pixelimage_triang
 						var b = 255 * (b1 * a3 + b2 * a2) | 0;
 						var a = 255 * (a3 + a2) | 0;
 						var blended = a << 24 | r << 16 | g << 8 | b;
-						pixelShape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+						pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 					} else {
-						pixelShape.image[pixelShape.useVirtualPos ? (y - pixelShape.virtualY) * pixelShape.width + x - pixelShape.virtualX | 0 : y * pixelShape.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
+						pixelImage.image[pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
 					}
 					foundY = true;
 				} else if(foundY) {
@@ -59552,7 +58828,7 @@ pixelimage_triangleGML_shape_TriangleShape.prototype = $extend(pixelimage_triang
 			}
 		}
 		if(hasHit2 == true) {
-			var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1,true);
+			var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1);
 		}
 		var bx1 = cx;
 		var by1 = cy;
@@ -59655,9 +58931,9 @@ pixelimage_triangleGML_shape_TriangleShape.prototype = $extend(pixelimage_triang
 				} else if(s + t < A) {
 					var this1 = color;
 					var c = this1;
-					if((c >> 24 & 255) < 254 && pixelShape.transparent) {
-						var location = pixelShape.useVirtualPos ? (y - pixelShape.virtualY) * pixelShape.width + x - pixelShape.virtualX | 0 : y * pixelShape.width + x | 0;
-						var this2 = pixelShape.image[location];
+					if((c >> 24 & 255) < 254 && pixelImage.transparent) {
+						var location = pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0;
+						var this2 = pixelImage.image[location];
 						var this3 = this2;
 						var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
 						var this5 = this4 >> 24 & 255;
@@ -59682,9 +58958,9 @@ pixelimage_triangleGML_shape_TriangleShape.prototype = $extend(pixelimage_triang
 						var b = 255 * (b1 * a3 + b2 * a2) | 0;
 						var a = 255 * (a3 + a2) | 0;
 						var blended = a << 24 | r << 16 | g << 8 | b;
-						pixelShape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+						pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 					} else {
-						pixelShape.image[pixelShape.useVirtualPos ? (y - pixelShape.virtualY) * pixelShape.width + x - pixelShape.virtualX | 0 : y * pixelShape.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
+						pixelImage.image[pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
 					}
 					foundY = true;
 				} else if(foundY) {
@@ -59693,10 +58969,10 @@ pixelimage_triangleGML_shape_TriangleShape.prototype = $extend(pixelimage_triang
 			}
 		}
 		if(hasHit2 == true) {
-			var v = new pixelimage_algo_HitTri(bx,by,bx1,by1,cx1,cy1,true);
+			var v = new pixelimage_algo_HitTri(bx,by,bx1,by1,cx1,cy1);
 		}
 		if(hasHit1 == true) {
-			var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy,true);
+			var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy);
 		}
 		var px = this.x3;
 		var py = this.y3;
@@ -59838,9 +59114,9 @@ pixelimage_triangleGML_shape_TriangleShape.prototype = $extend(pixelimage_triang
 				} else if(s + t < A) {
 					var this1 = color;
 					var c = this1;
-					if((c >> 24 & 255) < 254 && pixelShape.transparent) {
-						var location = pixelShape.useVirtualPos ? (y - pixelShape.virtualY) * pixelShape.width + x - pixelShape.virtualX | 0 : y * pixelShape.width + x | 0;
-						var this2 = pixelShape.image[location];
+					if((c >> 24 & 255) < 254 && pixelImage.transparent) {
+						var location = pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0;
+						var this2 = pixelImage.image[location];
 						var this3 = this2;
 						var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
 						var this5 = this4 >> 24 & 255;
@@ -59865,9 +59141,9 @@ pixelimage_triangleGML_shape_TriangleShape.prototype = $extend(pixelimage_triang
 						var b = 255 * (b1 * a3 + b2 * a2) | 0;
 						var a = 255 * (a3 + a2) | 0;
 						var blended = a << 24 | r << 16 | g << 8 | b;
-						pixelShape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+						pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 					} else {
-						pixelShape.image[pixelShape.useVirtualPos ? (y - pixelShape.virtualY) * pixelShape.width + x - pixelShape.virtualX | 0 : y * pixelShape.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
+						pixelImage.image[pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
 					}
 					foundY = true;
 				} else if(foundY) {
@@ -59876,7 +59152,7 @@ pixelimage_triangleGML_shape_TriangleShape.prototype = $extend(pixelimage_triang
 			}
 		}
 		if(hasHit2 == true) {
-			var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1,true);
+			var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1);
 		}
 		var bx1 = cx;
 		var by1 = cy;
@@ -59979,9 +59255,9 @@ pixelimage_triangleGML_shape_TriangleShape.prototype = $extend(pixelimage_triang
 				} else if(s + t < A) {
 					var this1 = color;
 					var c = this1;
-					if((c >> 24 & 255) < 254 && pixelShape.transparent) {
-						var location = pixelShape.useVirtualPos ? (y - pixelShape.virtualY) * pixelShape.width + x - pixelShape.virtualX | 0 : y * pixelShape.width + x | 0;
-						var this2 = pixelShape.image[location];
+					if((c >> 24 & 255) < 254 && pixelImage.transparent) {
+						var location = pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0;
+						var this2 = pixelImage.image[location];
 						var this3 = this2;
 						var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
 						var this5 = this4 >> 24 & 255;
@@ -60006,9 +59282,9 @@ pixelimage_triangleGML_shape_TriangleShape.prototype = $extend(pixelimage_triang
 						var b = 255 * (b1 * a3 + b2 * a2) | 0;
 						var a = 255 * (a3 + a2) | 0;
 						var blended = a << 24 | r << 16 | g << 8 | b;
-						pixelShape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+						pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 					} else {
-						pixelShape.image[pixelShape.useVirtualPos ? (y - pixelShape.virtualY) * pixelShape.width + x - pixelShape.virtualX | 0 : y * pixelShape.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
+						pixelImage.image[pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
 					}
 					foundY = true;
 				} else if(foundY) {
@@ -60017,16 +59293,16 @@ pixelimage_triangleGML_shape_TriangleShape.prototype = $extend(pixelimage_triang
 			}
 		}
 		if(hasHit2 == true) {
-			var v = new pixelimage_algo_HitTri(bx,by,bx1,by1,cx1,cy1,true);
+			var v = new pixelimage_algo_HitTri(bx,by,bx1,by1,cx1,cy1);
 		}
 		if(hasHit1 == true) {
-			var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy,true);
+			var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy);
 		}
-		return pixelimage_triangleGML_coreShape_FillShape.prototype.render.call(this,pixelShape);
+		return pixelimage_triGML_coreShape_FillShape.prototype.render.call(this,pixelImage);
 	}
-	,__class__: pixelimage_triangleGML_shape_TriangleShape
+	,__class__: pixelimage_triGML_shape_TriangleShape
 });
-var pixelimage_triangleGML_shape_VePathElementShape = function(opacity,visibility,strokeColors,strokeWidths,strokeDashGapArray,fill,pathData,translateX,translateY,scaleX,scaleY) {
+var pixelimage_triGML_shape_VePathElementShape = function(opacity,visibility,strokeColors,strokeWidths,strokeDashGapArray,fill,pathData,translateX,translateY,scaleX,scaleY) {
 	if(scaleY == null) {
 		scaleY = 1.;
 	}
@@ -60055,7 +59331,7 @@ var pixelimage_triangleGML_shape_VePathElementShape = function(opacity,visibilit
 	this.y0 = 0.;
 	this.x0 = 0.;
 	this.pathData = "";
-	pixelimage_triangleGML_coreShape_FillShape.call(this,opacity,visibility,0,1,strokeDashGapArray,fill);
+	pixelimage_triGML_coreShape_FillShape.call(this,opacity,visibility,0,1,strokeDashGapArray,fill);
 	this.strokeColors = strokeColors;
 	this.strokeWidths = strokeWidths;
 	this.pathData = pathData;
@@ -60064,10 +59340,10 @@ var pixelimage_triangleGML_shape_VePathElementShape = function(opacity,visibilit
 	this.scaleX = scaleX;
 	this.scaleY = scaleY;
 };
-pixelimage_triangleGML_shape_VePathElementShape.__name__ = "pixelimage.triangleGML.shape.VePathElementShape";
-pixelimage_triangleGML_shape_VePathElementShape.__interfaces__ = [justPath_ILinePathContext];
-pixelimage_triangleGML_shape_VePathElementShape.__super__ = pixelimage_triangleGML_coreShape_FillShape;
-pixelimage_triangleGML_shape_VePathElementShape.prototype = $extend(pixelimage_triangleGML_coreShape_FillShape.prototype,{
+pixelimage_triGML_shape_VePathElementShape.__name__ = "pixelimage.triGML.shape.VePathElementShape";
+pixelimage_triGML_shape_VePathElementShape.__interfaces__ = [justPath_ILinePathContext];
+pixelimage_triGML_shape_VePathElementShape.__super__ = pixelimage_triGML_coreShape_FillShape;
+pixelimage_triGML_shape_VePathElementShape.prototype = $extend(pixelimage_triGML_coreShape_FillShape.prototype,{
 	setParameter: function(name,value) {
 		switch(name) {
 		case "pathData":
@@ -60110,16 +59386,15 @@ pixelimage_triangleGML_shape_VePathElementShape.prototype = $extend(pixelimage_t
 			this.translateY = parseFloat(value);
 			break;
 		default:
-			pixelimage_triangleGML_coreShape_FillShape.prototype.setParameter.call(this,name,value);
+			pixelimage_triGML_coreShape_FillShape.prototype.setParameter.call(this,name,value);
 		}
 	}
-	,render: function(pixelShape) {
-		var w = Math.ceil(pixelShape.width);
-		var h = Math.ceil(pixelShape.height);
+	,render: function(pixelImage) {
+		var w = Math.ceil(pixelImage.width);
+		var h = Math.ceil(pixelImage.height);
 		var this1 = new Uint32Array(w * h | 0);
 		var this2 = new pixelimage_ImageStruct(w,h,this1);
-		var this1 = this2;
-		this.temp = this1;
+		this.temp = this2;
 		this.temp.transparent = true;
 		var lc = this.strokeColors.length;
 		var ls = this.strokeWidths.length;
@@ -60134,19 +59409,19 @@ pixelimage_triangleGML_shape_VePathElementShape.prototype = $extend(pixelimage_t
 			--i;
 			this.drawing();
 		}
-		var pixelImage = this.temp;
+		var pixelImage1 = this.temp;
 		var _g = 0;
-		var _g1 = pixelImage.height;
+		var _g1 = pixelImage1.height;
 		while(_g < _g1) {
 			var dy = _g++;
 			var _g2 = 0;
-			var _g3 = pixelImage.width;
+			var _g3 = pixelImage1.width;
 			while(_g2 < _g3) {
 				var dx = _g2++;
-				var c = pixelImage.image[pixelImage.useVirtualPos ? (dy - pixelImage.virtualY) * pixelImage.width + dx - pixelImage.virtualX | 0 : dy * pixelImage.width + dx | 0];
+				var c = pixelImage1.image[pixelImage1.useVirtualPos ? (dy - pixelImage1.virtualY) * pixelImage1.width + dx - pixelImage1.virtualX | 0 : dy * pixelImage1.width + dx | 0];
 				var col = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
-				if(pixelImage.useMask && pixelImage.mask != null) {
-					var this1 = pixelImage.mask;
+				if(pixelImage1.useMask && pixelImage1.mask != null) {
+					var this1 = pixelImage1.mask;
 					var c1 = this1.image[this1.useVirtualPos ? (dy - this1.virtualY) * this1.width + dx - this1.virtualX | 0 : dy * this1.width + dx | 0];
 					var this2 = pixelimage_Endian_isLittleEndian ? (c1 >> 24 & 255) << 24 | (c1 & 255) << 16 | (c1 >> 8 & 255) << 8 | c1 >> 16 & 255 : c1;
 					var maskPixel = this2;
@@ -60176,9 +59451,9 @@ pixelimage_triangleGML_shape_VePathElementShape.prototype = $extend(pixelimage_t
 					var y = dy;
 					var this10 = col;
 					var c2 = this10;
-					if((c2 >> 24 & 255) < 254 && pixelShape.transparent) {
-						var location = pixelShape.useVirtualPos ? (y - pixelShape.virtualY) * pixelShape.width + x - pixelShape.virtualX | 0 : y * pixelShape.width + x | 0;
-						var this11 = pixelShape.image[location];
+					if((c2 >> 24 & 255) < 254 && pixelImage.transparent) {
+						var location = pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0;
+						var this11 = pixelImage.image[location];
 						var this12 = this11;
 						var this13 = pixelimage_Endian_isLittleEndian ? (this12 >> 24 & 255) << 24 | (this12 & 255) << 16 | (this12 >> 8 & 255) << 8 | this12 >> 16 & 255 : this12;
 						var this14 = this13 >> 24 & 255;
@@ -60203,15 +59478,15 @@ pixelimage_triangleGML_shape_VePathElementShape.prototype = $extend(pixelimage_t
 						var b = 255 * (b1 * a3 + b2 * a2) | 0;
 						var a = 255 * (a3 + a2) | 0;
 						var blended = a << 24 | r << 16 | g << 8 | b;
-						pixelShape.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+						pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
 					} else {
-						pixelShape.image[pixelShape.useVirtualPos ? (y - pixelShape.virtualY) * pixelShape.width + x - pixelShape.virtualX | 0 : y * pixelShape.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c2 >> 24 & 255) << 24 | (c2 & 255) << 16 | (c2 >> 8 & 255) << 8 | c2 >> 16 & 255 : c2;
+						pixelImage.image[pixelImage.useVirtualPos ? (y - pixelImage.virtualY) * pixelImage.width + x - pixelImage.virtualX | 0 : y * pixelImage.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c2 >> 24 & 255) << 24 | (c2 & 255) << 16 | (c2 >> 8 & 255) << 8 | c2 >> 16 & 255 : c2;
 					}
 				}
 			}
 		}
 		this.temp = null;
-		return pixelimage_triangleGML_coreShape_FillShape.prototype.render.call(this,pixelShape);
+		return pixelimage_triGML_coreShape_FillShape.prototype.render.call(this,pixelImage);
 	}
 	,drawing: function() {
 		if(this.sp == null) {
@@ -60403,7 +59678,7 @@ pixelimage_triangleGML_shape_VePathElementShape.prototype = $extend(pixelimage_t
 				}
 			}
 			if(hasHit2 == true) {
-				var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1,true);
+				var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1);
 			}
 			var bx1 = cx;
 			var by1 = cy;
@@ -60544,11 +59819,11 @@ pixelimage_triangleGML_shape_VePathElementShape.prototype = $extend(pixelimage_t
 				}
 			}
 			if(hasHit2 == true) {
-				var v = new pixelimage_algo_HitTri(bx,by,bx1,by1,cx1,cy1,true);
+				var v = new pixelimage_algo_HitTri(bx,by,bx1,by1,cx1,cy1);
 			}
 			var tmp;
 			if(hasHit1 == true) {
-				var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy,true);
+				var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy);
 				tmp = v;
 			} else {
 				tmp = null;
@@ -60712,7 +59987,7 @@ pixelimage_triangleGML_shape_VePathElementShape.prototype = $extend(pixelimage_t
 					}
 				}
 				if(hasHit2 == true) {
-					var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1,true);
+					var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1);
 				}
 				var bx1 = cx;
 				var by1 = cy;
@@ -60853,10 +60128,10 @@ pixelimage_triangleGML_shape_VePathElementShape.prototype = $extend(pixelimage_t
 					}
 				}
 				if(hasHit2 == true) {
-					var v = new pixelimage_algo_HitTri(bx,by,bx1,by1,cx1,cy1,true);
+					var v = new pixelimage_algo_HitTri(bx,by,bx1,by1,cx1,cy1);
 				}
 				if(hasHit1 == true) {
-					var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy,true);
+					var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy);
 				}
 			}
 		}
@@ -61045,7 +60320,7 @@ pixelimage_triangleGML_shape_VePathElementShape.prototype = $extend(pixelimage_t
 			}
 		}
 		if(hasHit2 == true) {
-			var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1,true);
+			var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1);
 		}
 		var bx1 = cx;
 		var by1 = cy;
@@ -61186,11 +60461,11 @@ pixelimage_triangleGML_shape_VePathElementShape.prototype = $extend(pixelimage_t
 			}
 		}
 		if(hasHit2 == true) {
-			var v = new pixelimage_algo_HitTri(bx,by,bx1,by1,cx1,cy1,true);
+			var v = new pixelimage_algo_HitTri(bx,by,bx1,by1,cx1,cy1);
 		}
 		var tmp;
 		if(hasHit1 == true) {
-			var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy,true);
+			var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy);
 			tmp = v;
 		} else {
 			tmp = null;
@@ -61354,7 +60629,7 @@ pixelimage_triangleGML_shape_VePathElementShape.prototype = $extend(pixelimage_t
 				}
 			}
 			if(hasHit2 == true) {
-				var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1,true);
+				var v = new pixelimage_algo_HitTri(ax,ay,bx1,by1,cx1,cy1);
 			}
 			var bx1 = cx;
 			var by1 = cy;
@@ -61495,10 +60770,10 @@ pixelimage_triangleGML_shape_VePathElementShape.prototype = $extend(pixelimage_t
 				}
 			}
 			if(hasHit2 == true) {
-				var v = new pixelimage_algo_HitTri(bx,by,bx1,by1,cx1,cy1,true);
+				var v = new pixelimage_algo_HitTri(bx,by,bx1,by1,cx1,cy1);
 			}
 			if(hasHit1 == true) {
-				var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy,true);
+				var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy);
 			}
 		}
 		this.x0 = x2;
@@ -61511,21 +60786,30 @@ pixelimage_triangleGML_shape_VePathElementShape.prototype = $extend(pixelimage_t
 		this.info = null;
 		this.toggleDraw = true;
 	}
-	,__class__: pixelimage_triangleGML_shape_VePathElementShape
+	,__class__: pixelimage_triGML_shape_VePathElementShape
 });
-var pixelimage_$samples_pixelimage_$canvas_Arrows = function() {
-	this.lineGridShape = "<LineGridShape\n                        left = \"100\"  top = \"100\"\n                        width = \"2048\" height = \"1536\"\n                        delta = \"100\" deltaH = \"100\"\n                        strokeColor=\"0xfF003300\" strokeWidth=\"2.5\">\n                    </LineGridShape>";
-	this.arrowThickGradientTest = "<ArrowThickGradient\n                        flare=\"true\"\n                        reverseFlare=\"true\"\n                        both=\"true\"\n                        x1=\"300\" y1=\"300\" \n                        x2=\"560\" y2=\"120\" \n                        arrowWidth=\"60\"\n                        arrowHeight=\"50\"\n                        strokeWidth=\"5\" strokeTopColor=\"0xFF9000FF\" strokeBottomColor=\"0xffffa200\">\n                    </ArrowThickGradient>";
-	this.arrowShapeFlareTest = "<ArrowShape\n                        flare=\"true\"\n                        both=\"false\"\n                        x1=\"400\" y1=\"400\" \n                        x2=\"560\" y2=\"720\" \n                        arrowWidth=\"60\"\n                        arrowHeight=\"50\"\n                        strokeWidth=\"5\" strokeColor=\"0xff00FF00\">\n                    </ArrowShape>";
-	this.arrowShapeReverseFlareTest = "<ArrowShape\n                        flare=\"true\"\n                        both=\"false\"\n                        reverseFlare=\"true\"\n                        x1=\"100\" y1=\"300\" \n                        x2=\"360\" y2=\"120\" \n                        arrowWidth=\"60\"\n                        arrowHeight=\"50\"\n                        strokeWidth=\"5\" strokeColor=\"0xffFF0000\">\n                    </ArrowShape>";
-	this.arrowShapeTest = "<ArrowShape\n                        both=\"false\"\n                        x1=\"500\" y1=\"400\" \n                        x2=\"890\" y2=\"230\" \n                        arrowWidth=\"70\"\n                        strokeWidth=\"30\" strokeColor=\"0xff0000FF\">\n                    </ArrowShape>";
+var pixelimage_$samples_pixelimage_$canvas_Ellipses = function() {
+	this.circleTest = "<CircleShape \n                        left=\"200\" top=\"200\" \n                        diameter=\"300\" \n                        strokeColor=\"0xFFFF0000\" strokeWidth=\"10\" \n                        fill=\"0xFF00FF00\">\n                    </CircleShape>";
+	this.ellipseTest = "<EllipseShape \n                        top=\"100\" \n                        width=\"200\" \n                        height=\"50\" \n                        strokeColor=\"0xFF0000\" strokeWidth=\"1\" \n                        fill=\"0xFF00FF00\">\n                    </EllipseShape>";
 	this.canvasSetup = new htmlHelper_canvas_CanvasSetup();
 	this.begin();
-	this.draw([this.lineGridShape,this.arrowShapeTest,this.arrowShapeReverseFlareTest,this.arrowShapeFlareTest,this.arrowThickGradientTest]);
+	this.drawGrid();
+	var pixelImage = this.pixelImage;
+	var str = this.ellipseTest;
+	haxe_Log.trace(str,{ fileName : "pixelimage/triGML/coreShape/XMLshape.hx", lineNumber : 17, className : "pixelimage.triGML.coreShape.XMLshape", methodName : "withString"});
+	var xml = Xml.parse("<node>" + str + "</node>").firstElement();
+	haxe_Log.trace(xml,{ fileName : "pixelimage/triGML/coreShape/XMLshape.hx", lineNumber : 19, className : "pixelimage.triGML.coreShape.XMLshape", methodName : "withString"});
+	new pixelimage_triGML_coreShape_XMLshape(pixelImage,xml);
+	var pixelImage = this.pixelImage;
+	var str = this.circleTest;
+	haxe_Log.trace(str,{ fileName : "pixelimage/triGML/coreShape/XMLshape.hx", lineNumber : 17, className : "pixelimage.triGML.coreShape.XMLshape", methodName : "withString"});
+	var xml = Xml.parse("<node>" + str + "</node>").firstElement();
+	haxe_Log.trace(xml,{ fileName : "pixelimage/triGML/coreShape/XMLshape.hx", lineNumber : 19, className : "pixelimage.triGML.coreShape.XMLshape", methodName : "withString"});
+	new pixelimage_triGML_coreShape_XMLshape(pixelImage,xml);
 	this.end();
 };
-pixelimage_$samples_pixelimage_$canvas_Arrows.__name__ = "pixelimage_samples.pixelimage_canvas.Arrows";
-pixelimage_$samples_pixelimage_$canvas_Arrows.prototype = {
+pixelimage_$samples_pixelimage_$canvas_Ellipses.__name__ = "pixelimage_samples.pixelimage_canvas.Ellipses";
+pixelimage_$samples_pixelimage_$canvas_Ellipses.prototype = {
 	begin: function() {
 		this.surface = this.canvasSetup.surface;
 		var this1 = new Uint32Array(12582912);
@@ -61533,18 +60817,6 @@ pixelimage_$samples_pixelimage_$canvas_Arrows.prototype = {
 		var this1 = this2;
 		this.pixelImage = this1;
 		this.pixelImage.transparent = true;
-	}
-	,draw: function(triangleGMLs) {
-		var _g = 0;
-		while(_g < triangleGMLs.length) {
-			var shapeString = triangleGMLs[_g];
-			++_g;
-			var pixelShape = this.pixelImage;
-			haxe_Log.trace(shapeString,{ fileName : "pixelimage/triangleGML/coreShape/TriangleGML.hx", lineNumber : 25, className : "pixelimage.triangleGML.coreShape.TriangleGML", methodName : "withString"});
-			var xml = Xml.parse("<node>" + shapeString + "</node>").firstElement();
-			haxe_Log.trace(xml,{ fileName : "pixelimage/triangleGML/coreShape/TriangleGML.hx", lineNumber : 27, className : "pixelimage.triangleGML.coreShape.TriangleGML", methodName : "withString"});
-			new pixelimage_triangleGML_coreShape_TriangleGML(pixelShape,xml);
-		}
 	}
 	,end: function() {
 		var this1 = this.pixelImage;
@@ -61603,10 +60875,123 @@ pixelimage_$samples_pixelimage_$canvas_Arrows.prototype = {
 			}
 		}
 	}
-	,__class__: pixelimage_$samples_pixelimage_$canvas_Arrows
+	,drawGrid: function() {
+		var this1 = this.pixelImage;
+		var h_ = 2300;
+		var w_ = 3000;
+		var _g = 0;
+		var _g1 = 31;
+		while(_g < _g1) {
+			var i = _g++;
+			var x = 100 + i * 100 - 1.25;
+			var p = x | 0;
+			var xx = p;
+			var q = 100;
+			var maxX = x + 2.5 | 0;
+			var maxY = 100 + h_ | 0;
+			while(true) {
+				var x1 = p++;
+				var this2 = -16764160;
+				var c = this2;
+				if((c >> 24 & 255) < 254 && this1.transparent) {
+					var location = this1.useVirtualPos ? (q - this1.virtualY) * this1.width + x1 - this1.virtualX | 0 : q * this1.width + x1 | 0;
+					var this3 = this1.image[location];
+					var this4 = this3;
+					var this5 = pixelimage_Endian_isLittleEndian ? (this4 >> 24 & 255) << 24 | (this4 & 255) << 16 | (this4 >> 8 & 255) << 8 | this4 >> 16 & 255 : this4;
+					var this6 = this5 >> 24 & 255;
+					var a1 = this6 == 0 ? 0. : this6 / 255;
+					var this7 = this5 >> 16 & 255;
+					var r1 = this7 == 0 ? 0. : this7 / 255;
+					var this8 = this5 >> 8 & 255;
+					var g1 = this8 == 0 ? 0. : this8 / 255;
+					var this9 = this5 & 255;
+					var b1 = this9 == 0 ? 0. : this9 / 255;
+					var this10 = 255;
+					var a2 = this10 == 0 ? 0. : this10 / 255;
+					var this11 = 0;
+					var r2 = this11 == 0 ? 0. : this11 / 255;
+					var this12 = 51;
+					var g2 = this12 == 0 ? 0. : this12 / 255;
+					var this13 = 0;
+					var b2 = this13 == 0 ? 0. : this13 / 255;
+					var a3 = a1 * (1 - a2);
+					var r = 255 * (r1 * a3 + r2 * a2) | 0;
+					var g = 255 * (g1 * a3 + g2 * a2) | 0;
+					var b = 255 * (b1 * a3 + b2 * a2) | 0;
+					var a = 255 * (a3 + a2) | 0;
+					var blended = a << 24 | r << 16 | g << 8 | b;
+					this1.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+				} else {
+					this1.image[this1.useVirtualPos ? (q - this1.virtualY) * this1.width + x1 - this1.virtualX | 0 : q * this1.width + x1 | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
+				}
+				if(p > maxX) {
+					p = xx;
+					++q;
+				}
+				if(q > maxY) {
+					break;
+				}
+			}
+		}
+		var _g = 0;
+		var _g1 = 24;
+		while(_g < _g1) {
+			var i = _g++;
+			var y = 100 + i * 100 - 1.25;
+			var p = 100;
+			var xx = p;
+			var q = y | 0;
+			var maxX = 100 + w_ | 0;
+			var maxY = y + 2.5 | 0;
+			while(true) {
+				var x = p++;
+				var this2 = -16764160;
+				var c = this2;
+				if((c >> 24 & 255) < 254 && this1.transparent) {
+					var location = this1.useVirtualPos ? (q - this1.virtualY) * this1.width + x - this1.virtualX | 0 : q * this1.width + x | 0;
+					var this3 = this1.image[location];
+					var this4 = this3;
+					var this5 = pixelimage_Endian_isLittleEndian ? (this4 >> 24 & 255) << 24 | (this4 & 255) << 16 | (this4 >> 8 & 255) << 8 | this4 >> 16 & 255 : this4;
+					var this6 = this5 >> 24 & 255;
+					var a1 = this6 == 0 ? 0. : this6 / 255;
+					var this7 = this5 >> 16 & 255;
+					var r1 = this7 == 0 ? 0. : this7 / 255;
+					var this8 = this5 >> 8 & 255;
+					var g1 = this8 == 0 ? 0. : this8 / 255;
+					var this9 = this5 & 255;
+					var b1 = this9 == 0 ? 0. : this9 / 255;
+					var this10 = 255;
+					var a2 = this10 == 0 ? 0. : this10 / 255;
+					var this11 = 0;
+					var r2 = this11 == 0 ? 0. : this11 / 255;
+					var this12 = 51;
+					var g2 = this12 == 0 ? 0. : this12 / 255;
+					var this13 = 0;
+					var b2 = this13 == 0 ? 0. : this13 / 255;
+					var a3 = a1 * (1 - a2);
+					var r = 255 * (r1 * a3 + r2 * a2) | 0;
+					var g = 255 * (g1 * a3 + g2 * a2) | 0;
+					var b = 255 * (b1 * a3 + b2 * a2) | 0;
+					var a = 255 * (a3 + a2) | 0;
+					var blended = a << 24 | r << 16 | g << 8 | b;
+					this1.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
+				} else {
+					this1.image[this1.useVirtualPos ? (q - this1.virtualY) * this1.width + x - this1.virtualX | 0 : q * this1.width + x | 0] = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
+				}
+				if(p > maxX) {
+					p = xx;
+					++q;
+				}
+				if(q > maxY) {
+					break;
+				}
+			}
+		}
+	}
+	,__class__: pixelimage_$samples_pixelimage_$canvas_Ellipses
 };
-function pixelimage_$samples_pixelimage_$canvas_Arrows_main() {
-	new pixelimage_$samples_pixelimage_$canvas_Arrows();
+function pixelimage_$samples_pixelimage_$canvas_Ellipses_main() {
+	new pixelimage_$samples_pixelimage_$canvas_Ellipses();
 }
 var vision_ds_Line2D = function(start,end) {
 	this.end = new vision_ds_Point2D(0,0);
@@ -61688,5 +61073,5 @@ var pixelimage_Endian_isLittleEndian = (function($this) {
 	$r = a8[0] != 255;
 	return $r;
 }(this));
-pixelimage_$samples_pixelimage_$canvas_Arrows_main();
+pixelimage_$samples_pixelimage_$canvas_Ellipses_main();
 })(typeof window != "undefined" ? window : typeof global != "undefined" ? global : typeof self != "undefined" ? self : this);

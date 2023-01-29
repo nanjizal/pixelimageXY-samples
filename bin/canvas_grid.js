@@ -61513,19 +61513,20 @@ pixelimage_triangleGML_shape_VePathElementShape.prototype = $extend(pixelimage_t
 	}
 	,__class__: pixelimage_triangleGML_shape_VePathElementShape
 });
-var pixelimage_$samples_pixelimage_$canvas_Arrows = function() {
+var pixelimage_$samples_pixelimage_$canvas_Grid = function() {
 	this.lineGridShape = "<LineGridShape\n                        left = \"100\"  top = \"100\"\n                        width = \"2048\" height = \"1536\"\n                        delta = \"100\" deltaH = \"100\"\n                        strokeColor=\"0xfF003300\" strokeWidth=\"2.5\">\n                    </LineGridShape>";
-	this.arrowThickGradientTest = "<ArrowThickGradient\n                        flare=\"true\"\n                        reverseFlare=\"true\"\n                        both=\"true\"\n                        x1=\"300\" y1=\"300\" \n                        x2=\"560\" y2=\"120\" \n                        arrowWidth=\"60\"\n                        arrowHeight=\"50\"\n                        strokeWidth=\"5\" strokeTopColor=\"0xFF9000FF\" strokeBottomColor=\"0xffffa200\">\n                    </ArrowThickGradient>";
-	this.arrowShapeFlareTest = "<ArrowShape\n                        flare=\"true\"\n                        both=\"false\"\n                        x1=\"400\" y1=\"400\" \n                        x2=\"560\" y2=\"720\" \n                        arrowWidth=\"60\"\n                        arrowHeight=\"50\"\n                        strokeWidth=\"5\" strokeColor=\"0xff00FF00\">\n                    </ArrowShape>";
-	this.arrowShapeReverseFlareTest = "<ArrowShape\n                        flare=\"true\"\n                        both=\"false\"\n                        reverseFlare=\"true\"\n                        x1=\"100\" y1=\"300\" \n                        x2=\"360\" y2=\"120\" \n                        arrowWidth=\"60\"\n                        arrowHeight=\"50\"\n                        strokeWidth=\"5\" strokeColor=\"0xffFF0000\">\n                    </ArrowShape>";
-	this.arrowShapeTest = "<ArrowShape\n                        both=\"false\"\n                        x1=\"500\" y1=\"400\" \n                        x2=\"890\" y2=\"230\" \n                        arrowWidth=\"70\"\n                        strokeWidth=\"30\" strokeColor=\"0xff0000FF\">\n                    </ArrowShape>";
 	this.canvasSetup = new htmlHelper_canvas_CanvasSetup();
 	this.begin();
-	this.draw([this.lineGridShape,this.arrowShapeTest,this.arrowShapeReverseFlareTest,this.arrowShapeFlareTest,this.arrowThickGradientTest]);
+	var pixelShape = this.pixelImage;
+	var str = this.lineGridShape;
+	haxe_Log.trace(str,{ fileName : "pixelimage/triangleGML/coreShape/TriangleGML.hx", lineNumber : 25, className : "pixelimage.triangleGML.coreShape.TriangleGML", methodName : "withString"});
+	var xml = Xml.parse("<node>" + str + "</node>").firstElement();
+	haxe_Log.trace(xml,{ fileName : "pixelimage/triangleGML/coreShape/TriangleGML.hx", lineNumber : 27, className : "pixelimage.triangleGML.coreShape.TriangleGML", methodName : "withString"});
+	new pixelimage_triangleGML_coreShape_TriangleGML(pixelShape,xml);
 	this.end();
 };
-pixelimage_$samples_pixelimage_$canvas_Arrows.__name__ = "pixelimage_samples.pixelimage_canvas.Arrows";
-pixelimage_$samples_pixelimage_$canvas_Arrows.prototype = {
+pixelimage_$samples_pixelimage_$canvas_Grid.__name__ = "pixelimage_samples.pixelimage_canvas.Grid";
+pixelimage_$samples_pixelimage_$canvas_Grid.prototype = {
 	begin: function() {
 		this.surface = this.canvasSetup.surface;
 		var this1 = new Uint32Array(12582912);
@@ -61533,18 +61534,6 @@ pixelimage_$samples_pixelimage_$canvas_Arrows.prototype = {
 		var this1 = this2;
 		this.pixelImage = this1;
 		this.pixelImage.transparent = true;
-	}
-	,draw: function(triangleGMLs) {
-		var _g = 0;
-		while(_g < triangleGMLs.length) {
-			var shapeString = triangleGMLs[_g];
-			++_g;
-			var pixelShape = this.pixelImage;
-			haxe_Log.trace(shapeString,{ fileName : "pixelimage/triangleGML/coreShape/TriangleGML.hx", lineNumber : 25, className : "pixelimage.triangleGML.coreShape.TriangleGML", methodName : "withString"});
-			var xml = Xml.parse("<node>" + shapeString + "</node>").firstElement();
-			haxe_Log.trace(xml,{ fileName : "pixelimage/triangleGML/coreShape/TriangleGML.hx", lineNumber : 27, className : "pixelimage.triangleGML.coreShape.TriangleGML", methodName : "withString"});
-			new pixelimage_triangleGML_coreShape_TriangleGML(pixelShape,xml);
-		}
 	}
 	,end: function() {
 		var this1 = this.pixelImage;
@@ -61603,10 +61592,10 @@ pixelimage_$samples_pixelimage_$canvas_Arrows.prototype = {
 			}
 		}
 	}
-	,__class__: pixelimage_$samples_pixelimage_$canvas_Arrows
+	,__class__: pixelimage_$samples_pixelimage_$canvas_Grid
 };
-function pixelimage_$samples_pixelimage_$canvas_Arrows_main() {
-	new pixelimage_$samples_pixelimage_$canvas_Arrows();
+function pixelimage_$samples_pixelimage_$canvas_Grid_main() {
+	new pixelimage_$samples_pixelimage_$canvas_Grid();
 }
 var vision_ds_Line2D = function(start,end) {
 	this.end = new vision_ds_Point2D(0,0);
@@ -61688,5 +61677,5 @@ var pixelimage_Endian_isLittleEndian = (function($this) {
 	$r = a8[0] != 255;
 	return $r;
 }(this));
-pixelimage_$samples_pixelimage_$canvas_Arrows_main();
+pixelimage_$samples_pixelimage_$canvas_Grid_main();
 })(typeof window != "undefined" ? window : typeof global != "undefined" ? global : typeof self != "undefined" ? self : this);

@@ -1,0 +1,16 @@
+-cp src
+-js bin/canvas_arcs.js
+-lib htmlHelper
+-lib justPath
+-lib pixelimage
+-lib Vision
+-lib format
+-main pixelimage_samples.pixelimage_canvas.Arcs
+-D js-flatten 
+-dce full
+#--no-traces
+--next
+-cmd echo '<!DOCTYPE html><meta charset="UTF-8"><html><body><script src="canvas_arcs.js"></script></body></html>' >bin/canvas_arcs.html
+# open html on linux.
+-cmd cd bin/
+-cmd firefox "./canvas_arcs.html"

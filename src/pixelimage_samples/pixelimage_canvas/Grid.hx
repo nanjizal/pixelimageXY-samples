@@ -18,8 +18,8 @@ import pixelimage.textureImage.TestTiger;
 import pixelimage.textureImage.TestNineSlice;
 import pixelimage.algo.GeomPix;
 
-function main() new Quads();
-class Quads {
+function main() new Grid();
+class Grid {
 
     // htmlHelper requirements
     var canvasSetup = new CanvasSetup();
@@ -30,9 +30,8 @@ class Quads {
 
     public function new(){
         begin();
-        drawGrid();
         // see xml definitions below
-        TriangleGML.withString( pixelImage, quadShape );
+        TriangleGML.withString( pixelImage, lineGridShape );
         end();
     }
 
@@ -46,17 +45,11 @@ class Quads {
         pixelImage.drawToContext( surface.me, 0, 0 );
     }
 
-    function drawGrid(){
-        pixelImage.lineGrid( 100, 100, 1024*3, 768*3, 100, 2.5, 0xfF003300 );
-    }
-    var quadShape = 
-    '<QuadShape 
-        x1="100" y1="300" 
-        x2="300" y2="120" 
-        x3="130" y3="220" 
-        x4="500" y4="500" 
-        strokeColor="0xFFFF0000" strokeWidth="1" 
-        fill="0xFF00FF00">
-    </QuadShape>';
-
+    var lineGridShape = 
+                    '<LineGridShape
+                        left = "100"  top = "100"
+                        width = "2048" height = "1536"
+                        delta = "100" deltaH = "100"
+                        strokeColor="0xfF003300" strokeWidth="2.5">
+                    </LineGridShape>';
 }
