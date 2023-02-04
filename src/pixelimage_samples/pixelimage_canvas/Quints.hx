@@ -18,8 +18,8 @@ import pixelimage.textureImage.TestTiger;
 import pixelimage.textureImage.TestNineSlice;
 import pixelimage.algo.GeomPix;
 
-function main() new Quads();
-class Quads {
+function main() new Quints();
+class Quints {
 
     // htmlHelper requirements
     var canvasSetup = new CanvasSetup();
@@ -30,11 +30,12 @@ class Quads {
 
     public function new(){
         begin();
-        drawGrid();
         // see xml definitions below
-        TriangleGML.withString( pixelImage, quadShape );
-        var trigml = TriangleGML.withString( pixelImage, quadShapeSoft, 340, 0 );
-        //trigml.shapes[0].clear( pixelImage, 0xFF000000 ); 
+        draw([
+            lineGridShape
+          , quintShape
+          , quadShape
+      ]);
         end();
     }
 
@@ -43,28 +44,34 @@ class Quads {
         pixelImage = new Pixelshape( 1024*4, 768*4 );
         pixelImage.transparent = true;
     }
-
+    function draw( triangleGMLs: Array<String> ){
+        for( shapeString in triangleGMLs ) TriangleGML.withString( pixelImage, shapeString );
+    }
     function end(){
         pixelImage.drawToContext( surface.me, 0, 0 );
     }
-
-    function drawGrid(){
-        pixelImage.lineGrid( 100, 100, 1024*3, 768*3, 100, 2.5, 0xfF003300 );
-    }
-    var quadShapeSoft = 
+    var quintShape = 
+    '<QuintShape 
+        aX="100" aY="300" 
+        bX="130" bY="220"
+        cX="300" cY="120"
+        dX="500" dY="500" 
+        strokeColor="0xFF2600FF"
+        softC="3">
+    </QuintShape>';
+    var quadShape = 
     '<QuadShape 
-    aX="500" aY="300" 
-    bX="530" bY="220"
-    cX="700" cY="120"
-    dX="900" dY="500" 
-    soft="70"
-    strokeColor="0xFFFF0000" strokeWidth="1"> 
+        aX="500" aY="300" 
+        bX="530" bY="220"
+        cX="700" cY="120"
+        dX="900" dY="500" 
+        strokeColor="0xFF2600FF">
     </QuadShape>';
-    var quadShape = '<QuadShape 
-    aX="500" aY="300" 
-    bX="530" bY="220"
-    cX="700" cY="120"
-    dX="900" dY="500" 
-    strokeColor="0xFFFF0000" strokeWidth="1">
-    </QuadShape>';
+    var lineGridShape = 
+    '<LineGridShape
+        left = "100"  top = "100"
+        width = "2048" height = "1536"
+        delta = "100" deltaH = "100"
+        strokeColor="0xfF003300" strokeWidth="2.5">
+    </LineGridShape>';
 }

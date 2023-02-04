@@ -73,6 +73,7 @@ class Arrows {
                         x2="360" y2="120" 
                         arrowWidth="60"
                         arrowHeight="50"
+                        soft="10."
                         strokeWidth="5" strokeColor="0xffFF0000">
                     </ArrowShape>';
     var arrowShapeFlareTest: String = 
@@ -83,6 +84,7 @@ class Arrows {
                         x2="560" y2="720" 
                         arrowWidth="60"
                         arrowHeight="50"
+                        soft="10."
                         strokeWidth="5" strokeColor="0xff00FF00">
                     </ArrowShape>';
     var arrowThickGradientTest: String = 

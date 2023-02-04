@@ -35,6 +35,7 @@ class Ellipses {
         // see xml definitions below
         TriangleGML.withString( pixelImage, ellipseTest );
         TriangleGML.withString( pixelImage, circleTest );
+        TriangleGML.withString( pixelImage, softEllipseTest );
         end();
     }
 
@@ -66,4 +67,12 @@ class Ellipses {
                         strokeColor="0xFFFF0000" strokeWidth="10" 
                         fill="0xFF00FF00">
                     </CircleShape>';
+    var softEllipseTest: String = 
+                    '<SoftEllipseShape 
+                        left="500" top="500" 
+                        width="400" 
+                        height="400" 
+                        strokeColor="0xFFFF0000"
+                        softC="10">
+                    </SoftEllipseShape>';
 }
