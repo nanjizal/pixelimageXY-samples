@@ -794,83 +794,6 @@ pixelimage_Pixelimage.rotate = function(this1,theta,centreX,centreY,transparent,
 	}
 	return pixelImage;
 };
-pixelimage_Pixelimage.scaleUpInt = function(this1,scaleW,scaleH,transparent,includeMask) {
-	if(includeMask == null) {
-		includeMask = false;
-	}
-	if(transparent == null) {
-		transparent = false;
-	}
-	if(scaleH == null) {
-		scaleH = 2;
-	}
-	if(scaleW == null) {
-		scaleW = 2;
-	}
-	var p = 0;
-	var xx = p;
-	var q = 0;
-	var wNew = this1.width * scaleW | 0;
-	var hNew = this1.height * scaleH | 0;
-	var this2 = new Uint32Array(wNew * hNew | 0);
-	var this3 = new pixelimage_ImageStruct(wNew,hNew,this2);
-	var pixelImage = this3;
-	var maxX = wNew;
-	var maxY = hNew;
-	while(true) {
-		var x = p / scaleW | 0;
-		var y = q / scaleH | 0;
-		var c = this1.image[this1.useVirtualPos ? (y - this1.virtualY) * this1.width + x - this1.virtualX | 0 : y * this1.width + x | 0];
-		var color = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
-		var x1 = p++;
-		var this2 = color;
-		var c1 = this2;
-		if((c1 >> 24 & 255) < 254 && pixelImage.transparent) {
-			var location = pixelImage.useVirtualPos ? (q - pixelImage.virtualY) * pixelImage.width + x1 - pixelImage.virtualX | 0 : q * pixelImage.width + x1 | 0;
-			var this3 = pixelImage.image[location];
-			var this4 = this3;
-			var this5 = pixelimage_Endian_isLittleEndian ? (this4 >> 24 & 255) << 24 | (this4 & 255) << 16 | (this4 >> 8 & 255) << 8 | this4 >> 16 & 255 : this4;
-			var this6 = this5 >> 24 & 255;
-			var a1 = this6 == 0 ? 0. : this6 / 255;
-			var this7 = this5 >> 16 & 255;
-			var r1 = this7 == 0 ? 0. : this7 / 255;
-			var this8 = this5 >> 8 & 255;
-			var g1 = this8 == 0 ? 0. : this8 / 255;
-			var this9 = this5 & 255;
-			var b1 = this9 == 0 ? 0. : this9 / 255;
-			var this10 = color >> 24 & 255;
-			var a2 = this10 == 0 ? 0. : this10 / 255;
-			var this11 = color >> 16 & 255;
-			var r2 = this11 == 0 ? 0. : this11 / 255;
-			var this12 = color >> 8 & 255;
-			var g2 = this12 == 0 ? 0. : this12 / 255;
-			var this13 = color & 255;
-			var b2 = this13 == 0 ? 0. : this13 / 255;
-			var a3 = a1 * (1 - a2);
-			var r = 255 * (r1 * a3 + r2 * a2) | 0;
-			var g = 255 * (g1 * a3 + g2 * a2) | 0;
-			var b = 255 * (b1 * a3 + b2 * a2) | 0;
-			var a = 255 * (a3 + a2) | 0;
-			var blended = a << 24 | r << 16 | g << 8 | b;
-			pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
-		} else {
-			pixelImage.image[pixelImage.useVirtualPos ? (q - pixelImage.virtualY) * pixelImage.width + x1 - pixelImage.virtualX | 0 : q * pixelImage.width + x1 | 0] = pixelimage_Endian_isLittleEndian ? (c1 >> 24 & 255) << 24 | (c1 & 255) << 16 | (c1 >> 8 & 255) << 8 | c1 >> 16 & 255 : c1;
-		}
-		if(p > maxX) {
-			p = xx;
-			++q;
-		}
-		if(q > maxY) {
-			break;
-		}
-	}
-	if(this1.mask != null && includeMask) {
-		var v = pixelimage_Pixelimage.scaleUpInt(this1.mask,scaleW,scaleH,this1.mask.transparent,includeMask);
-		pixelImage.useMask = true;
-		pixelImage.mask = v;
-	}
-	return pixelImage;
-};
 var pixelimage_algo_HitQuad = function(ax,ay,bx,by,cx,cy,dx,dy,preCalculated) {
 	if(preCalculated == null) {
 		preCalculated = true;
@@ -1268,153 +1191,6 @@ pixelimage_$samples_pixelimage_$canvas_Arrows.prototype = {
 			}
 		}
 		var helloPixel = pixelImage;
-		var scaleW = 10;
-		var scaleH = 12;
-		if(scaleH == null) {
-			scaleH = 2;
-		}
-		if(scaleW == null) {
-			scaleW = 2;
-		}
-		var p = 0;
-		var xx = p;
-		var q = 0;
-		var wNew = helloPixel.width * scaleW | 0;
-		var hNew = helloPixel.height * scaleH | 0;
-		var this1 = new Uint32Array(wNew * hNew | 0);
-		var this2 = new pixelimage_ImageStruct(wNew,hNew,this1);
-		var pixelImage = this2;
-		var maxX = wNew;
-		var maxY = hNew;
-		while(true) {
-			var x = p / scaleW | 0;
-			var y = q / scaleH | 0;
-			var c = helloPixel.image[helloPixel.useVirtualPos ? (y - helloPixel.virtualY) * helloPixel.width + x - helloPixel.virtualX | 0 : y * helloPixel.width + x | 0];
-			var color = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
-			var x1 = p++;
-			var this1 = color;
-			var c1 = this1;
-			if((c1 >> 24 & 255) < 254 && pixelImage.transparent) {
-				var location = pixelImage.useVirtualPos ? (q - pixelImage.virtualY) * pixelImage.width + x1 - pixelImage.virtualX | 0 : q * pixelImage.width + x1 | 0;
-				var this2 = pixelImage.image[location];
-				var this3 = this2;
-				var this4 = pixelimage_Endian_isLittleEndian ? (this3 >> 24 & 255) << 24 | (this3 & 255) << 16 | (this3 >> 8 & 255) << 8 | this3 >> 16 & 255 : this3;
-				var this5 = this4 >> 24 & 255;
-				var a1 = this5 == 0 ? 0. : this5 / 255;
-				var this6 = this4 >> 16 & 255;
-				var r1 = this6 == 0 ? 0. : this6 / 255;
-				var this7 = this4 >> 8 & 255;
-				var g1 = this7 == 0 ? 0. : this7 / 255;
-				var this8 = this4 & 255;
-				var b1 = this8 == 0 ? 0. : this8 / 255;
-				var this9 = color >> 24 & 255;
-				var a2 = this9 == 0 ? 0. : this9 / 255;
-				var this10 = color >> 16 & 255;
-				var r2 = this10 == 0 ? 0. : this10 / 255;
-				var this11 = color >> 8 & 255;
-				var g2 = this11 == 0 ? 0. : this11 / 255;
-				var this12 = color & 255;
-				var b2 = this12 == 0 ? 0. : this12 / 255;
-				var a3 = a1 * (1 - a2);
-				var r = 255 * (r1 * a3 + r2 * a2) | 0;
-				var g = 255 * (g1 * a3 + g2 * a2) | 0;
-				var b = 255 * (b1 * a3 + b2 * a2) | 0;
-				var a = 255 * (a3 + a2) | 0;
-				var blended = a << 24 | r << 16 | g << 8 | b;
-				pixelImage.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
-			} else {
-				pixelImage.image[pixelImage.useVirtualPos ? (q - pixelImage.virtualY) * pixelImage.width + x1 - pixelImage.virtualX | 0 : q * pixelImage.width + x1 | 0] = pixelimage_Endian_isLittleEndian ? (c1 >> 24 & 255) << 24 | (c1 & 255) << 16 | (c1 >> 8 & 255) << 8 | c1 >> 16 & 255 : c1;
-			}
-			if(p > maxX) {
-				p = xx;
-				++q;
-			}
-			if(q > maxY) {
-				break;
-			}
-		}
-		if(helloPixel.mask != null && false) {
-			var this1 = helloPixel.mask;
-			var scaleW1 = scaleW;
-			var scaleH1 = scaleH;
-			var transparent = helloPixel.mask.transparent;
-			var includeMask = false;
-			if(includeMask == null) {
-				includeMask = false;
-			}
-			if(scaleH1 == null) {
-				scaleH1 = 2;
-			}
-			if(scaleW1 == null) {
-				scaleW1 = 2;
-			}
-			var p = 0;
-			var xx = p;
-			var q = 0;
-			var wNew = this1.width * scaleW1 | 0;
-			var hNew = this1.height * scaleH1 | 0;
-			var this2 = new Uint32Array(wNew * hNew | 0);
-			var this3 = new pixelimage_ImageStruct(wNew,hNew,this2);
-			var pixelImage1 = this3;
-			var maxX = wNew;
-			var maxY = hNew;
-			while(true) {
-				var x = p / scaleW1 | 0;
-				var y = q / scaleH1 | 0;
-				var c = this1.image[this1.useVirtualPos ? (y - this1.virtualY) * this1.width + x - this1.virtualX | 0 : y * this1.width + x | 0];
-				var color = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
-				var x1 = p++;
-				var this2 = color;
-				var c1 = this2;
-				if((c1 >> 24 & 255) < 254 && pixelImage1.transparent) {
-					var location = pixelImage1.useVirtualPos ? (q - pixelImage1.virtualY) * pixelImage1.width + x1 - pixelImage1.virtualX | 0 : q * pixelImage1.width + x1 | 0;
-					var this3 = pixelImage1.image[location];
-					var this4 = this3;
-					var this5 = pixelimage_Endian_isLittleEndian ? (this4 >> 24 & 255) << 24 | (this4 & 255) << 16 | (this4 >> 8 & 255) << 8 | this4 >> 16 & 255 : this4;
-					var this6 = this5 >> 24 & 255;
-					var a1 = this6 == 0 ? 0. : this6 / 255;
-					var this7 = this5 >> 16 & 255;
-					var r1 = this7 == 0 ? 0. : this7 / 255;
-					var this8 = this5 >> 8 & 255;
-					var g1 = this8 == 0 ? 0. : this8 / 255;
-					var this9 = this5 & 255;
-					var b1 = this9 == 0 ? 0. : this9 / 255;
-					var this10 = color >> 24 & 255;
-					var a2 = this10 == 0 ? 0. : this10 / 255;
-					var this11 = color >> 16 & 255;
-					var r2 = this11 == 0 ? 0. : this11 / 255;
-					var this12 = color >> 8 & 255;
-					var g2 = this12 == 0 ? 0. : this12 / 255;
-					var this13 = color & 255;
-					var b2 = this13 == 0 ? 0. : this13 / 255;
-					var a3 = a1 * (1 - a2);
-					var r = 255 * (r1 * a3 + r2 * a2) | 0;
-					var g = 255 * (g1 * a3 + g2 * a2) | 0;
-					var b = 255 * (b1 * a3 + b2 * a2) | 0;
-					var a = 255 * (a3 + a2) | 0;
-					var blended = a << 24 | r << 16 | g << 8 | b;
-					pixelImage1.image[location] = pixelimage_Endian_isLittleEndian ? (blended >> 24 & 255) << 24 | (blended & 255) << 16 | (blended >> 8 & 255) << 8 | blended >> 16 & 255 : blended;
-				} else {
-					pixelImage1.image[pixelImage1.useVirtualPos ? (q - pixelImage1.virtualY) * pixelImage1.width + x1 - pixelImage1.virtualX | 0 : q * pixelImage1.width + x1 | 0] = pixelimage_Endian_isLittleEndian ? (c1 >> 24 & 255) << 24 | (c1 & 255) << 16 | (c1 >> 8 & 255) << 8 | c1 >> 16 & 255 : c1;
-				}
-				if(p > maxX) {
-					p = xx;
-					++q;
-				}
-				if(q > maxY) {
-					break;
-				}
-			}
-			if(this1.mask != null && includeMask) {
-				var v = pixelimage_Pixelimage.scaleUpInt(this1.mask,scaleW1,scaleH1,this1.mask.transparent,includeMask);
-				pixelImage1.useMask = true;
-				pixelImage1.mask = v;
-			}
-			var v = pixelImage1;
-			pixelImage.useMask = true;
-			pixelImage.mask = v;
-		}
-		var scaled = pixelImage;
 		var angle = 3;
 		var centreX = 0;
 		var centreY = 0;
@@ -1432,8 +1208,8 @@ pixelimage_$samples_pixelimage_$canvas_Arrows.prototype = {
 		while(angle <= -360) angle += 360;
 		var rotated;
 		if(angle == 90. || angle == -270) {
-			var w = scaled.width;
-			var h = scaled.height;
+			var w = helloPixel.width;
+			var h = helloPixel.height;
 			var transparent1 = transparent;
 			var includeMask = false;
 			if(includeMask == null) {
@@ -1455,7 +1231,7 @@ pixelimage_$samples_pixelimage_$canvas_Arrows.prototype = {
 			pixelImage.transparent = transparent1;
 			var color = 0;
 			while(true) {
-				var c = scaled.image[scaled.useVirtualPos ? (q - scaled.virtualY) * scaled.width + p - scaled.virtualX | 0 : q * scaled.width + p | 0];
+				var c = helloPixel.image[helloPixel.useVirtualPos ? (q - helloPixel.virtualY) * helloPixel.width + p - helloPixel.virtualX | 0 : q * helloPixel.width + p | 0];
 				color = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
 				var x = maxY - q;
 				var this1 = color;
@@ -1500,9 +1276,9 @@ pixelimage_$samples_pixelimage_$canvas_Arrows.prototype = {
 					break;
 				}
 			}
-			if(scaled.mask != null && includeMask) {
-				var this1 = scaled.mask;
-				var transparent1 = scaled.mask.transparent;
+			if(helloPixel.mask != null && includeMask) {
+				var this1 = helloPixel.mask;
+				var transparent1 = helloPixel.mask.transparent;
 				var includeMask1 = includeMask;
 				if(includeMask1 == null) {
 					includeMask1 = false;
@@ -1726,8 +1502,8 @@ pixelimage_$samples_pixelimage_$canvas_Arrows.prototype = {
 			}
 			rotated = pixelImage;
 		} else if(angle == -90 || angle == 270) {
-			var w = scaled.width;
-			var h = scaled.height;
+			var w = helloPixel.width;
+			var h = helloPixel.height;
 			var transparent1 = transparent;
 			var includeMask = false;
 			if(includeMask == null) {
@@ -1749,7 +1525,7 @@ pixelimage_$samples_pixelimage_$canvas_Arrows.prototype = {
 			pixelImage.transparent = transparent1;
 			var color = 0;
 			while(true) {
-				var c = scaled.image[scaled.useVirtualPos ? (q - scaled.virtualY) * scaled.width + p - scaled.virtualX | 0 : q * scaled.width + p | 0];
+				var c = helloPixel.image[helloPixel.useVirtualPos ? (q - helloPixel.virtualY) * helloPixel.width + p - helloPixel.virtualX | 0 : q * helloPixel.width + p | 0];
 				color = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
 				var y = maxX - p;
 				var this1 = color;
@@ -1794,9 +1570,9 @@ pixelimage_$samples_pixelimage_$canvas_Arrows.prototype = {
 					break;
 				}
 			}
-			if(scaled.mask != null && includeMask) {
-				var this1 = scaled.mask;
-				var transparent1 = scaled.mask.transparent;
+			if(helloPixel.mask != null && includeMask) {
+				var this1 = helloPixel.mask;
+				var transparent1 = helloPixel.mask.transparent;
 				var includeMask1 = includeMask;
 				if(includeMask1 == null) {
 					includeMask1 = false;
@@ -2020,8 +1796,8 @@ pixelimage_$samples_pixelimage_$canvas_Arrows.prototype = {
 			}
 			rotated = pixelImage;
 		} else if(angle == 180 || angle == -180) {
-			var w = scaled.width;
-			var h = scaled.height;
+			var w = helloPixel.width;
+			var h = helloPixel.height;
 			var transparent1 = transparent;
 			var includeMask = false;
 			if(includeMask == null) {
@@ -2043,7 +1819,7 @@ pixelimage_$samples_pixelimage_$canvas_Arrows.prototype = {
 			pixelImage.transparent = transparent1;
 			var color = 0;
 			while(true) {
-				var c = scaled.image[scaled.useVirtualPos ? (q - scaled.virtualY) * scaled.width + p - scaled.virtualX | 0 : q * scaled.width + p | 0];
+				var c = helloPixel.image[helloPixel.useVirtualPos ? (q - helloPixel.virtualY) * helloPixel.width + p - helloPixel.virtualX | 0 : q * helloPixel.width + p | 0];
 				color = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
 				var x = maxX - p;
 				var y = maxY - q;
@@ -2089,9 +1865,9 @@ pixelimage_$samples_pixelimage_$canvas_Arrows.prototype = {
 					break;
 				}
 			}
-			if(scaled.mask != null && includeMask) {
-				var this1 = scaled.mask;
-				var transparent1 = scaled.mask.transparent;
+			if(helloPixel.mask != null && includeMask) {
+				var this1 = helloPixel.mask;
+				var transparent1 = helloPixel.mask.transparent;
 				var includeMask1 = includeMask;
 				if(includeMask1 == null) {
 					includeMask1 = false;
@@ -2186,17 +1962,17 @@ pixelimage_$samples_pixelimage_$canvas_Arrows.prototype = {
 			var ax = 0.;
 			var ay = 0.;
 			if(centreX1 != 0.) {
-				centreX1 = scaled.width / 2 + centreX1;
+				centreX1 = helloPixel.width / 2 + centreX1;
 				ax -= centreX1;
 			}
 			if(centreY1 != 0.) {
-				centreY1 = scaled.height / 2 + centreY1;
+				centreY1 = helloPixel.height / 2 + centreY1;
 				ay -= centreY1;
 			}
-			var bx = ax + scaled.width;
+			var bx = ax + helloPixel.width;
 			var by = ay;
 			var cx = bx;
-			var cy = ay + scaled.height;
+			var cy = ay + helloPixel.height;
 			var dx = ax;
 			var dy = cy;
 			var sin = Math.sin(theta);
@@ -2289,8 +2065,8 @@ pixelimage_$samples_pixelimage_$canvas_Arrows.prototype = {
 			}
 			var win_x = 0;
 			var win_y = 0;
-			var win_width = scaled.width;
-			var win_height = scaled.height;
+			var win_width = helloPixel.width;
+			var win_height = helloPixel.height;
 			var hasHit = false;
 			if(hasHit == null) {
 				hasHit = true;
@@ -2389,7 +2165,7 @@ pixelimage_$samples_pixelimage_$canvas_Arrows.prototype = {
 						var v = av * ratioA + bv * ratioB + ratioC;
 						var x = u * win_width + win_x | 0;
 						var y = v * win_height + win_y | 0;
-						var c = scaled.image[scaled.useVirtualPos ? (y - scaled.virtualY) * scaled.width + x - scaled.virtualX | 0 : y * scaled.width + x | 0];
+						var c = helloPixel.image[helloPixel.useVirtualPos ? (y - helloPixel.virtualY) * helloPixel.width + x - helloPixel.virtualX | 0 : y * helloPixel.width + x | 0];
 						var col = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
 						var this6 = col;
 						var c1 = this6;
@@ -2520,7 +2296,7 @@ pixelimage_$samples_pixelimage_$canvas_Arrows.prototype = {
 						var v = av * ratioA + bv * ratioB + ratioC;
 						var x = u * win_width + win_x | 0;
 						var y = v * win_height + win_y | 0;
-						var c = scaled.image[scaled.useVirtualPos ? (y - scaled.virtualY) * scaled.width + x - scaled.virtualX | 0 : y * scaled.width + x | 0];
+						var c = helloPixel.image[helloPixel.useVirtualPos ? (y - helloPixel.virtualY) * helloPixel.width + x - helloPixel.virtualX | 0 : y * helloPixel.width + x | 0];
 						var col = pixelimage_Endian_isLittleEndian ? (c >> 24 & 255) << 24 | (c & 255) << 16 | (c >> 8 & 255) << 8 | c >> 16 & 255 : c;
 						var this6 = col;
 						var c1 = this6;
@@ -2564,11 +2340,11 @@ pixelimage_$samples_pixelimage_$canvas_Arrows.prototype = {
 			if(hasHit1 == true) {
 				var v = new pixelimage_algo_HitQuad(ax,ay,bx,by,cx,cy,dx,dy,true);
 			}
-			if(scaled.mask != null && includeMask) {
-				var this1 = scaled.mask;
+			if(helloPixel.mask != null && includeMask) {
+				var this1 = helloPixel.mask;
 				var centreX = centreX1;
 				var centreY = centreY1;
-				var transparent = scaled.mask.transparent;
+				var transparent = helloPixel.mask.transparent;
 				var includeMask1 = includeMask;
 				if(includeMask1 == null) {
 					includeMask1 = false;

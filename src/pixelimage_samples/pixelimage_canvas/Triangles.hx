@@ -59,12 +59,14 @@ class Triangles {
                 , 0xccF000c0
                 , 0xeeF000c0];
         var gap = 200;
+        var out = [];
         for( i in 0...5 ){
-            p.fillTri( 100 + i*gap, 900
+            out.push( p.fillTri( 100 + i*gap, 900
                      , 300 + i*gap, 1200
                      , 500 + i*gap, 1000
-                     , a[i] );
+                     , a[i], true, true ) );
         }
+        return out;
    }
 // no border pattern
 
