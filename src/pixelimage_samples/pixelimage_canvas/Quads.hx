@@ -33,7 +33,8 @@ class Quads {
         drawGrid();
         // see xml definitions below
         TriangleGML.withString( pixelImage, quadShape );
-        var trigml = TriangleGML.withString( pixelImage, quadShapeSoft, 340, 0 );
+        var trigml = TriangleGML.withString( pixelImage, quadShapeSoft, 340, 5 );
+        TriangleGML.withString( pixelImage, quadShapeLuxury, 340, 500 ); 
         //trigml.shapes[0].clear( pixelImage, 0xFF000000 ); 
         end();
     }
@@ -57,7 +58,7 @@ class Quads {
     bX="530" bY="220"
     cX="700" cY="120"
     dX="900" dY="500" 
-    soft="70"
+    soft="90"
     strokeColor="0xFFFF0000" strokeWidth="1"> 
     </QuadShape>';
     var quadShape = '<QuadShape 
@@ -66,5 +67,15 @@ class Quads {
     cX="700" cY="120"
     dX="900" dY="500" 
     strokeColor="0xFFFF0000" strokeWidth="1">
+    </QuadShape>';
+    var quadShapeLuxury = 
+    '<QuadShape 
+    aX="500" aY="300" 
+    bX="530" bY="220"
+    cX="700" cY="120"
+    dX="900" dY="500" 
+    soft="90"
+    luxury="true"
+    strokeColor="0xFFFF0000" strokeWidth="1"> 
     </QuadShape>';
 }

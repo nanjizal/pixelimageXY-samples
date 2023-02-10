@@ -61,7 +61,9 @@ class Lines {
     var lineShapeTest: String = 
                     '<LineShape 
                         x2="400" y2="400" 
-                        x1="420" y1="460" 
-                        strokeWidth="30" strokeColor="0xffFF0000">
+                        x1="420" y1="700" 
+                        strokeWidth="100" strokeColor="0xffFFcc00"
+                        soft="90"
+                        luxury="true">
                     </LineShape>';
 }
