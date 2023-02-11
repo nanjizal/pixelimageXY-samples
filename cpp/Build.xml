@@ -1,0 +1,1091 @@
+<xml>
+<set name="HXCPP_API_LEVEL" value="430" />
+<files id="haxe">
+<compilerflag value="-Iinclude"/>
+  <file name="src/vision/ds/Point2D.cpp" >
+   <depend name="include/vision/ds/Point2D.h"/>
+  </file>
+  <file name="src/vision/ds/Line2D.cpp" >
+   <depend name="include/Std.h"/>
+   <depend name="include/vision/ds/Line2D.h"/>
+   <depend name="include/vision/ds/Point2D.h"/>
+  </file>
+  <file name="src/sys/io/FileOutput.cpp" >
+   <depend name="include/haxe/io/Bytes.h"/>
+   <depend name="include/haxe/io/Error.h"/>
+   <depend name="include/haxe/io/Output.h"/>
+   <depend name="include/sys/io/FileOutput.h"/>
+  </file>
+  <file name="src/sys/io/File.cpp" >
+   <depend name="include/haxe/io/Output.h"/>
+   <depend name="include/sys/io/File.h"/>
+   <depend name="include/sys/io/FileOutput.h"/>
+  </file>
+  <file name="src/pixelimage_samples/pixelimage_format/_Grid/Grid_Fields_.cpp" >
+   <depend name="include/pixelimage_samples/pixelimage_format/Grid.h"/>
+   <depend name="include/pixelimage_samples/pixelimage_format/_Grid/Grid_Fields_.h"/>
+  </file>
+  <file name="src/pixelimage_samples/pixelimage_format/Grid.cpp" >
+   <depend name="include/Std.h"/>
+   <depend name="include/Sys.h"/>
+   <depend name="include/Xml.h"/>
+   <depend name="include/format/png/Chunk.h"/>
+   <depend name="include/format/png/Color.h"/>
+   <depend name="include/format/png/Writer.h"/>
+   <depend name="include/format/tools/Deflate.h"/>
+   <depend name="include/haxe/Log.h"/>
+   <depend name="include/haxe/ds/List.h"/>
+   <depend name="include/haxe/io/ArrayBufferViewImpl.h"/>
+   <depend name="include/haxe/io/Bytes.h"/>
+   <depend name="include/haxe/io/Output.h"/>
+   <depend name="include/haxe/io/Path.h"/>
+   <depend name="include/pixelimage/ImageStruct.h"/>
+   <depend name="include/pixelimage/_Endian/Endian_Fields_.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/TriangleGML.h"/>
+   <depend name="include/pixelimage_samples/pixelimage_format/Grid.h"/>
+   <depend name="include/sys/io/File.h"/>
+   <depend name="include/sys/io/FileOutput.h"/>
+  </file>
+  <file name="src/pixelimage/triangleGML/shape/VePathElementShape.cpp" >
+   <depend name="include/Std.h"/>
+   <depend name="include/haxe/io/ArrayBufferViewImpl.h"/>
+   <depend name="include/haxe/io/Bytes.h"/>
+   <depend name="include/justPath/ILinePathContext.h"/>
+   <depend name="include/justPath/SvgLinePath.h"/>
+   <depend name="include/pixelimage/ImageStruct.h"/>
+   <depend name="include/pixelimage/_Endian/Endian_Fields_.h"/>
+   <depend name="include/pixelimage/algo/HitQuad.h"/>
+   <depend name="include/pixelimage/algo/IhitObj.h"/>
+   <depend name="include/pixelimage/iter/IntIterStart.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/BasicShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/FillShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/GroupShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/ShapeInterface.h"/>
+   <depend name="include/pixelimage/triangleGML/shape/VePathElementShape.h"/>
+  </file>
+  <file name="src/pixelimage/triangleGML/shape/TriangleShape.cpp" >
+   <depend name="include/Std.h"/>
+   <depend name="include/haxe/io/ArrayBufferViewImpl.h"/>
+   <depend name="include/haxe/io/Bytes.h"/>
+   <depend name="include/pixelimage/ImageStruct.h"/>
+   <depend name="include/pixelimage/_Endian/Endian_Fields_.h"/>
+   <depend name="include/pixelimage/algo/HitQuad.h"/>
+   <depend name="include/pixelimage/algo/HitTri.h"/>
+   <depend name="include/pixelimage/algo/IhitObj.h"/>
+   <depend name="include/pixelimage/iter/IntIterStart.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/BasicShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/FillShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/GroupShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/ShapeInterface.h"/>
+   <depend name="include/pixelimage/triangleGML/shape/TriangleShape.h"/>
+  </file>
+  <file name="src/pixelimage/triangleGML/shape/Star6Shape.cpp" >
+   <depend name="include/Std.h"/>
+   <depend name="include/haxe/io/ArrayBufferViewImpl.h"/>
+   <depend name="include/haxe/io/Bytes.h"/>
+   <depend name="include/pixelimage/ImageStruct.h"/>
+   <depend name="include/pixelimage/_Endian/Endian_Fields_.h"/>
+   <depend name="include/pixelimage/algo/HitTri.h"/>
+   <depend name="include/pixelimage/algo/IhitObj.h"/>
+   <depend name="include/pixelimage/iter/IntIterStart.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/BasicShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/FillShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/GroupShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/ShapeInterface.h"/>
+   <depend name="include/pixelimage/triangleGML/shape/Star6Shape.h"/>
+  </file>
+  <file name="src/pixelimage/triangleGML/shape/SquareShape.cpp" >
+   <depend name="include/Std.h"/>
+   <depend name="include/StringTools.h"/>
+   <depend name="include/haxe/io/ArrayBufferViewImpl.h"/>
+   <depend name="include/haxe/io/Bytes.h"/>
+   <depend name="include/pixelimage/ImageStruct.h"/>
+   <depend name="include/pixelimage/_Endian/Endian_Fields_.h"/>
+   <depend name="include/pixelimage/algo/HitTri.h"/>
+   <depend name="include/pixelimage/algo/IhitObj.h"/>
+   <depend name="include/pixelimage/iter/IntIterStart.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/BasicShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/FillShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/GroupShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/ShapeInterface.h"/>
+   <depend name="include/pixelimage/triangleGML/shape/SquareShape.h"/>
+  </file>
+  <file name="src/pixelimage/triangleGML/shape/RectangleShape.cpp" >
+   <depend name="include/Std.h"/>
+   <depend name="include/StringTools.h"/>
+   <depend name="include/haxe/io/ArrayBufferViewImpl.h"/>
+   <depend name="include/haxe/io/Bytes.h"/>
+   <depend name="include/pixelimage/ImageStruct.h"/>
+   <depend name="include/pixelimage/_Endian/Endian_Fields_.h"/>
+   <depend name="include/pixelimage/algo/HitTri.h"/>
+   <depend name="include/pixelimage/algo/IhitObj.h"/>
+   <depend name="include/pixelimage/iter/IntIterStart.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/BasicShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/FillShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/GroupShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/ShapeInterface.h"/>
+   <depend name="include/pixelimage/triangleGML/shape/RectangleShape.h"/>
+  </file>
+  <file name="src/pixelimage/triangleGML/shape/QuadrilateralShape.cpp" >
+   <depend name="include/Std.h"/>
+   <depend name="include/haxe/io/ArrayBufferViewImpl.h"/>
+   <depend name="include/haxe/io/Bytes.h"/>
+   <depend name="include/pixelimage/ImageStruct.h"/>
+   <depend name="include/pixelimage/_Endian/Endian_Fields_.h"/>
+   <depend name="include/pixelimage/algo/HitQuad.h"/>
+   <depend name="include/pixelimage/algo/HitTri.h"/>
+   <depend name="include/pixelimage/algo/IhitObj.h"/>
+   <depend name="include/pixelimage/iter/IntIterStart.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/BasicShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/FillShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/GroupShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/ShapeInterface.h"/>
+   <depend name="include/pixelimage/triangleGML/shape/QuadrilateralShape.h"/>
+  </file>
+  <file name="src/pixelimage/triangleGML/shape/PathElementShape.cpp" >
+   <depend name="include/Std.h"/>
+   <depend name="include/haxe/io/ArrayBufferViewImpl.h"/>
+   <depend name="include/haxe/io/Bytes.h"/>
+   <depend name="include/justPath/ILinePathContext.h"/>
+   <depend name="include/justPath/SvgLinePath.h"/>
+   <depend name="include/pixelimage/ImageStruct.h"/>
+   <depend name="include/pixelimage/_Endian/Endian_Fields_.h"/>
+   <depend name="include/pixelimage/algo/HitQuad.h"/>
+   <depend name="include/pixelimage/algo/IhitObj.h"/>
+   <depend name="include/pixelimage/iter/IntIterStart.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/BasicShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/FillShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/GroupShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/ShapeInterface.h"/>
+   <depend name="include/pixelimage/triangleGML/shape/PathElementShape.h"/>
+  </file>
+  <file name="src/pixelimage/triangleGML/shape/EllipseShape.cpp" >
+   <depend name="include/Std.h"/>
+   <depend name="include/haxe/io/ArrayBufferViewImpl.h"/>
+   <depend name="include/haxe/io/Bytes.h"/>
+   <depend name="include/pixelimage/ImageStruct.h"/>
+   <depend name="include/pixelimage/_Endian/Endian_Fields_.h"/>
+   <depend name="include/pixelimage/algo/HitTri.h"/>
+   <depend name="include/pixelimage/algo/IhitObj.h"/>
+   <depend name="include/pixelimage/iter/IntIterStart.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/BasicShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/FillShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/GroupShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/ShapeInterface.h"/>
+   <depend name="include/pixelimage/triangleGML/shape/EllipseShape.h"/>
+  </file>
+  <file name="src/pixelimage/triangleGML/shape/CircleShape.cpp" >
+   <depend name="include/Std.h"/>
+   <depend name="include/haxe/io/ArrayBufferViewImpl.h"/>
+   <depend name="include/haxe/io/Bytes.h"/>
+   <depend name="include/pixelimage/ImageStruct.h"/>
+   <depend name="include/pixelimage/_Endian/Endian_Fields_.h"/>
+   <depend name="include/pixelimage/algo/HitTri.h"/>
+   <depend name="include/pixelimage/algo/IhitObj.h"/>
+   <depend name="include/pixelimage/iter/IntIterStart.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/BasicShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/FillShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/GroupShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/ShapeInterface.h"/>
+   <depend name="include/pixelimage/triangleGML/shape/CircleShape.h"/>
+  </file>
+  <file name="src/pixelimage/triangleGML/shape/ArcShape.cpp" >
+   <depend name="include/Std.h"/>
+   <depend name="include/haxe/io/ArrayBufferViewImpl.h"/>
+   <depend name="include/haxe/io/Bytes.h"/>
+   <depend name="include/pixelimage/ImageStruct.h"/>
+   <depend name="include/pixelimage/_Endian/Endian_Fields_.h"/>
+   <depend name="include/pixelimage/algo/HitQuad.h"/>
+   <depend name="include/pixelimage/algo/HitTri.h"/>
+   <depend name="include/pixelimage/algo/HitTriArray.h"/>
+   <depend name="include/pixelimage/algo/IhitObj.h"/>
+   <depend name="include/pixelimage/iter/IntIterStart.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/BasicShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/FillShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/GroupShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/ShapeInterface.h"/>
+   <depend name="include/pixelimage/triangleGML/shape/ArcShape.h"/>
+  </file>
+  <file name="src/pixelimage/triangleGML/patternShape/SquarePattern.cpp" >
+   <depend name="include/Std.h"/>
+   <depend name="include/haxe/io/ArrayBufferViewImpl.h"/>
+   <depend name="include/haxe/io/Bytes.h"/>
+   <depend name="include/pixelimage/ImageStruct.h"/>
+   <depend name="include/pixelimage/_Endian/Endian_Fields_.h"/>
+   <depend name="include/pixelimage/algo/HitQuad.h"/>
+   <depend name="include/pixelimage/algo/HitTri.h"/>
+   <depend name="include/pixelimage/algo/IhitObj.h"/>
+   <depend name="include/pixelimage/iter/IntIterStart.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/BasicShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/GroupShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/PatternShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/ShapeInterface.h"/>
+   <depend name="include/pixelimage/triangleGML/patternShape/SquarePattern.h"/>
+  </file>
+  <file name="src/pixelimage/triangleGML/patternShape/RectanglePattern.cpp" >
+   <depend name="include/Std.h"/>
+   <depend name="include/StringTools.h"/>
+   <depend name="include/haxe/io/ArrayBufferViewImpl.h"/>
+   <depend name="include/haxe/io/Bytes.h"/>
+   <depend name="include/pixelimage/ImageStruct.h"/>
+   <depend name="include/pixelimage/_Endian/Endian_Fields_.h"/>
+   <depend name="include/pixelimage/algo/HitQuad.h"/>
+   <depend name="include/pixelimage/algo/HitTri.h"/>
+   <depend name="include/pixelimage/algo/IhitObj.h"/>
+   <depend name="include/pixelimage/iter/IntIterStart.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/BasicShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/GroupShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/PatternShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/ShapeInterface.h"/>
+   <depend name="include/pixelimage/triangleGML/patternShape/RectanglePattern.h"/>
+  </file>
+  <file name="src/pixelimage/triangleGML/patternShape/QuadrilateralPattern.cpp" >
+   <depend name="include/Std.h"/>
+   <depend name="include/haxe/io/ArrayBufferViewImpl.h"/>
+   <depend name="include/haxe/io/Bytes.h"/>
+   <depend name="include/pixelimage/ImageStruct.h"/>
+   <depend name="include/pixelimage/_Endian/Endian_Fields_.h"/>
+   <depend name="include/pixelimage/algo/HitQuad.h"/>
+   <depend name="include/pixelimage/algo/HitTri.h"/>
+   <depend name="include/pixelimage/algo/IhitObj.h"/>
+   <depend name="include/pixelimage/iter/IntIterStart.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/BasicShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/GroupShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/PatternShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/ShapeInterface.h"/>
+   <depend name="include/pixelimage/triangleGML/patternShape/QuadrilateralPattern.h"/>
+  </file>
+  <file name="src/pixelimage/triangleGML/patternShape/PathElementPattern.cpp" >
+   <depend name="include/Std.h"/>
+   <depend name="include/haxe/io/ArrayBufferViewImpl.h"/>
+   <depend name="include/haxe/io/Bytes.h"/>
+   <depend name="include/justPath/ILinePathContext.h"/>
+   <depend name="include/justPath/SvgLinePath.h"/>
+   <depend name="include/pixelimage/ImageStruct.h"/>
+   <depend name="include/pixelimage/_Endian/Endian_Fields_.h"/>
+   <depend name="include/pixelimage/algo/HitQuad.h"/>
+   <depend name="include/pixelimage/algo/HitTri.h"/>
+   <depend name="include/pixelimage/algo/IhitObj.h"/>
+   <depend name="include/pixelimage/iter/IntIterStart.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/BasicShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/GroupShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/PatternShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/ShapeInterface.h"/>
+   <depend name="include/pixelimage/triangleGML/patternShape/PathElementPattern.h"/>
+  </file>
+  <file name="src/pixelimage/triangleGML/patternShape/EllipsePattern.cpp" >
+   <depend name="include/Std.h"/>
+   <depend name="include/haxe/io/ArrayBufferViewImpl.h"/>
+   <depend name="include/haxe/io/Bytes.h"/>
+   <depend name="include/pixelimage/ImageStruct.h"/>
+   <depend name="include/pixelimage/_Endian/Endian_Fields_.h"/>
+   <depend name="include/pixelimage/algo/HitTri.h"/>
+   <depend name="include/pixelimage/algo/IhitObj.h"/>
+   <depend name="include/pixelimage/iter/IntIterStart.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/BasicShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/GroupShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/PatternShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/ShapeInterface.h"/>
+   <depend name="include/pixelimage/triangleGML/patternShape/EllipsePattern.h"/>
+  </file>
+  <file name="src/pixelimage/triangleGML/patternShape/CirclePattern.cpp" >
+   <depend name="include/Std.h"/>
+   <depend name="include/haxe/io/ArrayBufferViewImpl.h"/>
+   <depend name="include/haxe/io/Bytes.h"/>
+   <depend name="include/pixelimage/ImageStruct.h"/>
+   <depend name="include/pixelimage/_Endian/Endian_Fields_.h"/>
+   <depend name="include/pixelimage/algo/HitTri.h"/>
+   <depend name="include/pixelimage/algo/IhitObj.h"/>
+   <depend name="include/pixelimage/iter/IntIterStart.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/BasicShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/GroupShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/PatternShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/ShapeInterface.h"/>
+   <depend name="include/pixelimage/triangleGML/patternShape/CirclePattern.h"/>
+  </file>
+  <file name="src/pixelimage/triangleGML/patternShape/ArcPattern.cpp" >
+   <depend name="include/Std.h"/>
+   <depend name="include/haxe/io/ArrayBufferViewImpl.h"/>
+   <depend name="include/haxe/io/Bytes.h"/>
+   <depend name="include/pixelimage/ImageStruct.h"/>
+   <depend name="include/pixelimage/_Endian/Endian_Fields_.h"/>
+   <depend name="include/pixelimage/algo/HitQuad.h"/>
+   <depend name="include/pixelimage/algo/HitTri.h"/>
+   <depend name="include/pixelimage/algo/HitTriArray.h"/>
+   <depend name="include/pixelimage/algo/IhitObj.h"/>
+   <depend name="include/pixelimage/iter/IntIterStart.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/BasicShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/GroupShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/PatternShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/ShapeInterface.h"/>
+   <depend name="include/pixelimage/triangleGML/patternShape/ArcPattern.h"/>
+  </file>
+  <file name="src/pixelimage/triangleGML/patternContour/TrianglePattern.cpp" >
+   <depend name="include/Std.h"/>
+   <depend name="include/haxe/io/ArrayBufferViewImpl.h"/>
+   <depend name="include/haxe/io/Bytes.h"/>
+   <depend name="include/pixelimage/ImageStruct.h"/>
+   <depend name="include/pixelimage/_Endian/Endian_Fields_.h"/>
+   <depend name="include/pixelimage/algo/HitTri.h"/>
+   <depend name="include/pixelimage/algo/IhitObj.h"/>
+   <depend name="include/pixelimage/iter/IntIterStart.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/BasicShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/GroupShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/PatternStroke.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/ShapeInterface.h"/>
+   <depend name="include/pixelimage/triangleGML/patternContour/TrianglePattern.h"/>
+  </file>
+  <file name="src/pixelimage/triangleGML/patternContour/QuadPattern.cpp" >
+   <depend name="include/Std.h"/>
+   <depend name="include/haxe/io/ArrayBufferViewImpl.h"/>
+   <depend name="include/haxe/io/Bytes.h"/>
+   <depend name="include/pixelimage/ImageStruct.h"/>
+   <depend name="include/pixelimage/_Endian/Endian_Fields_.h"/>
+   <depend name="include/pixelimage/algo/HitQuad.h"/>
+   <depend name="include/pixelimage/algo/HitTri.h"/>
+   <depend name="include/pixelimage/algo/IhitObj.h"/>
+   <depend name="include/pixelimage/iter/IntIterStart.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/BasicShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/GroupShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/PatternStroke.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/ShapeInterface.h"/>
+   <depend name="include/pixelimage/triangleGML/patternContour/QuadPattern.h"/>
+  </file>
+  <file name="src/pixelimage/triangleGML/patternContour/LinePattern.cpp" >
+   <depend name="include/Std.h"/>
+   <depend name="include/haxe/io/ArrayBufferViewImpl.h"/>
+   <depend name="include/haxe/io/Bytes.h"/>
+   <depend name="include/pixelimage/ImageStruct.h"/>
+   <depend name="include/pixelimage/_Endian/Endian_Fields_.h"/>
+   <depend name="include/pixelimage/algo/HitQuad.h"/>
+   <depend name="include/pixelimage/algo/HitTri.h"/>
+   <depend name="include/pixelimage/algo/IhitObj.h"/>
+   <depend name="include/pixelimage/iter/IntIterStart.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/BasicShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/GroupShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/PatternStroke.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/ShapeInterface.h"/>
+   <depend name="include/pixelimage/triangleGML/patternContour/LinePattern.h"/>
+  </file>
+  <file name="src/pixelimage/triangleGML/patternContour/CubicCurvePattern.cpp" >
+   <depend name="include/Std.h"/>
+   <depend name="include/justPath/ILinePathContext.h"/>
+   <depend name="include/pixelimage/ImageStruct.h"/>
+   <depend name="include/pixelimage/draw/DrawTileHelper.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/BasicShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/GroupShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/PatternStroke.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/ShapeInterface.h"/>
+   <depend name="include/pixelimage/triangleGML/patternContour/CubicCurvePattern.h"/>
+  </file>
+  <file name="src/pixelimage/triangleGML/gradientContour/PolyLineGradient.cpp" >
+   <depend name="include/Std.h"/>
+   <depend name="include/haxe/io/ArrayBufferViewImpl.h"/>
+   <depend name="include/haxe/io/Bytes.h"/>
+   <depend name="include/pixelimage/ImageStruct.h"/>
+   <depend name="include/pixelimage/_Endian/Endian_Fields_.h"/>
+   <depend name="include/pixelimage/algo/HitQuad.h"/>
+   <depend name="include/pixelimage/algo/HitTri.h"/>
+   <depend name="include/pixelimage/algo/IhitObj.h"/>
+   <depend name="include/pixelimage/iter/IntIterStart.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/BasicGradient.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/GroupShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/ShapeInterface.h"/>
+   <depend name="include/pixelimage/triangleGML/gradientContour/PolyLineGradient.h"/>
+  </file>
+  <file name="src/pixelimage/triangleGML/gradientContour/LineGradient.cpp" >
+   <depend name="include/Std.h"/>
+   <depend name="include/haxe/io/ArrayBufferViewImpl.h"/>
+   <depend name="include/haxe/io/Bytes.h"/>
+   <depend name="include/pixelimage/ImageStruct.h"/>
+   <depend name="include/pixelimage/_Endian/Endian_Fields_.h"/>
+   <depend name="include/pixelimage/algo/HitQuad.h"/>
+   <depend name="include/pixelimage/algo/HitTri.h"/>
+   <depend name="include/pixelimage/algo/IhitObj.h"/>
+   <depend name="include/pixelimage/iter/IntIterStart.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/BasicGradient.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/GroupShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/ShapeInterface.h"/>
+   <depend name="include/pixelimage/triangleGML/gradientContour/LineGradient.h"/>
+  </file>
+  <file name="src/pixelimage/triangleGML/gradient/TriangleGradient.cpp" >
+   <depend name="include/Std.h"/>
+   <depend name="include/haxe/io/ArrayBufferViewImpl.h"/>
+   <depend name="include/haxe/io/Bytes.h"/>
+   <depend name="include/pixelimage/ImageStruct.h"/>
+   <depend name="include/pixelimage/_Endian/Endian_Fields_.h"/>
+   <depend name="include/pixelimage/algo/HitTri.h"/>
+   <depend name="include/pixelimage/algo/IhitObj.h"/>
+   <depend name="include/pixelimage/iter/IntIterStart.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/BasicGradient.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/GroupShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/ShapeInterface.h"/>
+   <depend name="include/pixelimage/triangleGML/gradient/TriangleGradient.h"/>
+  </file>
+  <file name="src/pixelimage/triangleGML/gradient/QuadGradient.cpp" >
+   <depend name="include/Std.h"/>
+   <depend name="include/haxe/io/ArrayBufferViewImpl.h"/>
+   <depend name="include/haxe/io/Bytes.h"/>
+   <depend name="include/pixelimage/ImageStruct.h"/>
+   <depend name="include/pixelimage/_Endian/Endian_Fields_.h"/>
+   <depend name="include/pixelimage/algo/HitQuad.h"/>
+   <depend name="include/pixelimage/algo/HitTri.h"/>
+   <depend name="include/pixelimage/algo/IhitObj.h"/>
+   <depend name="include/pixelimage/iter/IntIterStart.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/BasicGradient.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/GroupShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/ShapeInterface.h"/>
+   <depend name="include/pixelimage/triangleGML/gradient/QuadGradient.h"/>
+  </file>
+  <file name="src/pixelimage/triangleGML/gradient/PathElementThickGradient.cpp" >
+   <depend name="include/Std.h"/>
+   <depend name="include/haxe/Log.h"/>
+   <depend name="include/haxe/io/ArrayBufferViewImpl.h"/>
+   <depend name="include/haxe/io/Bytes.h"/>
+   <depend name="include/justPath/ILinePathContext.h"/>
+   <depend name="include/justPath/SvgLinePath.h"/>
+   <depend name="include/pixelimage/ImageStruct.h"/>
+   <depend name="include/pixelimage/_Endian/Endian_Fields_.h"/>
+   <depend name="include/pixelimage/algo/HitQuad.h"/>
+   <depend name="include/pixelimage/algo/HitTri.h"/>
+   <depend name="include/pixelimage/algo/IhitObj.h"/>
+   <depend name="include/pixelimage/iter/IntIterStart.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/BasicShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/FillShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/GroupShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/ShapeInterface.h"/>
+   <depend name="include/pixelimage/triangleGML/gradient/PathElementThickGradient.h"/>
+  </file>
+  <file name="src/pixelimage/triangleGML/gradient/EllipseRadialGradient.cpp" >
+   <depend name="include/Std.h"/>
+   <depend name="include/haxe/io/ArrayBufferViewImpl.h"/>
+   <depend name="include/haxe/io/Bytes.h"/>
+   <depend name="include/pixelimage/ImageStruct.h"/>
+   <depend name="include/pixelimage/_Endian/Endian_Fields_.h"/>
+   <depend name="include/pixelimage/algo/HitTri.h"/>
+   <depend name="include/pixelimage/algo/IhitObj.h"/>
+   <depend name="include/pixelimage/iter/IntIterStart.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/BasicGradient.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/GroupShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/ShapeInterface.h"/>
+   <depend name="include/pixelimage/triangleGML/gradient/EllipseRadialGradient.h"/>
+  </file>
+  <file name="src/pixelimage/triangleGML/gradient/ArrowThickGradient.cpp" >
+   <depend name="include/Std.h"/>
+   <depend name="include/StringTools.h"/>
+   <depend name="include/haxe/io/ArrayBufferViewImpl.h"/>
+   <depend name="include/haxe/io/Bytes.h"/>
+   <depend name="include/pixelimage/ImageStruct.h"/>
+   <depend name="include/pixelimage/_Endian/Endian_Fields_.h"/>
+   <depend name="include/pixelimage/algo/HitQuad.h"/>
+   <depend name="include/pixelimage/algo/HitTri.h"/>
+   <depend name="include/pixelimage/algo/HitTriArray.h"/>
+   <depend name="include/pixelimage/algo/IhitObj.h"/>
+   <depend name="include/pixelimage/iter/IntIterStart.h"/>
+   <depend name="include/pixelimage/pixel/_TwoGrad/TwoGrad_.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/BasicShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/FillShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/GroupShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/ShapeInterface.h"/>
+   <depend name="include/pixelimage/triangleGML/gradient/ArrowThickGradient.h"/>
+  </file>
+  <file name="src/pixelimage/triangleGML/coreShape/_TriangleGML/TriangleGML_Fields_.cpp" >
+   <depend name="include/justPath/ILinePathContext.h"/>
+   <depend name="include/pixelimage/triangleGML/contour/ArrowShape.h"/>
+   <depend name="include/pixelimage/triangleGML/contour/CubicCurveShape.h"/>
+   <depend name="include/pixelimage/triangleGML/contour/LineGridShape.h"/>
+   <depend name="include/pixelimage/triangleGML/contour/LineShape.h"/>
+   <depend name="include/pixelimage/triangleGML/contour/PolyLineShape.h"/>
+   <depend name="include/pixelimage/triangleGML/contour/QuadCurveShape.h"/>
+   <depend name="include/pixelimage/triangleGML/contour/QuadShape.h"/>
+   <depend name="include/pixelimage/triangleGML/contour/QuadSoftShape.h"/>
+   <depend name="include/pixelimage/triangleGML/contour/QuintShape.h"/>
+   <depend name="include/pixelimage/triangleGML/contour/SoftEllipseShape.h"/>
+   <depend name="include/pixelimage/triangleGML/contour/ThruCurveShape.h"/>
+   <depend name="include/pixelimage/triangleGML/contour/TriangleSoftShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/BasicGradient.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/BasicShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/FillShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/GroupShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/PatternShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/PatternStroke.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/ShapeInterface.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/_TriangleGML/TriangleGML_Fields_.h"/>
+   <depend name="include/pixelimage/triangleGML/gradient/ArrowThickGradient.h"/>
+   <depend name="include/pixelimage/triangleGML/gradient/EllipseRadialGradient.h"/>
+   <depend name="include/pixelimage/triangleGML/gradient/PathElementThickGradient.h"/>
+   <depend name="include/pixelimage/triangleGML/gradient/QuadGradient.h"/>
+   <depend name="include/pixelimage/triangleGML/gradient/TriangleGradient.h"/>
+   <depend name="include/pixelimage/triangleGML/gradientContour/LineGradient.h"/>
+   <depend name="include/pixelimage/triangleGML/gradientContour/PolyLineGradient.h"/>
+   <depend name="include/pixelimage/triangleGML/patternContour/CubicCurvePattern.h"/>
+   <depend name="include/pixelimage/triangleGML/patternContour/LinePattern.h"/>
+   <depend name="include/pixelimage/triangleGML/patternContour/QuadPattern.h"/>
+   <depend name="include/pixelimage/triangleGML/patternContour/TrianglePattern.h"/>
+   <depend name="include/pixelimage/triangleGML/patternShape/ArcPattern.h"/>
+   <depend name="include/pixelimage/triangleGML/patternShape/CirclePattern.h"/>
+   <depend name="include/pixelimage/triangleGML/patternShape/EllipsePattern.h"/>
+   <depend name="include/pixelimage/triangleGML/patternShape/PathElementPattern.h"/>
+   <depend name="include/pixelimage/triangleGML/patternShape/QuadrilateralPattern.h"/>
+   <depend name="include/pixelimage/triangleGML/patternShape/RectanglePattern.h"/>
+   <depend name="include/pixelimage/triangleGML/patternShape/SquarePattern.h"/>
+   <depend name="include/pixelimage/triangleGML/shape/ArcShape.h"/>
+   <depend name="include/pixelimage/triangleGML/shape/CircleShape.h"/>
+   <depend name="include/pixelimage/triangleGML/shape/EllipseShape.h"/>
+   <depend name="include/pixelimage/triangleGML/shape/PathElementShape.h"/>
+   <depend name="include/pixelimage/triangleGML/shape/QuadrilateralShape.h"/>
+   <depend name="include/pixelimage/triangleGML/shape/RectangleShape.h"/>
+   <depend name="include/pixelimage/triangleGML/shape/SquareShape.h"/>
+   <depend name="include/pixelimage/triangleGML/shape/Star6Shape.h"/>
+   <depend name="include/pixelimage/triangleGML/shape/TriangleShape.h"/>
+   <depend name="include/pixelimage/triangleGML/shape/VePathElementShape.h"/>
+  </file>
+  <file name="src/pixelimage/triangleGML/coreShape/TriangleGML.cpp" >
+   <depend name="include/Xml.h"/>
+   <depend name="include/_Xml/XmlType_Impl_.h"/>
+   <depend name="include/haxe/Log.h"/>
+   <depend name="include/pixelimage/ImageStruct.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/ShapeInterface.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/TriangleGML.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/_TriangleGML/TriangleGML_Fields_.h"/>
+  </file>
+  <file name="src/pixelimage/triangleGML/coreShape/PatternStroke.cpp" >
+   <depend name="include/Std.h"/>
+   <depend name="include/StringTools.h"/>
+   <depend name="include/haxe/io/ArrayBufferViewImpl.h"/>
+   <depend name="include/haxe/io/Bytes.h"/>
+   <depend name="include/pixelimage/ImageStruct.h"/>
+   <depend name="include/pixelimage/_Endian/Endian_Fields_.h"/>
+   <depend name="include/pixelimage/_Pixelimage/Pixelimage_Impl_.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/BasicShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/GroupShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/PatternStroke.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/ShapeInterface.h"/>
+  </file>
+  <file name="src/pixelimage/triangleGML/coreShape/PatternShape.cpp" >
+   <depend name="include/Std.h"/>
+   <depend name="include/StringTools.h"/>
+   <depend name="include/haxe/io/ArrayBufferViewImpl.h"/>
+   <depend name="include/haxe/io/Bytes.h"/>
+   <depend name="include/pixelimage/ImageStruct.h"/>
+   <depend name="include/pixelimage/_Endian/Endian_Fields_.h"/>
+   <depend name="include/pixelimage/_Pixelimage/Pixelimage_Impl_.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/BasicShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/GroupShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/PatternShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/ShapeInterface.h"/>
+  </file>
+  <file name="src/pixelimage/triangleGML/coreShape/BasicGradient.cpp" >
+   <depend name="include/Std.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/BasicGradient.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/GroupShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/ShapeInterface.h"/>
+  </file>
+  <file name="src/pixelimage/triangleGML/contour/TriangleSoftShape.cpp" >
+   <depend name="include/Std.h"/>
+   <depend name="include/StringTools.h"/>
+   <depend name="include/haxe/io/ArrayBufferViewImpl.h"/>
+   <depend name="include/haxe/io/Bytes.h"/>
+   <depend name="include/pixelimage/ImageStruct.h"/>
+   <depend name="include/pixelimage/_Endian/Endian_Fields_.h"/>
+   <depend name="include/pixelimage/algo/HitTri.h"/>
+   <depend name="include/pixelimage/algo/IhitObj.h"/>
+   <depend name="include/pixelimage/iter/IntIterStart.h"/>
+   <depend name="include/pixelimage/triangleGML/contour/TriangleSoftShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/BasicShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/GroupShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/ShapeInterface.h"/>
+  </file>
+  <file name="src/pixelimage/triangleGML/contour/ThruCurveShape.cpp" >
+   <depend name="include/Std.h"/>
+   <depend name="include/justPath/ILinePathContext.h"/>
+   <depend name="include/pixelimage/ImageStruct.h"/>
+   <depend name="include/pixelimage/draw/DrawShapeHelper.h"/>
+   <depend name="include/pixelimage/triangleGML/contour/ThruCurveShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/BasicShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/FillShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/GroupShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/ShapeInterface.h"/>
+  </file>
+  <file name="src/pixelimage/triangleGML/contour/SoftEllipseShape.cpp" >
+   <depend name="include/Std.h"/>
+   <depend name="include/haxe/io/ArrayBufferViewImpl.h"/>
+   <depend name="include/haxe/io/Bytes.h"/>
+   <depend name="include/pixelimage/ImageStruct.h"/>
+   <depend name="include/pixelimage/_Endian/Endian_Fields_.h"/>
+   <depend name="include/pixelimage/algo/HitTri.h"/>
+   <depend name="include/pixelimage/algo/IhitObj.h"/>
+   <depend name="include/pixelimage/iter/IntIterStart.h"/>
+   <depend name="include/pixelimage/triangleGML/contour/SoftEllipseShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/BasicShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/GroupShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/ShapeInterface.h"/>
+  </file>
+  <file name="src/pixelimage/triangleGML/contour/QuintShape.cpp" >
+   <depend name="include/Std.h"/>
+   <depend name="include/haxe/io/ArrayBufferViewImpl.h"/>
+   <depend name="include/haxe/io/Bytes.h"/>
+   <depend name="include/pixelimage/ImageStruct.h"/>
+   <depend name="include/pixelimage/_Endian/Endian_Fields_.h"/>
+   <depend name="include/pixelimage/algo/HitQuad.h"/>
+   <depend name="include/pixelimage/algo/HitTri.h"/>
+   <depend name="include/pixelimage/algo/IhitObj.h"/>
+   <depend name="include/pixelimage/iter/IntIterStart.h"/>
+   <depend name="include/pixelimage/triangleGML/contour/QuintShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/BasicShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/GroupShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/ShapeInterface.h"/>
+  </file>
+  <file name="src/pixelimage/triangleGML/contour/QuadSoftShape.cpp" >
+   <depend name="include/Std.h"/>
+   <depend name="include/StringTools.h"/>
+   <depend name="include/haxe/io/ArrayBufferViewImpl.h"/>
+   <depend name="include/haxe/io/Bytes.h"/>
+   <depend name="include/pixelimage/ImageStruct.h"/>
+   <depend name="include/pixelimage/_Endian/Endian_Fields_.h"/>
+   <depend name="include/pixelimage/algo/HitQuad.h"/>
+   <depend name="include/pixelimage/algo/HitTri.h"/>
+   <depend name="include/pixelimage/algo/IhitObj.h"/>
+   <depend name="include/pixelimage/iter/IntIterStart.h"/>
+   <depend name="include/pixelimage/triangleGML/contour/QuadSoftShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/BasicShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/GroupShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/ShapeInterface.h"/>
+  </file>
+  <file name="src/pixelimage/triangleGML/contour/QuadShape.cpp" >
+   <depend name="include/Std.h"/>
+   <depend name="include/StringTools.h"/>
+   <depend name="include/haxe/io/ArrayBufferViewImpl.h"/>
+   <depend name="include/haxe/io/Bytes.h"/>
+   <depend name="include/pixelimage/ImageStruct.h"/>
+   <depend name="include/pixelimage/_Endian/Endian_Fields_.h"/>
+   <depend name="include/pixelimage/algo/HitQuad.h"/>
+   <depend name="include/pixelimage/algo/HitTri.h"/>
+   <depend name="include/pixelimage/algo/IhitObj.h"/>
+   <depend name="include/pixelimage/iter/IntIterStart.h"/>
+   <depend name="include/pixelimage/triangleGML/contour/QuadShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/BasicShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/GroupShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/ShapeInterface.h"/>
+  </file>
+  <file name="src/pixelimage/triangleGML/contour/QuadCurveShape.cpp" >
+   <depend name="include/Std.h"/>
+   <depend name="include/justPath/ILinePathContext.h"/>
+   <depend name="include/pixelimage/ImageStruct.h"/>
+   <depend name="include/pixelimage/draw/DrawShapeHelper.h"/>
+   <depend name="include/pixelimage/triangleGML/contour/QuadCurveShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/BasicShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/FillShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/GroupShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/ShapeInterface.h"/>
+  </file>
+  <file name="src/pixelimage/triangleGML/contour/PolyLineShape.cpp" >
+   <depend name="include/Std.h"/>
+   <depend name="include/justPath/ILinePathContext.h"/>
+   <depend name="include/pixelimage/ImageStruct.h"/>
+   <depend name="include/pixelimage/draw/DrawShapeHelper.h"/>
+   <depend name="include/pixelimage/triangleGML/contour/PolyLineShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/BasicShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/FillShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/GroupShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/ShapeInterface.h"/>
+  </file>
+  <file name="src/pixelimage/triangleGML/contour/LineShape.cpp" >
+   <depend name="include/Std.h"/>
+   <depend name="include/StringTools.h"/>
+   <depend name="include/haxe/Log.h"/>
+   <depend name="include/haxe/io/ArrayBufferViewImpl.h"/>
+   <depend name="include/haxe/io/Bytes.h"/>
+   <depend name="include/pixelimage/ImageStruct.h"/>
+   <depend name="include/pixelimage/_Endian/Endian_Fields_.h"/>
+   <depend name="include/pixelimage/algo/HitQuad.h"/>
+   <depend name="include/pixelimage/algo/HitTri.h"/>
+   <depend name="include/pixelimage/algo/IhitObj.h"/>
+   <depend name="include/pixelimage/iter/IntIterStart.h"/>
+   <depend name="include/pixelimage/triangleGML/contour/LineShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/BasicShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/GroupShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/ShapeInterface.h"/>
+  </file>
+  <file name="src/pixelimage/triangleGML/contour/LineGridShape.cpp" >
+   <depend name="include/Std.h"/>
+   <depend name="include/haxe/io/ArrayBufferViewImpl.h"/>
+   <depend name="include/haxe/io/Bytes.h"/>
+   <depend name="include/pixelimage/ImageStruct.h"/>
+   <depend name="include/pixelimage/_Endian/Endian_Fields_.h"/>
+   <depend name="include/pixelimage/triangleGML/contour/LineGridShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/BasicShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/GroupShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/ShapeInterface.h"/>
+  </file>
+  <file name="src/pixelimage/triangleGML/contour/CubicCurveShape.cpp" >
+   <depend name="include/Std.h"/>
+   <depend name="include/haxe/Log.h"/>
+   <depend name="include/justPath/ILinePathContext.h"/>
+   <depend name="include/pixelimage/ImageStruct.h"/>
+   <depend name="include/pixelimage/draw/DrawShapeHelper.h"/>
+   <depend name="include/pixelimage/triangleGML/contour/CubicCurveShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/BasicShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/FillShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/GroupShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/ShapeInterface.h"/>
+  </file>
+  <file name="src/pixelimage/triangleGML/coreShape/FillShape.cpp" >
+   <depend name="include/Std.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/BasicShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/FillShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/GroupShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/ShapeInterface.h"/>
+  </file>
+  <file name="src/pixelimage/triangleGML/contour/ArrowShape.cpp" >
+   <depend name="include/Std.h"/>
+   <depend name="include/StringTools.h"/>
+   <depend name="include/haxe/io/ArrayBufferViewImpl.h"/>
+   <depend name="include/haxe/io/Bytes.h"/>
+   <depend name="include/pixelimage/ImageStruct.h"/>
+   <depend name="include/pixelimage/_Endian/Endian_Fields_.h"/>
+   <depend name="include/pixelimage/algo/HitQuad.h"/>
+   <depend name="include/pixelimage/algo/HitTri.h"/>
+   <depend name="include/pixelimage/algo/HitTriArray.h"/>
+   <depend name="include/pixelimage/algo/IhitObj.h"/>
+   <depend name="include/pixelimage/iter/IntIterStart.h"/>
+   <depend name="include/pixelimage/triangleGML/contour/ArrowShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/BasicShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/GroupShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/ShapeInterface.h"/>
+  </file>
+  <file name="src/pixelimage/triangleGML/coreShape/BasicShape.cpp" >
+   <depend name="include/Std.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/BasicShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/GroupShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/ShapeInterface.h"/>
+  </file>
+  <file name="src/pixelimage/triangleGML/coreShape/GroupShape.cpp" >
+   <depend name="include/Std.h"/>
+   <depend name="include/haxe/Log.h"/>
+   <depend name="include/pixelimage/ImageStruct.h"/>
+   <depend name="include/pixelimage/algo/IhitObj.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/GroupShape.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/ShapeInterface.h"/>
+  </file>
+  <file name="src/pixelimage/triangleGML/coreShape/ShapeInterface.cpp" >
+   <depend name="include/pixelimage/ImageStruct.h"/>
+   <depend name="include/pixelimage/triangleGML/coreShape/ShapeInterface.h"/>
+  </file>
+  <file name="src/pixelimage/pixel/_TwoGrad/TwoGrad_.cpp" >
+   <depend name="include/pixelimage/pixel/_TwoGrad/TwoGrad_.h"/>
+  </file>
+  <file name="src/pixelimage/iter/IntIterStart.cpp" >
+   <depend name="include/pixelimage/iter/IntIterStart.h"/>
+  </file>
+  <file name="src/pixelimage/draw/DrawTileHelper.cpp" >
+   <depend name="include/Std.h"/>
+   <depend name="include/haxe/Log.h"/>
+   <depend name="include/haxe/io/ArrayBufferViewImpl.h"/>
+   <depend name="include/haxe/io/Bytes.h"/>
+   <depend name="include/justPath/ILinePathContext.h"/>
+   <depend name="include/justPath/SvgLinePath.h"/>
+   <depend name="include/pixelimage/ImageStruct.h"/>
+   <depend name="include/pixelimage/_Endian/Endian_Fields_.h"/>
+   <depend name="include/pixelimage/algo/HitQuad.h"/>
+   <depend name="include/pixelimage/algo/HitTri.h"/>
+   <depend name="include/pixelimage/algo/IhitObj.h"/>
+   <depend name="include/pixelimage/draw/DrawTileHelper.h"/>
+   <depend name="include/pixelimage/iter/IntIterStart.h"/>
+  </file>
+  <file name="src/pixelimage/draw/DrawShapeHelper.cpp" >
+   <depend name="include/Std.h"/>
+   <depend name="include/haxe/Log.h"/>
+   <depend name="include/haxe/io/ArrayBufferViewImpl.h"/>
+   <depend name="include/haxe/io/Bytes.h"/>
+   <depend name="include/justPath/ILinePathContext.h"/>
+   <depend name="include/justPath/SvgLinePath.h"/>
+   <depend name="include/justPath/_CurveMath/CurveMath_Fields_.h"/>
+   <depend name="include/pixelimage/ImageStruct.h"/>
+   <depend name="include/pixelimage/_Endian/Endian_Fields_.h"/>
+   <depend name="include/pixelimage/algo/HitQuad.h"/>
+   <depend name="include/pixelimage/algo/IhitObj.h"/>
+   <depend name="include/pixelimage/draw/DrawShapeHelper.h"/>
+   <depend name="include/pixelimage/iter/IntIterStart.h"/>
+  </file>
+  <file name="src/pixelimage/algo/HitTriArray.cpp" >
+   <depend name="include/pixelimage/algo/HitTri.h"/>
+   <depend name="include/pixelimage/algo/HitTriArray.h"/>
+   <depend name="include/pixelimage/algo/IhitObj.h"/>
+  </file>
+  <file name="src/pixelimage/algo/HitTri.cpp" >
+   <depend name="include/pixelimage/ImageStruct.h"/>
+   <depend name="include/pixelimage/algo/HitTri.h"/>
+   <depend name="include/pixelimage/algo/IhitObj.h"/>
+   <depend name="include/pixelimage/iter/IntIterStart.h"/>
+  </file>
+  <file name="src/pixelimage/algo/HitQuad.cpp" >
+   <depend name="include/pixelimage/algo/HitQuad.h"/>
+   <depend name="include/pixelimage/algo/HitTri.h"/>
+   <depend name="include/pixelimage/algo/IhitObj.h"/>
+   <depend name="include/pixelimage/iter/IntIterStart.h"/>
+  </file>
+  <file name="src/pixelimage/algo/IhitObj.cpp" >
+   <depend name="include/pixelimage/algo/IhitObj.h"/>
+  </file>
+  <file name="src/pixelimage/_Pixelimage/Pixelimage_Impl_.cpp" >
+   <depend name="include/Std.h"/>
+   <depend name="include/haxe/io/ArrayBufferViewImpl.h"/>
+   <depend name="include/haxe/io/Bytes.h"/>
+   <depend name="include/pixelimage/ImageStruct.h"/>
+   <depend name="include/pixelimage/_Endian/Endian_Fields_.h"/>
+   <depend name="include/pixelimage/_Pixelimage/Pixelimage_Impl_.h"/>
+  </file>
+  <file name="src/pixelimage/ImageStruct.cpp" >
+   <depend name="include/haxe/io/ArrayBufferViewImpl.h"/>
+   <depend name="include/pixelimage/ImageStruct.h"/>
+   <depend name="include/pixelimage/_Endian/Endian_Fields_.h"/>
+  </file>
+  <file name="src/pixelimage/_Endian/Endian_Fields_.cpp" >
+   <depend name="include/haxe/io/ArrayBufferViewImpl.h"/>
+   <depend name="include/haxe/io/Bytes.h"/>
+   <depend name="include/pixelimage/_Endian/Endian_Fields_.h"/>
+  </file>
+  <file name="src/justPath/SvgLinePath.cpp" >
+   <depend name="include/Std.h"/>
+   <depend name="include/haxe/Log.h"/>
+   <depend name="include/justPath/EllipseArc.h"/>
+   <depend name="include/justPath/ILinePathContext.h"/>
+   <depend name="include/justPath/StoreF6.h"/>
+   <depend name="include/justPath/SvgLinePath.h"/>
+   <depend name="include/justPath/_CurveMath/CurveMath_Fields_.h"/>
+  </file>
+  <file name="src/justPath/StoreF6.cpp" >
+   <depend name="include/justPath/StoreF6.h"/>
+  </file>
+  <file name="src/justPath/ILinePathContext.cpp" >
+   <depend name="include/justPath/ILinePathContext.h"/>
+  </file>
+  <file name="src/justPath/EllipseArc.cpp" >
+   <depend name="include/justPath/EllipseArc.h"/>
+  </file>
+  <file name="src/justPath/_CurveMath/CurveMath_Fields_.cpp" >
+   <depend name="include/justPath/_CurveMath/CurveMath_Fields_.h"/>
+  </file>
+  <file name="src/haxe/zip/FlushMode.cpp" >
+   <depend name="include/haxe/zip/FlushMode.h"/>
+  </file>
+  <file name="src/haxe/zip/Compress.cpp" >
+   <depend name="include/Std.h"/>
+   <depend name="include/haxe/io/Bytes.h"/>
+   <depend name="include/haxe/zip/Compress.h"/>
+   <depend name="include/haxe/zip/FlushMode.h"/>
+  </file>
+  <file name="src/haxe/xml/Printer.cpp" >
+   <depend name="include/EReg.h"/>
+   <depend name="include/Std.h"/>
+   <depend name="include/StringBuf.h"/>
+   <depend name="include/StringTools.h"/>
+   <depend name="include/Xml.h"/>
+   <depend name="include/_Xml/XmlType_Impl_.h"/>
+   <depend name="include/haxe/xml/Printer.h"/>
+  </file>
+  <file name="src/haxe/xml/Parser.cpp" >
+   <depend name="include/Std.h"/>
+   <depend name="include/StringBuf.h"/>
+   <depend name="include/Xml.h"/>
+   <depend name="include/_Xml/XmlType_Impl_.h"/>
+   <depend name="include/haxe/IMap.h"/>
+   <depend name="include/haxe/ds/StringMap.h"/>
+   <depend name="include/haxe/xml/Parser.h"/>
+   <depend name="include/haxe/xml/XmlParserException.h"/>
+  </file>
+  <file name="src/haxe/xml/XmlParserException.cpp" >
+   <depend name="include/Type.h"/>
+   <depend name="include/haxe/xml/XmlParserException.h"/>
+  </file>
+  <file name="src/haxe/iterators/ArrayIterator.cpp" >
+   <depend name="include/haxe/iterators/ArrayIterator.h"/>
+  </file>
+  <file name="src/haxe/io/Path.cpp" >
+   <depend name="include/Std.h"/>
+   <depend name="include/StringBuf.h"/>
+   <depend name="include/haxe/io/Path.h"/>
+  </file>
+  <file name="src/haxe/io/Error.cpp" >
+   <depend name="include/haxe/io/Error.h"/>
+  </file>
+  <file name="src/haxe/io/Encoding.cpp" >
+   <depend name="include/haxe/io/Encoding.h"/>
+  </file>
+  <file name="src/haxe/io/BytesOutput.cpp" >
+   <depend name="include/haxe/io/Bytes.h"/>
+   <depend name="include/haxe/io/BytesBuffer.h"/>
+   <depend name="include/haxe/io/BytesOutput.h"/>
+   <depend name="include/haxe/io/Error.h"/>
+   <depend name="include/haxe/io/Output.h"/>
+  </file>
+  <file name="src/haxe/io/Output.cpp" >
+   <depend name="include/haxe/Exception.h"/>
+   <depend name="include/haxe/exceptions/NotImplementedException.h"/>
+   <depend name="include/haxe/exceptions/PosException.h"/>
+   <depend name="include/haxe/io/Bytes.h"/>
+   <depend name="include/haxe/io/Encoding.h"/>
+   <depend name="include/haxe/io/Error.h"/>
+   <depend name="include/haxe/io/Output.h"/>
+  </file>
+  <file name="src/haxe/io/BytesBuffer.cpp" >
+   <depend name="include/haxe/io/Bytes.h"/>
+   <depend name="include/haxe/io/BytesBuffer.h"/>
+  </file>
+  <file name="src/haxe/io/Bytes.cpp" >
+   <depend name="include/haxe/io/Bytes.h"/>
+   <depend name="include/haxe/io/Encoding.h"/>
+   <depend name="include/haxe/io/Error.h"/>
+  </file>
+  <file name="src/haxe/io/ArrayBufferViewImpl.cpp" >
+   <depend name="include/haxe/io/ArrayBufferViewImpl.h"/>
+   <depend name="include/haxe/io/Bytes.h"/>
+  </file>
+  <file name="src/haxe/exceptions/NotImplementedException.cpp" >
+   <depend name="include/haxe/Exception.h"/>
+   <depend name="include/haxe/exceptions/NotImplementedException.h"/>
+   <depend name="include/haxe/exceptions/PosException.h"/>
+  </file>
+  <file name="src/haxe/exceptions/PosException.cpp" >
+   <depend name="include/haxe/Exception.h"/>
+   <depend name="include/haxe/exceptions/PosException.h"/>
+  </file>
+  <file name="src/haxe/ds/StringMap.cpp" >
+   <depend name="include/haxe/IMap.h"/>
+   <depend name="include/haxe/ds/StringMap.h"/>
+   <depend name="include/haxe/iterators/ArrayIterator.h"/>
+  </file>
+  <file name="src/haxe/ds/_List/ListNode.cpp" >
+   <depend name="include/haxe/ds/_List/ListNode.h"/>
+  </file>
+  <file name="src/haxe/ds/List.cpp" >
+   <depend name="include/haxe/ds/List.h"/>
+   <depend name="include/haxe/ds/_List/ListNode.h"/>
+  </file>
+  <file name="src/haxe/ValueException.cpp" >
+   <depend name="include/Std.h"/>
+   <depend name="include/haxe/Exception.h"/>
+   <depend name="include/haxe/ValueException.h"/>
+  </file>
+  <file name="src/haxe/NativeStackTrace.cpp" >
+   <depend name="include/haxe/NativeStackTrace.h"/>
+  </file>
+  <file name="src/haxe/Log.cpp" >
+   <depend name="include/Std.h"/>
+   <depend name="include/haxe/Log.h"/>
+  </file>
+  <file name="src/haxe/Exception.cpp" >
+   <depend name="include/haxe/Exception.h"/>
+   <depend name="include/haxe/NativeStackTrace.h"/>
+  </file>
+  <file name="src/haxe/IMap.cpp" >
+   <depend name="include/haxe/IMap.h"/>
+  </file>
+  <file name="src/format/tools/Deflate.cpp" >
+   <depend name="include/format/tools/Deflate.h"/>
+   <depend name="include/haxe/io/Bytes.h"/>
+   <depend name="include/haxe/zip/Compress.h"/>
+  </file>
+  <file name="src/format/png/Writer.cpp" >
+   <depend name="include/format/png/Chunk.h"/>
+   <depend name="include/format/png/Color.h"/>
+   <depend name="include/format/png/Writer.h"/>
+   <depend name="include/haxe/ds/List.h"/>
+   <depend name="include/haxe/ds/_List/ListNode.h"/>
+   <depend name="include/haxe/io/Bytes.h"/>
+   <depend name="include/haxe/io/BytesOutput.h"/>
+   <depend name="include/haxe/io/Encoding.h"/>
+   <depend name="include/haxe/io/Output.h"/>
+  </file>
+  <file name="src/format/png/Chunk.cpp" >
+   <depend name="include/format/png/Chunk.h"/>
+   <depend name="include/haxe/io/Bytes.h"/>
+  </file>
+  <file name="src/format/png/Color.cpp" >
+   <depend name="include/format/png/Color.h"/>
+  </file>
+  <file name="src/Xml.cpp" >
+   <depend name="include/Xml.h"/>
+   <depend name="include/_Xml/XmlType_Impl_.h"/>
+   <depend name="include/haxe/IMap.h"/>
+   <depend name="include/haxe/ds/StringMap.h"/>
+   <depend name="include/haxe/iterators/ArrayIterator.h"/>
+   <depend name="include/haxe/xml/Parser.h"/>
+   <depend name="include/haxe/xml/Printer.h"/>
+  </file>
+  <file name="src/_Xml/XmlType_Impl_.cpp" >
+   <depend name="include/_Xml/XmlType_Impl_.h"/>
+  </file>
+  <file name="src/Type.cpp" >
+   <depend name="include/Reflect.h"/>
+   <depend name="include/Type.h"/>
+  </file>
+  <file name="src/Sys.cpp" >
+   <depend name="include/Sys.h"/>
+  </file>
+  <file name="src/StringTools.cpp" >
+   <depend name="include/Std.h"/>
+   <depend name="include/StringBuf.h"/>
+   <depend name="include/StringTools.h"/>
+  </file>
+  <file name="src/StringBuf.cpp" >
+   <depend name="include/StringBuf.h"/>
+  </file>
+  <file name="src/Std.cpp" >
+   <depend name="include/Std.h"/>
+  </file>
+  <file name="src/Reflect.cpp" >
+   <depend name="include/Reflect.h"/>
+  </file>
+  <file name="src/EReg.cpp" >
+   <depend name="include/EReg.h"/>
+   <depend name="include/Std.h"/>
+   <depend name="include/StringBuf.h"/>
+   <depend name="include/haxe/Exception.h"/>
+   <depend name="include/haxe/ValueException.h"/>
+  </file>
+  <file name="src/__boot__.cpp" >
+   <depend name="include/haxe/zip/FlushMode.h"/>
+   <depend name="include/haxe/io/Error.h"/>
+   <depend name="include/haxe/io/Encoding.h"/>
+   <depend name="include/format/png/Chunk.h"/>
+   <depend name="include/format/png/Color.h"/>
+   <depend name="include/pixelimage/_Endian/Endian_Fields_.h"/>
+   <depend name="include/justPath/_CurveMath/CurveMath_Fields_.h"/>
+   <depend name="include/haxe/xml/Parser.h"/>
+   <depend name="include/haxe/Log.h"/>
+   <depend name="include/Xml.h"/>
+  </file>
+  <file name="src/__files__.cpp" if='HXCPP_DEBUGGER'>
+  </file>
+   <file name="${HXCPP}/src/hx/NoFiles.cpp" unless="HXCPP_DEBUGGER" />
+  <file name="src/__resources__.cpp" >
+  </file>
+</files>
+<files id="__lib__">
+<compilerflag value="-Iinclude"/>
+  <file name="src/__lib__.cpp" >
+   <depend name="include/pixelimage_samples/pixelimage_format/_Grid/Grid_Fields_.h"/>
+  </file>
+</files>
+<files id="__main__">
+<compilerflag value="-Iinclude"/>
+  <file name="src/__main__.cpp" >
+   <depend name="include/pixelimage_samples/pixelimage_format/_Grid/Grid_Fields_.h"/>
+  </file>
+</files>
+<files id="__resources__">
+</files>
+<files id="__externs__">
+</files>
+<set name="HAXE_OUTPUT" value="Grid" />
+<include name="${HXCPP}/build-tool/BuildCommon.xml"/>
+<include name="${HXCPP}/src/hx/libs/regexp/Build.xml"/>
+<include name="${HXCPP}/src/hx/libs/std/Build.xml"/>
+<include name="${HXCPP}/src/hx/libs/std/Build.xml"/>
+<include name="${HXCPP}/src/hx/libs/ssl/Build.xml"/>
+<include name="${HXCPP}/src/hx/libs/std/Build.xml"/>
+<include name="${HXCPP}/src/hx/libs/zlib/Build.xml" />
+<error value="Hxcpp is out of date - please update" unlessApi="400" />
+</xml>

@@ -1,0 +1,17 @@
+-cp src
+#-cppia bin/format_grid.cppia
+#-neko bin/format_grid.n
+--cpp cpp
+-lib justPath
+-lib pixelimage
+-lib format
+-lib Vision
+-main pixelimage_samples.pixelimage_format.Grid
+-dce full
+#--no-traces
+--next
+#-cmd cd bin/
+#-cmd haxelib run hxcpp format_grid.cppia
+#-cmd neko format_grid.n
+-cmd cd cpp/
+-cmd ./Grid

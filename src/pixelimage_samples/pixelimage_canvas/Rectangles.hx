@@ -32,9 +32,9 @@ class Rectangles {
         begin();
         drawGrid();
         // see xml definitions below
-        TriangleGML.withString( pixelImage, rectangleShape );
-        TriangleGML.withString( pixelImage, squareShape );
-        TriangleGML.withString( pixelImage, tileRectangleTest );
+        TriangleGML.withString( pixelImage, rectangleShape, 100, 100 );
+        TriangleGML.withString( pixelImage, squareShape, 500, 50 );
+        TriangleGML.withString( pixelImage, tileRectangleTest, 500, 400 );
         end();
     }
 
@@ -53,21 +53,22 @@ class Rectangles {
     }
     var rectangleShape = 
     '<RectangleShape 
-        left="100" top="100" 
-        width="200" height="50" 
+        left="100" top="1000" 
+        width="1000" height="500" 
         rounded="true" 
         strokeColor="0xFFFF0000" 
         strokeWidth="1" 
-        fill="0xFF00FF00">
+        fill="0xFFFF0033">
     </RectangleShape>';
 
 // should I add rounded possibility?
 var squareShape = 
     '<SquareShape 
         left="100" top="100" 
-        diameter="90" 
-        strokeColor="0xFFFF0000" strokeWidth="1" 
-        fill="0xFF00FF00">
+        diameter="200" 
+        rounded="true"
+        strokeColor="0xFFFF0000" strokeWidth="12" 
+        fill="0xFFFFF200">
     </SquareShape>';
     var tileRectangleTest = 
     '<RectanglePattern 
