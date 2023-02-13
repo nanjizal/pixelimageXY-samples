@@ -1,0 +1,13 @@
+-cp src
+-cppia cppias/format_grid.cppia
+-lib justPath
+-lib pixelimage
+-lib format
+-lib Vision
+-main pixelimage_samples.pixelimage_format.Grid
+-dce full
+--times
+#--no-traces
+--next
+-cmd cd cppias/
+-cmd haxelib run hxcpp format_grid.cppia

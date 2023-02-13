@@ -1,0 +1,13 @@
+-cmd echo '###  not running on my system, maybe need newer neko?  ###'
+-cp src
+-neko nekos/format_grid.n
+-lib justPath
+-lib pixelimage
+-lib format
+-lib Vision
+-main pixelimage_samples.pixelimage_format.Grid
+#-dce full
+#--no-traces
+--next
+-cmd cd nekos/
+-cmd neko format_grid.n

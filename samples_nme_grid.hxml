@@ -1,0 +1,2 @@
+-cmd npx kill-port 6931
+-cmd haxelib run nme test nmeGrid.xml jsprime -Dflatoutput

@@ -8,6 +8,7 @@
 -lib Vision
 -main pixelimage_samples.pixelimage_format.Grid
 -dce full
+--times
 #--no-traces
 --next
 #-cmd cd bin/
