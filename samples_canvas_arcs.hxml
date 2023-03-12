@@ -3,10 +3,12 @@
 -lib htmlHelper
 -lib justPath
 -lib pixelimage
+-lib triangleGML
 -lib Vision
 -lib format
 -main pixelimage_samples.pixelimage_canvas.Arcs
 -D js-flatten 
+-D triangleGML.attibuteTrace
 -dce full
 #--no-traces
 --next
