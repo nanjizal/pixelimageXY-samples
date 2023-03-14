@@ -1,0 +1,18 @@
+-cp src
+-js bin/canvas_thinLines.js
+-lib htmlHelper
+-lib justPath
+-lib pixelimage
+-lib triangleGML
+-lib Vision
+-lib format
+-main pixelimage_samples.pixelimage_canvas.ThinLines
+-D js-flatten 
+-D triangleGML.attibuteTrace
+-dce full
+#--no-traces
+--next
+-cmd echo '<!DOCTYPE html><meta charset="UTF-8"><html><body><script src="canvas_thinLines.js"></script></body></html>' >bin/canvas_thinLines.html
+# open html on linux.
+-cmd cd bin/
+-cmd firefox "./canvas_thinLines.html"
