@@ -11,11 +11,16 @@ import pixelimageXY.algo.Xiolin_Wu_Line;
 
 function main() new ThinLines();
 class ThinLines {
-    var canvasSetup = new CanvasSetup();
+    
     public function new(){
+        var canvasSetup = new CanvasSetup( false );
         var surface = canvasSetup.surface;
+        canvasSetup.factor = 1/0.8;
+        canvasSetup.overSampleCanvas();
+        var me: js.html.CanvasRenderingContext2D = surface.me;
         var pixelShape = new Pixelshape( 1024*4, 768*4 );
         pixelShape.transparent = true;
+        pixelShape.simpleRect( 0, 0, pixelShape.width, pixelShape.height, 0xFF010101 );
         //var parser = new TriangleGML( pixelShape );
         //parser.addShape( backGround, 10, 10 );
         //parser.addShape( aGrid,      10, 10 );
@@ -24,7 +29,7 @@ class ThinLines {
         var radius = 280;
         var x = 0.;
         var y = 0.;
-        var num = 18;
+        var num = 18*2;
         var step = 2*Math.PI/num;
         var theta = 0.;
         for( i in 0...num ){
@@ -32,13 +37,17 @@ class ThinLines {
             y = midY + radius * Math.cos( theta );
             trace( x + ' ' + y );
             theta += step;
-            xWuLine( ( cast pixelShape: Pixelimage ), midX, midY, x, y, colors[i] );
+            var j = i%colors.length;
+            xWuLine( ( cast pixelShape: Pixelimage ), midX, midY, x, y, colors[j], 0.75 );
+            xWuLine( ( cast pixelShape: Pixelimage ), midX, midY, x, y, colors[j], 0.75 );
+            //xWuLine4( ( cast pixelShape: Pixelimage ), midX, midY, x, y, colors[i], 0.75 );
             //pixelShape.fillLine( midX, midY, x, y, 3, colors[i] );
         }
       /*parser.renderPromise().then(
             ( _ ) -> pixelShape.drawToContext( surface.me, 0, 0 )
         );*/
         pixelShape.drawToContext( surface.me, 0, 0 );
+        //me.filter = "blur(10px)";
     }
 }
 
